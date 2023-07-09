@@ -26,19 +26,22 @@ export const authOptions: NextAuthOptions = {
           type: "text",
         },
         password: { label: "password", type: "password" },
-      },
-      async authorize(credentials: { username: string; password: string }) {
+      }, // @ts-expect-error
+      async authorize(credentials, req) {
         try {
           let userDetails;
-          const { username, password } = credentials;
           userDetails = await prisma.admin.findUnique({
-            where: { username: username },
+            where: { username: credentials?.username },
           });
-          return {
-            ...userDetails,
-          };
+          if (userDetails) {
+            return {
+              ...userDetails,
+            };
+          }
+
+          return null;
         } catch (error) {
-          throw error;
+          return null;
         }
       },
     }),
@@ -47,6 +50,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        // @ts-expect-error
         token.username = user.username;
       }
       return token;
