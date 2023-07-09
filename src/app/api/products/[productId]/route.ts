@@ -22,7 +22,6 @@ export async function PUT(request: Request, context: any) {
         stock: parseInt(stock),
         price: parseInt(price),
         category: { connect: { id: parseInt(category) } },
-        image_keys: {},
       },
     });
   } catch (error) {
