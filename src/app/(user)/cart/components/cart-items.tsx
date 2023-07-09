@@ -84,7 +84,7 @@ export const CartItems = ({
               />
             ))}
 
-        {!cartItems.isLoading && cartItems.data?.length ? (
+        {!cartItems.isLoading && !cartItems.data?.length ? (
           <div className="flex h-96 flex-col items-center justify-center gap-2.5">
             <span className="opacity-50">No items in Cart</span>
             <RxCrossCircled size="25" className="opacity-50" />
