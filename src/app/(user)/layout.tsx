@@ -1,6 +1,6 @@
+import { Footer } from "@/components/user/footer";
 import { NavigationMain } from "@/components/user/navigation/navigation-main";
 import { NavigationMobile } from "@/components/user/navigation/navigation-mobile";
-import { Footer } from "@/components/user/site-footer";
 
 interface UserLayoutProps {
   children: React.ReactNode;
