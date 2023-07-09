@@ -11,7 +11,7 @@ export type FileImage = File & { preview: string };
 interface ImageUploaderProps {
   files: Array<File & { preview: string }>;
   setFiles: React.Dispatch<SetStateAction<FileImage[]>>;
-  deselectFile: (index: number) => void;
+  deselectFile?: (index: number) => void;
 }
 
 export const ImageUploader = ({
@@ -55,7 +55,7 @@ export const ImageUploader = ({
               >
                 <Button
                   variant="danger"
-                  onClick={() => deselectFile(index)}
+                  onClick={() => deselectFile && deselectFile(index)}
                   className="absolute -right-2 -top-2 z-10 h-5 w-5 rounded-full p-1.5 text-white"
                 >
                   <RxCross1 size="30" />
