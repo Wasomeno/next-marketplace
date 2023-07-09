@@ -1,6 +1,6 @@
 "use client";
 
-import { Session } from "next-auth";
+import { ISODateString, Session } from "next-auth";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,21 +9,31 @@ import { VscSignOut } from "react-icons/vsc";
 
 import * as HoverCard from "@radix-ui/react-hover-card";
 
-export const UserMenuMain = ({ session }: { session: Session | null }) => {
+export interface UserSession {
+  user?: {
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+    picture?: string | null;
+  };
+  expires: ISODateString;
+}
+
+export const UserMenuMain = ({ session }: { session: UserSession | null }) => {
   return (
     <HoverCard.Root openDelay={100} closeDelay={100}>
       <HoverCard.Trigger asChild>
         <div className="hidden cursor-pointer items-center gap-2 md:flex">
           <div className="relative h-7 w-7">
             <Image
-              src={session?.user?.picture}
+              src={session?.user?.picture as string}
               alt="userProfile"
               fill={true}
               className="rounded-full object-cover"
             />
           </div>
           <span className="text-sm tracking-wide">
-            {session.user?.name?.split(" ")[0]}
+            {session?.user?.name?.split(" ")[0]}
           </span>
         </div>
       </HoverCard.Trigger>

@@ -1,12 +1,13 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Session } from "next-auth";
 import Image from "next/image";
 import { useState } from "react";
 import { HiMenu, HiX } from "react-icons/hi";
 
-export function UserMenuMobile({ session }: { session: Session | null }) {
+import { UserSession } from "./user-menu-main";
+
+export function UserMenuMobile({ session }: { session: UserSession | null }) {
   const [showMenu, setShowMenu] = useState(false);
   return (
     <div className="relative flex items-center md:hidden">
@@ -48,7 +49,7 @@ export function UserMenuMobile({ session }: { session: Session | null }) {
                 <div className="item-center flex w-2/6 justify-center">
                   <div className="relative h-16 w-16">
                     <Image
-                      src={session?.user?.picture}
+                      src={session?.user?.picture as string}
                       alt="user-image"
                       fill
                       className="rounded-full"
