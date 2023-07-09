@@ -32,7 +32,7 @@ export default async function Cart() {
   return (
     <div className="flex flex-1 flex-col">
       <h1 className="mb-4 px-5 text-base lg:px-8 lg:text-xl">Shopping Cart</h1>
-      <CartItemsSection user={session.user?.email} />
+      <CartItemsSection user={session.user?.email as string} />
     </div>
   );
 }

@@ -30,7 +30,7 @@ export async function NavigationMain() {
       <div className="flex w-2/6 items-center justify-evenly lg:w-1/6">
         <Link href="/cart" className="relative font-sans">
           <IoCartOutline className="h-6 w-6 fill-slate-500 lg:h-7 lg:w-7" />
-          <CartItemCount user={session?.user?.email} />
+          <CartItemCount user={session?.user?.email as string} />
         </Link>
         <div className="flex justify-center">
           <UserMenu session={session} />
