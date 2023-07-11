@@ -35,7 +35,6 @@ export default async function ProductPage(props: {
   });
 
   invariant(productDetails, "Type error");
-  invariant(session?.user?.email, "Type error");
 
   return (
     <div className="flex flex-1 justify-center">
@@ -61,7 +60,7 @@ export default async function ProductPage(props: {
         </div>
         <AddToCartDialog
           productDetails={productDetails}
-          user={session.user.email}
+          user={session?.user?.email as string}
         />
       </div>
     </div>
