@@ -1,4 +1,3 @@
-import { useLayoutEffect } from "react";
 import { BiChevronRight } from "react-icons/bi";
 import { HiArrowsUpDown } from "react-icons/hi2";
 
@@ -51,7 +50,7 @@ export function ProductSorter({
           </div>
         </button>
       </DropdownTrigger>
-      <DropdownContent className="flex w-52 flex-col rounded-md rounded-t-none border-x border-b bg-white text-sm shadow-sm">
+      <DropdownContent className="flex w-52 flex-col rounded-md border bg-white text-sm shadow-sm">
         {sorts.map((sort) => (
           <DropdownItem key={sort.id} asChild>
             <button
