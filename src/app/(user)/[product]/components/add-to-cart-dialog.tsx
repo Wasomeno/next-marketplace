@@ -30,7 +30,7 @@ export const AddToCartDialog = ({
   );
 
   async function addProductToCart() {
-    await fetch(`/api/users/${user}/cart/${productDetails.id}`, {
+    await fetch(`/api/users/${user}/cart`, {
       method: "POST",
       body: JSON.stringify({
         product: { id: productDetails.id, amount: amount },
@@ -70,7 +70,6 @@ export const AddToCartDialog = ({
             </span>
           </div>
         </div>
-
         <div className="my-2 hidden justify-between lg:flex">
           <span className="text-xs text-slate-500 lg:text-base">Subtotal</span>
           <span className="text-sm lg:text-lg">
