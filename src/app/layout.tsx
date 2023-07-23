@@ -14,7 +14,7 @@ export default function RootLayout({
     <html lang="en">
       <ClientSessionProvider>
         <ReactQueryProvider>
-          <body className="min-h-screen bg-slate-50 antialiased">
+          <body className="bg-slate-50 antialiased">
             {children}
             <ToastifyContainer
               position="bottom-center"
