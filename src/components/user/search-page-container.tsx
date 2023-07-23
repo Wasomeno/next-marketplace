@@ -68,7 +68,7 @@ export const SearchPageContainer = ({
             {products?.map((product) => (
               <ProductCard
                 key={product.id}
-                href={"/categories/" + product.category.slug + "/" + product.id}
+                href={`/${product.id}`}
                 image={
                   <ProductCard.Image image={product.images[0].image_url} />
                 }
