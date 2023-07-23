@@ -17,7 +17,7 @@ export function CartItemCount({ user }: { user: string }) {
     }).then((count) => count.json());
   }
 
-  if (!cartItemsAmount.isLoading || cartItemsAmount.data) {
+  if (!cartItemsAmount.isLoading && cartItemsAmount.data) {
     return (
       <div className="flex-items-center absolute -right-2.5 -top-2 flex h-5 w-5 justify-center rounded-full  border-2 border-white bg-red-600 text-xs font-semibold text-white lg:h-6 lg:w-6 lg:text-sm">
         {cartItemsAmount.data}
