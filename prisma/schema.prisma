@@ -16,7 +16,7 @@ model Product {
   stock       Int
   category_id Int
   slug        String
-  cart_item   CartItem?
+  cart_items  CartItem[]
   orders      Order[]
   images      ProductImage[]
   category    Category       @relation(fields: [category_id], references: [id], onDelete: Cascade)
@@ -43,11 +43,12 @@ model Cart {
 model CartItem {
   id         Int     @id @default(autoincrement())
   cart_id    Int
-  product_id Int     @unique
+  product_id Int
   amount     Int
   cart       Cart    @relation(fields: [cart_id], references: [id], onDelete: Cascade)
   product    Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
 
+  @@index([product_id])
   @@index([cart_id])
 }
 
@@ -63,7 +64,7 @@ model Category {
 model CategoryImage {
   id          Int      @id @default(autoincrement())
   category_id Int
-  image_url   String   
+  image_url   String
   category    Category @relation(fields: [category_id], references: [id], onDelete: Cascade)
 
   @@index([category_id])
