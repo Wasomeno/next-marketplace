@@ -72,11 +72,11 @@ export const CategoryProductsSection = ({ category }: { category: string }) => {
           ) : !categoryProducts.isLoading &&
             !categoryProducts.data?.products.length ? (
             <div className="col-span-10 flex h-96 flex-col items-center justify-center gap-2">
-              <span className="text-slate-800 text-opacity-50">
+              <span className="text-sm text-slate-800 text-opacity-50 lg:text-base">
                 No products found
               </span>
               <span className="text-slate-800 text-opacity-50">
-                <RxCrossCircled className="h-8 w-8" />
+                <RxCrossCircled className="h-6 w-6 lg:h-8 lg:w-8" />
               </span>
             </div>
           ) : null}
