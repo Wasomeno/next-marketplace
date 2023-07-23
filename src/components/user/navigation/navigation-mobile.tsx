@@ -12,7 +12,7 @@ export const NavigationMobile = () => {
 
   if (params?.product || pathname === "/cart") return;
   return (
-    <div className="sticky bottom-0 z-10 flex h-14 w-full items-center justify-around border-t bg-white p-2 md:hidden">
+    <div className="sticky bottom-0 z-10 flex w-full items-center justify-around border-t bg-white p-2.5 lg:hidden">
       <Link href="/" className="flex flex-col items-center gap-1.5">
         <BsHouseDoor
           size="18"
