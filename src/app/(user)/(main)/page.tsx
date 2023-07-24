@@ -27,7 +27,7 @@ export default async function Home() {
     <div className="relative flex flex-col items-center justify-start gap-6 bg-white px-4 lg:px-8">
       <HomeBannerSlider />
       <div className="w-full lg:w-5/6">
-        <div className="w-3/6 rounded-md border p-4 shadow-sm ">
+        <div className="w-full rounded-md border p-4 shadow-sm lg:w-3/6 ">
           <h2 className="mb-4 font-sans text-sm font-medium lg:text-xl">
             Categories
           </h2>
