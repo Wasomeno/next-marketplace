@@ -5,13 +5,14 @@ import "swiper/css/navigation";
 
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import { Autoplay, Navigation } from "swiper";
 import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 
 export function HomeBannerSlider() {
   const [showNavigation, setShowNavigation] = useState(false);
+  const swiperRef = useRef<any>();
   return (
     <div
       className="swiper-container relative w-full lg:w-5/6"
@@ -19,9 +20,10 @@ export function HomeBannerSlider() {
       onMouseLeave={() => setShowNavigation(false)}
     >
       <Swiper
+        onSwiper={(swiper) => (swiperRef.current = swiper)}
         className="h-40 w-full lg:h-80"
         autoplay={{ disableOnInteraction: false }}
-        navigation={{ enabled: true, nextEl: ".btn-next", prevEl: ".btn-prev" }}
+        navigation={{ enabled: true, nextEl: "#btn-next", prevEl: "#btn-prev" }}
         modules={[Navigation, Autoplay]}
         loop={true}
         spaceBetween={50}
@@ -52,18 +54,18 @@ export function HomeBannerSlider() {
         </SwiperSlide>
       </Swiper>
       <AnimatePresence>
-        {showNavigation && <HomeBannerSliderNavigation />}
+        {showNavigation && <HomeBannerSliderNavigation swiperRef={swiperRef} />}
       </AnimatePresence>
     </div>
   );
 }
 
-const HomeBannerSliderNavigation = () => {
-  const swiper = useSwiper();
+const HomeBannerSliderNavigation = ({ swiperRef }: { swiperRef: any }) => {
   return (
     <>
       <motion.button
-        onClick={() => swiper.slidePrev()}
+        id="btn-prev"
+        onClick={() => swiperRef.current.slidePrev()}
         initial={{ opacity: 0, bottom: "47%" }}
         animate={{ opacity: 1, bottom: "50%" }}
         exit={{ opacity: 0, bottom: "47%" }}
@@ -73,7 +75,8 @@ const HomeBannerSliderNavigation = () => {
         <BsChevronLeft size="20" />
       </motion.button>
       <motion.button
-        onClick={() => swiper.slideNext()}
+        id="btn-next"
+        onClick={() => swiperRef.current.slideNext()}
         initial={{ opacity: 0, bottom: "47%" }}
         animate={{ opacity: 1, bottom: "50%" }}
         exit={{ opacity: 0, bottom: "47%" }}
