@@ -4,7 +4,7 @@ import invariant from "tiny-invariant";
 
 import { prisma } from "@/lib/prisma";
 
-import { authOptions } from "../../../../pages/api/auth/[...nextauth]";
+import { authOptions } from "../../../../../pages/api/auth/[...nextauth]";
 import { AddToCartDialog } from "./components/add-to-cart-dialog";
 import { ProductImages } from "./components/product-images";
 

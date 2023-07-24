@@ -50,7 +50,11 @@ export function ProductSorter({
           </div>
         </button>
       </DropdownTrigger>
-      <DropdownContent className="flex w-52 flex-col rounded-md border bg-white text-sm shadow-sm">
+      <DropdownContent
+        side="bottom"
+        sideOffset={-3}
+        className="flex w-52 flex-col rounded-b-md border border-t-0 bg-white text-sm shadow-sm"
+      >
         {sorts.map((sort) => (
           <DropdownItem key={sort.id} asChild>
             <button
