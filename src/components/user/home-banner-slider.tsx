@@ -50,10 +50,10 @@ export function HomeBannerSlider() {
             className="rounded-lg"
           />
         </SwiperSlide>
-        <AnimatePresence>
-          {showNavigation && <HomeBannerSliderNavigation />}
-        </AnimatePresence>
       </Swiper>
+      <AnimatePresence>
+        {showNavigation && <HomeBannerSliderNavigation />}
+      </AnimatePresence>
     </div>
   );
 }
@@ -68,7 +68,7 @@ const HomeBannerSliderNavigation = () => {
         animate={{ opacity: 1, bottom: "50%" }}
         exit={{ opacity: 0, bottom: "47%" }}
         transition={{ ease: "easeInOut", duration: 0.2, delay: 0.1 }}
-        className="btn-prev absolute left-0 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 p-2.5 shadow-md disabled:opacity-50"
+        className="btn-prev absolute -left-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white p-2.5 shadow-md disabled:opacity-50"
       >
         <BsChevronLeft size="20" />
       </motion.button>
@@ -78,7 +78,7 @@ const HomeBannerSliderNavigation = () => {
         animate={{ opacity: 1, bottom: "50%" }}
         exit={{ opacity: 0, bottom: "47%" }}
         transition={{ ease: "easeInOut", duration: 0.2, delay: 0.1 }}
-        className="btn-next absolute right-0 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 p-2.5 shadow-md disabled:opacity-50"
+        className="btn-next absolute -right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white p-2.5 shadow-md disabled:opacity-50"
       >
         <BsChevronRight size="20" />
       </motion.button>
