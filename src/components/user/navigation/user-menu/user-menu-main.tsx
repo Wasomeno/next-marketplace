@@ -4,6 +4,7 @@ import { ISODateString, Session } from "next-auth";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { BsBox2Heart } from "react-icons/bs";
 import { HiOutlineClipboard } from "react-icons/hi";
 import { VscSignOut } from "react-icons/vsc";
 
@@ -24,44 +25,60 @@ export const UserMenuMain = ({ session }: { session: UserSession | null }) => {
     <HoverCard.Root openDelay={100} closeDelay={100}>
       <HoverCard.Trigger asChild>
         <div className="hidden cursor-pointer items-center gap-2 md:flex">
-          <div className="relative h-7 w-7">
+          <div className="relative h-8 w-8">
             <Image
               src={session?.user?.picture as string}
               alt="userProfile"
-              fill={true}
               className="rounded-full object-cover"
+              fill
             />
           </div>
-          <span className="text-sm tracking-wide">
-            {session?.user?.name?.split(" ")[0]}
-          </span>
         </div>
       </HoverCard.Trigger>
       <HoverCard.Portal>
         <HoverCard.Content
-          className="z-30 flex h-52 w-52 flex-col gap-2 rounded-md border bg-white p-2 transition-all duration-200"
+          className="z-30 w-64 rounded-md border border-slate-300 bg-white transition-all duration-200"
           sideOffset={20}
           align={"end"}
           style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
         >
-          <Link
-            href="/orders"
-            className="flex items-center justify-between rounded-md px-4 py-3 text-sm transition duration-200 hover:bg-slate-200"
-          >
-            <span>
-              <HiOutlineClipboard size="18" />
+          <div className="border-b px-2.5 py-2">
+            <h5 className="font-sans font-medium">{session?.user?.name}</h5>
+            <span className="font-sans text-sm font-medium text-slate-500">
+              {session?.user?.email}
             </span>
-            <span className="text-center">Orders</span>
-          </Link>
-          <button
-            onClick={() => signOut()}
-            className="flex items-center justify-between rounded-md  px-4 py-3 text-sm transition duration-200 hover:bg-slate-200"
-          >
-            <span>
-              <VscSignOut size="18" />
-            </span>
-            <span> Sign Out</span>
-          </button>
+          </div>
+          <div className="border-b p-1.5">
+            <Link
+              href="/orders"
+              className="flex items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200"
+            >
+              <span>
+                <HiOutlineClipboard size="16" />
+              </span>
+              <span className="text-sm">Orders</span>
+            </Link>
+            <Link
+              href="/#"
+              className="flex items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200"
+            >
+              <span>
+                <BsBox2Heart size="16" />
+              </span>
+              <span className="text-sm">Wishlist</span>
+            </Link>
+          </div>
+          <div className="p-1.5">
+            <button
+              onClick={() => signOut()}
+              className="flex w-full items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200"
+            >
+              <span>
+                <VscSignOut size="16" />
+              </span>
+              <span className="text-sm"> Sign Out</span>
+            </button>
+          </div>
         </HoverCard.Content>
       </HoverCard.Portal>
     </HoverCard.Root>
