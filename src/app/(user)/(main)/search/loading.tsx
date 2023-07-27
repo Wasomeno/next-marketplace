@@ -1,7 +1,6 @@
+import { ProductSorterSkeleton } from "@/components/product-sorter";
 import { Button } from "@/components/ui/button";
 import ProductCard from "@/components/user/product-card";
-
-import { ProductSorterSkeleton } from "../[product]/components/product-sorter";
 
 export default async function SearchLoading() {
   return (
