@@ -13,10 +13,12 @@ import {
   DropdownTrigger,
 } from "@/components/ui/dropdown";
 import { Input } from "@/components/ui/input";
+import {
+  OrderCard,
+  OrderCardSkeleton,
+} from "@/components/user/order/order-card";
 import { Order, OrderStatus, Product } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
-
-import { OrderCard, OrderCardSkeleton } from "./components/order-card";
 
 const statuses = [
   "All Statuses",
