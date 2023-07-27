@@ -1,6 +1,6 @@
 "use client";
 
-import { ISODateString, Session } from "next-auth";
+import { ISODateString } from "next-auth";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -37,9 +37,10 @@ export const UserMenuMain = ({ session }: { session: UserSession | null }) => {
       </HoverCard.Trigger>
       <HoverCard.Portal>
         <HoverCard.Content
+          side="bottom"
+          align="end"
+          sideOffset={2.5}
           className="z-30 w-64 rounded-md border border-slate-300 bg-white transition-all duration-200"
-          sideOffset={20}
-          align={"end"}
           style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
         >
           <div className="border-b px-2.5 py-2">
