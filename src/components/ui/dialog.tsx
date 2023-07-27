@@ -7,6 +7,19 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 
 const Dialog = DialogPrimitive.Root;
 
+const DialogTrigger = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Trigger>
+>(({ className, children, ...props }, ref) => {
+  return (
+    <DialogPrimitive.Trigger ref={ref} className={className} {...props}>
+      {children}
+    </DialogPrimitive.Trigger>
+  );
+});
+
+DialogTrigger.displayName = DialogPrimitive.Trigger.displayName;
+
 const DialogPortal = ({
   className,
   children,
@@ -63,7 +76,7 @@ const DialogContent = React.forwardRef<
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ ease: "easeInOut", duration: 0.25 }}
-              className="fixed inset-0 bg-slate-800 bg-opacity-30 backdrop-blur-[2px]"
+              className="fixed inset-0 z-30 bg-slate-800 bg-opacity-30 backdrop-blur-[2px]"
             />
           </DialogOverlay>
           <DialogPrimitive.Content asChild ref={ref} {...props}>
@@ -73,7 +86,7 @@ const DialogContent = React.forwardRef<
               exit={{ opacity: 0 }}
               transition={{ ease: "easeInOut", duration: 0.25, delay: 0.1 }}
               className={twMerge(
-                "fixed bottom-0 left-1/2 h-[95%] w-full -translate-x-1/2 overflow-y-scroll rounded-lg bg-slate-50 shadow-md transition duration-300 lg:top-1/2 lg:-translate-y-1/2",
+                "fixed bottom-0 right-1/2 z-50 h-[95%] w-full translate-x-1/2 overflow-y-scroll rounded-lg bg-slate-50 shadow-md transition duration-300 lg:top-1/2 lg:-translate-y-1/2",
                 className
               )}
             >
@@ -88,4 +101,4 @@ const DialogContent = React.forwardRef<
 
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 
-export { Dialog, DialogOverlay, DialogHeader, DialogContent };
+export { Dialog, DialogOverlay, DialogHeader, DialogContent, DialogTrigger };
