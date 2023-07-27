@@ -42,7 +42,7 @@ export const CartCheckoutDialog = ({
 
   return (
     <div className="sticky bottom-0 w-full lg:w-2/6 lg:px-8">
-      <div className="border-t border-slate-400 p-2.5 lg:rounded-md lg:border lg:p-4">
+      <div className="border-t border-slate-200 p-2.5 lg:rounded-md lg:border lg:border-slate-400 lg:p-4">
         <span className="hidden text-xs lg:inline lg:text-lg">
           Cart Summary
         </span>

@@ -52,7 +52,7 @@ export const AddToCartDialog = ({ productDetails }: AddToCartDialogProps) => {
 
   return (
     <div className="sticky bottom-0 w-full bg-white lg:w-3/12">
-      <div className="border-t border-slate-400 p-2 lg:rounded-md lg:border lg:p-4">
+      <div className="border-t border-slate-200 p-2  lg:rounded-md lg:border lg:border-slate-400 lg:p-4">
         <div className="hidden lg:block">
           <span className="text-sm lg:text-base">Product Amount</span>
           <div className="my-4 flex items-center justify-center gap-4">
