@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 
 import { Cart, Prisma } from "@prisma/client";
 
-import { authOptions } from "../../../../../pages/api/auth/[...nextauth]";
+import { authOptions } from "../../../api/auth/[...nextauth]/route";
 import { CartItemsSection } from "./components/cart-items-section";
 
 export type CartItemWithProductPrice = Prisma.CartItemGetPayload<{
