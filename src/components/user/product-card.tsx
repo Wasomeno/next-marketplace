@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { FaStar } from "react-icons/fa";
-import { utapi } from "uploadthing/server";
 
 const ProductCard = ({
   image,
