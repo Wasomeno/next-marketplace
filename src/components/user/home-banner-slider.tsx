@@ -8,14 +8,14 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import { Autoplay, Navigation } from "swiper";
-import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 export function HomeBannerSlider() {
   const [showNavigation, setShowNavigation] = useState(false);
   const swiperRef = useRef<any>();
   return (
     <div
-      className="swiper-container relative w-full lg:w-5/6"
+      className="swiper-container relative w-full lg:w-11/12"
       onMouseOver={() => setShowNavigation(true)}
       onMouseLeave={() => setShowNavigation(false)}
     >
@@ -70,7 +70,7 @@ const HomeBannerSliderNavigation = ({ swiperRef }: { swiperRef: any }) => {
         animate={{ opacity: 1, bottom: "50%" }}
         exit={{ opacity: 0, bottom: "47%" }}
         transition={{ ease: "easeInOut", duration: 0.2, delay: 0.1 }}
-        className="btn-prev absolute -left-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white p-2.5 shadow-md disabled:opacity-50"
+        className="btn-prev absolute -left-4 z-[5] flex h-10 w-10 items-center justify-center rounded-full bg-white p-2.5 shadow-md disabled:opacity-50"
       >
         <BsChevronLeft size="20" />
       </motion.button>
@@ -81,7 +81,7 @@ const HomeBannerSliderNavigation = ({ swiperRef }: { swiperRef: any }) => {
         animate={{ opacity: 1, bottom: "50%" }}
         exit={{ opacity: 0, bottom: "47%" }}
         transition={{ ease: "easeInOut", duration: 0.2, delay: 0.1 }}
-        className="btn-next absolute -right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white p-2.5 shadow-md disabled:opacity-50"
+        className="btn-next absolute -right-4 z-[5] flex h-10 w-10 items-center justify-center rounded-full bg-white p-2.5 shadow-md disabled:opacity-50"
       >
         <BsChevronRight size="20" />
       </motion.button>
