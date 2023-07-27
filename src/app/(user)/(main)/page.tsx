@@ -57,7 +57,7 @@ export default async function Home() {
         <h2 className="mb-4 text-start font-sans text-sm font-medium lg:text-xl">
           Top Products
         </h2>
-        <div className="grid grid-cols-10 gap-4">
+        <div className="grid grid-cols-10 gap-2.5 lg:gap-4">
           {products.map((product) => (
             <ProductCard
               key={product.id}
