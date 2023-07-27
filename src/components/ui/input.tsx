@@ -9,6 +9,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ type, className, ...props }, ref) => {
     return (
       <input
+        ref={ref}
         type={type}
         className={twMerge(
           clsx(
@@ -17,7 +18,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )
         )}
         {...props}
-        ref={ref}
       />
     );
   }
