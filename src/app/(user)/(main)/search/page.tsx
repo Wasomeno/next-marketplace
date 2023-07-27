@@ -4,8 +4,7 @@ import { ProductsSection } from "@/components/products-section";
 import { prisma } from "@/lib/prisma";
 
 type Props = {
-  params: { id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: { q: string; pmin: string; pmax: string; sort: string };
 };
 
 export async function generateMetadata({
@@ -19,13 +18,11 @@ export async function generateMetadata({
 export default async function SearchPage({ searchParams }: Props) {
   const priceMin = searchParams.pmin;
   const priceMax = searchParams.pmax;
-  const sort = searchParams.sort
-    ? [searchParams.sort?.split(".") as string]
-    : [];
+  const sort = searchParams.sort ? [searchParams.sort.split(".")] : [];
 
   const products = await prisma.product.findMany({
     where: {
-      name: { contains: searchParams.q as string },
+      name: { contains: searchParams.q },
       price: {
         lte: priceMax ? parseInt(priceMax as string) : 5000000,
         gte: priceMin ? parseInt(priceMin as string) : 100,
