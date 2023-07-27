@@ -89,8 +89,6 @@ export function ProductSorter() {
       </DropdownTrigger>
       <DropdownContent
         align="end"
-        side="bottom"
-        sideOffset={-3}
         className="flex w-52 flex-col rounded-md border bg-white text-sm shadow-sm lg:rounded-b-md lg:rounded-t-none lg:border-t-0"
       >
         {sortOptions.map((sort) => (
