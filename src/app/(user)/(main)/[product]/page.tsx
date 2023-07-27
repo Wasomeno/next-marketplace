@@ -1,12 +1,9 @@
 import { Metadata } from "next";
-import { getServerSession } from "next-auth";
 import invariant from "tiny-invariant";
 
+import { AddToCartDialog } from "@/components/user/product-details/add-to-cart-dialog";
+import { ProductImages } from "@/components/user/product-details/product-images";
 import { prisma } from "@/lib/prisma";
-
-import { authOptions } from "../../../../../pages/api/auth/[...nextauth]";
-import { AddToCartDialog } from "./components/add-to-cart-dialog";
-import { ProductImages } from "./components/product-images";
 
 type Props = {
   params: { product: string };
@@ -27,10 +24,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProductPage(props: {
   params: { product: string };
 }) {
-  const { params } = props;
-  const session = await getServerSession(authOptions);
+  const { product: productId } = props.params;
   const productDetails = await prisma.product.findUnique({
-    where: { id: parseInt(params.product) },
+    where: { id: parseInt(productId) },
     include: { images: { select: { image_url: true } } },
   });
 
@@ -58,10 +54,7 @@ export default async function ProductPage(props: {
             </p>
           </div>
         </div>
-        <AddToCartDialog
-          productDetails={productDetails}
-          user={session?.user?.email as string}
-        />
+        <AddToCartDialog productDetails={productDetails} />
       </div>
     </div>
   );
