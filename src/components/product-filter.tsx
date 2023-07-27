@@ -11,9 +11,6 @@ import { DialogTrigger } from "@radix-ui/react-dialog";
 export const ProductsFilter = () => {
   const [openFilter, setOpenFilter] = useState(false);
 
-  const router = useRouter();
-  const path = usePathname();
-
   return (
     <Dialog open={openFilter} onOpenChange={setOpenFilter}>
       <DialogTrigger asChild>
@@ -27,7 +24,8 @@ export const ProductsFilter = () => {
       </DialogTrigger>
       <DialogContent
         open={openFilter}
-        className="flex w-full flex-col bg-white lg:right-0 lg:top-0 lg:h-screen lg:w-2/6 lg:translate-x-0 lg:translate-y-0"
+        onOpenAutoFocus={(event) => event.preventDefault()}
+        className="flex h-5/6 w-full flex-col bg-white lg:right-0 lg:top-0 lg:h-screen lg:w-2/6 lg:translate-x-0 lg:translate-y-0"
       >
         <div className="mb-4 border-b p-4">
           <h5 className="text-sm font-medium lg:text-lg">Filters</h5>
