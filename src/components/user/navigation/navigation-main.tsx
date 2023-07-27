@@ -5,21 +5,18 @@ import { IoCartOutline } from "react-icons/io5";
 
 import { Separator } from "@/components/ui/separator";
 
-import { authOptions } from "../../../../pages/api/auth/[...nextauth]";
+import { authOptions } from "../../../app/api/auth/[...nextauth]/route";
 import { CartItemCount } from "./cart-item-count";
 import { SearchProduct } from "./search-product";
 import { UserMenu } from "./user-menu";
 
 export async function NavigationMain() {
   const session = await getServerSession(authOptions);
+
   return (
-    <div className="sticky top-0 z-20 flex h-16 w-full items-center justify-between border-b border-b-gray-200 bg-white px-4 shadow-sm">
+    <div className="sticky top-0 z-10 flex h-16 w-full items-center justify-between border-b border-b-gray-200 bg-white px-4 shadow-sm">
       <div className="flex w-full items-center lg:w-3/6">
-        <Link
-          href="/"
-          prefetch={false}
-          className="relative hidden w-32 justify-center lg:flex"
-        >
+        <Link href="/" className="relative hidden w-32 justify-center lg:flex">
           <Image
             src="/next_marketplace.webp"
             alt="next-logo"

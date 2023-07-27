@@ -3,17 +3,16 @@ import Image from "next/image";
 import { BiTrash } from "react-icons/bi";
 import { BsCheck } from "react-icons/bs";
 
+import { CartItem } from "@/app/(user)/(main)/cart/page";
 import { Button } from "@/components/ui/button";
 import { queryClient } from "@/lib/react-query-client";
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { useMutation } from "@tanstack/react-query";
 
-import { CartItemWithProductImage } from "../page";
-
 interface CartItemCardProps {
   user: string;
   isSelected: boolean;
-  itemDetails: CartItemWithProductImage;
+  itemDetails: CartItem;
   onClick: () => void;
 }
 

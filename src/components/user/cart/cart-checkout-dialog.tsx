@@ -1,23 +1,24 @@
 "use client";
 
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { toast } from "react-toastify";
 
 import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
 
-import { CartItemWithProductPrice } from "../page";
+import { CartItem } from "../../../app/(user)/(main)/cart/page";
 
 interface CartCheckoutDialogProps {
-  user: string;
-  selectedItems: CartItemWithProductPrice[];
+  selectedItems: CartItem[];
 }
 
 export const CartCheckoutDialog = ({
-  user,
   selectedItems,
 }: CartCheckoutDialogProps) => {
+  const { data: session } = useSession();
+  const userEmail = session?.user?.email;
   const total = selectedItems
     .reduce(
       (firstValue, item) => item.amount * item.product.price + firstValue,
@@ -27,7 +28,7 @@ export const CartCheckoutDialog = ({
 
   const checkout = useMutation(
     async () =>
-      await axios.post(`/api/users/${user}/orders`, {
+      await axios.post(`/api/users/${userEmail}/orders`, {
         total,
         products: selectedItems.map((item) => ({ id: item.product_id })),
       }),

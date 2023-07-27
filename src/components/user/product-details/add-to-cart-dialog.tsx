@@ -1,5 +1,6 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -10,16 +11,15 @@ import { Product } from "@prisma/client";
 import { useMutation } from "@tanstack/react-query";
 
 export interface AddToCartDialogProps {
-  user: string;
   productDetails: Product;
 }
 
-export const AddToCartDialog = ({
-  user,
-  productDetails,
-}: AddToCartDialogProps) => {
+export const AddToCartDialog = ({ productDetails }: AddToCartDialogProps) => {
   const [amount, setAmount] = useState<number>(1);
   const router = useRouter();
+
+  const { data: session } = useSession();
+  const userEmail = session?.user?.email;
 
   const addProductMutation = useMutation(async () =>
     toast.promise(addProductToCart(), {
@@ -30,14 +30,14 @@ export const AddToCartDialog = ({
   );
 
   async function addProductToCart() {
-    await fetch(`/api/users/${user}/cart`, {
+    await fetch(`/api/users/${userEmail}/cart`, {
       method: "POST",
       body: JSON.stringify({
         product: { id: productDetails.id, amount: amount },
       }),
     });
-    queryClient.invalidateQueries(["cart", user]);
-    queryClient.invalidateQueries(["cartItemCount", user]);
+    queryClient.invalidateQueries(["cart", userEmail]);
+    queryClient.invalidateQueries(["cartItemCount", userEmail]);
   }
 
   function increment() {
@@ -86,7 +86,7 @@ export const AddToCartDialog = ({
           <Button
             variant="default"
             onClick={() =>
-              user ? addProductMutation.mutate() : router.push("/login")
+              userEmail ? addProductMutation.mutate() : router.push("/login")
             }
             className="my my-2 h-8 w-full rounded-lg  bg-blue-400 text-xs font-medium text-slate-50 lg:h-10 lg:text-sm"
           >

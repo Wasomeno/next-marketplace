@@ -1,15 +1,13 @@
-import React from "react";
-
 import { Order, OrderStatus, Product } from "@prisma/client";
 
-interface TransactionItemCardProps {
+interface OrderCardProps {
   transactionDetails: Order & {
     products: Product[];
     status: OrderStatus;
   };
 }
 
-export const OrderCard = ({ transactionDetails }: TransactionItemCardProps) => {
+export const OrderCard = ({ transactionDetails }: OrderCardProps) => {
   const date = new Date(transactionDetails.created_at);
   return (
     <div className="flex h-32 flex-col rounded-md bg-white px-4 py-2.5 shadow-md lg:h-36">

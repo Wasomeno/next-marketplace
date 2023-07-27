@@ -1,15 +1,16 @@
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { RxCrossCircled } from "react-icons/rx";
 
+import { CartItem } from "@/app/(user)/(main)/cart/page";
 import { useQuery } from "@tanstack/react-query";
 
-import { CartItemWithProductImage, CartItemWithProductPrice } from "../page";
 import { CartItemCard, CartItemCardSkeleton } from "./cart-item-card";
 
 async function fetchCartItems(
-  user: string
-): Promise<CartItemWithProductImage[]> {
+  user: string | null | undefined
+): Promise<CartItem[]> {
   const cart = await axios.get(`/api/users/${user}/cart`);
   return cart.data;
 }
@@ -23,22 +24,25 @@ function generateSkeleton(length: number) {
 }
 
 interface CartItemsProps {
-  userEmail: string;
-  selectedItems: CartItemWithProductPrice[];
-  setSelectedItems: Dispatch<SetStateAction<CartItemWithProductPrice[]>>;
+  selectedItems: CartItem[];
+  setSelectedItems: Dispatch<SetStateAction<CartItem[]>>;
 }
 
 export const CartItems = ({
-  userEmail,
   selectedItems,
   setSelectedItems,
 }: CartItemsProps) => {
+  const { data: session, status } = useSession();
+  const userEmail = session?.user?.email;
   const cartItems = useQuery(
     ["cart", userEmail],
-    async () => await fetchCartItems(userEmail)
+    async () => await fetchCartItems(userEmail),
+    {
+      enabled: status === "authenticated",
+    }
   );
 
-  function selectCartItem(cartItem: CartItemWithProductPrice) {
+  function selectCartItem(cartItem: CartItem) {
     setSelectedItems((items) => [...items, cartItem]);
   }
 
@@ -54,12 +58,12 @@ export const CartItems = ({
         cartItems.data.map((cartItem) => ({
           id: cartItem.id,
           product_id: cartItem.product_id,
-          product: { price: cartItem.product.price },
+          product: { ...cartItem.product },
           amount: cartItem.amount,
         }))
       );
     }
-  }, [cartItems.data]);
+  }, []);
 
   return (
     <div className="w-full px-5 lg:w-4/6 lg:px-8">
