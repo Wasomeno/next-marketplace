@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 
-import { SearchPageContainer } from "@/components/user/search-page-container";
+import { ProductsSection } from "@/components/products-section";
 import { prisma } from "@/lib/prisma";
 
 type Props = {
@@ -33,7 +33,7 @@ export default async function SearchPage({ searchParams }: Props) {
     },
     orderBy: !sort.length ? { price: "asc" } : Object.fromEntries(sort as []),
 
-    include: { category: true, images: { select: { image_url: true } } },
+    include: { category: true, images: true },
   });
-  return <SearchPageContainer products={products} />;
+  return <ProductsSection products={products} />;
 }
