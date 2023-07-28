@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import invariant from "tiny-invariant";
 
+import { BackButton } from "@/components/back-button";
 import { AddToCartDialog } from "@/components/user/product-details/add-to-cart-dialog";
 import { ProductImages } from "@/components/user/product-details/product-images";
 import { prisma } from "@/lib/prisma";
@@ -33,7 +34,10 @@ export default async function ProductPage(props: {
   invariant(productDetails, "Type error");
 
   return (
-    <div className="flex flex-1 justify-center">
+    <div className="flex flex-1 flex-col items-center">
+      <div className="flex w-full justify-start px-2">
+        <BackButton size="18" text="Back" />
+      </div>
       <div className="flex w-full flex-wrap justify-center gap-10 lg:w-5/6 lg:flex-nowrap">
         <ProductImages
           imageUrls={productDetails?.images.map((image) => image.image_url)}
