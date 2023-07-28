@@ -16,7 +16,8 @@ export function HomeBannerSlider() {
   return (
     <div
       className="swiper-container relative w-full lg:w-11/12"
-      onMouseOver={() => setShowNavigation(true)}
+      onClick={() => setShowNavigation(!showNavigation)}
+      onMouseEnter={() => setShowNavigation(true)}
       onMouseLeave={() => setShowNavigation(false)}
     >
       <Swiper
@@ -70,9 +71,9 @@ const HomeBannerSliderNavigation = ({ swiperRef }: { swiperRef: any }) => {
         animate={{ opacity: 1, bottom: "50%" }}
         exit={{ opacity: 0, bottom: "47%" }}
         transition={{ ease: "easeInOut", duration: 0.2, delay: 0.1 }}
-        className="btn-prev absolute -left-4 z-[5] flex h-10 w-10 items-center justify-center rounded-full bg-white p-2.5 shadow-md disabled:opacity-50"
+        className="btn-prev lg: absolute -left-2 z-[5] flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-md disabled:opacity-50 lg:-left-4 lg:h-12 lg:w-12"
       >
-        <BsChevronLeft size="20" />
+        <BsChevronLeft className="h-3 w-3 lg:h-5 lg:w-5" />
       </motion.button>
       <motion.button
         id="btn-next"
@@ -81,9 +82,9 @@ const HomeBannerSliderNavigation = ({ swiperRef }: { swiperRef: any }) => {
         animate={{ opacity: 1, bottom: "50%" }}
         exit={{ opacity: 0, bottom: "47%" }}
         transition={{ ease: "easeInOut", duration: 0.2, delay: 0.1 }}
-        className="btn-next absolute -right-4 z-[5] flex h-10 w-10 items-center justify-center rounded-full bg-white p-2.5 shadow-md disabled:opacity-50"
+        className="btn-next absolute -right-2 z-[5] flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-md disabled:opacity-50 lg:-right-4 lg:h-12 lg:w-12"
       >
-        <BsChevronRight size="20" />
+        <BsChevronRight className="h-3 w-3 lg:h-5 lg:w-5" />
       </motion.button>
     </>
   );
