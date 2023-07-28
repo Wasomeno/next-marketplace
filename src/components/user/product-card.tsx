@@ -36,7 +36,7 @@ const ProductCard = ({
 
 const ProductImage = ({ image }: { image: string }) => {
   return (
-    <div className="relative h-32 w-full bg-slate-200 lg:h-44">
+    <div className="relative h-32 w-full rounded-t-md bg-slate-200 lg:h-44">
       <Image src={image} alt="product-image" className="rounded-t-md" fill />
     </div>
   );
