@@ -58,7 +58,7 @@ export default function OrdersPage() {
   return (
     <div className="flex flex-1 flex-col px-5 lg:px-8">
       <div className="mb-4">
-        <h1 className="text-base lg:text-xl">Orders</h1>
+        <h1 className="text-base font-medium lg:text-xl">Orders</h1>
       </div>
       <div className="flex-1 rounded-lg border p-2.5 lg:w-4/6 lg:p-4">
         <div className="mb-2.5 flex items-center gap-2.5  overflow-x-scroll">
