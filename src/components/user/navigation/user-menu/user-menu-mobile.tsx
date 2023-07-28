@@ -1,9 +1,13 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { signOut } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
-import { HiMenu, HiX } from "react-icons/hi";
+import { BsBox2Heart } from "react-icons/bs";
+import { HiMenu, HiOutlineClipboard, HiX } from "react-icons/hi";
+import { VscSignOut } from "react-icons/vsc";
 
 import { UserSession } from "./user-menu-main";
 
@@ -17,7 +21,7 @@ export function UserMenuMobile({ session }: { session: UserSession | null }) {
       <AnimatePresence>
         {showMenu && (
           <motion.div
-            className="fixed inset-x-0 z-30 h-screen w-screen rounded-t-lg bg-white p-4 shadow-[0_3px_10px_rgb(0,0,0,0.2)]"
+            className="fixed inset-x-0 z-30 h-screen w-screen rounded-t-lg bg-white py-2.5 shadow-[0_3px_10px_rgb(0,0,0,0.2)]"
             initial={{ top: "100vh" }}
             animate={{ top: "0" }}
             transition={{
@@ -28,7 +32,6 @@ export function UserMenuMobile({ session }: { session: UserSession | null }) {
             exit={{ top: "100vh" }}
           >
             <motion.div
-              className="flex flex-col gap-6"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{
@@ -39,32 +42,51 @@ export function UserMenuMobile({ session }: { session: UserSession | null }) {
               }}
               exit={{ opacity: 0 }}
             >
-              <div className="flex h-8 items-center gap-4">
+              <div className="flex h-8 items-center gap-4 px-4">
                 <button onClick={() => setShowMenu(false)}>
                   <HiX size="18" />
                 </button>
-                <span className="text-base">Menu</span>
+                <span className="text-sm font-medium">Menu</span>
               </div>
-              <div className="flex items-center">
-                <div className="item-center flex w-2/6 justify-center">
-                  <div className="relative h-16 w-16">
-                    <Image
-                      src={session?.user?.picture as string}
-                      alt="user-image"
-                      fill
-                      className="rounded-full"
-                    />
-                  </div>
+              <div className="flex items-center gap-4 border-b px-4 py-2">
+                <div className="relative h-10 w-10">
+                  <Image
+                    fill
+                    src={session?.user?.picture as string}
+                    className="rounded-full"
+                    alt="user-image"
+                  />
                 </div>
-                <div className="flex flex-col gap-2">
-                  <h6>{session?.user?.name}</h6>
+                <div>
+                  <h5 className="font-sans font-medium">
+                    {session?.user?.name}
+                  </h5>
+                  <span className="font-sans text-sm font-medium text-slate-500">
+                    {session?.user?.email}
+                  </span>
                 </div>
               </div>
-              <div className="flex flex-col gap-2.5">
-                <h5 className="text-base font-medium">My Activity</h5>
-                <div className="space-y-1.5">
-                  <div></div>
-                </div>
+              <div className="space-y-1.5 border-b px-4 py-2">
+                <Link
+                  href="/#"
+                  className="flex items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200"
+                >
+                  <span>
+                    <BsBox2Heart size="16" />
+                  </span>
+                  <span className="text-sm">Wishlist</span>
+                </Link>
+              </div>
+              <div className="px-4 py-2">
+                <button
+                  onClick={() => signOut()}
+                  className="flex w-full items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200"
+                >
+                  <span>
+                    <VscSignOut size="16" />
+                  </span>
+                  <span className="text-sm"> Sign Out</span>
+                </button>
               </div>
             </motion.div>
           </motion.div>
