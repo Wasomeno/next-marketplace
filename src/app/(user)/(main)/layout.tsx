@@ -8,7 +8,7 @@ interface UserLayoutProps {
 
 export default async function UserMainLayout({ children }: UserLayoutProps) {
   return (
-    <div className="flex flex-1 flex-col gap-4 bg-white lg:gap-6">
+    <div className="flex flex-1 flex-col gap-2 bg-white lg:gap-6">
       <NavigationMain />
       {children}
       <Footer />
