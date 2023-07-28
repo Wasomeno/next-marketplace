@@ -63,7 +63,7 @@ export const CartItems = ({
         }))
       );
     }
-  }, []);
+  }, [cartItems.status]);
 
   return (
     <div className="w-full px-5 lg:w-4/6 lg:px-8">
