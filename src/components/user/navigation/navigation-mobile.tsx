@@ -35,13 +35,13 @@ export const NavigationMobile = () => {
           size="18"
           className={twMerge(
             "text-slate-400",
-            pathname === "/categories" && "text-blue-500"
+            pathname.startsWith("/categories") && "text-blue-500"
           )}
         />
         <span
           className={twMerge(
             "text-xs text-slate-400",
-            pathname === "/categories" && "text-blue-500"
+            pathname.startsWith("/categories") && "text-blue-500"
           )}
         >
           Categories
