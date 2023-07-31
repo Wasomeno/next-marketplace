@@ -9,17 +9,18 @@ datasource db {
 }
 
 model Product {
-  id          Int            @id @default(autoincrement())
-  name        String         @unique
-  description String
-  price       Int
-  stock       Int
-  category_id Int
-  slug        String
-  cart_items  CartItem[]
-  orders      Order[]
-  images      ProductImage[]
-  category    Category       @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  id             Int            @id @default(autoincrement())
+  name           String         @unique
+  description    String
+  price          Int
+  stock          Int
+  category_id    Int
+  slug           String
+  cart_items     CartItem[]
+  wishlist_items WishlistItem[]
+  orders         Order[]
+  images         ProductImage[]
+  category       Category       @relation(fields: [category_id], references: [id], onDelete: Cascade)
 
   @@index([category_id])
 }
@@ -50,6 +51,24 @@ model CartItem {
 
   @@index([product_id])
   @@index([cart_id])
+}
+
+model Wishlist {
+  id         Int            @id @default(autoincrement())
+  user_email String         @unique
+  user       User           @relation(fields: [user_email], references: [email])
+  items      WishlistItem[]
+}
+
+model WishlistItem {
+  id          Int      @id @default(autoincrement())
+  wishlist_id Int
+  product_id  Int
+  wishlist    Wishlist @relation(fields: [wishlist_id], references: [id], onDelete: Cascade)
+  product     Product  @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@index([product_id])
+  @@index([wishlist_id])
 }
 
 model Category {
@@ -150,6 +169,7 @@ model User {
   emailVerified DateTime? @map("email_verified")
   image         String?
   cart          Cart?
+  wishlist      Wishlist?
   accounts      Account[]
   sessions      Session[]
 
