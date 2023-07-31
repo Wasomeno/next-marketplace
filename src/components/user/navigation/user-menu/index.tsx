@@ -1,10 +1,14 @@
-import { Session } from "next-auth";
+import { getServerSession } from "next-auth";
 import Link from "next/link";
+
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 import { UserMenuMain } from "./user-menu-main";
 import { UserMenuMobile } from "./user-menu-mobile";
 
-export const UserMenu = ({ session }: { session: Session | null }) => {
+export async function UserMenu() {
+  const session = await getServerSession(authOptions);
+
   return session ? (
     <>
       <UserMenuMain session={session} />
@@ -20,4 +24,4 @@ export const UserMenu = ({ session }: { session: Session | null }) => {
       </Link>
     </div>
   );
-};
+}
