@@ -1,9 +1,11 @@
 import { Metadata } from "next";
 import invariant from "tiny-invariant";
 
+import { isProductInWishlist } from "@/app/actions/wishlist";
 import { BackButton } from "@/components/back-button";
 import { AddToCartDialog } from "@/components/user/product-details/add-to-cart-dialog";
 import { ProductImages } from "@/components/user/product-details/product-images";
+import { WishListButton } from "@/components/user/product-details/wishlist-button";
 import { prisma } from "@/lib/prisma";
 
 type Props = {
@@ -43,9 +45,14 @@ export default async function ProductPage(props: {
           imageUrls={productDetails?.images.map((image) => image.image_url)}
         />
         <div className="w-10/12 lg:w-5/12">
-          <h1 className="text-base font-medium lg:text-xl">
-            {productDetails?.name}
-          </h1>
+          <div className="flex items-center justify-between">
+            <h1 className="text-base font-medium lg:text-xl">
+              {productDetails?.name}
+            </h1>
+            <WishListButton
+              isProductInWishlist={await isProductInWishlist(productDetails.id)}
+            />
+          </div>
           <div className="my-4 text-lg font-medium lg:text-3xl">
             Rp. {productDetails?.price.toLocaleString("id")}
           </div>
