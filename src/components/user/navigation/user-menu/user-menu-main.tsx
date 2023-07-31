@@ -60,7 +60,7 @@ export const UserMenuMain = ({ session }: { session: UserSession | null }) => {
               <span className="text-sm">Orders</span>
             </Link>
             <Link
-              href="/#"
+              href="/wishlist"
               className="flex items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200"
             >
               <span>
