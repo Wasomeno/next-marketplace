@@ -8,7 +8,7 @@ const Separator = React.forwardRef<
   React.ElementRef<typeof SeparatorPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root>
 >(({ className, ...props }, ref) => {
-  return <SeparatorPrimitive.Root ref={ref} className={className} />;
+  return <SeparatorPrimitive.Root ref={ref} className={className} {...props} />;
 });
 
 Separator.displayName = SeparatorPrimitive.Root.displayName;
