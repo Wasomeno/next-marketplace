@@ -97,6 +97,18 @@ export async function addToCart(productId: number, productAmount: number) {
   revalidatePath("/cart");
 }
 
+export async function updateCartItem(cartItemId: number, amount: number) {
+  try {
+    await prisma.cartItem.update({
+      where: { id: cartItemId },
+      data: { amount: amount },
+    });
+  } catch (error) {
+    throw error;
+  }
+  revalidatePath("/cart");
+}
+
 export async function removeFromCart(cartItemId: number) {
   try {
     await prisma.cartItem.delete({ where: { id: cartItemId } });
