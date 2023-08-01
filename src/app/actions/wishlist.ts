@@ -3,6 +3,7 @@
 import { error } from "console";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 import { prisma } from "@/lib/prisma";
 
@@ -21,45 +22,55 @@ export async function getWishlist(sort: string[][]) {
       },
     },
   });
-
   return wishList?.items;
 }
 
 export async function isProductInWishlist(productId: number) {
   const session = await getServerSession(authOptions);
-  const wishList = await prisma.wishlist.findUnique({
-    where: { user_email: session?.user?.email as string },
-    select: {
-      items: { include: { product: { include: { images: true } } } },
-    },
-  });
-
-  const product = wishList?.items.find((item) => item.product_id === productId);
-
-  return product ? true : false;
+  if (session) {
+    const wishList = await prisma.wishlist.findUnique({
+      where: { user_email: session?.user?.email as string },
+      select: {
+        items: { include: { product: { include: { images: true } } } },
+      },
+    });
+    const product = wishList?.items.find(
+      (item) => item.product_id === productId
+    );
+    return product ? true : false;
+  } else {
+    return false;
+  }
 }
 
 export async function addToWishlist(productId: number) {
   const session = await getServerSession(authOptions);
-  const wishlist = await prisma.wishlist.findUnique({
-    where: { user_email: session?.user?.email as string },
-  });
 
-  if (wishlist) {
-    await prisma.wishlist.update({
+  if (session) {
+    const wishlist = await prisma.wishlist.findUnique({
       where: { user_email: session?.user?.email as string },
-      data: { items: { create: { product: { connect: { id: productId } } } } },
     });
+    if (wishlist) {
+      await prisma.wishlist.update({
+        where: { user_email: session?.user?.email as string },
+        data: {
+          items: { create: { product: { connect: { id: productId } } } },
+        },
+      });
+    }
+
+    if (!wishlist) {
+      await prisma.wishlist.create({
+        data: {
+          user: { connect: { email: session?.user?.email as string } },
+          items: { create: { product: { connect: { id: productId } } } },
+        },
+      });
+    }
+  } else {
+    redirect("/login");
   }
 
-  if (!wishlist) {
-    await prisma.wishlist.create({
-      data: {
-        user: { connect: { email: session?.user?.email as string } },
-        items: { create: { product: { connect: { id: productId } } } },
-      },
-    });
-  }
   revalidatePath(`/${productId}`);
 }
 

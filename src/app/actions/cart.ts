@@ -21,11 +21,15 @@ export async function getCartItems() {
 
 export async function getCartItemsCount() {
   const session = await getServerSession(authOptions);
-  const cart = await prisma.cart.findUnique({
-    where: { user_email: session?.user?.email as string },
-    select: { _count: true },
-  });
-  return cart?._count.items;
+  if (session) {
+    const cart = await prisma.cart.findUnique({
+      where: { user_email: session?.user?.email as string },
+      select: { _count: true },
+    });
+    return cart?._count.items;
+  } else {
+    return 0;
+  }
 }
 
 export async function addToCart(productId: number, productAmount: number) {
