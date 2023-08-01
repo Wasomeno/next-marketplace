@@ -1,117 +1,90 @@
-import axios from "axios";
+"use client";
+
 import Image from "next/image";
+import { useTransition } from "react";
 import { BiTrash } from "react-icons/bi";
 import { BsCheck } from "react-icons/bs";
+import { toast } from "react-toastify";
 
 import { CartItem } from "@/app/(user)/(main)/cart/page";
+import { removeFromCart, updateCartItem } from "@/app/actions/cart";
 import { Button } from "@/components/ui/button";
-import { queryClient } from "@/lib/react-query-client";
 import * as Checkbox from "@radix-ui/react-checkbox";
-import { useMutation } from "@tanstack/react-query";
 
 interface CartItemCardProps {
-  user: string;
   isSelected: boolean;
   itemDetails: CartItem;
   onClick: () => void;
 }
 
 export const CartItemCard = ({
-  user,
   itemDetails,
   isSelected,
   onClick,
 }: CartItemCardProps) => {
-  const deleteCartItem = useMutation(async () => {
-    await axios.post(`/api/users/${user}/cart/${itemDetails.id}/delete`);
-    queryClient.invalidateQueries(["cart", user]);
-    queryClient.invalidateQueries(["cartItemCount", user]);
-  });
+  const [isPending, startTransition] = useTransition();
 
-  const updateCartItem = useMutation(
-    async ({ item, amount }: { item: number; amount: number }) =>
-      await axios.patch(`/api/users/${user}/cart/${item}`, {
-        amount: amount,
-      }),
-    {
-      onSuccess() {
-        queryClient.invalidateQueries(["cart", user]);
-      },
-    }
-  );
-
-  async function increment(stock: number, item: number, amount: number) {
-    if (amount >= stock) return;
-    updateCartItem.mutate({ item, amount: amount + 1 });
+  function increment() {
+    itemDetails.amount >= itemDetails.product.stock
+      ? toast.error("Amount can't be more than the stock")
+      : startTransition(async () => {
+          await updateCartItem(itemDetails.id, itemDetails.amount + 1);
+        });
   }
 
-  async function decrement(item: number, amount: number) {
-    if (amount <= 1) return;
-    updateCartItem.mutate({ item, amount: amount - 1 });
+  function decrement() {
+    itemDetails.amount <= 1
+      ? toast.error("Amount can't be lower than 1")
+      : startTransition(async () => {
+          await updateCartItem(itemDetails.id, itemDetails.amount - 1);
+        });
   }
 
   return (
-    <div
-      key={itemDetails.id}
-      className="flex items-center justify-start gap-2.5"
-    >
+    <div className="flex items-center gap-4 border-t p-4">
       <Checkbox.Root
         checked={isSelected}
         onClick={() => onClick()}
-        className="flex h-6 w-6 items-center justify-center rounded-md border border-slate-400 bg-slate-50"
+        className="flex h-5 w-5 items-center justify-center rounded-sm border border-slate-400 bg-slate-50 lg:h-5 lg:w-5"
       >
         <Checkbox.Indicator color="black">
-          <BsCheck size="15" />
+          <BsCheck className="h-4 w-4" />
         </Checkbox.Indicator>
       </Checkbox.Root>
-      <div
-        className="w-full space-y-2 rounded-lg border p-4 shadow-sm"
-        key={itemDetails.id}
-      >
-        <div className="flex w-full items-center gap-4 ">
-          <div className="w-[60px] lg:w-[120px]">
-            <div className="relative h-16 w-full rounded-md bg-slate-200 lg:h-32">
-              <Image
-                src={itemDetails.product.images[0].image_url}
-                alt="product-image"
-                fill
-              />
-            </div>
+      <div className="flex w-full flex-wrap items-end justify-between gap-2">
+        <div className="flex w-full gap-2 lg:w-4/6 lg:gap-4">
+          <div className="relative h-20 w-28 rounded-md bg-slate-200 lg:h-32 lg:w-36">
+            <Image
+              src={itemDetails.product.images[0].image_url}
+              alt="product-image"
+              fill
+            />
           </div>
-          <div className="flex w-4/6 flex-col gap-2 lg:w-3/6">
-            <span className="text-xs font-medium tracking-wide lg:text-base">
-              {itemDetails.product.name}
+          <div className="flex w-4/6 flex-col gap-1 lg:w-3/6">
+            <span className="text-sm tracking-wide lg:text-base">
+              Rp {itemDetails.product.price}
             </span>
-            <span className="text-xs lg:text-base">
-              Rp {itemDetails.product.price.toLocaleString("id")}
+            <span className="text-xs tracking-wide text-slate-500 lg:text-base">
+              {itemDetails.product.name}
             </span>
           </div>
         </div>
-        <div className="flex w-full items-center justify-end gap-4">
-          <div className="flex h-7 w-20 items-center justify-center gap-4 rounded-md bg-slate-200 text-sm font-medium lg:h-10 lg:w-20">
-            <button
-              onClick={() => decrement(itemDetails.id, itemDetails.amount)}
-            >
-              -
-            </button>
+        <div className="flex w-full items-center justify-end gap-4 lg:w-auto">
+          <div className="bg-slate-white flex h-7 w-20 items-center justify-center gap-4 rounded-lg border border-slate-300 px-3 text-sm font-medium lg:h-10 lg:w-20">
+            <button onClick={decrement}>-</button>
             <span className="text-xs lg:text-sm">{itemDetails.amount}</span>
-            <button
-              onClick={() =>
-                increment(
-                  itemDetails.product.stock,
-                  itemDetails.id,
-                  itemDetails.amount
-                )
-              }
-            >
-              +
-            </button>
+            <button onClick={increment}>+</button>
           </div>
           <Button
-            onClick={() => deleteCartItem.mutate()}
             variant="danger"
             size="sm"
-            className="text-white"
+            className="h-7 w-7 p-2 text-white lg:h-8 lg:w-8"
+            onClick={() =>
+              startTransition(async () => {
+                await removeFromCart(itemDetails.id);
+                toast.success(`Removed ${itemDetails.product.name} from cart`);
+              })
+            }
           >
             <BiTrash size="14" />
           </Button>
@@ -123,20 +96,37 @@ export const CartItemCard = ({
 
 export const CartItemCardSkeleton = () => {
   return (
-    <div className="flex items-center justify-start gap-2.5">
-      <div className="flex h-6 w-6 animate-pulse rounded-md bg-slate-300" />
-      <div className="w-full space-y-2 rounded-lg border p-4 shadow-sm">
-        <div className="flex w-full items-center gap-4 ">
-          <div className="w-[60px] lg:w-[120px]">
-            <div className="h-16 w-full animate-pulse rounded-md bg-slate-300 lg:h-32" />
-          </div>
-          <div className="flex w-4/6 flex-col gap-2 lg:w-3/6">
-            <div className="h-6 w-40 animate-pulse rounded-md bg-slate-300 lg:h-8 lg:w-52  " />
-            <div className="h-6 w-24 animate-pulse rounded-md bg-slate-300 lg:h-8 lg:w-32  " />
+    <div className="flex items-center gap-4 border-t p-4">
+      <Checkbox.Root
+        disabled
+        className="flex h-5 w-5 items-center justify-center rounded-sm border border-slate-400 bg-slate-50 lg:h-5 lg:w-5"
+      >
+        <Checkbox.Indicator color="black">
+          <BsCheck className="h-4 w-4" />
+        </Checkbox.Indicator>
+      </Checkbox.Root>
+      <div className="flex w-full flex-wrap items-end justify-between gap-2">
+        <div className="flex w-full gap-2 lg:w-4/6 lg:gap-4">
+          <div className="relative h-20 w-28 animate-pulse rounded-md bg-slate-300 lg:h-32 lg:w-36" />
+          <div className="flex w-4/6 flex-col gap-1 lg:w-3/6">
+            <div className="h-[14px] w-40 animate-pulse rounded-md bg-slate-300 lg:h-[18px]" />
+            <div className="h-[12px] w-32 animate-pulse rounded-md bg-slate-300 lg:h-[18px]" />
           </div>
         </div>
-        <div className="flex w-full justify-end">
-          <div className="flex h-7 w-20  animate-pulse rounded-md bg-slate-300 lg:h-10 lg:w-20" />
+        <div className="flex w-full items-center justify-end gap-4 lg:w-auto">
+          <div className="bg-slate-white flex h-7 w-20 items-center justify-center gap-4 rounded-lg border border-slate-300 px-3 text-sm font-medium lg:h-10 lg:w-20">
+            <button disabled>-</button>
+            <div className="h-[12px] lg:h-[14px]" />
+            <button disabled>+</button>
+          </div>
+          <Button
+            disabled
+            variant="danger"
+            size="sm"
+            className="h-7 w-7 p-2 text-white lg:h-8 lg:w-8"
+          >
+            <BiTrash size="14" />
+          </Button>
         </div>
       </div>
     </div>
