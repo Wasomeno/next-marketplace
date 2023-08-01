@@ -13,6 +13,8 @@ const nextConfig = {
   },
   experimental: {
     appDir: true,
+    serverActions: true,
+    serverActionsBodySizeLimit: "2mb",
   },
   images: {
     domains: ["lh3.googleusercontent.com"],
