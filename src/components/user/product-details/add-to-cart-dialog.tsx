@@ -2,13 +2,12 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { toast } from "react-toastify";
 
+import { addToCart } from "@/app/actions/cart";
 import { Button } from "@/components/ui/button";
-import { queryClient } from "@/lib/react-query-client";
 import { Product } from "@prisma/client";
-import { useMutation } from "@tanstack/react-query";
 
 export interface AddToCartDialogProps {
   productDetails: Product;
@@ -16,29 +15,11 @@ export interface AddToCartDialogProps {
 
 export const AddToCartDialog = ({ productDetails }: AddToCartDialogProps) => {
   const [amount, setAmount] = useState<number>(1);
+  const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
   const { data: session } = useSession();
   const userEmail = session?.user?.email;
-
-  const addProductMutation = useMutation(async () =>
-    toast.promise(addProductToCart(), {
-      pending: "Adding " + productDetails.name,
-      success: "Succesfully added " + productDetails.name,
-      error: "Error",
-    })
-  );
-
-  async function addProductToCart() {
-    await fetch(`/api/users/${userEmail}/cart`, {
-      method: "POST",
-      body: JSON.stringify({
-        product: { id: productDetails.id, amount: amount },
-      }),
-    });
-    queryClient.invalidateQueries(["cart", userEmail]);
-    queryClient.invalidateQueries(["cartItemCount", userEmail]);
-  }
 
   function increment() {
     if (amount >= productDetails.stock) return;
@@ -78,15 +59,14 @@ export const AddToCartDialog = ({ productDetails }: AddToCartDialogProps) => {
         </div>
         <div className="flex w-full gap-2 lg:flex-col lg:gap-0">
           <Button
-            variant="defaultOutline"
-            className="my my-2 h-8 w-full rounded-lg border border-blue-400  text-xs font-medium text-blue-400 lg:h-10 lg:text-sm"
-          >
-            Add to Wishlist
-          </Button>
-          <Button
             variant="default"
             onClick={() =>
-              userEmail ? addProductMutation.mutate() : router.push("/login")
+              userEmail
+                ? startTransition(async () => {
+                    await addToCart(productDetails.id, amount);
+                    toast.success("Added to cart");
+                  })
+                : router.push("/login")
             }
             className="my my-2 h-8 w-full rounded-lg  bg-blue-400 text-xs font-medium text-slate-50 lg:h-10 lg:text-sm"
           >
