@@ -4,15 +4,22 @@ import { AnimatePresence, motion } from "framer-motion";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { BsBox2Heart } from "react-icons/bs";
-import { HiMenu, HiOutlineClipboard, HiX } from "react-icons/hi";
+import { HiMenu, HiX } from "react-icons/hi";
 import { VscSignOut } from "react-icons/vsc";
 
 import { UserSession } from "./user-menu-main";
 
 export function UserMenuMobile({ session }: { session: UserSession | null }) {
   const [showMenu, setShowMenu] = useState(false);
+  const pathnamae = usePathname();
+
+  useEffect(() => {
+    setShowMenu(false);
+  }, [pathnamae]);
+
   return (
     <div className="relative flex items-center md:hidden">
       <button onClick={() => setShowMenu(true)}>
@@ -68,7 +75,7 @@ export function UserMenuMobile({ session }: { session: UserSession | null }) {
               </div>
               <div className="space-y-1.5 border-b px-4 py-2">
                 <Link
-                  href="/#"
+                  href="/wishlist"
                   className="flex items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200"
                 >
                   <span>
