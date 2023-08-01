@@ -17,14 +17,14 @@ export default function RootLayout({
           <body className="bg-slate-50 antialiased">
             {children}
             <ToastifyContainer
+              closeButton={false}
               position="bottom-center"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={true}
-              closeOnClick
+              autoClose={2000}
+              hideProgressBar={true}
+              newestOnTop={false}
               rtl={false}
-              draggable
-              theme="light"
+              toastClassName="bg-white  border border-slate-300 rounded-lg"
+              bodyClassName="text-sm font-medium flex gap-4 font-sans text-slate-600"
             />
           </body>
         </ReactQueryProvider>
