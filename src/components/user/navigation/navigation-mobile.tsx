@@ -10,7 +10,8 @@ export const NavigationMobile = () => {
   const pathname = usePathname();
   const params = useParams();
 
-  if (params?.product || pathname === "/cart") return;
+  if (params?.product || pathname === "/cart" || pathname === "/wishlist")
+    return;
   return (
     <div className="sticky bottom-0 z-10 flex w-full items-center justify-around border-t bg-white p-2.5 lg:hidden">
       <Link href="/" className="flex flex-col items-center gap-1.5">
