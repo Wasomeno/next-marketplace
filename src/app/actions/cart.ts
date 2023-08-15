@@ -9,19 +9,23 @@ import { authOptions } from "../api/auth/[...nextauth]/route";
 
 export async function getCartItems() {
   const session = await getServerSession(authOptions);
-  const cart = await prisma.cart.findUnique({
-    where: { user_email: session?.user?.email as string },
-    select: {
-      items: { include: { product: { include: { images: true } } } },
-      _count: { select: { items: true } },
-    },
-  });
-  return { items: cart?.items, count: cart?._count.items };
+  if (session?.user?.email) {
+    const cart = await prisma.cart.findUnique({
+      where: { user_email: session?.user?.email as string },
+      select: {
+        items: { include: { product: { include: { images: true } } } },
+        _count: { select: { items: true } },
+      },
+    });
+    return { items: cart?.items, count: cart?._count.items };
+  } else {
+    return { items: [], count: 0 };
+  }
 }
 
 export async function getCartItemsCount() {
   const session = await getServerSession(authOptions);
-  if (session) {
+  if (session?.user?.email) {
     const cart = await prisma.cart.findUnique({
       where: { user_email: session?.user?.email as string },
       select: { _count: true },
