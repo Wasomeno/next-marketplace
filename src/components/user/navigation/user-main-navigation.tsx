@@ -8,10 +8,10 @@ import { Separator } from "@/components/ui/separator";
 import { SearchProduct } from "./search-product";
 import { UserMenu } from "./user-menu";
 
-export async function NavigationMain() {
+export async function UserMainNavigation() {
   const cartItemCount = await getCartItemsCount();
   return (
-    <div className="sticky top-0 z-10 flex h-16 w-full items-center justify-between border-b border-b-gray-200 bg-white px-4 shadow-sm">
+    <div className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-b-gray-200 bg-white px-4 shadow-sm">
       <div className="flex w-full items-center gap-2 lg:w-3/6">
         <Link
           href="/"
