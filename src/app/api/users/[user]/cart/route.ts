@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import { prisma } from "@/lib/prisma";
 import { CartItem } from "@prisma/client";
@@ -9,11 +9,10 @@ export async function GET(request: Request, context: { params: any }) {
     where: { user_email: user },
     include: { items: { include: { product: { include: { images: true } } } } },
   });
-
   return NextResponse.json(!userCart ? [] : userCart?.items);
 }
 
-export async function POST(request: Request, context: { params: any }) {
+export async function POST(request: NextRequest, context: { params: any }) {
   const { user } = context.params;
   const body = await request.json();
   const cart = await prisma.cart.findUnique({
