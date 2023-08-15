@@ -1,6 +1,6 @@
 import { Footer } from "@/components/user/footer";
-import { NavigationMain } from "@/components/user/navigation/navigation-main";
-import { NavigationMobile } from "@/components/user/navigation/navigation-mobile";
+import { UserMainNavigation } from "@/components/user/navigation/user-main-navigation";
+import { UserMobileNavigation } from "@/components/user/navigation/user-mobile-navigation";
 
 interface UserLayoutProps {
   children: React.ReactNode;
@@ -8,11 +8,11 @@ interface UserLayoutProps {
 
 export default async function UserMainLayout({ children }: UserLayoutProps) {
   return (
-    <div className="flex flex-1 flex-col gap-2 bg-white lg:gap-6">
-      <NavigationMain />
+    <div className="flex flex-1 flex-col gap-2 bg-white dark:bg-slate-950 lg:gap-6">
+      <UserMainNavigation />
       {children}
       <Footer />
-      <NavigationMobile />
+      <UserMobileNavigation />
     </div>
   );
 }
