@@ -2,6 +2,7 @@ import "./globals.css";
 import "react-toastify/dist/ReactToastify.css";
 
 import ClientSessionProvider from "@/components/session-provider";
+import { ThemeClientProvider } from "@/components/theme-client-provider";
 import ToastifyContainer from "@/components/toastify-client-container";
 import { ReactQueryProvider } from "@/lib/react-query-provider";
 
@@ -11,11 +12,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <ClientSessionProvider>
         <ReactQueryProvider>
-          <body className="bg-slate-50 antialiased">
-            {children}
+          <body className="bg-slate-50 dark:bg-slate-950 antialiased">
+            <ThemeClientProvider>{children}</ThemeClientProvider>
             <ToastifyContainer
               closeButton={false}
               position="bottom-center"
