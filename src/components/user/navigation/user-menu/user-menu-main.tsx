@@ -8,6 +8,7 @@ import { BsBox2Heart } from "react-icons/bs";
 import { HiOutlineClipboard } from "react-icons/hi";
 import { VscSignOut } from "react-icons/vsc";
 
+import { ThemeSwitcher } from "@/components/theme-switcher";
 import * as HoverCard from "@radix-ui/react-hover-card";
 
 export interface UserSession {
@@ -70,6 +71,7 @@ export const UserMenuMain = ({ session }: { session: UserSession | null }) => {
             </Link>
           </div>
           <div className="p-1.5">
+            <ThemeSwitcher />
             <button
               onClick={() => signOut()}
               className="flex w-full items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200"
