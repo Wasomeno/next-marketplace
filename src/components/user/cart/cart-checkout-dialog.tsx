@@ -42,7 +42,7 @@ export const CartCheckoutDialog = ({
 
   return (
     <div className="sticky bottom-0 w-full lg:w-2/6 lg:px-8">
-      <div className="border-t border-slate-200 p-2.5 shadow-[0_3px_10px_rgb(0,0,0,0.1)] lg:rounded-md lg:border lg:border-slate-400 lg:p-4 lg:shadow-none">
+      <div className="border-t lg:dark:border-gray-700 dark:border-t-gray-700 border-slate-200 p-2.5 shadow-[0_3px_10px_rgb(0,0,0,0.1)] lg:rounded-md lg:border lg:border-slate-400 lg:p-4 lg:shadow-none">
         <span className="hidden text-xs lg:inline lg:text-lg">
           Cart Summary
         </span>
@@ -53,7 +53,7 @@ export const CartCheckoutDialog = ({
         <Button
           variant="default"
           onClick={() => checkout.mutate()}
-          className="my-1 w-full rounded-lg border bg-blue-400  py-3 text-xs font-medium text-slate-50 lg:text-sm"
+          className="my-1 w-full rounded-lg bg-blue-400  py-3 text-xs font-medium dark:bg-blue-900 lg:text-sm"
         >
           Checkout
         </Button>

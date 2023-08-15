@@ -7,5 +7,5 @@ export function ThemeClientProvider({
 }: {
   children: React.ReactNode;
 }) {
-  return <ThemeProvider>{children}</ThemeProvider>;
+  return <ThemeProvider attribute="class">{children}</ThemeProvider>;
 }

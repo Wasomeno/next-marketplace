@@ -13,7 +13,7 @@ export const UserMobileNavigation = () => {
   if (params?.product || pathname === "/cart" || pathname === "/wishlist")
     return;
   return (
-    <div className="sticky bottom-0 z-10 flex w-full items-center justify-around border-t bg-white p-2.5 lg:hidden">
+    <div className="sticky bottom-0 z-10 flex w-full items-center justify-around border-t bg-white dark:bg-slate-950 dark:border-t-gray-700 p-2.5 lg:hidden">
       {userMobilePaths.map((path) => (
         <Link
           key={path.title}

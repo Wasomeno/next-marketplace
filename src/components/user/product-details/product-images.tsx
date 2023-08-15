@@ -20,11 +20,18 @@ export const ProductImages = ({ imageUrls }: { imageUrls: string[] }) => {
             onMouseLeave={() => setActiveImage(selectedImage)}
             onClick={() => setSelectedImage(url)}
             className={twMerge(
-              "relative h-16 w-16 cursor-pointer rounded-md border-2 transition duration-200 hover:border-blue-300",
-              selectedImage === url && "border-blue-300"
+              "relative h-16 w-16 cursor-pointer rounded-md transition duration-200"
             )}
           >
-            <Image src={url} alt="product-images" className="rounded-md" fill />
+            <Image
+              src={url}
+              alt="product-images"
+              className={twMerge(
+                "rounded-md border-2 hover:border-blue-300 hover:dark:border-blue-500",
+                selectedImage === url && "border-blue-300 dark:border-blue-500"
+              )}
+              fill
+            />
           </div>
         ))}
       </div>

@@ -21,7 +21,7 @@ const ProductCard = ({
   return (
     <Link
       href={href}
-      className="col-span-5 h-56 cursor-pointer rounded-md shadow-[0_3px_7px_rgb(0,0,0,0.1)] lg:col-span-2 lg:h-auto"
+      className="col-span-5 h-56 cursor-pointer rounded-md dark:shadow-gray-800 shadow-[0_3px_7px_rgb(0,0,0,0.1)] lg:col-span-2 lg:h-auto"
     >
       {image}
       <div className="flex w-full flex-col gap-1 p-3">
@@ -76,11 +76,11 @@ const Category = ({
 
 const Skeleton = () => {
   return (
-    <div className="col-span-5 h-56 cursor-pointer rounded-md shadow-md lg:col-span-2 lg:h-auto">
-      <div className="h-32 w-full animate-pulse rounded-t-md bg-slate-300 lg:h-44" />
+    <div className="col-span-5 h-56 cursor-pointer dark:shadow-neutral-700 rounded-md shadow-md lg:col-span-2 lg:h-auto">
+      <div className="h-32 w-full animate-pulse rounded-t-md bg-slate-300 dark:bg-neutral-500 lg:h-44" />
       <div className="flex w-full flex-col gap-1 p-3">
-        <span className="h-6 w-32 animate-pulse rounded-lg bg-slate-200" />
-        <span className="h-6 w-24 animate-pulse rounded-lg bg-slate-200" />
+        <span className="h-6 w-32 animate-pulse rounded-lg bg-slate-200 dark:bg-neutral-500" />
+        <span className="h-6 w-24 animate-pulse rounded-lg bg-slate-200 dark:bg-neutral-500" />
       </div>
     </div>
   );

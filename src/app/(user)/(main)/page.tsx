@@ -24,10 +24,10 @@ export default async function Home() {
   });
 
   return (
-    <div className="relative flex flex-col items-center justify-start gap-6 bg-white px-4 lg:px-8">
+    <div className="relative flex flex-col items-center justify-start gap-6 bg-white dark:bg-slate-950 px-4 lg:px-8">
       <HomeBannerSlider />
       <div className="w-full lg:w-11/12">
-        <div className="w-full rounded-md border p-4 shadow-sm lg:w-3/6 ">
+        <div className="w-full rounded-md border dark:border-gray-700 p-4 shadow-sm lg:w-3/6 ">
           <h2 className="mb-4 font-sans text-sm font-medium lg:text-xl">
             Categories
           </h2>

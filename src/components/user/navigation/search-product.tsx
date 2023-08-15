@@ -23,7 +23,7 @@ export function SearchProduct() {
       <Input
         ref={searchInputRef as any}
         placeholder="Search..."
-        className="h-8 w-full rounded-md border bg-slate-50 p-2 font-sans text-xs lg:h-10 lg:text-sm"
+        className="h-8 w-full rounded-md border dark:border-gray-700 bg-slate-50 dark:bg-slate-900 p-2 font-sans text-xs lg:h-10 lg:text-sm"
         onChange={(event) => setSearchParams(event.target.value)}
       />
     </form>

@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
-import { Autoplay, Navigation } from "swiper";
+import { Autoplay, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 export function HomeBannerSlider() {

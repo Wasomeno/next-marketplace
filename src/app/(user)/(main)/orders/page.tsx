@@ -60,9 +60,9 @@ export default function OrdersPage() {
       <div className="mb-4">
         <h1 className="text-base font-medium lg:text-xl">Orders</h1>
       </div>
-      <div className="flex-1 rounded-lg border p-2.5 lg:w-4/6 lg:p-4">
+      <div className="flex-1 flex flex-col rounded-lg border dark:border-gray-700 p-2.5 lg:w-4/6 lg:p-4">
         <div className="mb-2.5 flex items-center gap-2.5  overflow-x-scroll">
-          <div className="flex h-8 items-center rounded-md border bg-white p-1.5 lg:h-10">
+          <div className="flex h-8  items-center rounded-md border dark:border-gray-700 bg-white dark:bg-slate-950 p-1.5 lg:h-10">
             <div className="flex w-10 items-center justify-center">
               <RxMagnifyingGlass className="text-slate-400" />
             </div>
@@ -72,25 +72,28 @@ export default function OrdersPage() {
               onChange={(event) => {
                 setProductSearch(event.target.value);
               }}
-              className="h-auto w-32 border-none p-0 focus-visible:ring-0 lg:w-96"
+              className="h-auto w-32 border-none dark:bg-slate-950 p-0 focus-visible:ring-0 lg:w-96"
               placeholder="Search orders"
             />
           </div>
           <Dropdown>
             <DropdownTrigger asChild>
-              <button className="flex h-8 items-center justify-center rounded-md border bg-white px-3 outline-0 lg:h-10 lg:w-72 lg:justify-between">
+              <button className="flex h-8 items-center justify-center rounded-md border bg-white dark:bg-slate-950 dark:border-gray-700 px-3 outline-0 lg:h-10 lg:w-72 lg:justify-between">
                 <span className="text-xs lg:text-sm">{selectedStatus}</span>
                 <div className="w-5">
-                  <BiChevronRight size="20" className="text-slate-600" />
+                  <BiChevronRight
+                    size="20"
+                    className="text-slate-600 dark:text-white"
+                  />
                 </div>
               </button>
             </DropdownTrigger>
-            <DropdownContent className="flex w-72 flex-col rounded-md rounded-t-none border-x border-b bg-white text-sm shadow-sm">
+            <DropdownContent className="flex w-72 overflow-hidden flex-col rounded-md rounded-t-none border-x border-b dark:border-gray-700 bg-white dark:bg-slate-950 text-sm shadow-sm">
               {statuses.map((status, index) => (
                 <DropdownItem key={index} asChild>
                   <button
                     onClick={() => setSelectedStatus(status)}
-                    className="px-3 py-2 text-start text-xs outline-0 ring-0 transition duration-200 hover:bg-blue-100 lg:text-sm"
+                    className="px-3 py-2 text-start text-xs outline-0 ring-0 transition duration-200 hover:bg-blue-100 hover:dark:bg-slate-800 lg:text-sm"
                   >
                     {status}
                   </button>
@@ -99,7 +102,7 @@ export default function OrdersPage() {
             </DropdownContent>
           </Dropdown>
         </div>
-        <div className="flex w-full flex-col gap-2">
+        <div className="flex flex-1 w-full flex-col gap-2">
           {transactions.isLoading
             ? generateSkeleton(3)
             : transactions.data?.map(
@@ -116,7 +119,7 @@ export default function OrdersPage() {
                 )
               )}
           {!transactions.isLoading && !transactions.data.length ? (
-            <div className="flex h-72 flex-col items-center justify-center gap-2.5 opacity-50">
+            <div className="flex flex-1 flex-col items-center justify-center gap-2.5 opacity-50">
               <span className="text-sm">No Transactions</span>
               <RxCrossCircled size="25" />
             </div>

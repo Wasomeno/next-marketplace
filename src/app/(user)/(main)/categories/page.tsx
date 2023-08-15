@@ -16,7 +16,7 @@ export default async function CategoriesPage() {
 
   return (
     <div className="flex flex-1 flex-col items-center">
-      <div className="flex h-36 w-full items-center justify-between border-y bg-slate-50 px-10 lg:h-72 lg:px-16 ">
+      <div className="flex h-36 w-full items-center justify-between border-y dark:border-y-gray-700 bg-slate-50 dark:bg-slate-900 px-10 lg:h-72 lg:px-16 ">
         <h2 className="text-lg font-medium tracking-wider lg:text-4xl">
           Categories
         </h2>
@@ -26,7 +26,7 @@ export default async function CategoriesPage() {
           <Link
             key={category.id}
             href={`/categories/${category.slug}`}
-            className="col-span-6 flex h-40 flex-col gap-2 rounded-md border bg-white p-3 shadow-sm lg:col-span-2 lg:h-52 lg:text-base"
+            className="col-span-6 flex h-40 flex-col gap-2 rounded-md border dark:border-gray-700 bg-white dark:bg-slate-950 p-3 shadow-sm lg:col-span-2 lg:h-52 lg:text-base"
           >
             <div className="flex items-center justify-between">
               <span className="text-xs font-medium lg:text-base ">

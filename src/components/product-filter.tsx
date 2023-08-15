@@ -17,7 +17,7 @@ export const ProductsFilter = () => {
         <Button
           onClick={() => setOpenFilter(true)}
           variant="defaultOutline"
-          className="lg h-8 border-slate-200 lg:h-10"
+          className="lg h-8 border-slate-200 dark:border-gray-700 lg:h-10"
         >
           Filter
         </Button>
@@ -25,9 +25,9 @@ export const ProductsFilter = () => {
       <DialogContent
         open={openFilter}
         onOpenAutoFocus={(event) => event.preventDefault()}
-        className="flex h-5/6 w-full flex-col bg-white lg:right-0 lg:top-0 lg:h-screen lg:w-2/6 lg:translate-x-0 lg:translate-y-0"
+        className="flex h-5/6 w-full flex-col bg-white border-l rounded-none dark:border-l-gray-700 dark:bg-slate-950 lg:right-0 lg:top-0 lg:h-screen lg:w-2/6 lg:translate-x-0 lg:translate-y-0"
       >
-        <div className="mb-4 border-b p-4">
+        <div className="mb-4 border-b dark:border-b-gray-700 p-4">
           <h5 className="text-sm font-medium lg:text-lg">Filters</h5>
         </div>
         <div className="flex flex-1 flex-col justify-between">
@@ -43,8 +43,11 @@ export const ProductsFilter = () => {
               />
             </div>
           </div>
-          <div className="sticky bottom-0 flex h-16 items-center justify-center border-t px-4">
-            <Button variant="default" className="w-full bg-blue-400 text-white">
+          <div className="sticky bottom-0 flex h-16 items-center justify-center border-t dark:border-t-gray-700 px-4">
+            <Button
+              variant="default"
+              className="w-full bg-blue-400 dark:bg-blue-900 text-white"
+            >
               Clear Filters
             </Button>
           </div>

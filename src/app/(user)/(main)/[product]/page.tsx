@@ -3,6 +3,7 @@ import invariant from "tiny-invariant";
 
 import { isProductInWishlist } from "@/app/actions/wishlist";
 import { BackButton } from "@/components/back-button";
+import { Separator } from "@/components/ui/separator";
 import { AddToCartDialog } from "@/components/user/product-details/add-to-cart-dialog";
 import { ProductImages } from "@/components/user/product-details/product-images";
 import { WishListButton } from "@/components/user/product-details/wishlist-button";
@@ -56,9 +57,19 @@ export default async function ProductPage(props: {
           <div className="my-4 text-lg font-medium lg:text-3xl">
             Rp. {productDetails?.price.toLocaleString("id")}
           </div>
-          <hr className="my-2 w-full bg-slate-200" style={{ height: "1px" }} />
+          <Separator
+            decorative
+            orientation="horizontal"
+            className="my-2 w-full bg-slate-200 dark:bg-gray-700"
+            style={{ height: "1px" }}
+          />
           <span className="text-sm font-medium lg:text-base">Description</span>
-          <hr className="my-2 w-full bg-slate-200" style={{ height: "1px" }} />
+          <Separator
+            decorative
+            orientation="horizontal"
+            className="my-2 w-full bg-slate-200 dark:bg-gray-700"
+            style={{ height: "1px" }}
+          />
           <div>
             <p className="text-sm font-light lg:text-base">
               {productDetails?.description}

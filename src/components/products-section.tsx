@@ -43,10 +43,10 @@ export const ProductsSection = ({ products }: ProductsSectionProps) => {
             ))}
           {products?.length === 0 && (
             <div className="col-span-12 flex h-96 flex-col items-center justify-center gap-2">
-              <span className="text-sm text-slate-800 text-opacity-50 lg:text-base">
+              <span className="text-sm text-slate-800  dark:text-gray-500 text-opacity-50 lg:text-base">
                 No products found
               </span>
-              <span className="text-slate-800 text-opacity-50">
+              <span className="text-slate-800 dark:text-gray-500 text-opacity-50">
                 <RxCrossCircled className="h-6 w-6 lg:h-8 lg:w-8" />
               </span>
             </div>

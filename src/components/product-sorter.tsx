@@ -74,28 +74,31 @@ export function ProductSorter() {
   return (
     <Dropdown>
       <DropdownTrigger asChild>
-        <button className="flex h-8 w-8 items-center justify-center rounded-md border bg-white px-3 text-sm outline-0 lg:h-10 lg:w-52 lg:justify-between">
+        <button className="flex h-8 w-8 items-center justify-center rounded-md border bg-white dark:bg-slate-950 dark:border-gray-700 px-3 text-sm outline-0 lg:h-10 lg:w-52 lg:justify-between">
           <span className="hidden font-medium lg:block">
             {selectedSort ? selectedSort.label : "Select Sort"}
           </span>
           <div className="w-5">
             <BiChevronRight
               size="20"
-              className="hidden text-slate-600 lg:block"
+              className="hidden text-slate-600 dark:text-white lg:block"
             />
-            <HiArrowsUpDown size="16" className="text-slate-600 lg:hidden" />
+            <HiArrowsUpDown
+              size="16"
+              className="text-slate-600 dark:text-white lg:hidden"
+            />
           </div>
         </button>
       </DropdownTrigger>
       <DropdownContent
         align="end"
-        className="flex w-52 flex-col rounded-md border bg-white text-sm shadow-sm lg:rounded-b-md lg:rounded-t-none lg:border-t-0"
+        className="flex w-52 flex-col overflow-hidden rounded-md border bg-white dark:border-slate-700 dark:bg-slate-950 text-sm shadow-sm lg:rounded-b-md lg:rounded-t-none lg:border-t-0"
       >
         {sortOptions.map((sort) => (
           <DropdownItem key={sort.id} asChild>
             <button
               onClick={() => setSelectedSort(sort)}
-              className="px-3 py-2 text-start text-xs font-medium outline-0 ring-0 transition  duration-200 hover:bg-slate-100 lg:text-sm"
+              className="px-3 py-2 text-start text-xs font-medium outline-0 ring-0 transition  duration-200 hover:bg-slate-100 hover:dark:bg-slate-800 lg:text-sm"
             >
               {sort.label}
             </button>
@@ -119,7 +122,7 @@ export function ProductSorterSkeleton() {
         <Button
           disabled
           variant="defaultOutline"
-          className="h-8 w-8 border-slate-300 bg-white px-3 lg:h-10 lg:w-52 lg:justify-between"
+          className="h-8 w-8 border-slate-300 dark:border-gray-700 dark:bg-slate-950 bg-white px-3 lg:h-10 lg:w-52 lg:justify-between"
         >
           <span className="hidden font-medium lg:block">
             {getActiveSort()?.label ?? "Select Sort"}
@@ -127,9 +130,12 @@ export function ProductSorterSkeleton() {
           <div className="w-5">
             <BiChevronRight
               size="20"
-              className="hidden text-slate-600 lg:block"
+              className="hidden text-slate-600 dark:text-white lg:block"
             />
-            <HiArrowsUpDown size="16" className="text-slate-600 lg:hidden" />
+            <HiArrowsUpDown
+              size="16"
+              className="text-slate-600 dark:text-white lg:hidden"
+            />
           </div>
         </Button>
       </DropdownTrigger>

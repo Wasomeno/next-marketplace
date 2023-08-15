@@ -14,7 +14,7 @@ export default async function SearchLoading() {
               <Button
                 disabled
                 variant="defaultOutline"
-                className="border-slate-200"
+                className="border-slate-200 dark:border-gray-700"
               >
                 Filter
               </Button>

@@ -41,19 +41,19 @@ export const UserMenuMain = ({ session }: { session: UserSession | null }) => {
           side="bottom"
           align="end"
           sideOffset={2.5}
-          className="z-30 w-64 rounded-md border border-slate-300 bg-white transition-all duration-200"
+          className="z-30 w-64 rounded-md border border-slate-300 bg-white dark:bg-slate-950 dark:border-gray-700 transition-all duration-200"
           style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
         >
-          <div className="border-b px-2.5 py-2">
+          <div className="border-b  dark:border-b-gray-700 px-2.5 py-2">
             <h5 className="font-sans font-medium">{session?.user?.name}</h5>
             <span className="font-sans text-sm font-medium text-slate-500">
               {session?.user?.email}
             </span>
           </div>
-          <div className="border-b p-1.5">
+          <div className="border-b dark:border-b-gray-700 p-1.5">
             <Link
               href="/orders"
-              className="flex items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200"
+              className="flex items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200 hover:dark:bg-slate-800"
             >
               <span>
                 <HiOutlineClipboard size="16" />
@@ -62,7 +62,7 @@ export const UserMenuMain = ({ session }: { session: UserSession | null }) => {
             </Link>
             <Link
               href="/wishlist"
-              className="flex items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200"
+              className="flex items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200 hover:dark:bg-slate-800"
             >
               <span>
                 <BsBox2Heart size="16" />
@@ -74,7 +74,7 @@ export const UserMenuMain = ({ session }: { session: UserSession | null }) => {
             <ThemeSwitcher />
             <button
               onClick={() => signOut()}
-              className="flex w-full items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200"
+              className="flex w-full items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200 hover:dark:bg-slate-800"
             >
               <span>
                 <VscSignOut size="16" />
