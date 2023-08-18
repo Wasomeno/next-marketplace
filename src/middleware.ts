@@ -16,4 +16,4 @@ export default withAuth({
   },
 });
 
-export const config = { matcher: ["/cart", "/orders", "/admin"] };
+export const config = { matcher: ["/cart", "/orders"] };
