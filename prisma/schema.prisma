@@ -90,8 +90,9 @@ model CategoryImage {
 }
 
 model Order {
-  id         String      @id
+  id         Int         @id @default(autoincrement())
   user       String
+  invoice    String
   total      Int
   status_id  Int
   created_at DateTime    @default(now())
@@ -114,7 +115,7 @@ model Admin {
 }
 
 model OrderToProduct {
-  A String
+  A Int
   B Int
 
   @@unique([A, B], map: "_OrderToProduct_AB_unique")
@@ -168,6 +169,7 @@ model User {
   email         String?   @unique
   emailVerified DateTime? @map("email_verified")
   image         String?
+  address       String?
   cart          Cart?
   wishlist      Wishlist?
   accounts      Account[]
