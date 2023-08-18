@@ -57,7 +57,10 @@ export async function POST(request: NextRequest, context: { params: any }) {
                 id: cartItem?.id,
                 product_id: parseInt(body.product.id),
               },
-              data: { amount: (cartItem?.amount as number) + 1 },
+              data: {
+                amount:
+                  (cartItem?.amount as number) + parseInt(body.product.amount),
+              },
             },
           },
         },
@@ -68,20 +71,22 @@ export async function POST(request: NextRequest, context: { params: any }) {
     }
   }
 
-  try {
-    await prisma.cart.update({
-      where: { id: cart.id },
-      data: {
-        items: {
-          create: {
-            product: { connect: { id: parseInt(body.product.id) } },
-            amount: parseInt(body.product.amount),
+  if (cart) {
+    try {
+      await prisma.cart.update({
+        where: { id: cart.id },
+        data: {
+          items: {
+            create: {
+              product: { connect: { id: parseInt(body.product.id) } },
+              amount: parseInt(body.product.amount),
+            },
           },
         },
-      },
-    });
-    return NextResponse.json({ message: "success" });
-  } catch (error) {
-    return NextResponse.error();
+      });
+      return NextResponse.json({ message: "success" });
+    } catch (error) {
+      return NextResponse.error();
+    }
   }
 }
