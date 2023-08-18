@@ -1,33 +1,33 @@
-import { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
+import { Metadata } from "next"
+import Image from "next/image"
+import Link from "next/link"
 
-import { HomeBannerSlider } from "@/components/user/home-banner-slider";
-import ProductCard from "@/components/user/product-card";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/prisma"
+import { HomeBannerSlider } from "@/components/user/home-banner-slider"
+import ProductCard from "@/components/user/product-card"
 
 export const metadata: Metadata = {
   title: "Next Martketplace | Shopping Made Easy with Next Marketplace",
   description: "The best place to shop for your daily needs",
-};
+}
 
 export default async function Home() {
   const categories = await prisma.category.findMany({
     include: { images: { select: { image_url: true } } },
-  });
+  })
   const products = await prisma.product.findMany({
     include: {
       category: { select: { name: true, slug: true } },
       images: { select: { image_url: true } },
     },
     orderBy: { price: "desc" },
-  });
+  })
 
   return (
-    <div className="relative flex flex-col items-center justify-start gap-6 bg-white dark:bg-slate-950 px-4 lg:px-8">
+    <div className="relative flex flex-col items-center justify-start gap-6 bg-white px-4 dark:bg-neutral-950 lg:px-8">
       <HomeBannerSlider />
       <div className="w-full lg:w-11/12">
-        <div className="w-full rounded-md border dark:border-gray-700 p-4 shadow-sm lg:w-3/6 ">
+        <div className="w-full rounded-lg border p-4 shadow-sm dark:border-gray-800 lg:w-3/6 ">
           <h2 className="mb-4 font-sans text-sm font-medium lg:text-xl">
             Categories
           </h2>
@@ -43,7 +43,7 @@ export default async function Home() {
                     src={category.images[0].image_url}
                     alt="category-image"
                     fill
-                    className="rounded-md border-2 transition duration-200 hover:border-blue-300"
+                    className="rounded-md border-2 transition duration-200 hover:border-blue-300 dark:border-gray-700"
                     quality={30}
                   />
                 </div>
@@ -57,7 +57,7 @@ export default async function Home() {
         <h2 className="mb-4 text-start font-sans text-sm font-medium lg:text-xl">
           Top Products
         </h2>
-        <div className="grid grid-cols-10 gap-2.5 lg:gap-4">
+        <div className="grid grid-cols-10 gap-2.5 lg:grid-cols-12 lg:gap-4">
           {products.map((product) => (
             <ProductCard
               key={product.id}
@@ -71,5 +71,5 @@ export default async function Home() {
         </div>
       </div>
     </div>
-  );
+  )
 }
