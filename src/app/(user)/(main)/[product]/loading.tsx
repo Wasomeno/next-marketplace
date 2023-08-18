@@ -1,4 +1,5 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
 
 export default function ProductPageLoading() {
   return (
@@ -20,13 +21,17 @@ export default function ProductPageLoading() {
         <div className="w-10/12 lg:w-5/12">
           <div className="h-10 w-48 animate-pulse rounded-lg bg-slate-200 dark:bg-neutral-400" />
           <div className="my-4 h-8 w-40 animate-pulse rounded-lg bg-slate-200 dark:bg-neutral-400" />
-          <hr
-            className="my-2 w-full bg-slate-200 dark:bg-neutral-400"
+          <Separator
+            decorative
+            orientation="horizontal"
+            className="my-2 w-full bg-slate-200 dark:bg-gray-800"
             style={{ height: "1px" }}
           />
           <span className="text-sm font-medium lg:text-base">Description</span>
-          <hr
-            className="my-2 w-full bg-slate-200 dark:bg-neutral-400"
+          <Separator
+            decorative
+            orientation="horizontal"
+            className="my-2 w-full bg-slate-200 dark:bg-gray-800"
             style={{ height: "1px" }}
           />
           <div className="flex flex-col gap-1.5">
@@ -35,12 +40,12 @@ export default function ProductPageLoading() {
             <div className="h-6 w-4/6 animate-pulse rounded-lg bg-slate-200 dark:bg-neutral-400" />
           </div>
         </div>
-        <div className="sticky bottom-0 w-full bg-white dark:bg-slate-950 lg:w-3/12">
-          <div className="rounded-md border-t border-slate-400 dark:border-gray-700 p-2 lg:border lg:p-4">
+        <div className="sticky bottom-0 w-full bg-white dark:bg-neutral-950 lg:w-3/12">
+          <div className="rounded-md border-t border-slate-400 p-2 dark:border-gray-800 lg:border lg:p-4">
             <div className="hidden lg:block">
               <span>Product Amount</span>
               <div className="my-4 flex items-center justify-center gap-4">
-                <div className="relative flex w-3/6 items-center justify-center gap-4 rounded-md bg-slate-200 dark:bg-neutral-400 text-sm font-medium">
+                <div className="relative flex w-3/6 items-center justify-center gap-4 rounded-md bg-slate-200 text-sm font-medium dark:bg-neutral-400">
                   <button className="h-8 w-8">-</button>
                   <div className="h-6 w-10 animate-pulse rounded-lg bg-slate-200 dark:bg-neutral-400" />
                   <button className="h-8 w-8">+</button>
@@ -63,7 +68,7 @@ export default function ProductPageLoading() {
               <Button
                 disabled
                 variant="defaultOutline"
-                className="my-2 h-8 w-full border-0 rounded-lg bg-blue-400 dark:bg-blue-900 text-xs font-medium lg:h-10 lg:text-sm"
+                className="my-2 h-8 w-full rounded-lg border-0 bg-blue-400 text-xs font-medium dark:bg-blue-900 lg:h-10 lg:text-sm"
               >
                 Add to Cart
               </Button>
@@ -72,5 +77,5 @@ export default function ProductPageLoading() {
         </div>
       </div>
     </div>
-  );
+  )
 }
