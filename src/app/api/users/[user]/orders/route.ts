@@ -1,46 +1,56 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server"
+import { CartItem } from "@prisma/client"
 
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/prisma"
 
-function generateOrderId() {
-  const date = new Date();
-  return `INV/${date.getFullYear()}/${date.getTime()}`;
+function generateOrderInvoice() {
+  const date = new Date()
+  return `INV/${date.getFullYear()}/${date.getTime()}`
 }
 
 export async function GET(request: Request, context: any) {
-  const { user } = context.params;
+  const { user } = context.params
   try {
     const orders = await prisma.order.findMany({
       where: { user: { contains: user } },
-      include: { products: true, status: true },
-    });
-    return NextResponse.json(orders);
+      include: { products: { include: { images: true } }, status: true },
+    })
+    return NextResponse.json(orders)
   } catch (error) {
-    return NextResponse.error();
+    return NextResponse.error()
   }
 }
 
 export async function POST(request: Request, context: any) {
-  const { user } = context.params;
-  const { products, total } = await request.json();
+  const { user } = context.params
+  const { cartItems, total } = await request.json()
   try {
-    Promise.all;
     await prisma.order
       .create({
         data: {
-          id: generateOrderId(),
+          invoice: generateOrderInvoice(),
           user,
-          products: { connect: products },
+          products: {
+            connect: cartItems.map((cartItem: CartItem) => ({
+              id: cartItem.product_id,
+            })),
+          },
           total: parseInt(total),
           status: { connect: { id: 1 } },
         },
       })
       .then(
-        async () => await prisma.cart.delete({ where: { user_email: user } })
-      );
-    return NextResponse.json({ message: "Successfully made an order" });
+        async () =>
+          await prisma.cartItem.deleteMany({
+            where: {
+              id: {
+                in: cartItems.map((cartItem: CartItem) => cartItem.id),
+              },
+            },
+          })
+      )
+    return NextResponse.json({ message: "Successfully made an order" })
   } catch (error) {
-    console.log(error);
-    return NextResponse.error();
+    return NextResponse.error()
   }
 }
