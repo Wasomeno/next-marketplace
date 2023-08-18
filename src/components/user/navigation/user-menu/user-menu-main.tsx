@@ -1,24 +1,24 @@
-"use client";
+"use client"
 
-import { ISODateString } from "next-auth";
-import { signOut } from "next-auth/react";
-import Image from "next/image";
-import Link from "next/link";
-import { BsBox2Heart } from "react-icons/bs";
-import { HiOutlineClipboard } from "react-icons/hi";
-import { VscSignOut } from "react-icons/vsc";
+import Image from "next/image"
+import Link from "next/link"
+import * as HoverCard from "@radix-ui/react-hover-card"
+import { ISODateString } from "next-auth"
+import { signOut } from "next-auth/react"
+import { BsBox2Heart } from "react-icons/bs"
+import { HiOutlineClipboard } from "react-icons/hi"
+import { VscSignOut } from "react-icons/vsc"
 
-import { ThemeSwitcher } from "@/components/theme-switcher";
-import * as HoverCard from "@radix-ui/react-hover-card";
+import { ThemeSwitcher } from "@/components/theme-switcher"
 
 export interface UserSession {
   user?: {
-    name?: string | null;
-    email?: string | null;
-    image?: string | null;
-    picture?: string | null;
-  };
-  expires: ISODateString;
+    name?: string | null
+    email?: string | null
+    image?: string | null
+    picture?: string | null
+  }
+  expires: ISODateString
 }
 
 export const UserMenuMain = ({ session }: { session: UserSession | null }) => {
@@ -41,16 +41,16 @@ export const UserMenuMain = ({ session }: { session: UserSession | null }) => {
           side="bottom"
           align="end"
           sideOffset={2.5}
-          className="z-30 w-64 rounded-md border border-slate-300 bg-white dark:bg-slate-950 dark:border-gray-700 transition-all duration-200"
+          className="z-30 w-64 rounded-md border border-slate-300 bg-white transition-all duration-200 dark:border-gray-800 dark:bg-neutral-950"
           style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
         >
-          <div className="border-b  dark:border-b-gray-700 px-2.5 py-2">
+          <div className="border-b  px-2.5 py-2 dark:border-b-gray-800">
             <h5 className="font-sans font-medium">{session?.user?.name}</h5>
             <span className="font-sans text-sm font-medium text-slate-500">
               {session?.user?.email}
             </span>
           </div>
-          <div className="border-b dark:border-b-gray-700 p-1.5">
+          <div className="border-b p-1.5 dark:border-b-gray-800">
             <Link
               href="/orders"
               className="flex items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200 hover:dark:bg-slate-800"
@@ -85,5 +85,5 @@ export const UserMenuMain = ({ session }: { session: UserSession | null }) => {
         </HoverCard.Content>
       </HoverCard.Portal>
     </HoverCard.Root>
-  );
-};
+  )
+}

@@ -1,26 +1,26 @@
-"use client";
+"use client"
 
-import { AnimatePresence, motion } from "framer-motion";
-import { signOut } from "next-auth/react";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { BsBox2Heart } from "react-icons/bs";
-import { HiMenu, HiX } from "react-icons/hi";
-import { VscSignOut } from "react-icons/vsc";
+import { useEffect, useState } from "react"
+import Image from "next/image"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { AnimatePresence, motion } from "framer-motion"
+import { signOut } from "next-auth/react"
+import { BsBox2Heart } from "react-icons/bs"
+import { HiMenu, HiX } from "react-icons/hi"
+import { VscSignOut } from "react-icons/vsc"
 
-import { ThemeSwitcher } from "@/components/theme-switcher";
+import { ThemeSwitcher } from "@/components/theme-switcher"
 
-import { UserSession } from "./user-menu-main";
+import { UserSession } from "./user-menu-main"
 
 export function UserMenuMobile({ session }: { session: UserSession | null }) {
-  const [showMenu, setShowMenu] = useState(false);
-  const pathnamae = usePathname();
+  const [showMenu, setShowMenu] = useState(false)
+  const pathnamae = usePathname()
 
   useEffect(() => {
-    setShowMenu(false);
-  }, [pathnamae]);
+    setShowMenu(false)
+  }, [pathnamae])
 
   return (
     <div className="relative flex items-center md:hidden">
@@ -30,7 +30,7 @@ export function UserMenuMobile({ session }: { session: UserSession | null }) {
       <AnimatePresence>
         {showMenu && (
           <motion.div
-            className="fixed inset-x-0 z-30 h-screen w-screen rounded-t-lg bg-white dark:bg-slate-950 py-2.5 shadow-[0_3px_10px_rgb(0,0,0,0.2)]"
+            className="fixed inset-x-0 z-30 h-screen w-screen rounded-t-lg bg-white py-2.5 shadow-[0_3px_10px_rgb(0,0,0,0.2)] dark:bg-neutral-950"
             initial={{ top: "100vh" }}
             animate={{ top: "0" }}
             transition={{
@@ -57,7 +57,7 @@ export function UserMenuMobile({ session }: { session: UserSession | null }) {
                 </button>
                 <span className="text-sm font-medium">Menu</span>
               </div>
-              <div className="flex items-center gap-4 border-b dark:border-b-gray-700 px-4 py-2">
+              <div className="flex items-center gap-4 border-b px-4 py-2 dark:border-b-gray-800">
                 <div className="relative h-10 w-10">
                   <Image
                     fill
@@ -75,7 +75,7 @@ export function UserMenuMobile({ session }: { session: UserSession | null }) {
                   </span>
                 </div>
               </div>
-              <div className="space-y-1.5 border-b dark:border-b-gray-700 px-4 py-2">
+              <div className="space-y-1.5 border-b px-4 py-2 dark:border-b-gray-800">
                 <Link
                   href="/wishlist"
                   className="flex items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200"
@@ -103,5 +103,5 @@ export function UserMenuMobile({ session }: { session: UserSession | null }) {
         )}
       </AnimatePresence>
     </div>
-  );
+  )
 }

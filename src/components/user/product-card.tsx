@@ -21,7 +21,7 @@ const ProductCard = ({
   return (
     <Link
       href={href}
-      className="col-span-5 h-56 cursor-pointer rounded-md dark:shadow-gray-800 shadow-[0_3px_7px_rgb(0,0,0,0.1)] lg:col-span-2 lg:h-auto"
+      className="col-span-5 h-56 cursor-pointer rounded-md dark:bg-neutral-900 dark:shadow-gray-700 bg-neutral-50 bg-opacity-50 dark:bg-opacity-50 shadow-[0_3px_7px_rgb(0,0,0,0.1)] lg:col-span-2 lg:h-auto"
     >
       {image}
       <div className="flex w-full flex-col gap-1 p-3">

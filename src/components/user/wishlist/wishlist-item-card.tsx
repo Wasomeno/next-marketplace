@@ -1,41 +1,41 @@
-"use client";
+"use client"
 
-import Image from "next/image";
-import { Dispatch, SetStateAction, useTransition } from "react";
-import { BiTrash } from "react-icons/bi";
-import { BsCheck } from "react-icons/bs";
-import { toast } from "react-toastify";
+import { Dispatch, SetStateAction, useTransition } from "react"
+import Image from "next/image"
+import { Prisma } from "@prisma/client"
+import * as Checkbox from "@radix-ui/react-checkbox"
+import { BiTrash } from "react-icons/bi"
+import { BsCheck } from "react-icons/bs"
+import { toast } from "react-toastify"
 
-import { removeProductFromWishlist } from "@/app/actions/wishlist";
-import { Button } from "@/components/ui/button";
-import { Prisma } from "@prisma/client";
-import * as Checkbox from "@radix-ui/react-checkbox";
+import { Button } from "@/components/ui/button"
+import { removeProductFromWishlist } from "@/app/actions/wishlist"
 
 export const WishListItemCard = ({
   setSelectedItems,
   item,
 }: {
-  setSelectedItems: Dispatch<SetStateAction<number[]>>;
+  setSelectedItems: Dispatch<SetStateAction<number[]>>
   item: Prisma.WishlistItemGetPayload<{
-    include: { product: { include: { images: true } } };
-  }>;
+    include: { product: { include: { images: true } } }
+  }>
 }) => {
-  const [isPending, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition()
   return (
-    <div className="flex items-center gap-4 border-t p-4">
+    <div className="flex items-center gap-4 border-t p-4 dark:border-t-gray-800">
       <Checkbox.Root
         onClick={() =>
           setSelectedItems((selectedItems) => {
             if (selectedItems.includes(item.product_id)) {
               return selectedItems.filter(
                 (selectedItem) => selectedItem !== item.product_id
-              );
+              )
             } else {
-              return [...selectedItems, item.product_id];
+              return [...selectedItems, item.product_id]
             }
           })
         }
-        className="flex h-[15px] w-[15px] items-center justify-center rounded-sm border border-slate-400 bg-slate-50 lg:h-5 lg:w-5"
+        className="flex h-[15px] w-[15px] items-center justify-center rounded-sm border border-slate-400 bg-slate-50 dark:border-gray-700 dark:bg-neutral-800 lg:h-5 lg:w-5"
       >
         <Checkbox.Indicator color="black">
           <BsCheck size="18" />
@@ -54,7 +54,7 @@ export const WishListItemCard = ({
           </div>
           <div className="flex w-4/6 flex-col gap-1 lg:w-3/6">
             <span className="text-sm tracking-wide lg:text-base">
-              Rp {item.product.price}
+              Rp {item.product.price.toLocaleString("id")}
             </span>
             <span className="text-xs tracking-wide text-slate-500 lg:text-base">
               {item.product.name}
@@ -65,11 +65,11 @@ export const WishListItemCard = ({
           <Button
             variant="danger"
             size="sm"
-            className="h-7 w-7 p-2 text-white lg:h-8 lg:w-8"
+            className="h-7 w-7 p-2 text-white dark:bg-red-800 lg:h-8 lg:w-8"
             onClick={() =>
               startTransition(async () => {
-                await removeProductFromWishlist(item.product.id, "/wishlist");
-                toast.error(`Removed ${item.product.name} from wishlist`);
+                await removeProductFromWishlist(item.product.id, "/wishlist")
+                toast.error(`Removed ${item.product.name} from wishlist`)
               })
             }
           >
@@ -78,8 +78,8 @@ export const WishListItemCard = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export const WishListItemCardSkeleton = () => {
   return (
@@ -114,5 +114,5 @@ export const WishListItemCardSkeleton = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

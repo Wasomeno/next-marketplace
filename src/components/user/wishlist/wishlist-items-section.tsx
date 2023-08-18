@@ -1,26 +1,26 @@
-"use client";
+"use client"
 
-import { useState, useTransition } from "react";
-import { toast } from "react-toastify";
+import { useState, useTransition } from "react"
+import { Prisma } from "@prisma/client"
+import { toast } from "react-toastify"
 
-import { addAllToCart } from "@/app/actions/wishlist";
-import { ProductSorter } from "@/components/product-sorter";
-import { Button } from "@/components/ui/button";
-import { Prisma } from "@prisma/client";
+import { Button } from "@/components/ui/button"
+import { ProductSorter } from "@/components/product-sorter"
+import { addAllToCart } from "@/app/actions/wishlist"
 
-import { WishListItemCard } from "./wishlist-item-card";
+import { WishListItemCard } from "./wishlist-item-card"
 
 export const WishlistItemsSection = ({
   items,
 }: {
   items:
     | Prisma.WishlistItemGetPayload<{
-        include: { product: { include: { images: true } } };
+        include: { product: { include: { images: true } } }
       }>[]
-    | undefined;
+    | undefined
 }) => {
-  const [selectedItems, setSelectedItems] = useState<number[]>([]);
-  const [isPending, startTransition] = useTransition();
+  const [selectedItems, setSelectedItems] = useState<number[]>([])
+  const [isPending, startTransition] = useTransition()
   return (
     <div className="flex flex-1 flex-col justify-between lg:flex-row">
       <div className="w-full lg:w-7/12">
@@ -49,7 +49,7 @@ export const WishlistItemsSection = ({
         </div>
       </div>
       <div className="sticky bottom-0 w-full lg:w-2/6">
-        <div className="flex flex-col justify-between border-t border-slate-200 p-2.5 shadow-[0_3px_10px_rgb(0,0,0,0.1)] lg:h-72 lg:rounded-lg lg:border lg:border-slate-300 lg:p-4 lg:shadow-none">
+        <div className="flex flex-col justify-between border-t border-slate-200 p-2.5 shadow-[0_3px_10px_rgb(0,0,0,0.1)] dark:border-gray-800 lg:h-72 lg:rounded-lg lg:border lg:border-slate-300 lg:p-4 lg:shadow-none">
           <div className="">
             <span className="hidden text-xs font-medium lg:inline lg:text-base">
               Selected Items Summary
@@ -64,11 +64,11 @@ export const WishlistItemsSection = ({
           <Button
             disabled={!selectedItems.length}
             variant="default"
-            className="my-1 w-full rounded-lg border bg-blue-400  py-3 text-xs font-medium text-slate-50 lg:text-sm"
+            className="my-1 w-full rounded-lg bg-blue-400 py-3 text-xs font-medium text-slate-50 dark:bg-blue-900 lg:text-sm"
             onClick={() =>
               startTransition(async () => {
-                await addAllToCart(selectedItems);
-                toast.success("Added all selected items to cart");
+                await addAllToCart(selectedItems)
+                toast.success("Added all selected items to cart")
               })
             }
           >
@@ -77,5 +77,5 @@ export const WishlistItemsSection = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
