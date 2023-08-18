@@ -1,11 +1,10 @@
-import { AnimatePresence, motion } from "framer-motion";
-import React from "react";
-import { RxCross2 } from "react-icons/rx";
-import { twMerge } from "tailwind-merge";
+import React from "react"
+import * as DialogPrimitive from "@radix-ui/react-dialog"
+import { AnimatePresence, motion } from "framer-motion"
+import { RxCross2 } from "react-icons/rx"
+import { twMerge } from "tailwind-merge"
 
-import * as DialogPrimitive from "@radix-ui/react-dialog";
-
-const Dialog = DialogPrimitive.Root;
+const Dialog = DialogPrimitive.Root
 
 const DialogTrigger = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Trigger>,
@@ -15,10 +14,10 @@ const DialogTrigger = React.forwardRef<
     <DialogPrimitive.Trigger ref={ref} className={className} {...props}>
       {children}
     </DialogPrimitive.Trigger>
-  );
-});
+  )
+})
 
-DialogTrigger.displayName = DialogPrimitive.Trigger.displayName;
+DialogTrigger.displayName = DialogPrimitive.Trigger.displayName
 
 const DialogPortal = ({
   className,
@@ -29,10 +28,10 @@ const DialogPortal = ({
     <DialogPrimitive.Portal className="fixed z-50" {...props}>
       {children}
     </DialogPrimitive.Portal>
-  );
-};
+  )
+}
 
-DialogPortal.displayName = DialogPrimitive.Portal.displayName;
+DialogPortal.displayName = DialogPrimitive.Portal.displayName
 
 const DialogOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
@@ -42,28 +41,28 @@ const DialogOverlay = React.forwardRef<
     <DialogPrimitive.Overlay ref={ref} {...props}>
       {children}
     </DialogPrimitive.Overlay>
-  );
-});
+  )
+})
 
-DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
+DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 
 const DialogHeader = ({ title }: { title: string }) => {
   return (
-    <div className="sticky top-0 z-20 mb-4 flex h-16 w-full items-center justify-between border-b bg-slate-50 px-6">
-      <DialogPrimitive.Title className="text-base font-medium lg:text-xl">
+    <div className="sticky top-0 z-20 mb-4 flex h-16 w-full items-center justify-between border-b bg-slate-50 px-6 dark:border-b-neutral-700 dark:bg-neutral-900">
+      <DialogPrimitive.Title className="text-base font-medium lg:text-lg">
         {title}
       </DialogPrimitive.Title>
       <DialogPrimitive.Close>
         <RxCross2 size="20" />
       </DialogPrimitive.Close>
     </div>
-  );
-};
+  )
+}
 
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
-    open: boolean;
+    open: boolean
   }
 >(({ className, children, open, ...props }, ref) => {
   return (
@@ -76,7 +75,7 @@ const DialogContent = React.forwardRef<
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ ease: "easeInOut", duration: 0.25 }}
-              className="fixed inset-0 z-30 bg-slate-800 bg-opacity-30 backdrop-blur-[2px]"
+              className="fixed inset-0 z-30 bg-neutral-900 bg-opacity-30 backdrop-blur-[2px]"
             />
           </DialogOverlay>
           <DialogPrimitive.Content asChild ref={ref} {...props}>
@@ -86,7 +85,7 @@ const DialogContent = React.forwardRef<
               exit={{ opacity: 0 }}
               transition={{ ease: "easeInOut", duration: 0.25, delay: 0.1 }}
               className={twMerge(
-                "fixed bottom-0 right-1/2 z-50 h-[95%] w-full translate-x-1/2 overflow-y-scroll rounded-lg bg-slate-50 shadow-md transition duration-300 lg:top-1/2 lg:-translate-y-1/2",
+                "fixed bottom-0 right-1/2 z-50 h-[95%] w-full translate-x-1/2 overflow-y-scroll rounded-lg bg-slate-50 shadow-md transition duration-300 dark:bg-neutral-900 lg:top-1/2 lg:-translate-y-1/2",
                 className
               )}
             >
@@ -96,9 +95,9 @@ const DialogContent = React.forwardRef<
         </DialogPortal>
       )}
     </AnimatePresence>
-  );
-});
+  )
+})
 
-DialogContent.displayName = DialogPrimitive.Content.displayName;
+DialogContent.displayName = DialogPrimitive.Content.displayName
 
-export { Dialog, DialogOverlay, DialogHeader, DialogContent, DialogTrigger };
+export { Dialog, DialogOverlay, DialogHeader, DialogContent, DialogTrigger }
