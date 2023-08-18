@@ -1,20 +1,20 @@
-"use client";
+"use client"
 
-import { RxCrossCircled } from "react-icons/rx";
+import { Prisma } from "@prisma/client"
+import { RxCrossCircled } from "react-icons/rx"
 
-import ProductCard from "@/components/user/product-card";
-import { Prisma } from "@prisma/client";
+import ProductCard from "@/components/user/product-card"
 
-import { ProductsFilter } from "./product-filter";
-import { ProductSorter } from "./product-sorter";
+import { ProductsFilter } from "./product-filter"
+import { ProductSorter } from "./product-sorter"
 
 type ProductsSectionProps = {
   products:
     | Prisma.ProductGetPayload<{
-        include: { category: true; images: true };
+        include: { category: true; images: true }
       }>[]
-    | undefined;
-};
+    | undefined
+}
 
 export const ProductsSection = ({ products }: ProductsSectionProps) => {
   return (
@@ -43,10 +43,10 @@ export const ProductsSection = ({ products }: ProductsSectionProps) => {
             ))}
           {products?.length === 0 && (
             <div className="col-span-12 flex h-96 flex-col items-center justify-center gap-2">
-              <span className="text-sm text-slate-800  dark:text-gray-500 text-opacity-50 lg:text-base">
+              <span className="text-sm text-slate-800  text-opacity-50 dark:text-gray-500 lg:text-base">
                 No products found
               </span>
-              <span className="text-slate-800 dark:text-gray-500 text-opacity-50">
+              <span className="text-slate-800 text-opacity-50 dark:text-gray-500">
                 <RxCrossCircled className="h-6 w-6 lg:h-8 lg:w-8" />
               </span>
             </div>
@@ -54,5 +54,5 @@ export const ProductsSection = ({ products }: ProductsSectionProps) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
