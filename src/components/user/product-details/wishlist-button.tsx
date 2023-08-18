@@ -1,45 +1,38 @@
-"use client";
+"use client"
 
-import { motion } from "framer-motion";
-import { useParams } from "next/navigation";
-import { useState, useTransition } from "react";
-import { toast } from "react-toastify";
+import { useState, useTransition } from "react"
+import { useParams } from "next/navigation"
+import { motion } from "framer-motion"
+import { toast } from "react-toastify"
 
 import {
   addToWishlist,
   removeProductFromWishlist,
-} from "@/app/actions/wishlist";
-import { HeartLike } from "@/components/lottie/components/heart-like";
+} from "@/app/actions/wishlist"
 
 export const WishListButton = ({
   isProductInWishlist,
 }: {
-  isProductInWishlist: boolean;
+  isProductInWishlist: boolean
 }) => {
-  const [isActive, setIsActive] = useState(isProductInWishlist);
-  const [isPending, startTransition] = useTransition();
+  const [isActive, setIsActive] = useState(isProductInWishlist)
+  const [isPending, startTransition] = useTransition()
 
-  const { product } = useParams();
+  const { product } = useParams()
   return (
     <button
       onClick={() => {
         startTransition(async () => {
           if (!isActive) {
-            await addToWishlist(parseInt(product as string));
-            setIsActive(true);
-            toast("Added to wishlist", {
-              icon: (
-                <div>
-                  <HeartLike />
-                </div>
-              ),
-            });
+            await addToWishlist(parseInt(product as string))
+            setIsActive(true)
+            toast.success("Added to wishlist")
           } else {
-            await removeProductFromWishlist(parseInt(product as string));
-            setIsActive(false);
-            toast.error("Remove from wishlist");
+            await removeProductFromWishlist(parseInt(product as string))
+            setIsActive(false)
+            toast.error("Remove from wishlist")
           }
-        });
+        })
       }}
     >
       <motion.svg
@@ -65,5 +58,5 @@ export const WishListButton = ({
         />
       </motion.svg>
     </button>
-  );
-};
+  )
+}
