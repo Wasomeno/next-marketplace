@@ -33,16 +33,15 @@ export function adminDashboardReducer(
   state: AdminDashboardStates,
   action: Action
 ): AdminDashboardStates {
-  invariant(action.open, "Type error");
   switch (action.type) {
     case "set_open_add_modal":
-      return { ...state, isAddModalOpen: action.open };
+      return { ...state, isAddModalOpen: action.open as boolean };
     case "set_open_edit_modal":
-      return { ...state, isEditModalOpen: action.open };
+      return { ...state, isEditModalOpen: action.open as boolean };
     case "set_open_details_modal":
-      return { ...state, isDetailsModalOpen: action.open };
+      return { ...state, isDetailsModalOpen: action.open as boolean };
     case "set_open_delete_modal":
-      return { ...state, isDeleteModalOpen: action.open };
+      return { ...state, isDeleteModalOpen: action.open as boolean };
     case "set_data_details":
       return { ...state, dataDetails: action.dataDetails };
     default:
