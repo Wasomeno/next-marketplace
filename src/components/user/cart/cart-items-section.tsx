@@ -1,41 +1,41 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { RxCrossCircled } from "react-icons/rx";
-import invariant from "tiny-invariant";
+import { useState } from "react"
+import { Prisma } from "@prisma/client"
+import { RxCrossCircled } from "react-icons/rx"
+import invariant from "tiny-invariant"
 
-import { CartItem } from "@/app/(user)/(main)/cart/page";
-import { Prisma } from "@prisma/client";
+import { CartItem } from "@/app/(user)/(main)/cart/page"
 
-import { CartCheckoutDialog } from "./cart-checkout-dialog";
-import { CartItemCard } from "./cart-item-card";
+import { CartCheckoutDialog } from "./cart-checkout-dialog"
+import { CartItemCard } from "./cart-item-card"
 
 export const CartItemsSection = ({
   items,
 }: {
   items:
     | Prisma.CartItemGetPayload<{
-        include: { product: { include: { images: true } } };
+        include: { product: { include: { images: true } } }
       }>[]
-    | undefined;
+    | undefined
 }) => {
-  const [selectedItems, setSelectedItems] = useState<Array<CartItem>>([]);
+  const [selectedItems, setSelectedItems] = useState<Array<CartItem>>([])
 
   function selectCartItem(cartItem: CartItem) {
-    setSelectedItems((items) => [...items, cartItem]);
+    setSelectedItems((items) => [...items, cartItem])
   }
 
   function deselectCartItem(cartItemId: number) {
-    setSelectedItems((items) =>
-      items?.filter((selectedItem) => cartItemId !== selectedItem.id)
-    );
+    setSelectedItems(
+      (items) => items?.filter((selectedItem) => cartItemId !== selectedItem.id)
+    )
   }
 
-  invariant(items);
+  invariant(items)
 
   return (
     <div className="flex flex-1 flex-col items-start justify-between lg:flex-row lg:justify-center">
-      <div className="w-full px-5 lg:w-4/6 lg:px-8">
+      <div className="w-full px-4 lg:w-4/6 lg:px-8">
         <div className="flex w-full flex-col gap-4">
           {items.length > 0 &&
             items.map((item) => (
@@ -64,5 +64,5 @@ export const CartItemsSection = ({
       </div>
       <CartCheckoutDialog selectedItems={selectedItems} />
     </div>
-  );
-};
+  )
+}
