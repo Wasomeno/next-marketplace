@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import { BsTrash3 } from "react-icons/bs";
 import { twMerge } from "tailwind-merge";
-import invariant from "tiny-invariant";
 
 import { Button } from "@/components/ui/button";
 import { Category, Product, ProductImage } from "@prisma/client";
@@ -101,10 +100,8 @@ export const ProductsTable = ({ tableRowMenu }: ProductTableProps) => {
     [products.data]
   );
 
-  invariant(products.data, "TypeError");
-
   const table = useReactTable<ProductWithImages>({
-    data: products.data,
+    data: products.data as ProductWithImages[],
     columns,
     state: { sorting },
     onSortingChange: setSorting,
