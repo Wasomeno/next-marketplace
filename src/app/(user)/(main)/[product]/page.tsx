@@ -1,40 +1,40 @@
-import { Metadata } from "next";
-import invariant from "tiny-invariant";
+import { Metadata } from "next"
+import invariant from "tiny-invariant"
 
-import { isProductInWishlist } from "@/app/actions/wishlist";
-import { BackButton } from "@/components/back-button";
-import { Separator } from "@/components/ui/separator";
-import { AddToCartDialog } from "@/components/user/product-details/add-to-cart-dialog";
-import { ProductImages } from "@/components/user/product-details/product-images";
-import { WishListButton } from "@/components/user/product-details/wishlist-button";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/prisma"
+import { Separator } from "@/components/ui/separator"
+import { BackButton } from "@/components/back-button"
+import { AddToCartDialog } from "@/components/user/product-details/add-to-cart-dialog"
+import { ProductImages } from "@/components/user/product-details/product-images"
+import { WishListButton } from "@/components/user/product-details/wishlist-button"
+import { isProductInWishlist } from "@/app/actions/wishlist"
 
 type Props = {
-  params: { product: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
+  params: { product: string }
+  searchParams: { [key: string]: string | string[] | undefined }
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const productDetails = await prisma.product.findUnique({
     where: { id: parseInt(params?.product) },
-  });
+  })
 
   return {
     title: `${productDetails?.name} | Next Marketplace `,
     description: productDetails?.description,
-  };
+  }
 }
 
 export default async function ProductPage(props: {
-  params: { product: string };
+  params: { product: string }
 }) {
-  const { product: productId } = props.params;
+  const { product: productId } = props.params
   const productDetails = await prisma.product.findUnique({
     where: { id: parseInt(productId) },
     include: { images: { select: { image_url: true } } },
-  });
+  })
 
-  invariant(productDetails, "Type error");
+  invariant(productDetails, "Type error")
 
   return (
     <div className="flex flex-1 flex-col items-center">
@@ -60,14 +60,14 @@ export default async function ProductPage(props: {
           <Separator
             decorative
             orientation="horizontal"
-            className="my-2 w-full bg-slate-200 dark:bg-gray-700"
+            className="my-2 w-full bg-slate-200 dark:bg-gray-800"
             style={{ height: "1px" }}
           />
           <span className="text-sm font-medium lg:text-base">Description</span>
           <Separator
             decorative
             orientation="horizontal"
-            className="my-2 w-full bg-slate-200 dark:bg-gray-700"
+            className="my-2 w-full bg-slate-200 dark:bg-gray-800"
             style={{ height: "1px" }}
           />
           <div>
@@ -79,5 +79,5 @@ export default async function ProductPage(props: {
         <AddToCartDialog productDetails={productDetails} />
       </div>
     </div>
-  );
+  )
 }
