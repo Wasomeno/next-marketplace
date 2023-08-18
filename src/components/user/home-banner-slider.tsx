@@ -71,7 +71,7 @@ const HomeBannerSliderNavigation = ({ swiperRef }: { swiperRef: any }) => {
         animate={{ opacity: 1, bottom: "50%" }}
         exit={{ opacity: 0, bottom: "47%" }}
         transition={{ ease: "easeInOut", duration: 0.2, delay: 0.1 }}
-        className="btn-prev lg: absolute -left-2 z-[5] flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-md disabled:opacity-50 lg:-left-4 lg:h-12 lg:w-12"
+        className="btn-prev lg: absolute -left-2 z-[5] flex h-8 w-8 items-center justify-center rounded-full bg-white dark:bg-slate-800 shadow-md disabled:opacity-50 lg:-left-4 lg:h-12 lg:w-12"
       >
         <BsChevronLeft className="h-3 w-3 lg:h-5 lg:w-5" />
       </motion.button>
@@ -82,7 +82,7 @@ const HomeBannerSliderNavigation = ({ swiperRef }: { swiperRef: any }) => {
         animate={{ opacity: 1, bottom: "50%" }}
         exit={{ opacity: 0, bottom: "47%" }}
         transition={{ ease: "easeInOut", duration: 0.2, delay: 0.1 }}
-        className="btn-next absolute -right-2 z-[5] flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-md disabled:opacity-50 lg:-right-4 lg:h-12 lg:w-12"
+        className="btn-next absolute -right-2 z-[5] flex h-8 w-8 items-center justify-center rounded-full bg-white dark:bg-slate-800 shadow-md disabled:opacity-50 lg:-right-4 lg:h-12 lg:w-12"
       >
         <BsChevronRight className="h-3 w-3 lg:h-5 lg:w-5" />
       </motion.button>
