@@ -1,4 +1,3 @@
-import axios from "axios"
 import { getServerSession } from "next-auth"
 import { RxCrossCircled, RxMagnifyingGlass } from "react-icons/rx"
 
