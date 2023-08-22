@@ -4,8 +4,9 @@ import React from "react"
 import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
-import axios from "axios"
 import { useSession } from "next-auth/react"
+
+import { getOrderDetails } from "@/app/actions/order"
 
 import { Dialog, DialogContent, DialogHeader } from "../ui/dialog"
 
@@ -13,22 +14,19 @@ export const AdminOrderDetailsModal = () => {
   const params = useSearchParams()
   const router = useRouter()
   const isViewDetail = params.get("view")
-  const orderId = params.get("id")
+  const orderId = parseInt(params.get("id") ?? "")
 
   const session = useSession()
 
   const orderDetails = useQuery(
-    ["orderDetails"],
-    async () => {
-      const { data } = await axios.get(
-        `/api/users/${session.data?.user?.email}/orders/${orderId}`
-      )
-      return data
-    },
-    { enabled: orderId !== null || session.data?.user?.email !== undefined }
+    ["orderDetails", orderId],
+    async () => await getOrderDetails(orderId),
+    {
+      enabled: orderId !== null || session.data?.user?.email !== undefined,
+    }
   )
 
-  const date = new Date(orderDetails.data?.created_at)
+  const date = new Date(orderDetails.data?.created_at as Date)
 
   return (
     <Dialog
