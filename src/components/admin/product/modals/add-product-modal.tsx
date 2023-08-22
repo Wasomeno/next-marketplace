@@ -1,27 +1,25 @@
-import "@uploadthing/react/styles.css";
+"use client"
 
-import axios from "axios";
-import { useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import { Id, toast } from "react-toastify";
-import * as z from "zod";
+import "@uploadthing/react/styles.css"
 
-import { FileImage, ImageUploader } from "@/components/image-uploader";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { TextArea } from "@/components/ui/text-area";
-import { queryClient } from "@/lib/react-query-client";
-import { uploadFiles, useUploadThing } from "@/utils/uploadthing";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useRef, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { useUploadThing } from "@/utils/uploadthing"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation } from "@tanstack/react-query"
+import axios from "axios"
+import { useForm } from "react-hook-form"
+import { Id, toast } from "react-toastify"
+import * as z from "zod"
 
-import CategoryScrollableList from "./category-scrollable-list";
+import { queryClient } from "@/lib/react-query-client"
+import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { TextArea } from "@/components/ui/text-area"
+import { FileImage, ImageUploader } from "@/components/image-uploader"
 
-interface AddProductModalProps {
-  isAddModalOpen: boolean;
-  setOpenModal: (open: boolean) => void;
-}
+import CategoryScrollableList from "../category-scrollable-list"
 
 const AddProductFormSchema = z.object({
   name: z.string().min(5).max(25),
@@ -29,66 +27,61 @@ const AddProductFormSchema = z.object({
   description: z.string().min(20).max(200),
   stock: z.number().min(10).max(10000000),
   slug: z.string().min(5).max(25),
-});
+})
 
-type AddProductFormData = z.infer<typeof AddProductFormSchema>;
+type AddProductFormData = z.infer<typeof AddProductFormSchema>
 
-export const AddProductModal = ({
-  isAddModalOpen,
-  setOpenModal,
-}: AddProductModalProps) => {
-  const [files, setFiles] = useState<Array<FileImage>>([]);
-  const [selectedCategory, setSelectedCategory] = useState(0);
-  const {
-    register,
-    handleSubmit,
-    formState,
-    getValues,
-    setValue,
-    clearErrors,
-    reset,
-  } = useForm<AddProductFormData>({
-    resolver: zodResolver(AddProductFormSchema),
-  });
-  const toastRef = useRef<Id>(0);
-  const { startUpload } = useUploadThing("imageUploader");
+export const AddProductModal = () => {
+  const [files, setFiles] = useState<Array<FileImage>>([])
+  const [selectedCategory, setSelectedCategory] = useState(0)
+  const { register, handleSubmit, formState, getValues, clearErrors, reset } =
+    useForm<AddProductFormData>({
+      resolver: zodResolver(AddProductFormSchema),
+    })
+
+  const toastRef = useRef<Id>(0)
+  const { startUpload } = useUploadThing("imageUploader")
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const isAddModalOpen = searchParams.get("add") !== null
   const mutation = useMutation(
     async () => {
-      const uploadedFiles = await startUpload(files);
+      const uploadedFiles = await startUpload(files)
       return await axios.post("/api/products", {
         ...getValues(),
         category_id: selectedCategory,
         image_urls: uploadedFiles?.map((file) => ({ image_url: file.fileUrl })),
-      });
+      })
     },
     {
       onMutate: () => {
-        setOpenModal(false);
-        toastRef.current = toast.loading(`Adding ${getValues("name")}`);
+        router.push("/admin/products")
+        toastRef.current = toast.loading(`Adding ${getValues("name")}`)
       },
       onSuccess: (response) => {
-        reset();
-        setSelectedCategory(0);
-        setFiles([]);
+        reset()
+        setSelectedCategory(0)
+        setFiles([])
         toast.update(toastRef.current, {
           type: "success",
           render: response.data.message,
           isLoading: false,
           autoClose: 1500,
-        });
+        })
       },
       onSettled: () => {
-        queryClient.invalidateQueries(["products"]);
+        queryClient.invalidateQueries(["products"])
       },
     }
-  );
+  )
 
   return (
     <Dialog
       open={isAddModalOpen}
-      onOpenChange={(open) => {
-        setOpenModal(open);
-        clearErrors();
+      onOpenChange={() => {
+        router.push("/admin/products")
+        clearErrors()
       }}
     >
       <DialogContent
@@ -98,7 +91,7 @@ export const AddProductModal = ({
         <DialogHeader title="Add Product" />
         <form
           onSubmit={handleSubmit(() => {
-            mutation.mutate();
+            mutation.mutate()
           })}
           className="flex w-full flex-col gap-4 px-6 py-4"
         >
@@ -205,5 +198,5 @@ export const AddProductModal = ({
         </form>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

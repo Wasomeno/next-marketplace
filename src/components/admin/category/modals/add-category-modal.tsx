@@ -1,31 +1,30 @@
-"use client";
+"use client"
 
-import axios from "axios";
-import { useState } from "react";
-import { toast } from "react-toastify";
+import { useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { useUploadThing } from "@/utils/uploadthing"
+import { useMutation } from "@tanstack/react-query"
+import axios from "axios"
+import { toast } from "react-toastify"
 
-import { FileImage, ImageUploader } from "@/components/image-uploader";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { TextArea } from "@/components/ui/text-area";
-import { queryClient } from "@/lib/react-query-client";
-import { useUploadThing } from "@/utils/uploadthing";
-import { useMutation } from "@tanstack/react-query";
+import { queryClient } from "@/lib/react-query-client"
+import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { TextArea } from "@/components/ui/text-area"
+import { FileImage, ImageUploader } from "@/components/image-uploader"
 
-const AddCategoryModal = ({
-  setOpenAddModal,
-  isAddModalOpen,
-}: {
-  setOpenAddModal: (open: boolean) => void;
-  isAddModalOpen: boolean;
-}) => {
-  const [categoryImages, setCategoryImages] = useState<FileImage[]>([]);
-  const [categoryName, setCategoryName] = useState("");
-  const [categorySlug, setCategorySlug] = useState("");
-  const [categoryDescription, setCategoryDescription] = useState("");
+const AddCategoryModal = () => {
+  const [categoryImages, setCategoryImages] = useState<FileImage[]>([])
+  const [categoryName, setCategoryName] = useState("")
+  const [categorySlug, setCategorySlug] = useState("")
+  const [categoryDescription, setCategoryDescription] = useState("")
 
-  const uploadthing = useUploadThing("imageUploader");
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const uploadthing = useUploadThing("imageUploader")
+
+  const isAddModalOpen = searchParams.get("add") !== null
 
   const mutation = useMutation(
     async () =>
@@ -35,26 +34,26 @@ const AddCategoryModal = ({
         error: "Error",
       }),
     {
-      onMutate: () => setOpenAddModal(false),
+      onMutate: () => router.push("/admin/categories"),
       onSettled: () => queryClient.invalidateQueries(["categories"]),
     }
-  );
+  )
 
   async function addCategory() {
-    const imageFiles = await uploadthing.startUpload(categoryImages);
+    const imageFiles = await uploadthing.startUpload(categoryImages)
     const result = await axios.post("/api/categories", {
       name: categoryName,
       slug: categorySlug,
       description: categoryDescription,
       image_urls: imageFiles?.map((image) => ({ image_url: image.fileUrl })),
-    });
-    return result;
+    })
+    return result
   }
 
   return (
     <Dialog
       open={isAddModalOpen}
-      onOpenChange={(open) => setOpenAddModal(open)}
+      onOpenChange={() => router.push("/admin/categories")}
     >
       <DialogContent
         open={isAddModalOpen}
@@ -63,8 +62,8 @@ const AddCategoryModal = ({
         <DialogHeader title="Add Category" />
         <form
           onSubmit={async (event) => {
-            event.preventDefault();
-            mutation.mutate();
+            event.preventDefault()
+            mutation.mutate()
           }}
           className="flex flex-col gap-4 px-6 py-4"
         >
@@ -91,6 +90,7 @@ const AddCategoryModal = ({
             <Input
               id="name"
               type="text"
+              className="dark:border-neutral-600 dark:bg-neutral-800"
               value={categoryName}
               onChange={(event) => setCategoryName(event.target.value)}
             />
@@ -101,7 +101,7 @@ const AddCategoryModal = ({
             </label>
             <TextArea
               id="categoryDescription"
-              className="h-40"
+              className="h-40 dark:border-neutral-600 dark:bg-neutral-800"
               value={categoryDescription}
               onChange={(event) => setCategoryDescription(event.target.value)}
             />
@@ -113,6 +113,7 @@ const AddCategoryModal = ({
             <Input
               id="slug"
               type="text"
+              className="dark:border-neutral-600 dark:bg-neutral-800"
               value={categorySlug}
               onChange={(event) => setCategorySlug(event.target.value)}
             />
@@ -125,7 +126,7 @@ const AddCategoryModal = ({
         </form>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}
 
-export default AddCategoryModal;
+export default AddCategoryModal

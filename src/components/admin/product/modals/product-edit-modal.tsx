@@ -1,25 +1,22 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import * as z from "zod";
+"use client"
 
-import { FileImage, ImageUploader } from "@/components/image-uploader";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { TextArea } from "@/components/ui/text-area";
-import { queryClient } from "@/lib/react-query-client";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { useForm } from "react-hook-form"
+import { toast } from "react-toastify"
+import * as z from "zod"
 
-import CategoryScrollableList from "./category-scrollable-list";
-import { ProductWithImages } from "./products-table";
+import { queryClient } from "@/lib/react-query-client"
+import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { TextArea } from "@/components/ui/text-area"
+import { FileImage, ImageUploader } from "@/components/image-uploader"
+import { getProductDetails } from "@/app/actions/products"
 
-interface ProductEditModalProps {
-  productDetails: ProductWithImages;
-  isEditModalOpen: boolean;
-  setOpenEditModal: (open: boolean) => void;
-}
+import CategoryScrollableList from "../category-scrollable-list"
 
 const EditProductFormSchema = z.object({
   name: z.string().min(5).max(25),
@@ -28,16 +25,26 @@ const EditProductFormSchema = z.object({
   stock: z.number().min(10).max(10000000),
   slug: z.string().min(5).max(25),
   category_id: z.number().min(1),
-});
+})
 
-type EditProductFormData = z.infer<typeof EditProductFormSchema>;
+type EditProductFormData = z.infer<typeof EditProductFormSchema>
 
-export const ProductEditModal = ({
-  productDetails,
-  isEditModalOpen,
-  setOpenEditModal,
-}: ProductEditModalProps) => {
-  const [files, setFiles] = useState<Array<FileImage>>([]);
+export const ProductEditModal = () => {
+  const [files, setFiles] = useState<Array<FileImage>>([])
+
+  const searchParams = useSearchParams()
+  const router = useRouter()
+
+  const productId = parseInt(searchParams.get("id") as string)
+
+  const isEditModalOpen = searchParams.get("edit") !== null
+
+  const productDetails = useQuery(
+    ["productDetails", productId],
+    async () => await getProductDetails(productId),
+    { enabled: isEditModalOpen }
+  )
+
   const {
     register,
     getValues,
@@ -48,44 +55,44 @@ export const ProductEditModal = ({
   } = useForm<EditProductFormData>({
     resolver: zodResolver(EditProductFormSchema),
     values: {
-      name: productDetails.name,
-      price: productDetails.price,
-      description: productDetails.description,
-      stock: productDetails.stock,
-      slug: productDetails.slug,
-      category_id: productDetails.category_id,
+      name: productDetails.data?.name as string,
+      price: productDetails.data?.price as number,
+      description: productDetails.data?.description as string,
+      stock: productDetails.data?.stock as number,
+      slug: productDetails.data?.slug as string,
+      category_id: productDetails.data?.category_id as number,
     },
-  });
+  })
 
   const updateMutation = useMutation(
     () =>
       toast.promise(updateProduct(), {
         error: "Error",
         success: "Update Success",
-        pending: "Updating " + productDetails.name,
+        pending: "Updating " + productDetails.data?.name,
       }),
     {
-      onMutate: () => setOpenEditModal(false),
+      onMutate: () => router.push("/admin/products"),
       onSuccess: () => queryClient.invalidateQueries(["products"]),
     }
-  );
+  )
 
   async function updateProduct() {
-    await fetch("/api/products/" + productDetails.id, {
+    await fetch("/api/products/" + productId, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(getValues()),
-    });
+    })
   }
 
   return (
     <Dialog
       open={isEditModalOpen}
-      onOpenChange={(open) => {
-        setOpenEditModal(open);
-        clearErrors();
+      onOpenChange={() => {
+        router.push("/admin/products")
+        clearErrors()
       }}
     >
       <DialogContent
@@ -95,13 +102,13 @@ export const ProductEditModal = ({
         <DialogHeader title="Edit Product" />
         <form
           onSubmit={handleSubmit(() => {
-            updateMutation.mutate();
+            updateMutation.mutate()
           })}
           className="flex flex-col gap-2.5 px-6 py-2"
         >
           <div className="flex flex-col items-start gap-1 text-gray-400">
             <label className="text-sm font-medium ">Id</label>
-            <h5 className="text-lg">{productDetails.id}</h5>
+            <h5 className="text-lg">{productId}</h5>
           </div>
           <div className="flex flex-col items-start gap-1">
             <label className="text-sm font-medium text-slate-800">Image</label>
@@ -179,5 +186,5 @@ export const ProductEditModal = ({
         </form>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}
