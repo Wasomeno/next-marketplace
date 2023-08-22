@@ -1,15 +1,15 @@
-import { getServerSession } from "next-auth";
-import Link from "next/link";
+import Link from "next/link"
+import { getServerSession } from "next-auth"
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 
-import { UserMenuMain } from "./user-menu-main";
-import { UserMenuMobile } from "./user-menu-mobile";
+import { UserMenuMain } from "./user-menu-main"
+import { UserMenuMobile } from "./user-menu-mobile"
 
 export async function UserMenu() {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions)
 
-  return session ? (
+  return session?.user.email ? (
     <>
       <UserMenuMain session={session} />
       <UserMenuMobile session={session} />
@@ -23,5 +23,5 @@ export async function UserMenu() {
         Sign In
       </Link>
     </div>
-  );
+  )
 }
