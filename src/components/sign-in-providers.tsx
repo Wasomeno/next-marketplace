@@ -1,10 +1,10 @@
-"use client";
+"use client"
 
-import { signIn } from "next-auth/react";
-import { AiFillGithub } from "react-icons/ai";
-import { FcGoogle } from "react-icons/fc";
+import { signIn } from "next-auth/react"
+import { AiFillGithub } from "react-icons/ai"
+import { FcGoogle } from "react-icons/fc"
 
-import { Button } from "./ui/button";
+import { Button } from "./ui/button"
 
 export const SignInProviders = () => {
   return (
@@ -14,17 +14,17 @@ export const SignInProviders = () => {
         onClick={() =>
           signIn("google", { callbackUrl: "http://localhost:3000" })
         }
-        className="border-slate-300 hover:bg-slate-100"
+        className="border-slate-300 hover:bg-slate-100 dark:border-gray-800 dark:bg-slate-950"
       >
         <FcGoogle className="h-6 w-6 lg:h-6 lg:w-6" />
       </Button>
       <Button
         disabled
         variant="defaultOutline"
-        className="border-slate-300 hover:bg-slate-100"
+        className="border-slate-300 hover:bg-slate-100 dark:border-gray-800 dark:bg-slate-950"
       >
         <AiFillGithub className="h-6 w-6 lg:h-6 lg:w-6" />
       </Button>
     </div>
-  );
-};
+  )
+}
