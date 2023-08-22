@@ -1,17 +1,17 @@
-import Image from "next/image";
-import React, { SetStateAction } from "react";
-import { useDropzone } from "react-dropzone";
-import { RxCross1 } from "react-icons/rx";
+import React, { SetStateAction } from "react"
+import Image from "next/image"
+import { useDropzone } from "react-dropzone"
+import { RxCross1 } from "react-icons/rx"
 
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import { Button } from "./ui/button"
+import { Input } from "./ui/input"
 
-export type FileImage = File & { preview: string };
+export type FileImage = File & { preview: string }
 
 interface ImageUploaderProps {
-  files: Array<File & { preview: string }>;
-  setFiles: React.Dispatch<SetStateAction<FileImage[]>>;
-  deselectFile?: (index: number) => void;
+  files: Array<File & { preview: string }>
+  setFiles: React.Dispatch<SetStateAction<FileImage[]>>
+  deselectFile?: (index: number) => void
 }
 
 export const ImageUploader = ({
@@ -27,9 +27,9 @@ export const ImageUploader = ({
             preview: URL.createObjectURL(file),
           })
         )
-      );
+      )
     },
-  });
+  })
 
   return (
     <div className="flex w-full flex-col gap-2">
@@ -37,7 +37,7 @@ export const ImageUploader = ({
         <div
           {...getRootProps({
             className:
-              "flex items-center cursor-pointer rounded-md bg-white h-32 justify-center border ",
+              "flex items-center cursor-pointer rounded-md bg-white dark:bg-neutral-800 dark:border-neutral-600 h-32 justify-center border   ",
           })}
         >
           <Input {...getInputProps()} />
@@ -51,7 +51,7 @@ export const ImageUploader = ({
             {files.map((file, index) => (
               <div
                 key={index}
-                className="relative flex h-20 w-20 items-center justify-center rounded-md border bg-white p-2"
+                className="relative flex h-20 w-20 items-center justify-center rounded-md border bg-white  p-2"
               >
                 <Button
                   variant="danger"
@@ -67,5 +67,5 @@ export const ImageUploader = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}
