@@ -24,3 +24,15 @@ export async function getAllOrders(dateTime?: Date): Promise<
 
   return orders
 }
+
+export async function getOrderDetails(
+  orderId: number
+): Promise<Prisma.OrderGetPayload<{
+  include: { products: { include: { images: true } }; status: true }
+}> | null> {
+  const orderDetails = await prisma.order.findUnique({
+    where: { id: orderId },
+    include: { products: { include: { images: true } }, status: true },
+  })
+  return orderDetails
+}
