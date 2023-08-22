@@ -1,7 +1,7 @@
-import { cva, VariantProps } from "class-variance-authority";
-import clsx from "clsx";
-import React from "react";
-import { twMerge } from "tailwind-merge";
+import React from "react"
+import { cva, VariantProps } from "class-variance-authority"
+import clsx from "clsx"
+import { twMerge } from "tailwind-merge"
 
 const buttonVariants = cva(
   "flex lg:text-sm text-xs font-medium transition duration-300 disabled:opacity-50 items-center rounded-md justify-center",
@@ -10,9 +10,9 @@ const buttonVariants = cva(
       variant: {
         default: "bg-slate-100",
         defaultOutline: "border border-slate-100",
-        danger: "bg-red-600",
+        danger: "bg-red-600 dark:bg-red-800",
         warning: "bg-yellow-500",
-        success: "bg-green-600",
+        success: "bg-green-600 dark:bg-green-800",
         dangerOutline: "border border-red-600",
         successOutline: "border border-green-600",
       },
@@ -27,7 +27,7 @@ const buttonVariants = cva(
       size: "default",
     },
   }
-);
+)
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -41,10 +41,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       />
-    );
+    )
   }
-);
+)
 
-Button.displayName = "Button";
+Button.displayName = "Button"
 
-export { Button, buttonVariants };
+export { Button, buttonVariants }
