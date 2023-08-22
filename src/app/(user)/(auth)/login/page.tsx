@@ -1,19 +1,19 @@
-import { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
+import { Metadata } from "next"
+import Image from "next/image"
+import Link from "next/link"
 
-import { SignInProviders } from "@/components/sign-in-providers";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Separator } from "@/components/ui/separator"
+import { SignInProviders } from "@/components/sign-in-providers"
 
 export const metadata: Metadata = {
   title: "Sign in | Next Marketplace",
-};
+}
 
 export default async function Login() {
   return (
-    <main className="flex flex-1 items-center justify-center">
+    <main className="flex flex-1 items-center justify-center dark:bg-neutral-950">
       <Link
         href="/"
         prefetch={false}
@@ -32,18 +32,19 @@ export default async function Login() {
         </h1>
         <div className="flex w-5/6 flex-col items-center gap-2 rounded-lg lg:w-3/6">
           <SignInProviders />
-
           <div className="flex w-full items-center justify-center gap-2">
             <Separator
               decorative
               orientation="horizontal"
-              className="h-px w-full bg-slate-200"
+              className="dark: h-px w-full bg-slate-200 dark:bg-gray-500"
             />
-            <span className="text-xs text-slate-500 lg:text-sm">Or</span>
+            <span className="text-xs text-slate-500 dark:text-gray-500 lg:text-sm">
+              Or
+            </span>
             <Separator
               decorative
               orientation="horizontal"
-              className="h-px w-full bg-slate-200"
+              className="h-px w-full bg-slate-200 dark:bg-gray-500"
             />
           </div>
 
@@ -72,8 +73,8 @@ export default async function Login() {
             </div>
             <Button
               disabled
-              variant="defaultOutline"
-              className="mt-4 w-full border-blue-400 text-xs font-medium tracking-wide text-blue-400 hover:bg-blue-400 hover:text-white lg:text-sm"
+              variant="default"
+              className="mt-4 w-full text-xs font-medium tracking-wide hover:bg-blue-400  dark:bg-blue-900 lg:text-sm"
             >
               Submit
             </Button>
@@ -81,5 +82,5 @@ export default async function Login() {
         </div>
       </div>
     </main>
-  );
+  )
 }
