@@ -1,9 +1,10 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
-import Credentials from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google";
+import { NextRequest } from "next/server"
+import { PrismaAdapter } from "@next-auth/prisma-adapter"
+import NextAuth, { NextAuthOptions } from "next-auth"
+import Credentials from "next-auth/providers/credentials"
+import GoogleProvider from "next-auth/providers/google"
 
-import { prisma } from "@/lib/prisma";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { prisma } from "@/lib/prisma"
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -26,21 +27,27 @@ export const authOptions: NextAuthOptions = {
           type: "text",
         },
         password: { label: "password", type: "password" },
-      }, // @ts-expect-error
-      async authorize(credentials, req) {
+      },
+      // @ts-expect-error
+      async authorize(credentials) {
         try {
-          let userDetails;
+          let userDetails
           userDetails = await prisma.admin.findUnique({
             where: { username: credentials?.username },
-          });
-          if (userDetails) {
+          })
+          if (!credentials?.username || !credentials.password) {
+            const error = new Error("password or username can't be empty")
+            throw error
+          } else if (userDetails?.password !== credentials.password) {
+            throw new Error("password don't match")
+          } else {
             return {
               ...userDetails,
-            };
+              role: "admin",
+            }
           }
-          return null;
         } catch (error) {
-          return null;
+          throw error
         }
       },
     }),
@@ -48,20 +55,28 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
-        // @ts-expect-error
-        token.username = user.username;
+        token.id = user.id
+        token.username = user.username
+        token.role = user.role
       }
-      return token;
+      return token
     },
     async session({ session, token }) {
-      session.user = { ...token };
-      return session;
+      session.user = { ...token }
+      return session
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
-};
+}
 
-const handler = NextAuth(authOptions);
+async function auth(req: NextRequest, res: any) {
+  const callbackUrl = req.nextUrl.searchParams.get("callbackUrl")
+  return await NextAuth(req, res, {
+    ...authOptions,
+    pages: {
+      signIn: callbackUrl?.startsWith("/admin") ? "/admin/login" : "/login",
+    },
+  })
+}
 
-export { handler as GET, handler as POST };
+export { auth as GET, auth as POST }
