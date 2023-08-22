@@ -97,7 +97,10 @@ export const CategoryTable = ({
     {
       accessorKey: "_count",
       header: "Product Amount",
-      cell: (productCount) => productCount.getValue().products,
+      cell: (productCount) => {
+        const count = productCount.getValue() as { products: number }
+        return count.products
+      },
       footer: (props) => props.column.id,
       enableColumnFilter: false,
     },

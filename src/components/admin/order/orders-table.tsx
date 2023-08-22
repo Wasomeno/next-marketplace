@@ -113,7 +113,10 @@ export const OrdersTable = ({
       {
         accessorKey: "_count",
         header: "Product Amount",
-        cell: (info) => info.getValue().products,
+        cell: (info) => {
+          const count = info.getValue() as { products: number }
+          return count.products
+        },
         enableColumnFilter: false,
       },
       {
