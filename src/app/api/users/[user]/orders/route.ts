@@ -8,7 +8,7 @@ function generateOrderInvoice() {
   return `INV/${date.getFullYear()}/${date.getTime()}`
 }
 
-export async function GET(request: Request, context: any) {
+export async function GET(context: any) {
   const { user } = context.params
   try {
     const orders = await prisma.order.findMany({
