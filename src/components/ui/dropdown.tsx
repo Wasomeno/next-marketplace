@@ -1,27 +1,26 @@
-"use client";
+"use client"
 
-import clsx from "clsx";
-import React from "react";
-import { IconType } from "react-icons";
-import { twMerge } from "tailwind-merge";
-
-import * as DropdownPrimitive from "@radix-ui/react-dropdown-menu";
+import React from "react"
+import * as DropdownPrimitive from "@radix-ui/react-dropdown-menu"
+import clsx from "clsx"
+import { IconType } from "react-icons"
+import { twMerge } from "tailwind-merge"
 
 export interface Menu {
-  text: string;
-  onSelect: () => void;
-  Icon: IconType;
+  text: string
+  onSelect: () => void
+  Icon: IconType
 }
 
-const Dropdown = DropdownPrimitive.Root;
-const DropdownPortal = DropdownPrimitive.Portal;
+const Dropdown = DropdownPrimitive.Root
+const DropdownPortal = DropdownPrimitive.Portal
 
 const DropdownContent = React.forwardRef<
   React.ElementRef<typeof DropdownPrimitive.Content>,
   React.ComponentPropsWithRef<typeof DropdownPrimitive.Content>
 >(({ className, children, ...props }, ref) => {
   return (
-    <DropdownPortal>
+    <DropdownPortal forceMount>
       <DropdownPrimitive.Content
         className={twMerge(clsx(className))}
         ref={ref}
@@ -30,10 +29,10 @@ const DropdownContent = React.forwardRef<
         {children}
       </DropdownPrimitive.Content>
     </DropdownPortal>
-  );
-});
+  )
+})
 
-DropdownContent.displayName = "DropdownContent";
+DropdownContent.displayName = "DropdownContent"
 
 const DropdownTrigger = React.forwardRef<
   React.ElementRef<typeof DropdownPrimitive.Trigger>,
@@ -43,10 +42,10 @@ const DropdownTrigger = React.forwardRef<
     <DropdownPrimitive.Trigger ref={ref} className={className} {...props}>
       {children}
     </DropdownPrimitive.Trigger>
-  );
-});
+  )
+})
 
-DropdownTrigger.displayName = "DropdownTrigger";
+DropdownTrigger.displayName = "DropdownTrigger"
 
 const DropdownItem = React.forwardRef<
   React.ElementRef<typeof DropdownPrimitive.Item>,
@@ -56,10 +55,10 @@ const DropdownItem = React.forwardRef<
     <DropdownPrimitive.Item className={className} ref={ref} {...props}>
       {children}
     </DropdownPrimitive.Item>
-  );
-});
+  )
+})
 
-DropdownItem.displayName = "DropdownItem";
+DropdownItem.displayName = "DropdownItem"
 
 export {
   Dropdown,
@@ -67,4 +66,4 @@ export {
   DropdownPortal,
   DropdownTrigger,
   DropdownItem,
-};
+}
