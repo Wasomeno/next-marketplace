@@ -1,6 +1,6 @@
-import clsx from "clsx";
-import React from "react";
-import { twMerge } from "tailwind-merge";
+import React from "react"
+import clsx from "clsx"
+import { twMerge } from "tailwind-merge"
 
 export interface TextAreaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
@@ -18,10 +18,10 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
         {...props}
         ref={ref}
       />
-    );
+    )
   }
-);
+)
 
-TextArea.displayName = "TextArea";
+TextArea.displayName = "TextArea"
 
-export { TextArea };
+export { TextArea }
