@@ -18,7 +18,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const productDetails = await prisma.product.findUnique({
     where: { id: parseInt(params?.product) },
   })
-
   return {
     title: `${productDetails?.name} | Next Marketplace `,
     description: productDetails?.description,
@@ -33,6 +32,8 @@ export default async function ProductPage(props: {
     where: { id: parseInt(productId) },
     include: { images: { select: { image_url: true } } },
   })
+
+  const isWishlisted = await isProductInWishlist(parseInt(productId))
 
   invariant(productDetails, "Type error")
 
@@ -50,9 +51,7 @@ export default async function ProductPage(props: {
             <h1 className="text-base font-medium lg:text-xl">
               {productDetails?.name}
             </h1>
-            <WishListButton
-              isProductInWishlist={await isProductInWishlist(productDetails.id)}
-            />
+            <WishListButton isWishlisted={isWishlisted} />
           </div>
           <div className="my-4 text-lg font-medium lg:text-3xl">
             Rp. {productDetails?.price.toLocaleString("id")}
