@@ -1,36 +1,50 @@
 "use client"
 
-import { useState, useTransition } from "react"
-import { useParams } from "next/navigation"
+import { useTransition } from "react"
+import { useParams, useRouter } from "next/navigation"
 import { motion } from "framer-motion"
+import { useSession } from "next-auth/react"
 import { toast } from "react-toastify"
 
 import {
-  addToWishlist,
+  addProductToWishlist,
   removeProductFromWishlist,
 } from "@/app/actions/wishlist"
 
-export const WishListButton = ({
-  isProductInWishlist,
-}: {
-  isProductInWishlist: boolean
-}) => {
-  const [isActive, setIsActive] = useState(isProductInWishlist)
+export const WishListButton = ({ isWishlisted }: { isWishlisted: boolean }) => {
   const [isPending, startTransition] = useTransition()
+  const { product: productId } = useParams()
 
-  const { product } = useParams()
+  const router = useRouter()
+
+  const session = useSession()
+
+  async function addToWishlist() {
+    if (session.data?.user.email) {
+      await addProductToWishlist(parseInt(productId as string))
+      toast.success("Added to wishlist")
+    } else {
+      router.push("/login")
+    }
+  }
+
+  async function removeFromWishlist() {
+    if (session.data?.user.email) {
+      await removeProductFromWishlist(parseInt(productId as string))
+      toast.error("Remove from wishlist")
+    } else {
+      router.push("/login")
+    }
+  }
+
   return (
     <button
       onClick={() => {
         startTransition(async () => {
-          if (!isActive) {
-            await addToWishlist(parseInt(product as string))
-            setIsActive(true)
-            toast.success("Added to wishlist")
+          if (!isWishlisted) {
+            await addToWishlist()
           } else {
-            await removeProductFromWishlist(parseInt(product as string))
-            setIsActive(false)
-            toast.error("Remove from wishlist")
+            await removeFromWishlist()
           }
         })
       }}
@@ -39,7 +53,7 @@ export const WishListButton = ({
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 512 512"
         className="w-5 lg:w-5"
-        animate={{ scale: isActive ? 1.2 : 1.0 }}
+        animate={{ scale: isWishlisted ? 1.2 : 1.0 }}
         transition={{
           type: "spring",
           bounce: 0.5,
@@ -48,7 +62,9 @@ export const WishListButton = ({
       >
         <motion.path
           initial={{ fill: "rgb(203 213 225)" }}
-          animate={{ fill: isActive ? "rgb(220 38 38)" : "rgb(203 213 225)" }}
+          animate={{
+            fill: isWishlisted ? "rgb(220 38 38)" : "rgb(203 213 225)",
+          }}
           transition={{
             type: "spring",
             bounce: 0.5,
