@@ -12,7 +12,8 @@ import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
 export function OrderDetailsModal() {
   const params = useSearchParams()
   const router = useRouter()
-  const isViewDetail = params.get("view")
+
+  const isViewDetails = params.get("view")
   const orderId = params.get("id")
 
   const session = useSession()
@@ -32,11 +33,11 @@ export function OrderDetailsModal() {
 
   return (
     <Dialog
-      open={isViewDetail !== null}
+      open={isViewDetails !== null}
       onOpenChange={() => router.push("/orders")}
     >
       <DialogContent
-        open={isViewDetail !== null}
+        open={isViewDetails !== null}
         className="w-full lg:h-4/6 lg:w-3/6"
       >
         <DialogHeader title="Order Details" />
