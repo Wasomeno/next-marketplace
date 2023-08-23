@@ -24,7 +24,7 @@ export default async function OrdersPage() {
   const transactions = await getUserTransactions()
   return (
     <div className="flex flex-1 flex-col px-5 lg:px-8">
-      <div className="mb-4">
+      <div className="mb-4 mt-2 lg:mb-4">
         <h1 className="text-base font-medium lg:text-xl">Orders</h1>
       </div>
       <div className="flex flex-1 flex-col lg:w-7/12">
