@@ -5,6 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { AnimatePresence, motion } from "framer-motion"
+import { Session } from "next-auth"
 import { signOut } from "next-auth/react"
 import { BsBox2Heart } from "react-icons/bs"
 import { HiMenu, HiX } from "react-icons/hi"
@@ -12,15 +13,13 @@ import { VscSignOut } from "react-icons/vsc"
 
 import { ThemeSwitcher } from "@/components/theme-switcher"
 
-import { UserSession } from "./user-menu-main"
-
-export function UserMenuMobile({ session }: { session: UserSession | null }) {
+export function UserMenuMobile({ session }: { session: Session }) {
   const [showMenu, setShowMenu] = useState(false)
-  const pathnamae = usePathname()
+  const pathname = usePathname()
 
   useEffect(() => {
     setShowMenu(false)
-  }, [pathnamae])
+  }, [pathname])
 
   return (
     <div className="relative flex items-center md:hidden">
