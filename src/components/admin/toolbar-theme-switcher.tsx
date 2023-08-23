@@ -18,11 +18,7 @@ export const ToolbarThemeSwitcher = () => {
       }}
       className="rounded-md px-2.5 py-2 transition duration-200"
     >
-      {resolvedTheme === "light" ? (
-        <BsSun size={20} />
-      ) : (
-        <FaRegMoon size={20} />
-      )}
+      {resolvedTheme === "dark" ? <FaRegMoon size={20} /> : <BsSun size={20} />}
     </button>
   )
 }
