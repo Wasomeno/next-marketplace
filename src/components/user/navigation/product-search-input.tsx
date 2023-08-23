@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 
 import { Input } from "@/components/ui/input"
 
-export function SearchProduct() {
+export function ProductSearchInput() {
   const [searchParams, setSearchParams] = useState("")
   const router = useRouter()
 
