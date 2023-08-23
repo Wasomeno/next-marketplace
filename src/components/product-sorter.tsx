@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { AnimatePresence, motion } from "framer-motion"
 import { BiChevronRight } from "react-icons/bi"
 import { HiArrowsUpDown } from "react-icons/hi2"
 
@@ -43,6 +44,7 @@ const sortOptions: ProductSort[] = [
 ]
 
 export function ProductSorter() {
+  const [isOpen, setIsOpen] = useState(false)
   const searchParams = useSearchParams()
 
   const getActiveSort = () => {
@@ -72,7 +74,7 @@ export function ProductSorter() {
   }, [selectedSort])
 
   return (
-    <Dropdown>
+    <Dropdown open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
       <DropdownTrigger asChild>
         <button className="flex h-8 w-8 items-center justify-center rounded-md border bg-white px-3 text-sm outline-0 dark:border-gray-800 dark:bg-slate-950 lg:h-10 lg:w-52 lg:justify-between">
           <span className="hidden font-medium lg:block">
@@ -90,21 +92,29 @@ export function ProductSorter() {
           </div>
         </button>
       </DropdownTrigger>
-      <DropdownContent
-        align="end"
-        className="flex w-52 flex-col overflow-hidden rounded-md border bg-white text-sm shadow-sm dark:border-gray-800 dark:bg-slate-950 lg:rounded-b-md lg:rounded-t-none lg:border-t-0"
-      >
-        {sortOptions.map((sort) => (
-          <DropdownItem key={sort.id} asChild>
-            <button
-              onClick={() => setSelectedSort(sort)}
-              className="px-3 py-2 text-start text-xs font-medium outline-0 ring-0 transition  duration-200 hover:bg-slate-100 hover:dark:bg-slate-800 lg:text-sm"
+      <AnimatePresence>
+        {isOpen && (
+          <DropdownContent asChild align="end">
+            <motion.div
+              initial={{ height: "0px" }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: "0px" }}
+              className="flex w-52 flex-col overflow-hidden rounded-md border bg-white text-sm shadow-sm dark:border-gray-800 dark:bg-slate-950 lg:rounded-b-md lg:rounded-t-none lg:border-t-0"
             >
-              {sort.label}
-            </button>
-          </DropdownItem>
-        ))}
-      </DropdownContent>
+              {sortOptions.map((sort) => (
+                <DropdownItem key={sort.id} asChild>
+                  <button
+                    onClick={() => setSelectedSort(sort)}
+                    className="px-3 py-2 text-start text-xs font-medium outline-0 ring-0 transition  duration-200 hover:bg-slate-100 hover:dark:bg-slate-800 lg:text-sm"
+                  >
+                    {sort.label}
+                  </button>
+                </DropdownItem>
+              ))}
+            </motion.div>
+          </DropdownContent>
+        )}
+      </AnimatePresence>
     </Dropdown>
   )
 }
