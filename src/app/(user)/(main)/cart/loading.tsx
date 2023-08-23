@@ -23,7 +23,7 @@ export default function CartLoading() {
             <CartItemCardSkeleton />
           </div>
         </div>
-        <div className="sticky bottom-0 w-full lg:w-2/6 lg:px-8">
+        <div className="sticky bottom-0 w-full bg-white dark:bg-neutral-950 lg:w-2/6 lg:px-8">
           <div className="border-t border-slate-200 p-2.5 shadow-[0_3px_10px_rgb(0,0,0,0.1)] dark:border-gray-800 lg:rounded-md lg:border lg:p-4 lg:shadow-none">
             <span className="hidden text-xs lg:inline lg:text-lg">
               Cart Summary
