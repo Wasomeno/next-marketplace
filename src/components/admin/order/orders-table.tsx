@@ -11,6 +11,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  PaginationState,
   SortingState,
   useReactTable,
 } from "@tanstack/react-table"
@@ -30,7 +31,6 @@ import {
 import { TableDataSorter } from "@/components/table-data-sorter"
 import { TableRowMenu } from "@/components/table-row-menu"
 import { TableSearchInput } from "@/components/table-search-input"
-import { getAllOrders } from "@/app/actions/order"
 
 export const OrdersTable = ({
   orders,
@@ -43,8 +43,13 @@ export const OrdersTable = ({
     }
   }>[]
 }) => {
-  const [sorting, setSorting] = useState<SortingState>([])
   const [selectedOrders, setSelectedOrders] = useState<Array<number>>([])
+
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  })
 
   const columns = useMemo<
     ColumnDef<
@@ -154,8 +159,9 @@ export const OrdersTable = ({
   >({
     data: orders,
     columns,
-    state: { sorting },
+    state: { sorting, pagination },
     onSortingChange: setSorting,
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -163,24 +169,26 @@ export const OrdersTable = ({
   })
 
   return (
-    <div className="w-full">
+    <div className="flex w-full flex-1 flex-col overflow-y-scroll">
       <div className="my-2 flex justify-between gap-2.5">
         <div className="flex items-center gap-2">
           <TableSearchInput
-            onChange={(value) => table.getColumn("name")?.setFilterValue(value)}
+            onChange={(event) =>
+              table.getColumn("invoice")?.setFilterValue(event.target.value)
+            }
             placeholder="Search by order invoice"
           />
           <TableDataSorter table={table} sortsData={getOrderSorts(table)} />
         </div>
       </div>
-      <div className="flex-1 overflow-x-scroll rounded-lg border border-gray-200 shadow-sm dark:border-neutral-600">
-        <Table className="w-full border-collapse text-left text-sm text-gray-500 dark:bg-neutral-800">
-          <TableHeader className="bg-blue-100 dark:bg-blue-900">
+      <div className="flex-1 overflow-x-scroll rounded-lg border border-gray-200 bg-white shadow-sm dark:border-neutral-600 dark:bg-neutral-800">
+        <Table className="w-full border-collapse bg-white text-left text-sm text-gray-500 dark:bg-neutral-800">
+          <TableHeader className="">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
                 key={headerGroup.id}
                 aria-rowspan={1}
-                className="dark:border-neutral-600"
+                className="bg-blue-100 dark:border-neutral-600 dark:bg-blue-900"
               >
                 {headerGroup.headers.map((header) => {
                   return (
@@ -204,9 +212,12 @@ export const OrdersTable = ({
             ))}
           </TableHeader>
           <TableBody className="relative divide-y divide-gray-100 border-t border-gray-100 dark:divide-neutral-600 dark:border-neutral-600">
-            {table.getRowModel().rows?.length &&
+            {table.getRowModel().rows?.length > 0 &&
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} className="dark:border-neutral-600">
+                <TableRow
+                  key={row.id}
+                  className="bg-white  dark:border-neutral-600 dark:bg-neutral-800"
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       className="px-3 py-2 text-center text-xs  dark:text-white lg:px-6 lg:py-4 lg:text-sm"
