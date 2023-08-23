@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Category, Prisma, Product } from "@prisma/client"
+import { Prisma } from "@prisma/client"
 import {
   ColumnDef,
   flexRender,
@@ -10,7 +10,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  Row,
+  PaginationState,
   SortingState,
   useReactTable,
 } from "@tanstack/react-table"
@@ -18,6 +18,14 @@ import { BsPlus, BsTrash3 } from "react-icons/bs"
 
 import { getCategorySorts } from "@/config/table/sorts/categorySorts"
 import { Button } from "@/components/ui/button"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 import { TableDataSorter } from "@/components/table-data-sorter"
 import { TableRowMenu } from "@/components/table-row-menu"
 import { TableSearchInput } from "@/components/table-search-input"
@@ -31,8 +39,13 @@ export const CategoryTable = ({
     include: { _count: { select: { products: true } }; images: true }
   }>[]
 }) => {
-  const [sorting, setSorting] = useState<SortingState>([])
   const [selectedCategories, setSelectedCategories] = useState<number[]>([])
+
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 4,
+  })
 
   const router = useRouter()
 
@@ -133,8 +146,10 @@ export const CategoryTable = ({
     columns,
     state: {
       sorting,
+      pagination,
     },
     onSortingChange: setSorting,
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -146,7 +161,9 @@ export const CategoryTable = ({
       <div className="my-2 flex justify-between gap-2.5">
         <div className="flex items-center gap-2">
           <TableSearchInput
-            onChange={(value) => table.getColumn("name")?.setFilterValue(value)}
+            onChange={(event) =>
+              table.getColumn("name")?.setFilterValue(event.target.value)
+            }
             placeholder="Search by category name"
           />
           <TableDataSorter table={table} sortsData={getCategorySorts(table)} />
@@ -173,14 +190,17 @@ export const CategoryTable = ({
           </Button>
         </div>
       </div>
-      <div className="flex-1 overflow-x-scroll rounded-lg border border-gray-200 shadow-sm dark:border-gray-700 dark:bg-neutral-800">
-        <table className="w-full border-collapse bg-white text-left text-sm text-gray-500 dark:bg-neutral-800 dark:text-slate-50">
-          <thead className="bg-blue-100 dark:bg-blue-950">
+      <div className="flex-1 overflow-x-scroll rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-neutral-800">
+        <Table className="w-full border-collapse  bg-white text-left text-sm text-gray-500 dark:bg-neutral-800 dark:text-slate-50">
+          <TableHeader className="">
             {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
+              <TableRow
+                key={headerGroup.id}
+                className="bg-blue-100 dark:bg-blue-950"
+              >
                 {headerGroup.headers.map((header) => {
                   return (
-                    <th
+                    <TableHead
                       className="px-6 py-4 text-center text-xs font-medium text-gray-900 dark:text-neutral-50 lg:text-sm"
                       key={header.id}
                       colSpan={header.colSpan}
@@ -193,20 +213,23 @@ export const CategoryTable = ({
                           )}
                         </div>
                       )}
-                    </th>
+                    </TableHead>
                   )
                 })}
-              </tr>
+              </TableRow>
             ))}
-          </thead>
-          <tbody className="relative border-t border-gray-100 dark:border-neutral-600 dark:bg-neutral-800">
-            {table.getRowModel().rows?.length &&
+          </TableHeader>
+          <TableBody className="relative border-t border-gray-100 dark:border-neutral-600 dark:bg-neutral-800">
+            {table.getRowModel().rows?.length > 0 &&
               table.getRowModel().rows.map((row) => {
                 return (
-                  <tr key={row.id}>
+                  <TableRow
+                    key={row.id}
+                    className="bg-white  dark:border-neutral-600 dark:bg-neutral-800"
+                  >
                     {row.getVisibleCells().map((cell) => {
                       return (
-                        <td
+                        <TableCell
                           className="dark:background-neutral-800 border-b border-b-gray-200 px-3 py-2 text-center text-xs dark:border-b-neutral-600 lg:px-6 lg:py-4 lg:text-sm"
                           key={cell.id}
                         >
@@ -214,24 +237,24 @@ export const CategoryTable = ({
                             cell.column.columnDef.cell,
                             cell.getContext()
                           )}
-                        </td>
+                        </TableCell>
                       )
                     })}
-                  </tr>
+                  </TableRow>
                 )
               })}
             {!table.getRowModel().rows?.length && (
-              <tr>
-                <td
+              <TableRow>
+                <TableCell
                   colSpan={columns.length}
                   className="h-96 text-center font-medium tracking-wider text-gray-400"
                 >
                   No Data
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             )}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
 
       <div className="my-2 flex items-center justify-start gap-2.5">
