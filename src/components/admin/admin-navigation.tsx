@@ -13,6 +13,13 @@ import {
 } from "react-icons/md"
 import { twMerge } from "tailwind-merge"
 
+interface NavigationLinkProps {
+  path: string
+  href: string
+  title: string
+  Icon: IconType
+}
+
 const AdminNavigation = () => {
   const path = usePathname()
   return (
@@ -57,14 +64,12 @@ const AdminNavigation = () => {
   )
 }
 
-interface NavigationLinkProps {
-  path: string | null
-  href: string
-  title: string
-  Icon: IconType
-}
-
-const NavigationLink = ({ href, path, title, Icon }: NavigationLinkProps) => {
+const NavigationLink = ({
+  href,
+  path,
+  title,
+  Icon,
+}: Readonly<NavigationLinkProps>) => {
   return (
     <Link
       href={href}
