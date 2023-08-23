@@ -16,6 +16,7 @@ export function AdminNotificationDropdown() {
   const [isOpen, setIsOpen] = useState(false)
   const viewport = useViewport()
   const dateNow = new Date()
+
   const newOrders = useQuery(
     ["newOrders"],
     async () => await getAllOrders(dateNow)
