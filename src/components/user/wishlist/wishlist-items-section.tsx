@@ -10,15 +10,15 @@ import { addAllToCart } from "@/app/actions/wishlist"
 
 import { WishListItemCard } from "./wishlist-item-card"
 
-export const WishlistItemsSection = ({
-  items,
-}: {
+type WishlistItemsSectionProps = {
   items:
     | Prisma.WishlistItemGetPayload<{
         include: { product: { include: { images: true } } }
       }>[]
     | undefined
-}) => {
+}
+
+export const WishlistItemsSection = ({ items }: WishlistItemsSectionProps) => {
   const [selectedItems, setSelectedItems] = useState<number[]>([])
   const [isPending, startTransition] = useTransition()
   return (
@@ -48,7 +48,7 @@ export const WishlistItemsSection = ({
           )}
         </div>
       </div>
-      <div className="sticky bottom-0 w-full lg:w-2/6">
+      <div className="sticky bottom-0 w-full bg-white dark:bg-neutral-950 lg:w-2/6">
         <div className="flex flex-col justify-between border-t border-slate-200 p-2.5 shadow-[0_3px_10px_rgb(0,0,0,0.1)] dark:border-gray-800 lg:h-72 lg:rounded-lg lg:border lg:border-slate-300 lg:p-4 lg:shadow-none">
           <div className="">
             <span className="hidden text-xs font-medium lg:inline lg:text-base">

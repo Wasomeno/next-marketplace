@@ -11,15 +11,17 @@ import { toast } from "react-toastify"
 import { Button } from "@/components/ui/button"
 import { removeProductFromWishlist } from "@/app/actions/wishlist"
 
-export const WishListItemCard = ({
-  setSelectedItems,
-  item,
-}: {
+type WishListItemCardProps = {
   setSelectedItems: Dispatch<SetStateAction<number[]>>
   item: Prisma.WishlistItemGetPayload<{
     include: { product: { include: { images: true } } }
   }>
-}) => {
+}
+
+export const WishListItemCard = ({
+  setSelectedItems,
+  item,
+}: WishListItemCardProps) => {
   const [isPending, startTransition] = useTransition()
   return (
     <div className="flex items-center gap-4 border-t p-4 dark:border-t-gray-800">
