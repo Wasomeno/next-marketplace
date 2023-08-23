@@ -2,20 +2,18 @@
 
 import { useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Category, Prisma, Product, ProductImage } from "@prisma/client"
-import { useQuery } from "@tanstack/react-query"
+import { Prisma } from "@prisma/client"
 import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  Row,
+  PaginationState,
   SortingState,
   useReactTable,
 } from "@tanstack/react-table"
 import { BsPlus, BsTrash3 } from "react-icons/bs"
-import { twMerge } from "tailwind-merge"
 
 import { getProductSorts } from "@/config/table/sorts/productSorts"
 import { Button } from "@/components/ui/button"
@@ -41,78 +39,79 @@ export const ProductsTable = ({
     include: { images: true; category: true }
   }>[]
 }) => {
-  const [sorting, setSorting] = useState<SortingState>([])
   const [selectedProducts, setSelectedProducts] = useState<Array<number>>([])
   const [showDeleteModal, setShowDeleteModal] = useState(false)
 
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 4,
+  })
+
   const router = useRouter()
 
-  const columns = useMemo(
-    () =>
-      productsTableColumns({
-        tableRowMenu: {
-          id: "action",
-          header: "Actions",
-          cell: ({ row }) => {
-            return (
-              <TableRowMenu>
-                <TableRowMenu.Link
-                  href={`/admin/products?id=${row.original.id}&view=true`}
-                >
-                  View Product
-                </TableRowMenu.Link>
-                <TableRowMenu.Link
-                  href={`/admin/products?id=${row.original.id}&edit=true`}
-                >
-                  Edit Product
-                </TableRowMenu.Link>
-              </TableRowMenu>
-            )
-          },
-        },
-        checkBox: {
-          id: "select",
-          header: ({ table }) => (
-            <input
-              type="checkbox"
-              className="h-4 w-4 cursor-pointer p-1.5"
-              checked={
-                table.getCoreRowModel().rows.length === selectedProducts.length
-              }
-              onChange={() => {
-                setSelectedProducts((currentSelected) => {
-                  return table.getCoreRowModel().rows.length ===
-                    currentSelected.length
-                    ? []
-                    : table.getCoreRowModel().rows.map((row) => row.original.id)
-                })
-              }}
-            />
-          ),
-          cell: ({ row }) => (
-            <div className="px-1">
-              <input
-                type="checkbox"
-                className="h-4 w-4 cursor-pointer rounded-md accent-blue-300 dark:accent-gray-300"
-                checked={selectedProducts.includes(row.original.id)}
-                onChange={() =>
-                  setSelectedProducts((currentSelected) => {
-                    if (currentSelected.includes(row.original.id)) {
-                      return currentSelected.filter(
-                        (productId) => productId !== row.original.id
-                      )
-                    } else {
-                      return [...currentSelected, row.original.id]
-                    }
-                  })
+  const columns = productsTableColumns({
+    tableRowMenu: {
+      id: "action",
+      header: "Actions",
+      cell: ({ row }) => {
+        return (
+          <TableRowMenu>
+            <TableRowMenu.Link
+              href={`/admin/products?id=${row.original.id}&view=true`}
+            >
+              View Product
+            </TableRowMenu.Link>
+            <TableRowMenu.Link
+              href={`/admin/products?id=${row.original.id}&edit=true`}
+            >
+              Edit Product
+            </TableRowMenu.Link>
+          </TableRowMenu>
+        )
+      },
+    },
+    checkBox: {
+      id: "select",
+      header: ({ table }) => (
+        <input
+          type="checkbox"
+          className="h-4 w-4 cursor-pointer p-1.5"
+          checked={
+            table.getCoreRowModel().rows.length === selectedProducts.length
+          }
+          onChange={() => {
+            setSelectedProducts((currentSelected) => {
+              return table.getCoreRowModel().rows.length ===
+                currentSelected.length
+                ? []
+                : table.getCoreRowModel().rows.map((row) => row.original.id)
+            })
+          }}
+        />
+      ),
+      cell: ({ row }) => (
+        <div className="px-1">
+          <input
+            type="checkbox"
+            className="h-4 w-4 cursor-pointer rounded-md accent-blue-300 dark:accent-gray-300"
+            checked={selectedProducts.includes(row.original.id)}
+            onChange={() =>
+              setSelectedProducts((currentSelected) => {
+                if (currentSelected.includes(row.original.id)) {
+                  return currentSelected.filter(
+                    (productId) => productId !== row.original.id
+                  )
+                } else {
+                  return [...currentSelected, row.original.id]
                 }
-              />
-            </div>
-          ),
-        },
-      }),
-    [products.length]
-  )
+              })
+            }
+          />
+        </div>
+      ),
+    },
+  })
 
   const table = useReactTable<
     Prisma.ProductGetPayload<{ include: { images: true; category: true } }>
@@ -121,7 +120,8 @@ export const ProductsTable = ({
       include: { images: true; category: true }
     }>[],
     columns,
-    state: { sorting },
+    state: { sorting, pagination },
+    onPaginationChange: setPagination,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -130,11 +130,13 @@ export const ProductsTable = ({
   })
 
   return (
-    <div className="w-full">
+    <div className="flex w-full flex-1 flex-col overflow-y-scroll">
       <div className="my-2 flex justify-between gap-2.5">
         <div className="flex items-center gap-2">
           <TableSearchInput
-            onChange={(value) => table.getColumn("name")?.setFilterValue(value)}
+            onChange={(event) =>
+              table.getColumn("name")?.setFilterValue(event.target.value)
+            }
             placeholder="Search by product name"
           />
           <TableDataSorter table={table} sortsData={getProductSorts(table)} />
@@ -159,7 +161,7 @@ export const ProductsTable = ({
           </Button>
         </div>
       </div>
-      <div className="flex-1 overflow-x-scroll rounded-lg border border-gray-200 shadow-sm dark:border-neutral-600">
+      <div className="flex-1 overflow-x-scroll rounded-lg border border-gray-200 bg-white shadow-sm dark:border-neutral-600 dark:bg-neutral-800">
         <Table className="w-full border-collapse text-left text-sm text-gray-500 dark:bg-neutral-800">
           <TableHeader className="bg-blue-100 dark:bg-blue-900">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -190,9 +192,12 @@ export const ProductsTable = ({
             ))}
           </TableHeader>
           <TableBody className="relative divide-y divide-gray-100 border-t border-gray-100 dark:divide-neutral-600 dark:border-neutral-600">
-            {table.getRowModel().rows?.length &&
+            {table.getRowModel().rows?.length > 0 &&
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} className="dark:border-neutral-600">
+                <TableRow
+                  key={row.id}
+                  className="bg-white dark:border-neutral-600 dark:bg-neutral-800"
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       className="px-3 py-2 text-center text-xs  dark:text-white lg:px-6 lg:py-4 lg:text-sm"
