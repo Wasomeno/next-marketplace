@@ -1,3 +1,7 @@
+export const metadata = {
+  title: "Admin | Dashboard",
+}
+
 export default async function AdminDashboard() {
   return (
     <div className="flex w-full flex-1 flex-col p-5 dark:bg-neutral-900">
