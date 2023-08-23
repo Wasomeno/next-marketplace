@@ -17,12 +17,12 @@ export default async function Login() {
       <Link
         href="/"
         prefetch={false}
-        className="absolute left-0 top-2 flex items-center"
+        className="absolute left-0 top-0 flex items-center"
       >
-        <div className="relative h-12 w-12 lg:h-14 lg:w-14">
+        <div className="relative h-12 w-12 lg:h-16 lg:w-16">
           <Image src="/next_marketplace.webp" alt="next-logo" fill />
         </div>
-        <span className="font-sans text-xs font-medium tracking-tight lg:text-lg">
+        <span className="font-sans text-xs font-medium tracking-tight lg:text-base">
           Next Martketplace
         </span>
       </Link>
@@ -74,7 +74,7 @@ export default async function Login() {
             <Button
               disabled
               variant="default"
-              className="mt-4 w-full text-xs font-medium tracking-wide hover:bg-blue-400  dark:bg-blue-900 lg:text-sm"
+              className="mt-4 w-full text-xs font-medium tracking-wide active:hover:bg-blue-400  dark:bg-blue-900 lg:text-sm"
             >
               Submit
             </Button>
