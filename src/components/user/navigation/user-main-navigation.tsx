@@ -5,7 +5,7 @@ import { IoCartOutline } from "react-icons/io5"
 import { Separator } from "@/components/ui/separator"
 import { getCartItemsCount } from "@/app/actions/cart"
 
-import { SearchProduct } from "./search-product"
+import { ProductSearchInput } from "./product-search-input"
 import { UserMenu } from "./user-menu"
 
 export async function UserMainNavigation() {
@@ -19,7 +19,7 @@ export async function UserMainNavigation() {
         >
           <Image src="/next_marketplace.webp" alt="next-logo" fill />
         </Link>
-        <SearchProduct />
+        <ProductSearchInput />
       </div>
       <div className="flex w-3/6 items-center justify-evenly lg:w-44">
         <Link href="/cart" className="relative font-sans">
