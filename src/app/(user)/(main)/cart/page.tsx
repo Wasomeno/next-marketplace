@@ -21,7 +21,7 @@ export default async function Cart() {
   return (
     <div className="flex flex-1 flex-col">
       <div className="mb-4 px-4 lg:px-8">
-        <div className="mb-2 flex items-center gap-2">
+        <div className="mb-2 flex items-center">
           <BackButton />
           <h1 className="text-base font-medium lg:text-xl">Cart</h1>
         </div>
