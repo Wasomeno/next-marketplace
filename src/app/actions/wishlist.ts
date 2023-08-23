@@ -1,16 +1,15 @@
-"use server";
+"use server"
 
-import { error } from "console";
-import { getServerSession } from "next-auth";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { error } from "console"
+import { revalidatePath } from "next/cache"
+import { getServerSession } from "next-auth"
 
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/prisma"
 
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { authOptions } from "../api/auth/[...nextauth]/route"
 
 export async function getWishlist(sort: string[][]) {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions)
   const wishList = await prisma.wishlist.findUnique({
     where: { user_email: session?.user?.email as string },
     include: {
@@ -21,119 +20,112 @@ export async function getWishlist(sort: string[][]) {
         include: { product: { include: { images: true } } },
       },
     },
-  });
-  return wishList?.items;
+  })
+  return wishList?.items
 }
 
 export async function isProductInWishlist(productId: number) {
-  const session = await getServerSession(authOptions);
-  if (session) {
+  const session = await getServerSession(authOptions)
+  if (session?.user.email) {
     const wishList = await prisma.wishlist.findUnique({
       where: { user_email: session?.user?.email as string },
       select: {
         items: { include: { product: { include: { images: true } } } },
       },
-    });
+    })
     const product = wishList?.items.find(
       (item) => item.product_id === productId
-    );
-    return product ? true : false;
+    )
+    return product ? true : false
   } else {
-    return false;
+    return false
   }
 }
 
-export async function addToWishlist(productId: number) {
-  const session = await getServerSession(authOptions);
-
-  if (session) {
-    const wishlist = await prisma.wishlist.findUnique({
+export async function addProductToWishlist(productId: number) {
+  const session = await getServerSession(authOptions)
+  const wishlist = await prisma.wishlist.findUnique({
+    where: { user_email: session?.user?.email as string },
+  })
+  if (wishlist) {
+    await prisma.wishlist.update({
       where: { user_email: session?.user?.email as string },
-    });
-    if (wishlist) {
-      await prisma.wishlist.update({
-        where: { user_email: session?.user?.email as string },
-        data: {
-          items: { create: { product: { connect: { id: productId } } } },
-        },
-      });
-    }
-
-    if (!wishlist) {
-      await prisma.wishlist.create({
-        data: {
-          user: { connect: { email: session?.user?.email as string } },
-          items: { create: { product: { connect: { id: productId } } } },
-        },
-      });
-    }
-  } else {
-    redirect("/login");
+      data: {
+        items: { create: { product: { connect: { id: productId } } } },
+      },
+    })
   }
-
-  revalidatePath(`/${productId}`);
+  if (!wishlist) {
+    await prisma.wishlist.create({
+      data: {
+        user: { connect: { email: session?.user?.email as string } },
+        items: { create: { product: { connect: { id: productId } } } },
+      },
+    })
+  }
+  revalidatePath(`/${productId}`)
 }
 
 export async function removeProductFromWishlist(
   productId: number,
   path?: string
 ) {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions)
   const wishlist = await prisma.wishlist.findUnique({
     where: { user_email: session?.user?.email as string },
-  });
+  })
 
   if (wishlist) {
     await prisma.wishlist.update({
       where: { user_email: session?.user?.email as string },
       data: { items: { deleteMany: { product_id: productId } } },
-    });
+    })
   }
 
   if (!wishlist) {
-    throw error;
+    throw error
   }
 
-  revalidatePath(path ?? `/${productId}`);
+  revalidatePath(path ?? `/${productId}`)
 }
 
 export async function removeProductsFromWishlist(
   productIds: number[],
   path?: string
 ) {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions)
   const wishlist = await prisma.wishlist.findUnique({
     where: { user_email: session?.user?.email as string },
-  });
+  })
 
   if (wishlist) {
     const productsToDelete = productIds.map((productId) => ({
       product_id: productId,
-    }));
+    }))
     await prisma.wishlist.update({
       where: { user_email: session?.user?.email as string },
       data: { items: { deleteMany: productsToDelete } },
-    });
+    })
   }
 
   if (!wishlist) {
-    throw error;
+    throw error
   }
 
-  revalidatePath(path ?? "/wishlist");
+  revalidatePath(path ?? "/wishlist")
 }
 
 export async function addAllToCart(productIds: number[]) {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions)
   const cart = await prisma.cart.findUnique({
     where: { user_email: session?.user?.email as string },
     include: { items: true },
-  });
+  })
   if (!cart) {
     const cartItems = productIds.map((productId) => ({
       product_id: productId,
       amount: 1,
-    }));
+    }))
     try {
       await prisma.cart.create({
         data: {
@@ -144,10 +136,10 @@ export async function addAllToCart(productIds: number[]) {
           },
           user: { connect: { email: session?.user?.email as string } },
         },
-      });
-      await removeProductsFromWishlist(productIds);
+      })
+      await removeProductsFromWishlist(productIds)
     } catch (error) {
-      throw error;
+      throw error
     }
   }
 
@@ -155,10 +147,10 @@ export async function addAllToCart(productIds: number[]) {
     productIds.forEach(async (productId) => {
       const isItemExistInCart = cart.items.some(
         (cartItem) => cartItem.product_id === productId
-      );
+      )
       const cartItem = cart?.items.find(
         (cartItem) => cartItem.product_id === productId
-      );
+      )
       if (isItemExistInCart) {
         await prisma.cart.update({
           where: { user_email: session?.user?.email as string },
@@ -173,7 +165,7 @@ export async function addAllToCart(productIds: number[]) {
               },
             },
           },
-        });
+        })
       } else {
         await prisma.cart.update({
           where: { id: cart.id },
@@ -185,9 +177,9 @@ export async function addAllToCart(productIds: number[]) {
               },
             },
           },
-        });
+        })
       }
-    });
-    await removeProductsFromWishlist(productIds);
+    })
+    await removeProductsFromWishlist(productIds)
   }
 }
