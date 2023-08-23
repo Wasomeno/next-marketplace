@@ -9,7 +9,7 @@ import { toast } from "react-toastify"
 import { Button } from "@/components/ui/button"
 import { addToCart } from "@/app/actions/cart"
 
-export interface AddToCartDialogProps {
+type AddToCartDialogProps = {
   productDetails: Product
 }
 
