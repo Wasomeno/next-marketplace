@@ -45,7 +45,7 @@ export const UserMenuMain = ({ session }: { session: Session }) => {
             >
               <motion.div
                 initial={{ height: "0px", opacity: 0 }}
-                animate={{ height: "200px", opacity: 1 }}
+                animate={{ height: "240px", opacity: 1 }}
                 exit={{ height: "0px", opacity: 0 }}
                 transition={{ duration: 0.2, ease: "easeInOut" }}
                 className="z-30 w-64 overflow-hidden rounded-md border border-slate-300 bg-white transition-all duration-200 dark:border-gray-800 dark:bg-neutral-950"
