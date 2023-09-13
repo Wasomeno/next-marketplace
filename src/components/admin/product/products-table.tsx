@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Prisma } from "@prisma/client"
 import {
@@ -29,7 +29,7 @@ import { TableDataSorter } from "@/components/table-data-sorter"
 import { TableRowMenu } from "@/components/table-row-menu"
 import { TableSearchInput } from "@/components/table-search-input"
 
-import { DeleteProductsModal } from "./modals/delete-products-modal"
+import { DeleteProductModal } from "./modals/delete-product-modal"
 import { productsTableColumns } from "./products-table-columns"
 
 export const ProductsTable = ({
@@ -141,13 +141,13 @@ export const ProductsTable = ({
           />
           <TableDataSorter table={table} sortsData={getProductSorts(table)} />
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           <Button
             variant="danger"
             size="sm"
             disabled={!selectedProducts.length}
             onClick={() => router.push("/admin/products?delete=true")}
-            className="hover:scale-[105%]"
+            className="h-8 w-8 hover:scale-[105%] lg:h-9 lg:w-9"
           >
             <BsTrash3 className="text-slate-50" />
           </Button>
@@ -155,7 +155,7 @@ export const ProductsTable = ({
             variant="success"
             size="sm"
             onClick={() => router.push("/admin/products?add=true")}
-            className="hover:scale-[105%]"
+            className="h-8 w-8 hover:scale-[105%] lg:h-9 lg:w-9"
           >
             <BsPlus className="text-slate-50" />
           </Button>
@@ -245,7 +245,7 @@ export const ProductsTable = ({
           Next
         </Button>
       </div>
-      <DeleteProductsModal
+      <DeleteProductModal
         selectedProducts={selectedProducts}
         isDeleteModalOpen={showDeleteModal}
         setDeleteModalOpen={(open) => setShowDeleteModal(open)}
