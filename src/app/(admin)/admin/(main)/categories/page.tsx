@@ -1,7 +1,7 @@
 import { CategoryTable } from "@/components/admin/category/category-table"
 import { AddCategoryModal } from "@/components/admin/category/modals/add-category-modal"
-import { CategoryDetailsModal } from "@/components/admin/category/modals/category-details-modal"
 import { EditCategoryModal } from "@/components/admin/category/modals/edit-category-modal"
+import { ViewCategoryDetailsModal } from "@/components/admin/category/modals/view-category-details-modal"
 import { getAllCategories } from "@/app/actions/categories"
 
 export const metadata = {
@@ -20,7 +20,7 @@ export default async function AdminCategoriesPages() {
       <CategoryTable categories={categories} />
       <AddCategoryModal />
       <EditCategoryModal />
-      <CategoryDetailsModal />
+      <ViewCategoryDetailsModal />
     </div>
   )
 }
