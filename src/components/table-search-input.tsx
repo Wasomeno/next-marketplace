@@ -1,11 +1,10 @@
 "use client"
 
-import { HTMLInputTypeAttribute } from "react"
 import clsx from "clsx"
 import { RxMagnifyingGlass } from "react-icons/rx"
 import { twMerge } from "tailwind-merge"
 
-import { Input, InputProps } from "./ui/input"
+import { Input } from "./ui/input"
 
 interface TableSearchInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
@@ -20,7 +19,12 @@ export function TableSearchInput({
         "flex h-8 w-40 items-center rounded-md border bg-white p-1.5 dark:border-neutral-600 dark:bg-neutral-900 lg:h-10 lg:w-96"
       }
     >
-      <div className="flex w-10 items-center justify-center">
+      <div
+        className={clsx(
+          "flex w-10 items-center justify-center",
+          props.disabled && "opacity-50"
+        )}
+      >
         <RxMagnifyingGlass className="text-slate-400 dark:text-white" />
       </div>
       <Input
