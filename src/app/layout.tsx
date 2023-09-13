@@ -16,7 +16,10 @@ export default function RootLayout({
       <ClientSessionProvider>
         <ReactQueryProvider>
           <body className="bg-slate-50 antialiased dark:bg-slate-950">
-            <ThemeClientProvider>{children}</ThemeClientProvider>
+            <ThemeClientProvider>
+              {children}
+              <div className="fixed" />
+            </ThemeClientProvider>
             <ToastifyContainer
               closeButton={false}
               position="bottom-center"
