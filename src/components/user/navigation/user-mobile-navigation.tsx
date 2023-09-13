@@ -29,13 +29,13 @@ export const UserMobileNavigation = () => {
             size="18"
             className={twMerge(
               "text-slate-400",
-              pathname === path.href && "text-blue-500"
+              pathname.includes(path.href) && "text-blue-500"
             )}
           />
           <span
             className={twMerge(
               "text-xs text-slate-400",
-              pathname === path.href && "text-blue-500"
+              pathname.includes(path.href) && "text-blue-500"
             )}
           >
             {path.title}
