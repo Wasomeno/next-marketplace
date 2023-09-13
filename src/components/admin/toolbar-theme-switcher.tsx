@@ -1,24 +1,28 @@
 "use client"
 
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { useTheme } from "next-themes"
 import { BsSun } from "react-icons/bs"
 import { FaRegMoon } from "react-icons/fa"
 
 export const ToolbarThemeSwitcher = () => {
-  const { setTheme, resolvedTheme } = useTheme()
+  const [isMounted, setIsMounted] = useState<boolean>()
+  const { setTheme, theme } = useTheme()
+
+  useEffect(() => {
+    if (window) {
+      setIsMounted(true)
+    }
+  }, [])
+
+  if (!isMounted) return
   return (
     <button
-      onClick={() => {
-        if (resolvedTheme === "dark") {
-          setTheme("light")
-        } else {
-          setTheme("dark")
-        }
-      }}
+      onClick={() => (theme === "dark" ? setTheme("light") : setTheme("dark"))}
       className="rounded-md px-2.5 py-2 transition duration-200"
     >
-      {resolvedTheme === "dark" ? <FaRegMoon size={20} /> : <BsSun size={20} />}
+      {theme === "dark" && <FaRegMoon size={20} />}
+      {theme === "light" && <BsSun size={20} />}
     </button>
   )
 }
