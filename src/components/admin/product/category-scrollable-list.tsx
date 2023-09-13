@@ -1,25 +1,24 @@
-import clsx from "clsx";
-import { memo, useEffect } from "react";
-import { twMerge } from "tailwind-merge";
-
-import { Category } from "@prisma/client";
-import * as ScrollArea from "@radix-ui/react-scroll-area";
-import { useQuery } from "@tanstack/react-query";
+import { memo } from "react"
+import { Category } from "@prisma/client"
+import * as ScrollArea from "@radix-ui/react-scroll-area"
+import { useQuery } from "@tanstack/react-query"
+import clsx from "clsx"
+import { twMerge } from "tailwind-merge"
 
 interface CategoryScrollableListProps {
-  selectedCategory: number;
-  selectCategory: (id: number) => void;
+  selectedCategory: number
+  selectCategory: (id: number) => void
 }
 
 const CategoryScrollableList = ({
   selectedCategory,
   selectCategory,
 }: CategoryScrollableListProps) => {
-  const categories = useQuery(["categories"], () => fetchCategories(), {});
+  const categories = useQuery(["categories"], () => fetchCategories(), {})
 
   async function fetchCategories(): Promise<Category[]> {
-    const result = await fetch("/api/categories", { method: "GET" });
-    return result.json();
+    const result = await fetch("/api/categories", { method: "GET" })
+    return result.json()
   }
 
   if (categories.isLoading) {
@@ -41,20 +40,21 @@ const CategoryScrollableList = ({
           <div className="h-5 w-3/6 rounded-md bg-slate-200" />
         </div>
       </div>
-    );
+    )
   }
 
   return (
-    <ScrollArea.Root className="h-72 w-full overflow-hidden rounded-md border">
-      <ScrollArea.Viewport className="h-full w-full bg-white">
+    <ScrollArea.Root className="h-72 w-full overflow-hidden rounded-md border dark:border-neutral-600">
+      <ScrollArea.Viewport className="h-full w-full bg-white dark:bg-neutral-800">
         {categories.data?.map((category) => (
           <div
             key={category.id}
             onClick={() => selectCategory(category.id)}
             className={twMerge(
               clsx(
-                "w-full cursor-pointer border-b px-3 py-2 text-sm tracking-wide transition duration-200 hover:bg-blue-100",
-                selectedCategory === category.id && "bg-blue-100"
+                "w-full cursor-pointer border-b px-3 py-2 text-sm tracking-wide transition duration-200 hover:bg-blue-100 dark:border-b-neutral-600 dark:bg-neutral-800",
+                selectedCategory === category.id &&
+                  "bg-blue-100 dark:bg-blue-900"
               )
             )}
           >
@@ -69,7 +69,7 @@ const CategoryScrollableList = ({
         <ScrollArea.Thumb className="relative flex" />
       </ScrollArea.Scrollbar>
     </ScrollArea.Root>
-  );
-};
+  )
+}
 
-export default memo(CategoryScrollableList);
+export default memo(CategoryScrollableList)
