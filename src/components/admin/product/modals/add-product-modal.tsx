@@ -1,7 +1,5 @@
 "use client"
 
-import "@uploadthing/react/styles.css"
-
 import { useRef, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useUploadThing } from "@/utils/uploadthing"
@@ -21,7 +19,7 @@ import { FileImage, ImageUploader } from "@/components/image-uploader"
 
 import CategoryScrollableList from "../category-scrollable-list"
 
-const AddProductFormSchema = z.object({
+export const ProductSchema = z.object({
   name: z.string().min(5).max(25),
   price: z.number().min(100).max(1000000000),
   description: z.string().min(20).max(200),
@@ -29,29 +27,29 @@ const AddProductFormSchema = z.object({
   slug: z.string().min(5).max(25),
 })
 
-type AddProductFormData = z.infer<typeof AddProductFormSchema>
+export type ProductFormData = z.infer<typeof ProductSchema>
 
-export const AddProductModal = () => {
+export function AddProductModal() {
   const [files, setFiles] = useState<Array<FileImage>>([])
   const [selectedCategory, setSelectedCategory] = useState(0)
   const { register, handleSubmit, formState, getValues, clearErrors, reset } =
-    useForm<AddProductFormData>({
-      resolver: zodResolver(AddProductFormSchema),
+    useForm<ProductFormData>({
+      resolver: zodResolver(ProductSchema),
     })
 
-  const toastRef = useRef<Id>(0)
   const { startUpload } = useUploadThing("imageUploader")
+
+  const toastRef = useRef<Id>(0)
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  const isAddModalOpen = searchParams.get("add") !== null
   const mutation = useMutation(
     async () => {
       const uploadedFiles = await startUpload(files)
       return await axios.post("/api/products", {
         ...getValues(),
         category_id: selectedCategory,
-        image_urls: uploadedFiles?.map((file) => ({ image_url: file.fileUrl })),
+        image_urls: uploadedFiles?.map((file) => ({ image_url: file.url })),
       })
     },
     {
@@ -76,9 +74,10 @@ export const AddProductModal = () => {
     }
   )
 
+  const isAddModalOpen = searchParams.get("add") !== null
+
   return (
     <Dialog
-      open={isAddModalOpen}
       onOpenChange={() => {
         router.push("/admin/products")
         clearErrors()
@@ -111,7 +110,12 @@ export const AddProductModal = () => {
             <label id="productName" className="text-sm">
               Name
             </label>
-            <Input id="productName" type="text" {...register("name")} />
+            <Input
+              id="productName"
+              type="text"
+              {...register("name")}
+              className="dark:border-neutral-600 dark:bg-neutral-800"
+            />
             {formState.errors.name?.message && (
               <p className="text-sm text-red-600">
                 {formState.errors.name.message}
@@ -126,6 +130,7 @@ export const AddProductModal = () => {
               id="productPrice"
               type="number"
               {...register("price", { valueAsNumber: true })}
+              className="dark:border-neutral-600 dark:bg-neutral-800"
             />
             {formState.errors.price?.message && (
               <p className="text-sm text-red-600">
@@ -139,7 +144,7 @@ export const AddProductModal = () => {
             </label>
             <TextArea
               id="productDescription"
-              className="h-40"
+              className="h-40 dark:border-neutral-600 dark:bg-neutral-800"
               {...register("description")}
             />
             {formState.errors.description?.message && (
@@ -155,7 +160,7 @@ export const AddProductModal = () => {
             <Input
               id="productStock"
               type="number"
-              className="rounded-md p-2"
+              className="dark:border-neutral-600 dark:bg-neutral-800"
               {...register("stock", { valueAsNumber: true })}
             />
             {formState.errors.stock?.message && (
@@ -170,7 +175,7 @@ export const AddProductModal = () => {
               <Input
                 id="productSlug"
                 type="text"
-                className="rounded-md  p-2"
+                className="dark:border-neutral-600 dark:bg-neutral-800"
                 {...register("slug")}
               />
               {formState.errors.slug?.message && (
