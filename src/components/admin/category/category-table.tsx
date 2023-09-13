@@ -32,19 +32,19 @@ import { TableSearchInput } from "@/components/table-search-input"
 
 import { DeleteCategoriesModal } from "./modals/delete-categories-modal"
 
-export const CategoryTable = ({
+export function CategoryTable({
   categories,
 }: {
   categories: Prisma.CategoryGetPayload<{
     include: { _count: { select: { products: true } }; images: true }
   }>[]
-}) => {
+}) {
   const [selectedCategories, setSelectedCategories] = useState<number[]>([])
 
   const [sorting, setSorting] = useState<SortingState>([])
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 4,
+    pageSize: 8,
   })
 
   const router = useRouter()
@@ -168,13 +168,13 @@ export const CategoryTable = ({
           />
           <TableDataSorter table={table} sortsData={getCategorySorts(table)} />
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           <Button
             variant="danger"
             size="sm"
             disabled={!selectedCategories.length}
             onClick={() => router.push("/admin/categories?delete=true")}
-            className="hover:scale-[105%]"
+            className="h-8 w-8 hover:scale-[105%] lg:h-9 lg:w-9"
           >
             <BsTrash3 className="text-slate-50" />
           </Button>
@@ -184,7 +184,7 @@ export const CategoryTable = ({
             onClick={() => {
               router.push(`/admin/categories?add=true`)
             }}
-            className="hover:scale-[105%]"
+            className="h-8 w-8 hover:scale-[105%] lg:h-9 lg:w-9"
           >
             <BsPlus className="text-slate-50" />
           </Button>
@@ -192,11 +192,11 @@ export const CategoryTable = ({
       </div>
       <div className="flex-1 overflow-x-scroll rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-neutral-800">
         <Table className="w-full border-collapse  bg-white text-left text-sm text-gray-500 dark:bg-neutral-800 dark:text-slate-50">
-          <TableHeader className="">
+          <TableHeader className="bg-blue-100 dark:bg-blue-900">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
                 key={headerGroup.id}
-                className="bg-blue-100 dark:bg-blue-950"
+                className="dark:border-neutral-600"
               >
                 {headerGroup.headers.map((header) => {
                   return (
