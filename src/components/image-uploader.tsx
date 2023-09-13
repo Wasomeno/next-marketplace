@@ -55,6 +55,7 @@ export const ImageUploader = ({
               >
                 <Button
                   variant="danger"
+                  type="button"
                   onClick={() => deselectFile && deselectFile(index)}
                   className="absolute -right-2 -top-2 z-10 h-5 w-5 rounded-full p-1.5 text-white"
                 >
