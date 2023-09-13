@@ -4,9 +4,8 @@ import { revalidatePath } from "next/cache"
 import { Prisma } from "@prisma/client"
 import { getServerSession } from "next-auth"
 
+import { authOptions } from "@/config/next-auth"
 import { prisma } from "@/lib/prisma"
-
-import { authOptions } from "../api/auth/[...nextauth]/route"
 
 type CheckoutProps = {
   cartItems: Prisma.CartItemGetPayload<{

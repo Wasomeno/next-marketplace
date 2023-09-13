@@ -2,9 +2,8 @@
 
 import { getServerSession } from "next-auth"
 
+import { authOptions } from "@/config/next-auth"
 import { prisma } from "@/lib/prisma"
-
-import { authOptions } from "../api/auth/[...nextauth]/route"
 
 export async function getUserAddress() {
   const session = await getServerSession(authOptions)

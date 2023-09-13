@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { getServerSession } from "next-auth"
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { authOptions } from "@/config/next-auth"
 
 import { UserMenuMain } from "./user-menu-main"
 import { UserMenuMobile } from "./user-menu-mobile"

@@ -1,11 +1,10 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
-import { getServerSession } from "next-auth"
+import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 
-import { prisma } from "@/lib/prisma"
-
-import { authOptions } from "../api/auth/[...nextauth]/route"
+import { authOptions } from "@/config/next-auth";
+import { prisma } from "@/lib/prisma";
 
 export async function getCartItems() {
   const session = await getServerSession(authOptions)
