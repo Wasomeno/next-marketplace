@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query"
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
 import { getCategoryDetails } from "@/app/actions/categories"
 
-const CategoryDetailsModal = () => {
+export function ViewCategoryDetailsModal() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -45,5 +45,3 @@ const CategoryDetailsModal = () => {
     </Dialog>
   )
 }
-
-export default CategoryDetailsModal
