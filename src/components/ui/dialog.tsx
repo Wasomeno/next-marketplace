@@ -50,7 +50,7 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 
 const DialogHeader = ({ title }: { title: string }) => {
   return (
-    <div className="sticky top-0 z-20 mb-4 flex h-16 w-full items-center justify-between border-b bg-slate-50 px-6 dark:border-b-neutral-700 dark:bg-neutral-900">
+    <div className="sticky top-0 z-20 mb-4 flex h-12 w-full items-center justify-between border-b bg-slate-50 px-6 dark:border-b-neutral-700 dark:bg-neutral-900 lg:h-16">
       <DialogPrimitive.Title className="text-base font-medium lg:text-lg">
         {title}
       </DialogPrimitive.Title>
@@ -77,7 +77,7 @@ const DialogContent = React.forwardRef<
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ ease: "easeInOut", duration: 0.25 }}
-              className="fixed inset-0 z-30 bg-neutral-900 bg-opacity-30 backdrop-blur-[2px]"
+              className="fixed inset-0 z-30 bg-neutral-950 bg-opacity-30 backdrop-blur-[2px]"
             />
           </DialogOverlay>
           <DialogPrimitive.Content asChild ref={ref} {...props}>
