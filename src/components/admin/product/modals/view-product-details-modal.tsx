@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query"
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
 import { getProductDetails } from "@/app/actions/products"
 
-export const ProductDetailsModal = () => {
+export function ViewProductDetailsModal() {
   const searchParams = useSearchParams()
   const router = useRouter()
 
