@@ -1,12 +1,12 @@
-import { IconType } from "react-icons";
-import { BiCategory } from "react-icons/bi";
-import { BsCardList, BsHouseDoor } from "react-icons/bs";
+import { IconType } from "react-icons"
+import { BiCategory } from "react-icons/bi"
+import { BsCardList, BsHouseDoor } from "react-icons/bs"
 
 type UserMobilePath = {
-  title: string;
-  href: string;
-  Icon: IconType;
-};
+  title: string
+  href: string
+  Icon: IconType
+}
 
 export const userMobilePaths: UserMobilePath[] = [
   {
@@ -24,4 +24,4 @@ export const userMobilePaths: UserMobilePath[] = [
     href: "/orders",
     Icon: BsCardList,
   },
-];
+]
