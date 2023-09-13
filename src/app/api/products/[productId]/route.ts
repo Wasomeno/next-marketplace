@@ -1,19 +1,19 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server"
 
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/prisma"
 
 export async function GET(request: Request, context: { params: any }) {
-  const { productId } = context.params;
+  const { productId } = context.params
   const productDetails = await prisma.product.findUnique({
     where: { id: parseInt(productId) },
     include: { category: true },
-  });
-  return NextResponse.json(productDetails);
+  })
+  return NextResponse.json(productDetails)
 }
 
 export async function PUT(request: Request, context: any) {
-  const { productId } = context.params;
-  const { name, stock, price, category } = await request.json();
+  const { productId } = context.params
+  const { name, stock, price, categoryId, description } = await request.json()
   try {
     await prisma.product.update({
       where: { id: parseInt(productId) },
@@ -21,11 +21,12 @@ export async function PUT(request: Request, context: any) {
         name: name,
         stock: parseInt(stock),
         price: parseInt(price),
-        category: { connect: { id: parseInt(category) } },
+        description: description,
+        category: { connect: { id: parseInt(categoryId) } },
       },
-    });
+    })
+    return new Response(JSON.stringify({ message: "Success" }))
   } catch (error) {
-    return NextResponse.error();
+    return NextResponse.error()
   }
-  return new Response(JSON.stringify({ message: "Success" }));
 }
