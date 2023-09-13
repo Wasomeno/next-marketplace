@@ -31,7 +31,7 @@ export const WishListButton = ({ isWishlisted }: { isWishlisted: boolean }) => {
   async function removeFromWishlist() {
     if (session.data?.user.email) {
       await removeProductFromWishlist(parseInt(productId as string))
-      toast.error("Remove from wishlist")
+      toast.error("Removed from wishlist")
     } else {
       router.push("/login")
     }
