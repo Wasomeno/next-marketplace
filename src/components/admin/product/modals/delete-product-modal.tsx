@@ -4,19 +4,20 @@ import axios from "axios"
 import { Id, toast } from "react-toastify"
 
 import { queryClient } from "@/lib/react-query-client"
+import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 
-interface DeleteProductsModalProps {
+interface DeleteProductModalProps {
   selectedProducts: Array<number>
   isDeleteModalOpen: boolean
   setDeleteModalOpen: (open: boolean) => void
 }
 
-export const DeleteProductsModal = ({
+export function DeleteProductModal({
   selectedProducts,
   isDeleteModalOpen,
   setDeleteModalOpen,
-}: DeleteProductsModalProps) => {
+}: DeleteProductModalProps) {
   const toastRef = useRef<Id>(0)
   const deleteProduct = useMutation(
     () =>
@@ -60,18 +61,20 @@ export const DeleteProductsModal = ({
             </p>
           </div>
           <div className="flex h-20 w-3/6 items-center justify-evenly">
-            <button
+            <Button
+              variant="success"
               onClick={() => deleteProduct.mutate()}
               className="w-20 rounded-lg border py-2.5 text-sm"
             >
               Continue
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="danger"
               onClick={() => setDeleteModalOpen(false)}
               className="w-20 rounded-lg border py-2.5 text-sm"
             >
               Cancel
-            </button>
+            </Button>
           </div>
         </div>
       </DialogContent>
