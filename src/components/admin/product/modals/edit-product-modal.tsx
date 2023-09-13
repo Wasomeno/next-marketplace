@@ -1,36 +1,25 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { toast } from "react-toastify"
-import * as z from "zod"
 
-import { queryClient } from "@/lib/react-query-client"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
 import { FileImage, ImageUploader } from "@/components/image-uploader"
-import { getProductDetails } from "@/app/actions/products"
+import { getProductDetails, updateProduct } from "@/app/actions/products"
 
 import CategoryScrollableList from "../category-scrollable-list"
+import { ProductFormData, ProductSchema } from "./add-product-modal"
 
-const EditProductFormSchema = z.object({
-  name: z.string().min(5).max(25),
-  price: z.number().min(100).max(1000000000),
-  description: z.string().min(20).max(100),
-  stock: z.number().min(10).max(10000000),
-  slug: z.string().min(5).max(25),
-  category_id: z.number().min(1),
-})
-
-type EditProductFormData = z.infer<typeof EditProductFormSchema>
-
-export const ProductEditModal = () => {
-  const [files, setFiles] = useState<Array<FileImage>>([])
+export function EditProductModal() {
+  const [images, setImages] = useState<Array<FileImage>>([])
+  const [selectedCategory, setSelectedCategory] = useState(0)
 
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -45,47 +34,65 @@ export const ProductEditModal = () => {
     { enabled: isEditModalOpen }
   )
 
-  const {
-    register,
-    getValues,
-    setValue,
-    formState,
-    handleSubmit,
-    clearErrors,
-  } = useForm<EditProductFormData>({
-    resolver: zodResolver(EditProductFormSchema),
-    values: {
-      name: productDetails.data?.name as string,
-      price: productDetails.data?.price as number,
-      description: productDetails.data?.description as string,
-      stock: productDetails.data?.stock as number,
-      slug: productDetails.data?.slug as string,
-      category_id: productDetails.data?.category_id as number,
-    },
-  })
+  const { register, getValues, formState, handleSubmit, clearErrors } =
+    useForm<ProductFormData>({
+      resolver: zodResolver(ProductSchema),
+      values: {
+        name: productDetails.data?.name as string,
+        price: productDetails.data?.price as number,
+        description: productDetails.data?.description as string,
+        stock: productDetails.data?.stock as number,
+        slug: productDetails.data?.slug as string,
+      },
+    })
 
   const updateMutation = useMutation(
     () =>
-      toast.promise(updateProduct(), {
-        error: "Error",
-        success: "Update Success",
-        pending: "Updating " + productDetails.data?.name,
-      }),
+      toast.promise(
+        updateProduct({
+          ...getValues(),
+          productId,
+          categoryId: selectedCategory,
+        }),
+        {
+          error: "Error",
+          success: "Update Success",
+          pending: "Updating " + productDetails.data?.name,
+        }
+      ),
     {
-      onMutate: () => router.push("/admin/products"),
-      onSuccess: () => queryClient.invalidateQueries(["products"]),
+      onSuccess() {
+        productDetails.refetch()
+      },
     }
   )
 
-  async function updateProduct() {
-    await fetch("/api/products/" + productId, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(getValues()),
-    })
+  async function getImageFiles(imagePromises: Promise<File>[]) {
+    const imageFiles = await Promise.all(imagePromises)
+    setImages(
+      imageFiles.map((image) =>
+        Object.assign(image, {
+          preview: URL.createObjectURL(image),
+        })
+      )
+    )
   }
+
+  useEffect(() => {
+    if (!productDetails.isLoading) {
+      setSelectedCategory(productDetails.data?.category_id as number)
+      const imageUrls = productDetails.data?.images.map((image) =>
+        fetch(image.image_url)
+          .then((response) => response.blob())
+          .then((blob) => new File([blob], "image.jpeg", { type: blob.type }))
+      )
+      getImageFiles(imageUrls as Promise<File>[])
+    }
+
+    return () => {
+      setImages([])
+    }
+  }, [productDetails.isLoading])
 
   return (
     <Dialog
@@ -100,19 +107,18 @@ export const ProductEditModal = () => {
         className="bg-slate-100 lg:h-5/6 lg:w-3/6"
       >
         <DialogHeader title="Edit Product" />
+
         <form
-          onSubmit={handleSubmit(() => {
-            updateMutation.mutate()
-          })}
-          className="flex flex-col gap-2.5 px-6 py-2"
+          onSubmit={handleSubmit(() => updateMutation.mutate())}
+          className="flex flex-1 flex-col gap-4 px-6 py-2"
         >
           <div className="flex flex-col items-start gap-1 text-gray-400">
-            <label className="text-sm font-medium ">Id</label>
+            <label className="text-sm font-medium text-gray-400">Id</label>
             <h5 className="text-lg">{productId}</h5>
           </div>
           <div className="flex flex-col items-start gap-1">
-            <label className="text-sm font-medium text-slate-800">Image</label>
-            <ImageUploader files={files} setFiles={setFiles} />
+            <label className="text-sm font-medium">Image</label>
+            <ImageUploader files={images} setFiles={setImages} />
             {formState.errors.name?.message && (
               <p className="text-sm text-red-600">
                 {formState.errors.name.message}
@@ -120,8 +126,11 @@ export const ProductEditModal = () => {
             )}
           </div>
           <div className="flex flex-col items-start gap-1">
-            <label className="text-sm font-medium text-slate-800">Name</label>
-            <Input {...register("name")} />
+            <label className="text-sm font-medium ">Name</label>
+            <Input
+              {...register("name")}
+              className="dark:border-neutral-600 dark:bg-neutral-800"
+            />
             {formState.errors.name?.message && (
               <p className="text-sm text-red-600">
                 {formState.errors.name.message}
@@ -129,10 +138,11 @@ export const ProductEditModal = () => {
             )}
           </div>
           <div className="flex flex-col items-start gap-1">
-            <label className="text-sm font-medium text-slate-800">Price</label>
+            <label className="text-sm font-medium">Price</label>
             <Input
               type="number"
               {...register("price", { valueAsNumber: true })}
+              className="dark:border-neutral-600 dark:bg-neutral-800"
             />
             {formState.errors.price?.message && (
               <p className="text-sm text-red-600">
@@ -146,7 +156,7 @@ export const ProductEditModal = () => {
             </label>
             <TextArea
               id="productDescription"
-              className="h-40"
+              className="h-40 dark:border-neutral-600 dark:bg-neutral-800"
               {...register("description")}
             />
             {formState.errors.description?.message && (
@@ -156,10 +166,11 @@ export const ProductEditModal = () => {
             )}
           </div>
           <div className="flex flex-col items-start gap-1">
-            <label className="text-sm font-medium text-slate-800">Stock</label>
+            <label className="text-sm font-medium">Stock</label>
             <Input
               type="number"
               {...register("stock", { valueAsNumber: true })}
+              className="dark:border-neutral-600 dark:bg-neutral-800"
             />
             {formState.errors.stock?.message && (
               <p className="text-sm text-red-600">
@@ -168,14 +179,10 @@ export const ProductEditModal = () => {
             )}
           </div>
           <div className="flex flex-col items-start gap-1">
-            <label className="text-sm font-medium text-slate-800">
-              Category
-            </label>
+            <label className="text-sm font-medium">Category</label>
             <CategoryScrollableList
-              selectedCategory={getValues("category_id")}
-              selectCategory={(category_id) =>
-                setValue("category_id", category_id)
-              }
+              selectedCategory={selectedCategory}
+              selectCategory={(category_id) => setSelectedCategory(category_id)}
             />
           </div>
           <div className="flex items-center justify-center gap-4">
