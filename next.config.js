@@ -2,7 +2,7 @@
 
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
-});
+})
 
 const nextConfig = {
   env: {
@@ -31,8 +31,14 @@ const nextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "utfs.io",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
-};
+}
 
-module.exports = withBundleAnalyzer(nextConfig);
+module.exports = withBundleAnalyzer(nextConfig)
