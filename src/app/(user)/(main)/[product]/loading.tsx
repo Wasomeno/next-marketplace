@@ -41,7 +41,7 @@ export default function ProductPageLoading() {
           </div>
         </div>
         <div className="sticky bottom-0 w-full bg-white dark:bg-neutral-950 lg:w-3/12">
-          <div className="rounded-md border-t border-slate-400 p-2 dark:border-gray-800 lg:border lg:p-4">
+          <div className="border-t border-slate-200 p-2 shadow-[0_3px_10px_rgb(0,0,0,0.1)] dark:border-t-gray-800 lg:rounded-md lg:border lg:border-slate-400 lg:p-4 lg:shadow-none lg:dark:border-gray-800">
             <div className="hidden lg:block">
               <span>Product Amount</span>
               <div className="my-4 flex items-center justify-center gap-4">
