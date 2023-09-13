@@ -22,7 +22,7 @@ export const AdminOrderDetailsModal = () => {
     ["orderDetails", orderId],
     async () => await getOrderDetails(orderId),
     {
-      enabled: orderId !== null || session.data?.user?.email !== undefined,
+      enabled: orderId !== null && session.data?.user?.email !== undefined,
     }
   )
 
