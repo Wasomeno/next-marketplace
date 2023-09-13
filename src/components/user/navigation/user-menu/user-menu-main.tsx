@@ -47,7 +47,7 @@ export const UserMenuMain = ({ session }: { session: Session }) => {
                 initial={{ height: "0px", opacity: 0 }}
                 animate={{ height: "240px", opacity: 1 }}
                 exit={{ height: "0px", opacity: 0 }}
-                transition={{ duration: 0.2, ease: "easeInOut" }}
+                transition={{ duration: 0.2, ease: "backIn" }}
                 className="z-30 w-64 overflow-hidden rounded-md border border-slate-300 bg-white transition-all duration-200 dark:border-gray-800 dark:bg-neutral-950"
                 style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
               >
