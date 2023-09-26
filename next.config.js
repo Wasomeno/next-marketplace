@@ -12,7 +12,6 @@ const nextConfig = {
     NEXTAUTH_SECRET: "5c3d24485bb838879e06f5bebca5652f",
   },
   experimental: {
-    appDir: true,
     serverActions: true,
     serverActionsBodySizeLimit: "2mb",
   },
