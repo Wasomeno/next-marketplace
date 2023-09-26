@@ -4,9 +4,9 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
 
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
-import { getCategoryDetails } from "@/app/actions/categories"
+import { getCategory } from "@/app/actions/categories"
 
-export function ViewCategoryDetailsModal() {
+export function ViewCategoryModal() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -15,7 +15,7 @@ export function ViewCategoryDetailsModal() {
 
   const categoryDetails = useQuery(
     ["categoryDetails", categoryId],
-    async () => await getCategoryDetails(categoryId)
+    async () => await getCategory(categoryId)
   )
 
   return (
