@@ -4,9 +4,9 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
 
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
-import { getProductDetails } from "@/app/actions/products"
+import { getProduct } from "@/app/actions/products"
 
-export function ViewProductDetailsModal() {
+export function ViewProductModal() {
   const searchParams = useSearchParams()
   const router = useRouter()
 
@@ -15,7 +15,7 @@ export function ViewProductDetailsModal() {
 
   const productDetails = useQuery(
     ["productDetails", productId],
-    async () => await getProductDetails(productId),
+    async () => await getProduct(productId),
     { enabled: isDetailsModalOpen }
   )
 
