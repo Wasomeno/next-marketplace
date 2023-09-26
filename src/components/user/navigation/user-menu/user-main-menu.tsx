@@ -1,19 +1,19 @@
 "use client"
 
-import { useState } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import * as HoverCard from "@radix-ui/react-hover-card"
-import { AnimatePresence, motion } from "framer-motion"
-import { Session } from "next-auth"
-import { signOut } from "next-auth/react"
-import { BsBox2Heart } from "react-icons/bs"
-import { HiOutlineClipboard } from "react-icons/hi"
-import { VscSignOut } from "react-icons/vsc"
+import { AnimatePresence, motion } from "framer-motion";
+import { Session } from "next-auth";
+import { signOut } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import { BsBox2Heart } from "react-icons/bs";
+import { HiOutlineClipboard } from "react-icons/hi";
+import { VscSignOut } from "react-icons/vsc";
 
-import { ThemeSwitcher } from "@/components/theme-switcher"
+import { ThemeSwitcher } from "@/components/theme-switcher";
+import * as HoverCard from "@radix-ui/react-hover-card";
 
-export const UserMenuMain = ({ session }: { session: Session }) => {
+export const UserMainMenu = ({ session }: { session: Session }) => {
   const [isOpen, setIsOpen] = useState(false)
   return (
     <HoverCard.Root
