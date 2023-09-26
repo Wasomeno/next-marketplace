@@ -4,25 +4,23 @@ import React from "react"
 import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
-import { useSession } from "next-auth/react"
 
-import { getOrderDetails } from "@/app/actions/order"
+import { getOrder } from "@/app/actions/order"
 
-import { Dialog, DialogContent, DialogHeader } from "../ui/dialog"
+import { Dialog, DialogContent, DialogHeader } from "../../../ui/dialog"
 
-export const AdminOrderDetailsModal = () => {
+export const ViewOrderModal = () => {
   const params = useSearchParams()
   const router = useRouter()
-  const isViewDetail = params.get("view")
-  const orderId = parseInt(params.get("id") ?? "")
 
-  const session = useSession()
+  const isViewDetail = params.get("view")
+  const orderId = parseInt(params.get("id") as string)
 
   const orderDetails = useQuery(
     ["orderDetails", orderId],
-    async () => await getOrderDetails(orderId),
+    async () => await getOrder(orderId),
     {
-      enabled: orderId !== null && session.data?.user?.email !== undefined,
+      enabled: isViewDetail !== null,
     }
   )
 
