@@ -19,7 +19,7 @@ interface NavigationLinkProps {
   Icon: IconType
 }
 
-export const AdminNavigationMobile = () => {
+export const AdminMobileNavigation = () => {
   const path = usePathname()
   return (
     <div className="sticky bottom-2.5 flex w-11/12 items-center justify-center rounded-lg bg-white p-1.5 shadow-[0_3px_10px_rgb(0,0,0,0.2)] dark:bg-neutral-800 lg:hidden">
