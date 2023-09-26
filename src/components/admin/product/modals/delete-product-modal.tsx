@@ -1,24 +1,25 @@
 import React, { useRef } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 import { Id, toast } from "react-toastify"
 
 import { queryClient } from "@/lib/react-query-client"
-import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { ConfirmationDialog } from "@/components/confirmation-dialog"
 
-interface DeleteProductModalProps {
+type DeleteProductModalProps = {
   selectedProducts: Array<number>
-  isDeleteModalOpen: boolean
-  setDeleteModalOpen: (open: boolean) => void
 }
 
 export function DeleteProductModal({
   selectedProducts,
-  isDeleteModalOpen,
-  setDeleteModalOpen,
 }: DeleteProductModalProps) {
   const toastRef = useRef<Id>(0)
+
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const isDeleteModalOpen = searchParams.get("delete") !== null
   const deleteProduct = useMutation(
     () =>
       axios.post("/api/products/delete", {
@@ -27,7 +28,6 @@ export function DeleteProductModal({
     {
       onMutate() {
         toastRef.current = toast.loading("Deleting products")
-        setDeleteModalOpen(false)
       },
       onSuccess(response) {
         toast.update(toastRef.current, {
@@ -48,36 +48,13 @@ export function DeleteProductModal({
   )
 
   return (
-    <Dialog
+    <ConfirmationDialog
       open={isDeleteModalOpen}
-      onOpenChange={(open) => setDeleteModalOpen(open)}
-    >
-      <DialogContent open={isDeleteModalOpen} className="lg:h-2/6 lg:w-2/6">
-        <div className="flex h-full flex-col items-center justify-between">
-          <div className="flex h-5/6 flex-col justify-center gap-2.5 text-center">
-            <h5 className="text-base lg:text-lg">Delete Products</h5>
-            <p className="text-xs lg:text-sm">
-              Continue delete {selectedProducts.length} selected products?
-            </p>
-          </div>
-          <div className="flex h-20 w-3/6 items-center justify-evenly">
-            <Button
-              variant="success"
-              onClick={() => deleteProduct.mutate()}
-              className="w-20 rounded-lg border py-2.5 text-sm"
-            >
-              Continue
-            </Button>
-            <Button
-              variant="danger"
-              onClick={() => setDeleteModalOpen(false)}
-              className="w-20 rounded-lg border py-2.5 text-sm"
-            >
-              Cancel
-            </Button>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+      title="Delete Product"
+      body={`Confirm delete ${selectedProducts.length} product?`}
+      onOpenChange={() => router.push("/admin/products")}
+      onConfirm={deleteProduct.mutate}
+      onCancel={() => router.push("/admin/products")}
+    />
   )
 }
