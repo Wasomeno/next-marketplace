@@ -2,20 +2,11 @@ import Image from "next/image"
 import { Category, Prisma, ProductImage } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
 
-export const productsTableColumns = ({
-  tableRowMenu,
-  checkBox,
-}: {
-  tableRowMenu: ColumnDef<
-    Prisma.ProductGetPayload<{ include: { images: true; category: true } }>
-  >
-  checkBox: ColumnDef<
-    Prisma.ProductGetPayload<{ include: { images: true; category: true } }>
-  >
-}): ColumnDef<
+import { TableRowMenu } from "@/components/table-row-menu"
+
+export const productTableColumns: ColumnDef<
   Prisma.ProductGetPayload<{ include: { images: true; category: true } }>
->[] => [
-  checkBox,
+>[] = [
   {
     accessorKey: "id",
     header: "Id",
@@ -28,8 +19,13 @@ export const productsTableColumns = ({
     cell: (info) => {
       const images = info.getValue() as ProductImage[]
       return (
-        <div className="relative h-20 w-20">
-          <Image src={images[0].image_url} alt="product-image" fill />
+        <div className="relative flex items-center justify-center">
+          <Image
+            src={images[0].image_url}
+            alt="product-image"
+            width={90}
+            height={90}
+          />
         </div>
       )
     },
@@ -58,5 +54,24 @@ export const productsTableColumns = ({
     header: "Stock",
     cell: (category) => category.getValue(),
   },
-  tableRowMenu,
+  {
+    id: "action",
+    header: "Actions",
+    cell: ({ row }) => {
+      return (
+        <TableRowMenu>
+          <TableRowMenu.Link
+            href={`/admin/products?id=${row.original.id}&view=true`}
+          >
+            View Product
+          </TableRowMenu.Link>
+          <TableRowMenu.Link
+            href={`/admin/products?id=${row.original.id}&edit=true`}
+          >
+            Edit Product
+          </TableRowMenu.Link>
+        </TableRowMenu>
+      )
+    },
+  },
 ]
