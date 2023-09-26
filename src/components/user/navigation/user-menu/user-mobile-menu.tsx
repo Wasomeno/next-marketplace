@@ -13,7 +13,7 @@ import { VscSignOut } from "react-icons/vsc"
 
 import { ThemeSwitcher } from "@/components/theme-switcher"
 
-export function UserMenuMobile({ session }: { session: Session }) {
+export function UserMobileMenu({ session }: { session: Session }) {
   const [showMenu, setShowMenu] = useState(false)
   const pathname = usePathname()
 
