@@ -3,16 +3,16 @@ import { getServerSession } from "next-auth"
 
 import { authOptions } from "@/config/next-auth"
 
-import { UserMenuMain } from "./user-menu-main"
-import { UserMenuMobile } from "./user-menu-mobile"
+import { UserMainMenu } from "./user-main-menu"
+import { UserMobileMenu } from "./user-mobile-menu"
 
 export async function UserMenu() {
   const session = await getServerSession(authOptions)
 
   return session?.user.email ? (
     <>
-      <UserMenuMain session={session} />
-      <UserMenuMobile session={session} />
+      <UserMainMenu session={session} />
+      <UserMobileMenu session={session} />
     </>
   ) : (
     <div className="flex items-center justify-center gap-2">

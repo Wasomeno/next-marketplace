@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
-import { getCategoryDetails, updateCategory } from "@/app/actions/categories"
+import { getCategory, updateCategory } from "@/app/actions/categories"
 
 import { CategorySchema } from "./add-category-modal"
 
@@ -24,8 +24,9 @@ export function EditCategoryModal() {
 
   const categoryDetails = useQuery(
     ["categoryDetails", categoryId],
-    async () => await getCategoryDetails(categoryId)
+    async () => await getCategory(categoryId)
   )
+
   const { register, getValues, handleSubmit, formState } = useForm<
     z.infer<typeof CategorySchema>
   >({

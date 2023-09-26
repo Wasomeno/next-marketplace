@@ -12,9 +12,9 @@ import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
 import { FileImage, ImageUploader } from "@/components/image-uploader"
-import { getProductDetails, updateProduct } from "@/app/actions/products"
+import { getProduct, updateProduct } from "@/app/actions/products"
 
-import CategoryScrollableList from "../category-scrollable-list"
+import { CategoryPicker } from "../category-picker"
 import { ProductFormData, ProductSchema } from "./add-product-modal"
 
 export function EditProductModal() {
@@ -30,7 +30,7 @@ export function EditProductModal() {
 
   const productDetails = useQuery(
     ["productDetails", productId],
-    async () => await getProductDetails(productId),
+    async () => await getProduct(productId),
     { enabled: isEditModalOpen }
   )
 
@@ -180,7 +180,7 @@ export function EditProductModal() {
           </div>
           <div className="flex flex-col items-start gap-1">
             <label className="text-sm font-medium">Category</label>
-            <CategoryScrollableList
+            <CategoryPicker
               selectedCategory={selectedCategory}
               selectCategory={(category_id) => setSelectedCategory(category_id)}
             />

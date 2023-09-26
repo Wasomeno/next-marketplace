@@ -6,7 +6,7 @@ import { toast } from "react-toastify"
 
 import { Button } from "@/components/ui/button"
 import { ProductSorter } from "@/components/product-sorter"
-import { addAllToCart } from "@/app/actions/wishlist"
+import { addWishlistsToCart } from "@/app/actions/wishlist"
 
 import { WishListItemCard } from "./wishlist-item-card"
 
@@ -67,7 +67,7 @@ export const WishlistItemsSection = ({ items }: WishlistItemsSectionProps) => {
             className="my-1 w-full rounded-lg bg-blue-400 py-3 text-xs font-medium text-slate-50 dark:bg-blue-900 lg:text-sm"
             onClick={() =>
               startTransition(async () => {
-                await addAllToCart(selectedItems)
+                await addWishlistsToCart(selectedItems)
                 toast.success("Added all selected items to cart")
               })
             }
