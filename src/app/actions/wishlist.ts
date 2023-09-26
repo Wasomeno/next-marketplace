@@ -114,7 +114,7 @@ export async function removeProductsFromWishlist(
   revalidatePath(path ?? "/wishlist")
 }
 
-export async function addAllToCart(productIds: number[]) {
+export async function addWishlistsToCart(productIds: number[]) {
   const session = await getServerSession(authOptions)
   const cart = await prisma.cart.findUnique({
     where: { user_email: session?.user?.email as string },
