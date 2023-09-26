@@ -1,19 +1,19 @@
 "use client"
 
-import { useState, useTransition } from "react"
-import { useRouter } from "next/navigation"
-import { Product } from "@prisma/client"
-import { useSession } from "next-auth/react"
-import { toast } from "react-toastify"
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
+import { toast } from "react-toastify";
 
-import { Button } from "@/components/ui/button"
-import { addToCart } from "@/app/actions/cart"
+import { addToCart } from "@/app/actions/cart";
+import { Button } from "@/components/ui/button";
+import { Product } from "@prisma/client";
 
 type AddToCartDialogProps = {
   productDetails: Product
 }
 
-export const AddToCartDialog = ({ productDetails }: AddToCartDialogProps) => {
+export const AddToCartSection = ({ productDetails }: AddToCartDialogProps) => {
   const [amount, setAmount] = useState<number>(1)
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
