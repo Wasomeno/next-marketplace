@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useEffect, useState } from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { AnimatePresence, motion } from "framer-motion"
 import { RxCross2 } from "react-icons/rx"
@@ -22,15 +22,10 @@ const DialogTrigger = React.forwardRef<
 DialogTrigger.displayName = DialogPrimitive.Trigger.displayName
 
 const DialogPortal = ({
-  className,
   children,
   ...props
 }: DialogPrimitive.DialogPortalProps) => {
-  return (
-    <DialogPrimitive.Portal className="fixed z-50" {...props}>
-      {children}
-    </DialogPrimitive.Portal>
-  )
+  return <DialogPrimitive.Portal {...props}>{children}</DialogPrimitive.Portal>
 }
 
 DialogPortal.displayName = DialogPrimitive.Portal.displayName
@@ -50,12 +45,12 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 
 const DialogHeader = ({ title }: { title: string }) => {
   return (
-    <div className="sticky top-0 z-20 mb-4 flex h-12 w-full items-center justify-between border-b bg-slate-50 px-6 dark:border-b-neutral-700 dark:bg-neutral-900 lg:h-16">
+    <div className="sticky top-0 z-20 flex h-12 w-full items-center justify-between border-b bg-slate-50 px-6 dark:border-b-neutral-700 dark:bg-neutral-900 lg:h-16">
       <DialogPrimitive.Title className="text-base font-medium lg:text-lg">
         {title}
       </DialogPrimitive.Title>
       <DialogPrimitive.Close>
-        <RxCross2 size="20" />
+        <RxCross2 className="h-5 w-5" />
       </DialogPrimitive.Close>
     </div>
   )
@@ -67,9 +62,17 @@ const DialogContent = React.forwardRef<
     open: boolean
   }
 >(({ className, children, open, ...props }, ref) => {
+  const [clientReady, setClientReady] = useState(false)
+
+  useEffect(() => {
+    if (window !== undefined) {
+      setClientReady(true)
+    }
+  }, [])
+
   return (
     <AnimatePresence>
-      {open && (
+      {open && clientReady && (
         <DialogPortal forceMount>
           <DialogOverlay asChild>
             <motion.div
