@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { AnimatePresence, motion } from "framer-motion"
 import { BiChevronRight } from "react-icons/bi"
 
@@ -22,8 +23,16 @@ const statuses = [
 ]
 
 export const OrderStatusFilter = () => {
+  const searchParams = useSearchParams()
+  const statusId = searchParams.get("status")
+  const activeFilter = statuses[parseInt(statusId as string)]
+
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedStatus, setSelectedStatus] = useState(statuses[0])
+  const [selectedStatus, setSelectedStatus] = useState(
+    activeFilter ?? statuses[0]
+  )
+
+  const router = useRouter()
   return (
     <Dropdown open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
       <DropdownTrigger asChild>
@@ -53,7 +62,20 @@ export const OrderStatusFilter = () => {
               {statuses.map((status) => (
                 <DropdownItem key={status.id} asChild>
                   <button
-                    onClick={() => setSelectedStatus(status)}
+                    onClick={() => {
+                      if (status.id === 0) {
+                        router.replace(`${location.pathname}`)
+                      } else {
+                        const newSearchParams = new URLSearchParams(
+                          searchParams
+                        )
+                        newSearchParams.set("status", status.id.toString())
+                        router.replace(
+                          `${location.pathname}?${newSearchParams.toString()}`
+                        )
+                      }
+                      setSelectedStatus(status)
+                    }}
                     className="w-full px-3 py-2 text-start text-xs outline-0 ring-0 transition duration-200 hover:bg-blue-100 hover:dark:bg-slate-800 lg:text-sm"
                   >
                     {status.title}
