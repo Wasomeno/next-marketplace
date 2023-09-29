@@ -34,7 +34,9 @@ export const OrderTable = memo(
   }: {
     orders: Prisma.OrderGetPayload<{
       include: {
-        products: { include: { images: true; category: true } }
+        products: {
+          include: { product: { include: { images: true } } }
+        }
         status: true
         _count: { select: { products: true } }
       }
@@ -50,7 +52,11 @@ export const OrderTable = memo(
       ColumnDef<
         Prisma.OrderGetPayload<{
           include: {
-            products: { include: { images: true; category: true } }
+            products: {
+              include: {
+                product: { include: { images: true } }
+              }
+            }
             status: true
             _count: { select: { products: true } }
           }
@@ -106,7 +112,9 @@ export const OrderTable = memo(
     const table = useReactTable<
       Prisma.OrderGetPayload<{
         include: {
-          products: { include: { images: true; category: true } }
+          products: {
+            include: { product: { include: { images: true; category: true } } }
+          }
           status: true
           _count: { select: { products: true } }
         }
