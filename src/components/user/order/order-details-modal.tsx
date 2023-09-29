@@ -26,7 +26,7 @@ export function OrderDetailsModal() {
     <Dialog
       open={open}
       onOpenChange={() => {
-        const newSearchParams = new URLSearchParams(searchParams)
+        const newSearchParams = new URLSearchParams(searchParams.toString())
         newSearchParams.delete("view")
         newSearchParams.delete("id")
         router.push(`/orders?${newSearchParams.toString()}`)
