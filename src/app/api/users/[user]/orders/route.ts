@@ -12,8 +12,11 @@ export async function GET(context: any) {
   const { user } = context.params
   try {
     const orders = await prisma.order.findMany({
-      where: { user: { contains: user } },
-      include: { products: { include: { images: true } }, status: true },
+      where: { user: { email: { contains: user } } },
+      include: {
+        products: { include: { product: { include: { images: true } } } },
+        status: true,
+      },
     })
     return NextResponse.json(orders)
   } catch (error) {
