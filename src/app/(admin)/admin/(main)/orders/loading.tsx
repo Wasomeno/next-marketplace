@@ -17,7 +17,7 @@ export default function OrderLoadingPage() {
       </div>
       <div className="my-2 flex justify-between gap-2.5">
         <div className="flex items-center gap-2">
-          <TableSearchInput placeholder="Search by order id" disabled />
+          <TableSearchInput placeholder="Search by order invoice" disabled />
           <TableDataSorter disabled sortsData={getOrderSorts()} />
         </div>
       </div>
