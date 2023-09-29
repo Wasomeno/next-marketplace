@@ -15,9 +15,12 @@ export function TableSearchInput({
 }: TableSearchInputProps) {
   return (
     <div
-      className={
-        "flex h-8 w-40 items-center rounded-md border bg-white p-1.5 dark:border-neutral-600 dark:bg-neutral-900 lg:h-10 lg:w-96"
-      }
+      className={twMerge(
+        clsx(
+          "flex h-8 w-40 items-center rounded-md border bg-white p-1.5 dark:border-neutral-600 dark:bg-neutral-900 lg:h-10 lg:w-96",
+          props.disabled && "opacity-70"
+        )
+      )}
     >
       <div
         className={clsx(
