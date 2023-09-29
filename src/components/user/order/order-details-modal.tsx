@@ -20,8 +20,6 @@ export function OrderDetailsModal() {
     async () => await getOrder(parseInt(orderId as string))
   )
 
-  console.log(orderDetails.data)
-
   const date = new Date(orderDetails.data?.created_at as Date)
 
   return (
