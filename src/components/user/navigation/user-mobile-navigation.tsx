@@ -11,7 +11,7 @@ export const UserMobileNavigation = () => {
   const params = useParams()
 
   if (
-    params?.product ||
+    params?.product !== null ||
     pathname === "/cart" ||
     pathname === "/wishlist" ||
     pathname === "/cart/checkout"
