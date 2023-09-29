@@ -49,7 +49,7 @@ export function OrderProductRating() {
     <Dialog
       open={open}
       onOpenChange={() => {
-        const newSearchParams = new URLSearchParams(searchParams)
+        const newSearchParams = new URLSearchParams(searchParams.toString())
         newSearchParams.delete("rating")
         newSearchParams.delete("id")
         router.push(`/orders?${newSearchParams.toString()}`)

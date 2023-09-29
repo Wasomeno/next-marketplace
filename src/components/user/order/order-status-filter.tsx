@@ -67,7 +67,7 @@ export const OrderStatusFilter = () => {
                         router.replace(`${location.pathname}`)
                       } else {
                         const newSearchParams = new URLSearchParams(
-                          searchParams
+                          searchParams.toString()
                         )
                         newSearchParams.set("status", status.id.toString())
                         router.replace(

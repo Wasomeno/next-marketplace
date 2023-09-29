@@ -23,7 +23,7 @@ export const OrderProductCard = ({ orderProduct }: OrderCardProps) => {
   const searchParams = useSearchParams()
 
   function getSearchParams(values: string[][]) {
-    const newSearchParams = new URLSearchParams(searchParams)
+    const newSearchParams = new URLSearchParams(searchParams.toString())
     values.forEach((value) => {
       newSearchParams.set(value[0], value[1])
     })

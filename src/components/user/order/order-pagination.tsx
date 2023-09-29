@@ -19,7 +19,7 @@ export function OrderPagination({ count }: { count: number }) {
       {pageArray.map((value) => (
         <button
           onClick={() => {
-            const newSearchParams = new URLSearchParams(searchParams)
+            const newSearchParams = new URLSearchParams(searchParams.toString())
             value === "1"
               ? newSearchParams.delete("page")
               : newSearchParams.set("page", value)
