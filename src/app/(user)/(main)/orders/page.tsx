@@ -3,25 +3,60 @@ import { RxCrossCircled, RxMagnifyingGlass } from "react-icons/rx"
 
 import { prisma } from "@/lib/prisma"
 import { Input } from "@/components/ui/input"
-import { OrderCard } from "@/components/user/order/order-card"
 import { OrderDetailsModal } from "@/components/user/order/order-details-modal"
+import { OrderPagination } from "@/components/user/order/order-pagination"
+import { OrderProductCard } from "@/components/user/order/order-product-card"
+import { OrderProductRating } from "@/components/user/order/order-product-rating"
 import { OrderStatusFilter } from "@/components/user/order/order-status-filter"
+
+type Props = {
+  searchParams: {
+    status: string
+    page: string
+    id: string
+    rating: string
+    view: string
+  }
+}
 
 export const metadata = {
   title: "Orders | Next Marketplace",
 }
 
-async function getUserTransactions() {
+async function getUserOrderProduct(statusId?: number, page?: number) {
   const session = await getServerSession()
-  const transactions = await prisma.order.findMany({
-    where: { user: session?.user?.email as string },
-    include: { products: { include: { images: true } }, status: true },
+  const userOrderProducts = await prisma.orderProduct.count({
+    where: {
+      order: {
+        user_email: { equals: session?.user.email as string },
+        status_id: statusId ? statusId : undefined,
+      },
+    },
   })
-  return transactions
+
+  const orderProducts = await prisma.orderProduct.findMany({
+    where: {
+      order: {
+        user_email: { equals: session?.user.email as string },
+        status_id: statusId ? statusId : undefined,
+      },
+    },
+    include: {
+      order: { include: { status: true } },
+      product: { include: { images: true } },
+    },
+    skip: page ? page * 5 - 5 : 0,
+    take: page ? page * 5 : 5,
+  })
+  return { orderProducts, count: userOrderProducts }
 }
 
-export default async function OrdersPage() {
-  const transactions = await getUserTransactions()
+export default async function OrdersPage({ searchParams }: Props) {
+  const { orderProducts, count } = await getUserOrderProduct(
+    parseInt(searchParams.status),
+    parseInt(searchParams.page)
+  )
+
   return (
     <div className="flex flex-1 flex-col px-5 lg:px-8">
       <div className="mb-4 mt-2 lg:mb-4">
@@ -42,22 +77,24 @@ export default async function OrdersPage() {
           <OrderStatusFilter />
         </div>
         <div className="flex flex-1 flex-col gap-2">
-          {transactions.length > 0 &&
-            transactions.map((transaction) => (
-              <OrderCard
-                transactionDetails={transaction}
-                key={transaction.id}
+          {orderProducts.length > 0 &&
+            orderProducts.map((orderProduct) => (
+              <OrderProductCard
+                key={orderProduct.id}
+                orderProduct={orderProduct}
               />
             ))}
-          {!transactions.length ? (
+          {orderProducts.length === 0 && (
             <div className="flex flex-1 flex-col items-center justify-center gap-2.5 opacity-50">
               <span className="text-sm">No Transactions</span>
               <RxCrossCircled size="25" />
             </div>
-          ) : null}
+          )}
         </div>
+        {count > 5 && <OrderPagination count={count} />}
       </div>
-      <OrderDetailsModal />
+      {searchParams.view && <OrderDetailsModal />}
+      {searchParams.rating && <OrderProductRating />}
     </div>
   )
 }
