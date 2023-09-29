@@ -5,7 +5,7 @@ import { Prisma } from "@prisma/client"
 
 import { prisma } from "@/lib/prisma"
 
-export async function getAllCategories(): Promise<
+export async function getCategories(): Promise<
   Prisma.CategoryGetPayload<{
     include: { _count: { select: { products: true } }; images: true }
   }>[]
@@ -16,7 +16,7 @@ export async function getAllCategories(): Promise<
   return categories
 }
 
-export async function getCategoryDetails(
+export async function getCategory(
   categoryId: number
 ): Promise<Prisma.CategoryGetPayload<{
   include: { images: true; products: true }

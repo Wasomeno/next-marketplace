@@ -5,7 +5,7 @@ import { Prisma } from "@prisma/client"
 
 import { prisma } from "@/lib/prisma"
 
-export async function getAllProducts(): Promise<
+export async function getProducts(): Promise<
   Prisma.ProductGetPayload<{ include: { images: true; category: true } }>[]
 > {
   const products = await prisma.product.findMany({
@@ -14,7 +14,7 @@ export async function getAllProducts(): Promise<
   return products
 }
 
-export async function getProductDetails(
+export async function getProduct(
   productId: number
 ): Promise<Prisma.ProductGetPayload<{
   include: { images: true; category: true }

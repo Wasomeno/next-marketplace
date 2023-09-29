@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
 import { FileImage, ImageUploader } from "@/components/image-uploader"
 
-import CategoryScrollableList from "../category-scrollable-list"
+import { CategoryPicker } from "../category-picker"
 
 export const ProductSchema = z.object({
   name: z.string().min(5).max(25),
@@ -78,8 +78,9 @@ export function AddProductModal() {
 
   return (
     <Dialog
-      onOpenChange={() => {
-        router.push("/admin/products")
+      open={isAddModalOpen}
+      onOpenChange={(open) => {
+        router.replace("/admin/products")
         clearErrors()
       }}
     >
@@ -189,7 +190,7 @@ export function AddProductModal() {
             <label id="productCategory" className="text-sm">
               Category
             </label>
-            <CategoryScrollableList
+            <CategoryPicker
               selectedCategory={selectedCategory}
               selectCategory={(categoryId) => setSelectedCategory(categoryId)}
             />

@@ -27,6 +27,7 @@ export default function AdminLoginPage() {
 
   return (
     <PageTransitionWrapper className="flex flex-1 flex-col items-center justify-center">
+      <title>Login | Next Marketplace Admin</title>
       <div>
         <div className="mb-4 flex items-center justify-between">
           <h1 className="font-sans text-2xl font-semibold lg:text-3xl">

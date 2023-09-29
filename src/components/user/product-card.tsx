@@ -37,8 +37,8 @@ const ProductCard = ({
       {...props}
     >
       <Link href={href}>
+        {image}
         <div className="flex w-full flex-col gap-1 p-3">
-          {image}
           {name}
           {price}
           {category}
@@ -51,12 +51,13 @@ const ProductCard = ({
 
 const ProductImage = ({ image }: { image: string }) => {
   return (
-    <div className="relative h-32 w-full overflow-clip rounded-t-md bg-slate-50 lg:h-44">
+    <div className="relative h-32 w-full overflow-clip rounded-t-md border bg-slate-50 lg:h-44">
       <Image
         src={image}
         alt="product-image"
-        className="object-contain"
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        className="object-cover object-top"
+        sizes="(max-width: 320px) 100vw, (max-width: 160px) 50vw, 33vw"
+        quality={75}
         fill
       />
     </div>

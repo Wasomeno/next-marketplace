@@ -17,17 +17,20 @@ type CheckoutProps = {
 
 export async function checkout({ cartItems, total, invoice }: CheckoutProps) {
   const session = await getServerSession(authOptions)
+
+  const orderProducts = cartItems.map((cartItem) => ({
+    product_id: cartItem.product_id,
+    total: cartItem.product.price * cartItem.amount,
+    amount: cartItem.amount,
+  }))
+
   try {
     await prisma.order
       .create({
         data: {
           invoice,
-          user: session?.user?.email as string,
-          products: {
-            connect: cartItems.map((cartItem) => ({
-              id: cartItem.product_id,
-            })),
-          },
+          user: { connect: { email: session?.user.email as string } },
+          products: { createMany: { data: orderProducts } },
           total: total,
           status: { connect: { id: 3 } },
         },

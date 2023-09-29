@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 
 export function CheckoutSummary() {
   const router = useRouter()
+
   const selectedCartItems: Prisma.CartItemGetPayload<{
     include: { product: { include: { images: true } } }
   }>[] = JSON.parse(localStorage?.getItem("selectedCartItems") as string)

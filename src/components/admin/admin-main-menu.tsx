@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { signOut, useSession } from "next-auth/react"
-import { BsPersonVcard } from "react-icons/bs"
 import { VscSignOut } from "react-icons/vsc"
 
 import { Dropdown, DropdownContent, DropdownTrigger } from "../ui/dropdown"
@@ -23,13 +22,13 @@ export function AdminMainMenu() {
           <DropdownContent asChild side="bottom" align="end" sideOffset={2.5}>
             <motion.div
               initial={{ height: "50px", opacity: 0 }}
-              animate={{ height: "170px", opacity: 1 }}
+              animate={{ height: "150px", opacity: 1 }}
               exit={{ height: "50px", opacity: 0 }}
               transition={{ duration: 0.1 }}
               className="z-30 w-64 rounded-md border border-slate-300 bg-white duration-200 dark:border-neutral-600 dark:bg-neutral-900"
               style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
             >
-              <div className="border-b px-2.5 py-2 dark:border-b-neutral-800">
+              <div className="border-b px-4 py-2 dark:border-b-neutral-800">
                 <h5 className="font-sans text-sm font-medium lg:text-base">
                   Admin
                 </h5>
@@ -37,16 +36,7 @@ export function AdminMainMenu() {
                   {session?.data?.user?.username}
                 </span>
               </div>
-              <div className="border-b p-1.5 dark:border-b-neutral-800">
-                <button
-                  onClick={() => signOut()}
-                  className="flex w-full items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200 hover:dark:bg-neutral-800"
-                >
-                  <BsPersonVcard size="16" />
-                  <span className="text-xs lg:text-sm"> Profile</span>
-                </button>
-              </div>
-              <div className="p-1.5">
+              <div className="p-2 dark:border-b-neutral-800">
                 <button
                   onClick={() => signOut()}
                   className="flex w-full items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200 hover:dark:bg-neutral-800"

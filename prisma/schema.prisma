@@ -9,18 +9,19 @@ datasource db {
 }
 
 model Product {
-  id             Int            @id @default(autoincrement())
-  name           String         @unique
+  id             Int             @id @default(autoincrement())
+  name           String          @unique
   description    String
   price          Int
   stock          Int
   category_id    Int
   slug           String
+  reviews        ProductReview[]
   cart_items     CartItem[]
   wishlist_items WishlistItem[]
-  orders         Order[]
   images         ProductImage[]
-  category       Category       @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  order_products OrderProduct[]
+  category       Category        @relation(fields: [category_id], references: [id], onDelete: Cascade)
 
   @@index([category_id])
 }
@@ -31,6 +32,20 @@ model ProductImage {
   image_url  String
   product    Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
 
+  @@index([product_id])
+}
+
+model ProductReview {
+  id         Int      @id @default(autoincrement())
+  product_id Int
+  user_id    String
+  created_at DateTime @default(now())
+  rating     Int
+  review     String?
+  product    Product  @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [user_id], references: [id])
+
+  @@index([user_id])
   @@index([product_id])
 }
 
@@ -90,16 +105,31 @@ model CategoryImage {
 }
 
 model Order {
-  id         Int         @id @default(autoincrement())
-  user       String
+  id         Int            @id @default(autoincrement())
   invoice    String
   total      Int
   status_id  Int
-  created_at DateTime    @default(now())
-  status     OrderStatus @relation(fields: [status_id], references: [id])
-  products   Product[]
+  created_at DateTime       @default(now())
+  user_email String
+  user       User           @relation(fields: [user_email], references: [email])
+  status     OrderStatus    @relation(fields: [status_id], references: [id])
+  products   OrderProduct[]
 
+  @@index([user_email])
   @@index([status_id])
+}
+
+model OrderProduct {
+  id         Int     @id @default(autoincrement())
+  amount     Int
+  total      Int
+  order_id   Int
+  product_id Int
+  product    Product @relation(fields: [product_id], references: [id])
+  order      Order   @relation(fields: [order_id], references: [id])
+
+  @@index([product_id])
+  @@index([order_id])
 }
 
 model OrderStatus {
@@ -164,13 +194,15 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String          @id @default(cuid())
   name          String?
-  email         String?   @unique
-  emailVerified DateTime? @map("email_verified")
+  email         String?         @unique
+  emailVerified DateTime?       @map("email_verified")
   image         String?
   address       String?
   cart          Cart?
+  orders        Order[]
+  reviews       ProductReview[]
   wishlist      Wishlist?
   accounts      Account[]
   sessions      Session[]

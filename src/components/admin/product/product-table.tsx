@@ -16,7 +16,7 @@ import {
 } from "@tanstack/react-table"
 import { BsPlus, BsTrash3 } from "react-icons/bs"
 
-import { getCategorySorts } from "@/config/table/sorts/categorySorts"
+import { getProductSorts } from "@/config/table/sorts/productSorts"
 import { Button } from "@/components/ui/button"
 import {
   Table,
@@ -27,45 +27,40 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { TableDataSorter } from "@/components/table-data-sorter"
-import { TableRowMenu } from "@/components/table-row-menu"
 import { TableSearchInput } from "@/components/table-search-input"
 
-import { DeleteCategoriesModal } from "./modals/delete-categories-modal"
+import { DeleteProductModal } from "./modals/delete-product-modal"
+import { productTableColumns } from "./product-table-columns"
 
-export const CategoryTable = memo(
+export const ProductTable = memo(
   ({
-    categories,
+    products,
   }: {
-    categories: Prisma.CategoryGetPayload<{
-      include: { _count: { select: { products: true } }; images: true }
+    products: Prisma.ProductGetPayload<{
+      include: { images: true; category: true }
     }>[]
   }) => {
-    const [selectedCategories, setSelectedCategories] = useState<number[]>([])
-
+    const [selectedProducts, setSelectedProducts] = useState<Array<number>>([])
     const [sorting, setSorting] = useState<SortingState>([])
     const [pagination, setPagination] = useState<PaginationState>({
       pageIndex: 0,
-      pageSize: 8,
+      pageSize: 4,
     })
 
-    const router = useRouter()
-
     const columns: ColumnDef<
-      Prisma.CategoryGetPayload<{
-        include: { _count: { select: { products: true } }; images: true }
-      }>
+      Prisma.ProductGetPayload<{ include: { images: true; category: true } }>
     >[] = [
       {
         id: "select",
         header: ({ table }) => (
           <input
             type="checkbox"
-            className="h-4 w-4 cursor-pointer rounded-md border border-slate-300 accent-white dark:accent-gray-300"
+            className="h-4 w-4 cursor-pointer p-1.5"
             checked={
-              table.getCoreRowModel().rows.length === selectedCategories.length
+              table.getCoreRowModel().rows.length === selectedProducts.length
             }
             onChange={() => {
-              setSelectedCategories((currentSelected) => {
+              setSelectedProducts((currentSelected) => {
                 return table.getCoreRowModel().rows.length ===
                   currentSelected.length
                   ? []
@@ -78,13 +73,13 @@ export const CategoryTable = memo(
           <div className="px-1">
             <input
               type="checkbox"
-              className="h-4 w-4 cursor-pointer rounded-md border accent-black dark:accent-gray-300"
-              checked={selectedCategories.includes(row.original.id)}
+              className="h-4 w-4 cursor-pointer rounded-md accent-blue-300 dark:accent-gray-300"
+              checked={selectedProducts.includes(row.original.id)}
               onChange={() =>
-                setSelectedCategories((currentSelected) => {
+                setSelectedProducts((currentSelected) => {
                   if (currentSelected.includes(row.original.id)) {
                     return currentSelected.filter(
-                      (categoryId) => categoryId !== row.original.id
+                      (productId) => productId !== row.original.id
                     )
                   } else {
                     return [...currentSelected, row.original.id]
@@ -95,65 +90,24 @@ export const CategoryTable = memo(
           </div>
         ),
       },
-      {
-        accessorKey: "id",
-        header: "Id",
-        cell: (id) => id.getValue(),
-        footer: (props) => props.column.id,
-        enableColumnFilter: false,
-      },
-      {
-        accessorKey: "name",
-        header: "Name",
-        cell: (name) => name.getValue(),
-        footer: (props) => props.column.id,
-      },
-      {
-        accessorKey: "_count",
-        header: "Product Amount",
-        cell: (productCount) => {
-          const count = productCount.getValue() as { products: number }
-          return count.products
-        },
-        footer: (props) => props.column.id,
-        enableColumnFilter: false,
-      },
-      {
-        id: "actions",
-        header: "Actions",
-        cell: ({ row }) => (
-          <TableRowMenu>
-            <TableRowMenu.Link
-              href={`/admin/categories?id=${row.original.id}&view=true`}
-            >
-              View Category
-            </TableRowMenu.Link>
-            <TableRowMenu.Link
-              href={`/admin/categories?id=${row.original.id}&edit=true`}
-            >
-              Edit Category
-            </TableRowMenu.Link>
-          </TableRowMenu>
-        ),
-      },
+      ...productTableColumns,
     ]
 
+    const router = useRouter()
+
     const table = useReactTable<
-      Prisma.CategoryGetPayload<{
-        include: { _count: { select: { products: true } }; images: true }
-      }>
+      Prisma.ProductGetPayload<{ include: { images: true; category: true } }>
     >({
-      data: categories,
+      data: products as Prisma.ProductGetPayload<{
+        include: { images: true; category: true }
+      }>[],
       columns,
-      state: {
-        sorting,
-        pagination,
-      },
-      onSortingChange: setSorting,
+      state: { sorting, pagination },
       onPaginationChange: setPagination,
+      onSortingChange: setSorting,
       getCoreRowModel: getCoreRowModel(),
-      getFilteredRowModel: getFilteredRowModel(),
       getSortedRowModel: getSortedRowModel(),
+      getFilteredRowModel: getFilteredRowModel(),
       getPaginationRowModel: getPaginationRowModel(),
     })
 
@@ -165,19 +119,16 @@ export const CategoryTable = memo(
               onChange={(event) =>
                 table.getColumn("name")?.setFilterValue(event.target.value)
               }
-              placeholder="Search by category name"
+              placeholder="Search by product name"
             />
-            <TableDataSorter
-              table={table}
-              sortsData={getCategorySorts(table)}
-            />
+            <TableDataSorter table={table} sortsData={getProductSorts(table)} />
           </div>
           <div className="flex items-center gap-2">
             <Button
               variant="danger"
               size="sm"
-              disabled={!selectedCategories.length}
-              onClick={() => router.push("/admin/categories?delete=true")}
+              disabled={!selectedProducts.length}
+              onClick={() => router.replace("/admin/products?delete=true")}
               className="h-8 w-8 hover:scale-[105%] lg:h-9 lg:w-9"
             >
               <BsTrash3 className="text-slate-50" />
@@ -185,27 +136,26 @@ export const CategoryTable = memo(
             <Button
               variant="success"
               size="sm"
-              onClick={() => {
-                router.push(`/admin/categories?add=true`)
-              }}
+              onClick={() => router.replace("/admin/products?add=true")}
               className="h-8 w-8 hover:scale-[105%] lg:h-9 lg:w-9"
             >
               <BsPlus className="text-slate-50" />
             </Button>
           </div>
         </div>
-        <div className="flex-1 overflow-x-scroll rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-neutral-800">
-          <Table className="w-full border-collapse  bg-white text-left text-sm text-gray-500 dark:bg-neutral-800 dark:text-slate-50">
+        <div className="flex-1 overflow-x-scroll rounded-lg border border-gray-200 bg-white shadow-sm dark:border-neutral-600 dark:bg-neutral-800">
+          <Table className="w-full border-collapse text-left text-sm text-gray-500 dark:bg-neutral-800">
             <TableHeader className="bg-blue-100 dark:bg-blue-900">
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow
                   key={headerGroup.id}
+                  aria-rowspan={1}
                   className="dark:border-neutral-600"
                 >
                   {headerGroup.headers.map((header) => {
                     return (
                       <TableHead
-                        className="px-6 py-4 text-center text-xs font-medium text-gray-900 dark:text-neutral-50 lg:text-sm"
+                        className="px-6 py-4 text-center text-xs font-medium text-gray-900 dark:text-white lg:text-sm"
                         key={header.id}
                         colSpan={header.colSpan}
                       >
@@ -223,30 +173,27 @@ export const CategoryTable = memo(
                 </TableRow>
               ))}
             </TableHeader>
-            <TableBody className="relative border-t border-gray-100 dark:border-neutral-600 dark:bg-neutral-800">
+            <TableBody className="relative divide-y divide-gray-100 border-t border-gray-100 dark:divide-neutral-600 dark:border-neutral-600">
               {table.getRowModel().rows?.length > 0 &&
-                table.getRowModel().rows.map((row) => {
-                  return (
-                    <TableRow
-                      key={row.id}
-                      className="bg-white  dark:border-neutral-600 dark:bg-neutral-800"
-                    >
-                      {row.getVisibleCells().map((cell) => {
-                        return (
-                          <TableCell
-                            className="dark:background-neutral-800 border-b border-b-gray-200 px-3 py-2 text-center text-xs dark:border-b-neutral-600 lg:px-6 lg:py-4 lg:text-sm"
-                            key={cell.id}
-                          >
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
-                          </TableCell>
-                        )
-                      })}
-                    </TableRow>
-                  )
-                })}
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    className="bg-white dark:border-neutral-600 dark:bg-neutral-800"
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell
+                        className="px-3 py-2 text-center text-xs  dark:text-white lg:px-6 lg:py-4 lg:text-sm"
+                        key={cell.id}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+
               {!table.getRowModel().rows?.length && (
                 <TableRow>
                   <TableCell
@@ -260,7 +207,6 @@ export const CategoryTable = memo(
             </TableBody>
           </Table>
         </div>
-
         <div className="my-2 flex items-center justify-start gap-2.5">
           <Button
             variant="default"
@@ -281,13 +227,13 @@ export const CategoryTable = memo(
             Next
           </Button>
         </div>
-        <DeleteCategoriesModal selectedCategories={selectedCategories} />
+        <DeleteProductModal selectedProducts={selectedProducts} />
       </div>
     )
   },
   (oldProps, newProps) => {
-    return oldProps.categories.length === newProps.categories.length
+    return oldProps.products.length === newProps.products.length
   }
 )
 
-CategoryTable.displayName = "CategoryTable"
+ProductTable.displayName = "ProductTable"

@@ -44,7 +44,7 @@ export function CheckoutPaymentModal() {
   const [status, setStatus] = useState("idle")
   const searchParams = useSearchParams()
   const router = useRouter()
-  const isPayment = searchParams.get("payment")
+  const open = searchParams.get("payment") !== null
 
   const selectedCartItems: Prisma.CartItemGetPayload<{
     include: { product: { include: { images: true } } }
@@ -57,12 +57,12 @@ export function CheckoutPaymentModal() {
 
   return (
     <Dialog
-      open={isPayment !== null}
+      open={open}
       onOpenChange={() => status !== "loading" && router.push("/cart/checkout")}
     >
       <DialogContent
-        open={isPayment !== null}
-        className="flex flex-1 flex-col lg:h-4/6 lg:w-2/6"
+        open={open}
+        className="flex flex-1 flex-col gap-4 lg:h-4/6 lg:w-2/6"
       >
         {status === "idle" && (
           <>
@@ -115,10 +115,6 @@ export function CheckoutPaymentModal() {
                       invoice,
                       cartItems: selectedCartItems,
                     })
-                    localStorage.setItem(
-                      "selectedCartItems",
-                      JSON.stringify([])
-                    )
                     setStatus("success")
                   }}
                   className="w-full bg-blue-400 font-semibold text-white dark:bg-blue-900"
