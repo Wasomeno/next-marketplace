@@ -16,12 +16,12 @@ export const userMobilePaths: UserMobilePath[] = [
   },
   {
     title: "Categories",
-    href: "/categories",
+    href: "categories",
     Icon: BiCategory,
   },
   {
     title: "Orders",
-    href: "/orders",
+    href: "orders",
     Icon: BsCardList,
   },
 ]
