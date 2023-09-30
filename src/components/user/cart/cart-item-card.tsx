@@ -105,7 +105,7 @@ export const CartItemCardSkeleton = () => {
           <BsCheck className="h-4 w-4" />
         </Checkbox.Indicator>
       </Checkbox.Root>
-      <div className="flex w-full flex-wrap items-end justify-between gap-2">
+      <div className="flex w-full flex-wrap items-center justify-between gap-2">
         <div className="flex w-full gap-2 lg:w-4/6 lg:gap-4">
           <div className="relative h-20 w-28 animate-pulse rounded-md bg-slate-300 dark:bg-neutral-400 lg:h-32 lg:w-36" />
           <div className="flex w-4/6 flex-col gap-1 lg:w-3/6">
