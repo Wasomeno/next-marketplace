@@ -12,7 +12,7 @@ interface ProductCardProps extends React.HTMLAttributes<HTMLDivElement> {
   name?: React.ReactNode
   price?: React.ReactNode
   category?: React.ReactNode
-  ratings?: React.ReactNode
+  rating?: React.ReactNode
   href: string
 }
 
@@ -21,7 +21,7 @@ const ProductCard = ({
   name,
   price,
   category,
-  ratings,
+  rating,
   href,
   className,
   ...props
@@ -30,7 +30,7 @@ const ProductCard = ({
     <div
       className={twMerge(
         clsx(
-          "col-span-5 h-56 cursor-pointer rounded-md bg-neutral-50 bg-opacity-50 shadow-[0_3px_7px_rgb(0,0,0,0.1)] dark:bg-neutral-900 dark:bg-opacity-50 dark:shadow-gray-700 lg:col-span-2 lg:h-auto",
+          "col-span-5 h-60 cursor-pointer rounded-md bg-neutral-50 bg-opacity-50 shadow-[0_3px_7px_rgb(0,0,0,0.1)] dark:bg-neutral-900 dark:bg-opacity-50 dark:shadow-gray-700 lg:col-span-2 lg:h-auto",
           className
         )
       )}
@@ -38,11 +38,11 @@ const ProductCard = ({
     >
       <Link href={href}>
         {image}
-        <div className="flex w-full flex-col gap-1 p-3">
+        <div className="flex w-full flex-col gap-1.5 p-3">
           {name}
           {price}
           {category}
-          {ratings}
+          {rating}
         </div>
       </Link>
     </div>
@@ -64,10 +64,10 @@ const ProductImage = ({ image }: { image: string }) => {
   )
 }
 
-const Rating = () => {
+const Rating = ({ rating }: { rating: number }) => {
   return (
-    <span className="flex gap-1 font-sans text-sm">
-      <FaStar size="15" className="fill-yellow-400" />
+    <span className="flex items-center gap-1 font-sans text-sm">
+      <FaStar size="15" className="fill-yellow-400" /> <span>{rating}</span>
     </span>
   )
 }
