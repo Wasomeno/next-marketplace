@@ -10,8 +10,9 @@ export const UserMobileNavigation = () => {
   const pathname = usePathname()
   const params = useParams()
 
+  const pathSplit = pathname.split("/")[1] !== "" ? pathname.split("/")[1] : "/"
   if (
-    params?.product !== null ||
+    params?.productId ||
     pathname === "/cart" ||
     pathname === "/wishlist" ||
     pathname === "/cart/checkout"
@@ -22,20 +23,20 @@ export const UserMobileNavigation = () => {
       {userMobilePaths.map((path) => (
         <Link
           key={path.title}
-          href={path.href}
+          href={`/${path.href}`}
           className="flex flex-col items-center gap-1.5"
         >
           <path.Icon
             size="18"
             className={twMerge(
               "text-slate-400",
-              pathname.includes(path.href) && "text-blue-500"
+              pathSplit.includes(path.href) && "text-blue-500"
             )}
           />
           <span
             className={twMerge(
               "text-xs text-slate-400",
-              pathname.includes(path.href) && "text-blue-500"
+              pathSplit.includes(path.href) && "text-blue-500"
             )}
           >
             {path.title}
