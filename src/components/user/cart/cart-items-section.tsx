@@ -55,9 +55,9 @@ export const CartItemsSection = ({
               />
             ))}
           {items.length === 0 && (
-            <div className="flex h-96 flex-col items-center justify-center gap-2.5">
-              <span className="opacity-50">No items in Cart</span>
-              <RxCrossCircled size="25" className="opacity-50" />
+            <div className="flex h-96 flex-col items-center justify-center gap-2.5 opacity-50">
+              <span className="text-sm lg:text-base">No items in Cart</span>
+              <RxCrossCircled size="20" />
             </div>
           )}
         </div>
