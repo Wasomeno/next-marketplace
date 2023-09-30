@@ -18,7 +18,7 @@ export function ProductSearchInput() {
         router.push("/search?q=" + searchParams)
         searchInputRef.current?.blur()
       }}
-      className="w-5/6 lg:w-5/6"
+      className="w-full lg:w-5/6"
     >
       <Input
         ref={searchInputRef as any}
