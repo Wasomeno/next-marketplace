@@ -1,11 +1,11 @@
 "use client"
 
-import { useState, useTransition } from "react"
+import { useState } from "react"
 import { Prisma } from "@prisma/client"
+import { RxCrossCircled } from "react-icons/rx"
 import { toast } from "react-toastify"
 
 import { Button } from "@/components/ui/button"
-import { ProductSorter } from "@/components/product-sorter"
 import { addWishlistsToCart } from "@/app/actions/wishlist"
 
 import { WishListItemCard } from "./wishlist-item-card"
@@ -20,16 +20,9 @@ type WishlistItemsSectionProps = {
 
 export const WishlistItemsSection = ({ items }: WishlistItemsSectionProps) => {
   const [selectedItems, setSelectedItems] = useState<number[]>([])
-  const [isPending, startTransition] = useTransition()
   return (
     <div className="flex flex-1 flex-col justify-between lg:flex-row">
       <div className="w-full lg:w-7/12">
-        <div className="flex items-center justify-between px-4 lg:px-0">
-          <span className="font-sans text-xs font-medium text-slate-400 lg:text-sm">
-            {items?.length ?? 0} items
-          </span>
-          <ProductSorter />
-        </div>
         <div className="mt-2">
           {items?.length ? (
             items?.map((item) => (
@@ -40,10 +33,9 @@ export const WishlistItemsSection = ({ items }: WishlistItemsSectionProps) => {
               />
             ))
           ) : (
-            <div className="flex h-96 flex-col items-center justify-center">
-              <span className="text-sm font-medium text-slate-400 lg:text-base">
-                No items
-              </span>
+            <div className="flex h-96 flex-col items-center justify-center gap-2.5 opacity-50">
+              <span className="text-sm lg:text-base">No items in Cart</span>
+              <RxCrossCircled size="20" />
             </div>
           )}
         </div>
@@ -65,12 +57,10 @@ export const WishlistItemsSection = ({ items }: WishlistItemsSectionProps) => {
             disabled={!selectedItems.length}
             variant="default"
             className="my-1 w-full rounded-lg bg-blue-400 py-3 text-xs font-medium text-slate-50 dark:bg-blue-900 lg:text-sm"
-            onClick={() =>
-              startTransition(async () => {
-                await addWishlistsToCart(selectedItems)
-                toast.success("Added all selected items to cart")
-              })
-            }
+            onClick={async () => {
+              await addWishlistsToCart(selectedItems)
+              toast.success("Added all selected items to cart")
+            }}
           >
             Add all to Cart
           </Button>
