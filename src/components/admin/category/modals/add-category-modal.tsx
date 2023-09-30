@@ -36,7 +36,7 @@ export function AddCategoryModal() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  const isAddModalOpen = searchParams.get("add") !== null
+  const open = searchParams.get("add") !== null
 
   const mutation = useMutation(
     async () =>
@@ -61,14 +61,8 @@ export function AddCategoryModal() {
   )
 
   return (
-    <Dialog
-      open={isAddModalOpen}
-      onOpenChange={() => router.push("/admin/categories")}
-    >
-      <DialogContent
-        open={isAddModalOpen}
-        className="bg-slate-100 lg:h-5/6 lg:w-3/6"
-      >
+    <Dialog open={open} onOpenChange={() => router.push("/admin/categories")}>
+      <DialogContent open={open} className="bg-slate-100 lg:h-5/6 lg:w-3/6">
         <DialogHeader title="Add Category" />
         <form
           onSubmit={handleSubmit(() => {

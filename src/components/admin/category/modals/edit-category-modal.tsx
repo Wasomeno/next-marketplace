@@ -20,7 +20,7 @@ export function EditCategoryModal() {
   const searchParams = useSearchParams()
 
   const categoryId = parseInt(searchParams.get("id") ?? "0")
-  const isEditModalOpen = searchParams.get("edit") !== null
+  const open = searchParams.get("edit") !== null
 
   const categoryDetails = useQuery(
     ["categoryDetails", categoryId],
@@ -60,11 +60,8 @@ export function EditCategoryModal() {
   )
 
   return (
-    <Dialog
-      open={isEditModalOpen}
-      onOpenChange={() => router.push("/admin/categories")}
-    >
-      <DialogContent open={isEditModalOpen} className="lg:h-5/6 lg:w-3/6">
+    <Dialog open={open} onOpenChange={() => router.push("/admin/categories")}>
+      <DialogContent open={open} className="lg:h-5/6 lg:w-3/6">
         <DialogHeader title="Edit Category" />
         <form
           onSubmit={handleSubmit(() => {

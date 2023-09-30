@@ -43,6 +43,8 @@ export function AddProductModal() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
+  const open = searchParams.get("add") !== null
+
   const mutation = useMutation(
     async () => {
       const uploadedFiles = await startUpload(files)
@@ -74,20 +76,15 @@ export function AddProductModal() {
     }
   )
 
-  const isAddModalOpen = searchParams.get("add") !== null
-
   return (
     <Dialog
-      open={isAddModalOpen}
-      onOpenChange={(open) => {
+      open={open}
+      onOpenChange={() => {
         router.replace("/admin/products")
         clearErrors()
       }}
     >
-      <DialogContent
-        open={isAddModalOpen}
-        className="bg-slate-100 lg:h-5/6 lg:w-3/6"
-      >
+      <DialogContent open={open} className="bg-slate-100 lg:h-5/6 lg:w-3/6">
         <DialogHeader title="Add Product" />
         <form
           onSubmit={handleSubmit(() => {

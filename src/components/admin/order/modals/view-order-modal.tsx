@@ -12,28 +12,22 @@ export const ViewOrderModal = () => {
   const params = useSearchParams()
   const router = useRouter()
 
-  const isViewDetail = params.get("view")
+  const open = params.get("view") !== null
   const orderId = parseInt(params.get("id") as string)
 
   const orderDetails = useQuery(
     ["orderDetails", orderId],
     async () => await getOrder(orderId),
     {
-      enabled: isViewDetail !== null,
+      enabled: open,
     }
   )
 
   const date = new Date(orderDetails.data?.created_at as Date)
 
   return (
-    <Dialog
-      open={isViewDetail !== null}
-      onOpenChange={() => router.push("/admin/orders")}
-    >
-      <DialogContent
-        open={isViewDetail !== null}
-        className="w-full lg:h-4/6 lg:w-3/6"
-      >
+    <Dialog open={open} onOpenChange={() => router.push("/admin/orders")}>
+      <DialogContent open={open} className="w-full lg:h-4/6 lg:w-3/6">
         <DialogHeader title="Order Details" />
         <div className="px-4">
           <span className="rounded-lg bg-blue-200 px-3 py-2 text-xs font-medium dark:bg-blue-900 lg:text-base">

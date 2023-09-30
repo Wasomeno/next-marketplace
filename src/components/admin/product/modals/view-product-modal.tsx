@@ -11,20 +11,17 @@ export function ViewProductModal() {
   const router = useRouter()
 
   const productId = parseInt(searchParams.get("id") as string)
-  const isDetailsModalOpen = searchParams.get("view") !== null
+  const open = searchParams.get("view") !== null
 
   const productDetails = useQuery(
     ["productDetails", productId],
     async () => await getProduct(productId),
-    { enabled: isDetailsModalOpen }
+    { enabled: open }
   )
 
   return (
-    <Dialog
-      open={isDetailsModalOpen}
-      onOpenChange={() => router.push("/admin/products")}
-    >
-      <DialogContent open={isDetailsModalOpen} className="lg:h-5/6 lg:w-3/6">
+    <Dialog open={open} onOpenChange={() => router.push("/admin/products")}>
+      <DialogContent open={open} className="lg:h-5/6 lg:w-3/6">
         <DialogHeader title="Product Details" />
         <div className="flex w-full flex-col gap-4 px-6">
           <div className="flex w-full flex-col items-start gap-1">

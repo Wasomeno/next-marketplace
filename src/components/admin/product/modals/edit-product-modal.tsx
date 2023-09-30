@@ -26,12 +26,12 @@ export function EditProductModal() {
 
   const productId = parseInt(searchParams.get("id") as string)
 
-  const isEditModalOpen = searchParams.get("edit") !== null
+  const open = searchParams.get("edit") !== null
 
   const productDetails = useQuery(
     ["productDetails", productId],
     async () => await getProduct(productId),
-    { enabled: isEditModalOpen }
+    { enabled: open }
   )
 
   const { register, getValues, formState, handleSubmit, clearErrors } =
@@ -96,16 +96,13 @@ export function EditProductModal() {
 
   return (
     <Dialog
-      open={isEditModalOpen}
+      open={open}
       onOpenChange={() => {
         router.push("/admin/products")
         clearErrors()
       }}
     >
-      <DialogContent
-        open={isEditModalOpen}
-        className="bg-slate-100 lg:h-5/6 lg:w-3/6"
-      >
+      <DialogContent open={open} className="bg-slate-100 lg:h-5/6 lg:w-3/6">
         <DialogHeader title="Edit Product" />
 
         <form
