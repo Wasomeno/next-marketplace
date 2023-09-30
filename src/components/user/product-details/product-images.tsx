@@ -1,14 +1,14 @@
-"use client";
+"use client"
 
-import Image from "next/image";
-import { useState } from "react";
-import { twMerge } from "tailwind-merge";
+import { useState } from "react"
+import Image from "next/image"
+import { twMerge } from "tailwind-merge"
 
 export const ProductImages = ({ imageUrls }: { imageUrls: string[] }) => {
-  const [selectedImage, setSelectedImage] = useState(imageUrls[0]);
-  const [activeImage, setActiveImage] = useState(imageUrls[0]);
+  const [selectedImage, setSelectedImage] = useState(imageUrls[0])
+  const [activeImage, setActiveImage] = useState(imageUrls[0])
   return (
-    <div className="w-10/12 lg:w-4/12">
+    <div className="w-11/12 lg:w-5/12">
       <div className="relative h-80 rounded-md">
         <Image src={activeImage} alt="product-image-main" fill />
       </div>
@@ -36,5 +36,5 @@ export const ProductImages = ({ imageUrls }: { imageUrls: string[] }) => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
