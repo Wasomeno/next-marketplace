@@ -13,7 +13,6 @@ export function OrderPagination({ count }: { count: number }) {
     .fill("")
     .map((value, index) => (index + 1).toString())
 
-  console.log(activePage)
   return (
     <div className="mt-4 flex items-center justify-center gap-4">
       {pageArray.map((value) => (
@@ -28,7 +27,7 @@ export function OrderPagination({ count }: { count: number }) {
           key={value}
           className={twMerge(
             clsx(
-              "font-medium",
+              "text-sm font-medium lg:text-base",
               activePage === value || (value === "1" && activePage === null)
                 ? "font-semibold text-blue-400"
                 : ""
