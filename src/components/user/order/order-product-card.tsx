@@ -3,7 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-import { Order, OrderStatus, Prisma } from "@prisma/client"
+import { Prisma } from "@prisma/client"
 import clsx from "clsx"
 import { twMerge } from "tailwind-merge"
 
