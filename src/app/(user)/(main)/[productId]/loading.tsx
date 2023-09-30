@@ -5,7 +5,7 @@ export default function ProductPageLoading() {
   return (
     <div className="flex flex-1 justify-center">
       <div className="flex w-full flex-wrap justify-center gap-10 lg:w-5/6 lg:flex-nowrap">
-        <div className="w-10/12 lg:w-4/12">
+        <div className="w-11/12 lg:w-4/12">
           <div className="h-80 animate-pulse rounded-md bg-slate-200 dark:bg-neutral-400" />
           <div className="mt-4 flex items-center gap-2.5">
             {["image", "images", "image"].map((url, index) => (
@@ -18,7 +18,7 @@ export default function ProductPageLoading() {
             ))}
           </div>
         </div>
-        <div className="w-10/12 lg:w-5/12">
+        <div className="w-11/12 lg:w-5/12">
           <div className="h-10 w-48 animate-pulse rounded-lg bg-slate-200 dark:bg-neutral-400" />
           <div className="my-4 h-8 w-40 animate-pulse rounded-lg bg-slate-200 dark:bg-neutral-400" />
           <Separator
