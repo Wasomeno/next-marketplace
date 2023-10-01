@@ -21,7 +21,10 @@ export function ViewProductModal() {
 
   return (
     <Dialog open={open} onOpenChange={() => router.push("/admin/products")}>
-      <DialogContent open={open} className="lg:h-5/6 lg:w-3/6">
+      <DialogContent
+        open={open}
+        className="flex flex-col gap-4 lg:h-5/6 lg:w-3/6"
+      >
         <DialogHeader title="Product Details" />
         <div className="flex w-full flex-col gap-4 px-6">
           <div className="flex w-full flex-col items-start gap-1">
