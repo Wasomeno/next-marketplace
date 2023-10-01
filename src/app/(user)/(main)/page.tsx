@@ -19,6 +19,7 @@ export default async function Home() {
     include: {
       category: { select: { name: true, slug: true } },
       images: { select: { image_url: true } },
+      reviews: { select: { rating: true } },
     },
     orderBy: { price: "desc" },
   })
@@ -28,7 +29,7 @@ export default async function Home() {
       <HomeBannerSlider />
       <div className="w-full lg:w-11/12">
         <div className="w-full rounded-lg border p-4 shadow-sm dark:border-gray-800 lg:w-3/6 ">
-          <h2 className="mb-4 font-sans text-sm font-medium lg:text-xl">
+          <h2 className="mb-2 font-sans text-sm font-medium lg:mb-4 lg:text-xl">
             Categories
           </h2>
           <div className="flex items-center justify-start gap-4 overflow-x-scroll">
@@ -66,6 +67,18 @@ export default async function Home() {
               name={<ProductCard.Name name={product.name} />}
               price={<ProductCard.Price price={product.price} />}
               category={<ProductCard.Category category={product.category} />}
+              rating={
+                product.reviews.length !== 0 && (
+                  <ProductCard.Rating
+                    rating={
+                      product.reviews.reduce(
+                        (rating, review) => rating + review.rating,
+                        0
+                      ) / product.reviews.length
+                    }
+                  />
+                )
+              }
             />
           ))}
         </div>
