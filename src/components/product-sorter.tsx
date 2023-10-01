@@ -113,11 +113,9 @@ export function ProductSorter() {
 
 export function ProductSorterSkeleton() {
   const searchParams = useSearchParams()
-  const getActiveSort = () => {
-    const sortParams = searchParams.get("sort")
-    const activeSort = sortOptions.find((sort) => sort.value === sortParams)
-    return activeSort
-  }
+  const activeSort = sortOptions.find(
+    (sort) => sort.value === searchParams.get("sort")
+  )
   return (
     <Dropdown>
       <DropdownTrigger asChild disabled>
@@ -127,7 +125,7 @@ export function ProductSorterSkeleton() {
           className="h-8 w-8 border-slate-300 bg-white px-3 dark:border-gray-700 dark:bg-slate-950 lg:h-10 lg:w-52 lg:justify-between"
         >
           <span className="hidden font-medium lg:block">
-            {getActiveSort()?.label ?? "Select Sort"}
+            {activeSort?.label ?? "Select Sort"}
           </span>
           <div className="w-5">
             <BiChevronRight
