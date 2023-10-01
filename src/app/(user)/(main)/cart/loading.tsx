@@ -15,7 +15,7 @@ export default function CartLoading() {
         </span>
       </div>
       <div className="flex flex-1 flex-col items-start justify-between lg:flex-row lg:justify-center">
-        <div className="w-full px-5 lg:w-4/6 lg:px-8">
+        <div className="w-full px-4 lg:w-4/6 lg:px-8">
           <div className="flex w-full flex-col gap-4">
             <CartItemCardSkeleton />
             <CartItemCardSkeleton />
