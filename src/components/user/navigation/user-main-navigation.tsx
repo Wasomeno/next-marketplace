@@ -21,7 +21,7 @@ export async function UserMainNavigation() {
         </Link>
         <ProductSearchInput />
       </div>
-      <div className="flex w-3/6 items-center justify-end gap-4 px-2 lg:w-44">
+      <div className="flex w-4/6 items-center justify-end gap-4 px-2 lg:w-44">
         <CartButton />
         <Separator
           className="h-7 w-px rounded-full bg-slate-200 dark:bg-gray-700"
