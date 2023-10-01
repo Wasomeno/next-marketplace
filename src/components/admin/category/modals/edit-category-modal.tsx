@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
+import { FaSpinner } from "react-icons/fa"
 import { toast } from "react-toastify"
 import * as z from "zod"
 
@@ -61,68 +62,77 @@ export function EditCategoryModal() {
 
   return (
     <Dialog open={open} onOpenChange={() => router.push("/admin/categories")}>
-      <DialogContent open={open} className="lg:h-5/6 lg:w-3/6">
+      <DialogContent
+        open={open}
+        className="flex flex-1 flex-col lg:h-5/6 lg:w-3/6"
+      >
         <DialogHeader title="Edit Category" />
-        <form
-          onSubmit={handleSubmit(() => {
-            updateMutation.mutate()
-          })}
-          className="flex w-full flex-col gap-4 px-6 py-4"
-        >
-          <div className="flex w-full flex-col items-start gap-1">
-            <label className="text-sm font-medium text-gray-400">Id</label>
-            <h5 className="text-lg">{categoryId}</h5>
+        {categoryDetails.isLoading ? (
+          <div className="flex flex-1 items-center justify-center">
+            <FaSpinner className="animate-spin fill-blue-500" size={30} />
           </div>
-          <div className="flex w-full flex-col items-start gap-1">
-            <label className="text-sm font-medium ">Name</label>
-            <Input
-              type="text"
-              {...register("name")}
-              className="dark:border-neutral-600 dark:bg-neutral-800"
-            />
-            {formState.errors.name?.message && (
-              <p className="text-sm text-red-600">
-                {formState.errors.name.message}
-              </p>
-            )}
-          </div>
-          <div className="flex w-full flex-col items-start gap-1">
-            <label className="text-sm font-medium ">Description</label>
-            <TextArea
-              {...register("description")}
-              className="h-40 dark:border-neutral-600 dark:bg-neutral-800"
-            />
-            {formState.errors.description?.message && (
-              <p className="text-sm text-red-600">
-                {formState.errors.description.message}
-              </p>
-            )}
-          </div>
-          <div className="flex w-full flex-col items-start gap-1">
-            <label className="text-sm font-medium ">Slug</label>
-            <Input
-              type="text"
-              {...register("slug")}
-              className="dark:border-neutral-600 dark:bg-neutral-800"
-            />
-            {formState.errors.slug?.message && (
-              <p className="text-sm text-red-600">
-                {formState.errors.slug.message}
-              </p>
-            )}
-          </div>
-          <div className="flex w-full flex-col items-start gap-1">
-            <label className="text-sm font-medium ">Products</label>
-            <h5 className="text-lg">
-              {categoryDetails?.data?.products?.length}
-            </h5>
-          </div>
-          <div className="items-ceneter flex justify-center gap-4">
-            <Button variant="success" className="w-40 text-slate-50">
-              Submit
-            </Button>
-          </div>
-        </form>
+        ) : (
+          <form
+            onSubmit={handleSubmit(() => {
+              updateMutation.mutate()
+            })}
+            className="flex w-full flex-col gap-4 px-6 py-4"
+          >
+            <div className="flex w-full flex-col items-start gap-1">
+              <label className="text-sm font-medium text-gray-400">Id</label>
+              <h5 className="text-lg">{categoryId}</h5>
+            </div>
+            <div className="flex w-full flex-col items-start gap-1">
+              <label className="text-sm font-medium ">Name</label>
+              <Input
+                type="text"
+                {...register("name")}
+                className="dark:border-neutral-600 dark:bg-neutral-800"
+              />
+              {formState.errors.name?.message && (
+                <p className="text-sm text-red-600">
+                  {formState.errors.name.message}
+                </p>
+              )}
+            </div>
+            <div className="flex w-full flex-col items-start gap-1">
+              <label className="text-sm font-medium ">Description</label>
+              <TextArea
+                {...register("description")}
+                className="h-40 dark:border-neutral-600 dark:bg-neutral-800"
+              />
+              {formState.errors.description?.message && (
+                <p className="text-sm text-red-600">
+                  {formState.errors.description.message}
+                </p>
+              )}
+            </div>
+            <div className="flex w-full flex-col items-start gap-1">
+              <label className="text-sm font-medium ">Slug</label>
+              <Input
+                type="text"
+                {...register("slug")}
+                className="dark:border-neutral-600 dark:bg-neutral-800"
+              />
+              {formState.errors.slug?.message && (
+                <p className="text-sm text-red-600">
+                  {formState.errors.slug.message}
+                </p>
+              )}
+            </div>
+            <div className="flex w-full flex-col items-start gap-1">
+              <label className="text-sm font-medium ">Products</label>
+              <h5 className="text-lg">
+                {categoryDetails?.data?.products?.length}
+              </h5>
+            </div>
+            <div className="items-ceneter flex justify-center gap-4">
+              <Button variant="success" className="w-40 text-slate-50">
+                Submit
+              </Button>
+            </div>
+          </form>
+        )}
       </DialogContent>
     </Dialog>
   )
