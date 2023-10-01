@@ -62,7 +62,7 @@ export function AddCategoryModal() {
 
   return (
     <Dialog open={open} onOpenChange={() => router.push("/admin/categories")}>
-      <DialogContent open={open} className="bg-slate-100 lg:h-5/6 lg:w-3/6">
+      <DialogContent open={open} className="bg-slate-50 lg:h-5/6 lg:w-3/6">
         <DialogHeader title="Add Category" />
         <form
           onSubmit={handleSubmit(() => {

@@ -84,7 +84,7 @@ export function AddProductModal() {
         clearErrors()
       }}
     >
-      <DialogContent open={open} className="bg-slate-100 lg:h-5/6 lg:w-3/6">
+      <DialogContent open={open} className="bg-slate-50 lg:h-5/6 lg:w-3/6">
         <DialogHeader title="Add Product" />
         <form
           onSubmit={handleSubmit(() => {
