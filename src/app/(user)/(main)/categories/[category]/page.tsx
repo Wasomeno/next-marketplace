@@ -33,11 +33,11 @@ export default async function CategoryProductsPage({
         orderBy: !sort.length ? { price: "asc" } : Object.fromEntries(sort),
         where: {
           price: {
-            lte: priceMax ? parseInt(priceMax) : 5000000,
+            lte: priceMax ? parseInt(priceMax) : 50000000,
             gte: priceMin ? parseInt(priceMin) : 100,
           },
         },
-        include: { images: true, category: true },
+        include: { images: true, category: true, reviews: true },
       },
     },
   })
