@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
-import { OrderStatus } from "@prisma/client"
+import { Order, OrderStatus } from "@prisma/client"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { FaSpinner } from "react-icons/fa"
 import { Id, toast } from "react-toastify"
@@ -15,8 +15,6 @@ import { getOrder, updateOrderStatus } from "@/app/actions/order"
 import { OrderStatusPicker } from "./order-status-picker"
 
 export function EditOrderModal() {
-  const [selectedStatus, setSelectedStatus] = useState<OrderStatus | null>()
-
   const toastRef = useRef<Id>(0)
   const params = useSearchParams()
   const router = useRouter()
@@ -30,6 +28,12 @@ export function EditOrderModal() {
       enabled: open,
     }
   )
+
+  const [selectedStatus, setSelectedStatus] = useState<OrderStatus | undefined>(
+    orderDetails.data?.status
+  )
+
+  const date = new Date(orderDetails.data?.created_at as Date)
 
   const updateOrder = useMutation(
     () =>
@@ -52,14 +56,6 @@ export function EditOrderModal() {
     }
   )
 
-  const date = new Date(orderDetails.data?.created_at as Date)
-
-  useEffect(() => {
-    if (!orderDetails.isLoading) {
-      setSelectedStatus(orderDetails.data?.status)
-    }
-  }, [orderDetails.isLoading])
-
   return (
     <Dialog open={open} onOpenChange={() => router.push("/admin/orders")}>
       <DialogContent
@@ -75,7 +71,9 @@ export function EditOrderModal() {
           <>
             <div className="px-4">
               <OrderStatusPicker
-                status={selectedStatus as OrderStatus}
+                status={
+                  selectedStatus ?? (orderDetails.data?.status as OrderStatus)
+                }
                 selectStatus={(status) =>
                   setSelectedStatus(status as OrderStatus)
                 }
