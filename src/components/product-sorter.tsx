@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { AnimatePresence, motion } from "framer-motion"
 import { BiChevronRight } from "react-icons/bi"
@@ -44,34 +44,26 @@ const sortOptions: ProductSort[] = [
 ]
 
 export function ProductSorter() {
-  const [isOpen, setIsOpen] = useState(false)
   const searchParams = useSearchParams()
+  const activeSort = sortOptions.find(
+    (sort) => sort.value === searchParams.get("sort")
+  )
 
-  const getActiveSort = () => {
-    const sortParams = searchParams.get("sort")
-    const activeSort = sortOptions.find((sort) => sort.value === sortParams)
-    return activeSort
-  }
-
+  const [isOpen, setIsOpen] = useState(false)
   const [selectedSort, setSelectedSort] = useState<ProductSort | undefined>(
-    getActiveSort()
+    activeSort
   )
 
   const router = useRouter()
   const path = usePathname()
 
-  const createSearchParams = () => {
+  function selectSort(sort: ProductSort) {
     const newParams = new URLSearchParams(searchParams.toString())
-    newParams.set("sort", selectedSort?.value as string)
-    return newParams.toString()
+    newParams.set("sort", sort.value)
+    const url = `${path}?${newParams.toString()}`
+    setSelectedSort(sort)
+    router.push(url)
   }
-
-  useEffect(() => {
-    if (selectedSort) {
-      const url = `${path}?${createSearchParams()}`
-      router.push(url)
-    }
-  }, [selectedSort])
 
   return (
     <Dropdown open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
@@ -104,7 +96,7 @@ export function ProductSorter() {
               {sortOptions.map((sort) => (
                 <DropdownItem key={sort.id} asChild>
                   <button
-                    onClick={() => setSelectedSort(sort)}
+                    onClick={() => selectSort(sort)}
                     className="px-3 py-2 text-start text-xs font-medium outline-0 ring-0 transition  duration-200 hover:bg-slate-100 hover:dark:bg-slate-800 lg:text-sm"
                   >
                     {sort.label}
