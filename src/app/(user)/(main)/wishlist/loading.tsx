@@ -2,7 +2,6 @@ import React from "react"
 
 import { Button } from "@/components/ui/button"
 import { BackButton } from "@/components/back-button"
-import { ProductSorterSkeleton } from "@/components/product-sorter"
 import { WishListItemCardSkeleton } from "@/components/user/wishlist/wishlist-item-card"
 
 export default function WishlistLoading() {
@@ -17,7 +16,6 @@ export default function WishlistLoading() {
           <span className="font-sans text-xs font-medium text-slate-400 lg:text-sm">
             0 items
           </span>
-          <ProductSorterSkeleton />
         </div>
         <div>
           <WishListItemCardSkeleton />
