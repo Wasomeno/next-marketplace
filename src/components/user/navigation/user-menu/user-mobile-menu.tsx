@@ -1,9 +1,8 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import Image from "next/image"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { AnimatePresence, motion } from "framer-motion"
 import { Session } from "next-auth"
 import { signOut } from "next-auth/react"
@@ -15,11 +14,7 @@ import { ThemeSwitcher } from "@/components/theme-switcher"
 
 export function UserMobileMenu({ session }: { session: Session }) {
   const [showMenu, setShowMenu] = useState(false)
-  const pathname = usePathname()
-
-  useEffect(() => {
-    setShowMenu(false)
-  }, [pathname])
+  const router = useRouter()
 
   return (
     <div className="relative flex items-center md:hidden">
@@ -75,15 +70,18 @@ export function UserMobileMenu({ session }: { session: Session }) {
                 </div>
               </div>
               <div className="space-y-1.5 border-b px-4 py-2 dark:border-b-gray-800">
-                <Link
-                  href="/wishlist"
+                <button
+                  onClick={() => {
+                    router.push("/wishlist")
+                    setShowMenu(false)
+                  }}
                   className="flex items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200"
                 >
                   <span>
                     <BsBox2Heart size="16" />
                   </span>
                   <span className="text-sm">Wishlist</span>
-                </Link>
+                </button>
               </div>
               <div className="px-4 py-2">
                 <ThemeSwitcher />
