@@ -13,17 +13,19 @@ type Props = {
 }
 
 export default async function WishlistPage({ searchParams }: Props) {
-  const sort = searchParams.sort ? [searchParams.sort.split(".")] : []
-
-  const wislistItems = await getWishlist(sort)
-
+  const wishlist = await getWishlist()
   return (
-    <div className="flex flex-1 flex-col px-0 lg:px-8">
-      <div className="flex items-center px-2 lg:px-0">
-        <BackButton />
-        <h1 className="text-base font-medium lg:text-xl">Wishlist</h1>
+    <div className="flex flex-1 flex-col">
+      <div className="mb-4 px-4 lg:px-8">
+        <div className="mb-2 flex items-center gap-3">
+          <BackButton />
+          <h1 className="text-base font-medium lg:text-xl">Wishlist</h1>
+        </div>
+        <span className="font-sans text-xs font-medium text-slate-400 lg:text-sm">
+          {wishlist.count} items
+        </span>
       </div>
-      <WishlistItemsSection items={wislistItems} />
+      <WishlistItemsSection items={wishlist.items} />
     </div>
   )
 }
