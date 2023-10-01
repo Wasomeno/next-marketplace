@@ -1,5 +1,4 @@
 import React from "react"
-import router from "next/router"
 
 import { Button } from "./ui/button"
 import { Dialog, DialogContent } from "./ui/dialog"
