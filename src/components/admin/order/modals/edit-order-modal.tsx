@@ -60,7 +60,7 @@ export function EditOrderModal() {
     <Dialog open={open} onOpenChange={() => router.push("/admin/orders")}>
       <DialogContent
         open={open}
-        className="flex w-full flex-1 flex-col gap-4 lg:h-4/6 lg:w-3/6"
+        className="flex flex-col gap-4 lg:h-4/6 lg:w-3/6"
       >
         <DialogHeader title="Edit Order" />
         {orderDetails.isLoading ? (
@@ -122,7 +122,8 @@ export function EditOrderModal() {
             </div>
           </>
         )}
-        <div className="sticky bottom-0 flex  items-center justify-center border-t bg-white py-2">
+
+        <div className="sticky bottom-0 flex  items-center justify-center border-t bg-slate-50 py-2">
           <Button
             onClick={() => updateOrder.mutate()}
             variant="success"
