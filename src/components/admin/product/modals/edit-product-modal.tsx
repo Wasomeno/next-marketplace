@@ -106,11 +106,11 @@ export function EditProductModal() {
     >
       <DialogContent
         open={open}
-        className="flex flex-1 flex-col bg-slate-100 lg:h-5/6 lg:w-3/6"
+        className="flex flex-1 flex-col bg-slate-50 lg:h-5/6 lg:w-3/6"
       >
         <DialogHeader title="Edit Product" />
         {productDetails.isLoading ? (
-          <div className="flex flex-1 items-center justify-center">
+          <div className="flex flex-1 flex-col items-center justify-center">
             <FaSpinner className="animate-spin fill-blue-500" size={30} />
           </div>
         ) : (
