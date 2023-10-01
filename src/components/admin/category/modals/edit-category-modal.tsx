@@ -64,7 +64,7 @@ export function EditCategoryModal() {
     <Dialog open={open} onOpenChange={() => router.push("/admin/categories")}>
       <DialogContent
         open={open}
-        className="flex flex-1 flex-col lg:h-5/6 lg:w-3/6"
+        className="flex flex-1 flex-col bg-slate-50 lg:h-5/6 lg:w-3/6"
       >
         <DialogHeader title="Edit Category" />
         {categoryDetails.isLoading ? (
@@ -76,7 +76,7 @@ export function EditCategoryModal() {
             onSubmit={handleSubmit(() => {
               updateMutation.mutate()
             })}
-            className="flex w-full flex-col gap-4 px-6 py-4"
+            className="flex w-full flex-1 flex-col gap-4  px-6 py-4"
           >
             <div className="flex w-full flex-col items-start gap-1">
               <label className="text-sm font-medium text-gray-400">Id</label>
