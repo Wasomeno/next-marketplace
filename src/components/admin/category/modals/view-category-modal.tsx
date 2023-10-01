@@ -23,7 +23,10 @@ export function ViewCategoryModal() {
       open={isDetailsModalOpen}
       onOpenChange={() => router.push("/admin/categories")}
     >
-      <DialogContent open={isDetailsModalOpen} className="lg:h-5/6 lg:w-3/6">
+      <DialogContent
+        open={isDetailsModalOpen}
+        className="flex flex-col gap-4 lg:h-5/6 lg:w-3/6"
+      >
         <DialogHeader title="Category Details" />
         <div className="flex w-full flex-col gap-4 px-6">
           <div className="flex w-full flex-col items-start gap-1">

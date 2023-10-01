@@ -27,10 +27,13 @@ export const ViewOrderModal = () => {
 
   return (
     <Dialog open={open} onOpenChange={() => router.push("/admin/orders")}>
-      <DialogContent open={open} className="w-full lg:h-4/6 lg:w-3/6">
+      <DialogContent
+        open={open}
+        className="flex w-full flex-col gap-4 lg:h-4/6 lg:w-3/6"
+      >
         <DialogHeader title="Order Details" />
         <div className="px-4">
-          <span className="rounded-lg bg-blue-200 px-3 py-2 text-xs font-medium dark:bg-blue-900 lg:text-base">
+          <span className="rounded-lg bg-blue-200 px-3 py-2 text-xs font-medium dark:bg-blue-900 lg:text-sm">
             {orderDetails.data?.status.name}
           </span>
           <div className="my-4 flex items-center justify-between text-sm">
