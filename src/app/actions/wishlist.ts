@@ -7,20 +7,22 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/config/next-auth"
 import { prisma } from "@/lib/prisma"
 
-export async function getWishlist(sort: string[][]) {
+export async function getWishlist() {
   const session = await getServerSession(authOptions)
   const wishList = await prisma.wishlist.findUnique({
     where: { user_email: session?.user?.email as string },
     include: {
       items: {
         orderBy: {
-          product: !sort?.length ? { price: "asc" } : Object.fromEntries(sort),
+          product: { price: "asc" },
         },
         include: { product: { include: { images: true } } },
       },
+      _count: { select: { items: true } },
     },
   })
-  return wishList?.items
+
+  return { items: wishList?.items ?? [], count: wishList?._count.items ?? 0 }
 }
 
 export async function isProductInWishlist(productId: number) {
