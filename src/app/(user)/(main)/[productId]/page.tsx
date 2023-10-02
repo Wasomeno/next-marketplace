@@ -45,16 +45,16 @@ export default async function ProductPage(props: {
 
   return (
     <div className="flex flex-1 flex-col items-center">
-      <div className="flex w-full justify-start px-2">
-        <BackButton size="18" text="Back" />
-      </div>
-      <div className="flex w-full flex-wrap justify-center gap-10 lg:w-5/6 lg:flex-nowrap">
-        <div className="space-y-10">
-          <div className="flex flex-wrap justify-center gap-10 lg:justify-normal">
+      <div className=" flex w-full flex-wrap justify-between gap-10 lg:w-5/6 lg:flex-nowrap">
+        <div className="relative w-full space-y-10 lg:w-4/6">
+          <div className="absolute left-4 top-0">
+            <BackButton size={20} />
+          </div>
+          <div className="flex flex-wrap justify-center gap-10 lg:flex-nowrap lg:justify-normal">
             <ProductImages
               imageUrls={productDetails?.images.map((image) => image.image_url)}
             />
-            <div className="w-10/12 lg:w-3/6">
+            <div className="w-11/12 lg:w-4/6">
               <div className="flex items-center justify-between">
                 <h1 className="text-base font-medium lg:text-xl">
                   {productDetails?.name}
@@ -87,7 +87,7 @@ export default async function ProductPage(props: {
             </div>
           </div>
           <div className="flex flex-wrap justify-center gap-5 lg:justify-normal lg:gap-10">
-            <h2 className="w-5/6 text-base font-medium lg:text-xl">
+            <h2 className="w-11/12 text-base font-medium lg:w-full lg:text-xl">
               Overall Rating
             </h2>
             <div className="flex flex-1 flex-wrap justify-center gap-5 lg:flex-nowrap lg:justify-normal lg:gap-10">
@@ -107,7 +107,7 @@ export default async function ProductPage(props: {
                   {productDetails.reviews.length} reviews
                 </span>
               </div>
-              <div className="flex w-5/6 flex-col gap-4 lg:w-full">
+              <div className="flex w-11/12 flex-col gap-4 lg:w-full">
                 <div className="flex w-full items-center justify-between lg:w-64">
                   <span className="text-base font-medium lg:text-lg">
                     Reviews
