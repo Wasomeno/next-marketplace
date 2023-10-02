@@ -1,17 +1,13 @@
 import React from "react"
 
 import { Button } from "@/components/ui/button"
-import { BackButton } from "@/components/back-button"
 import { WishListItemCardSkeleton } from "@/components/user/wishlist/wishlist-item-card"
 
 export default function WishlistLoading() {
   return (
     <div className="flex flex-1 flex-col px-0 lg:flex-row lg:px-8">
       <div className="flex flex-1 flex-col gap-3 px-4 lg:w-4/6 lg:px-0">
-        <div className="flex items-center gap-2">
-          <BackButton />
-          <h1 className="text-base font-medium lg:text-xl">Wishlist</h1>
-        </div>
+        <h1 className="mb-2 text-base font-medium lg:text-xl">Wishlist</h1>
         <div className="flex items-center justify-between">
           <span className="font-sans text-xs font-medium text-slate-400 lg:text-sm">
             0 items

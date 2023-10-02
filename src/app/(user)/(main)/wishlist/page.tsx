@@ -1,6 +1,5 @@
 import { Metadata } from "next"
 
-import { BackButton } from "@/components/back-button"
 import { WishlistItemsSection } from "@/components/user/wishlist/wishlist-items-section"
 import { getWishlist } from "@/app/actions/wishlist"
 
@@ -17,10 +16,7 @@ export default async function WishlistPage({ searchParams }: Props) {
   return (
     <div className="flex flex-1 flex-col">
       <div className="mb-4 px-4 lg:px-8">
-        <div className="mb-2 flex items-center gap-3">
-          <BackButton />
-          <h1 className="text-base font-medium lg:text-xl">Wishlist</h1>
-        </div>
+        <h1 className="mb-2 text-base font-medium lg:text-xl">Wishlist</h1>
         <span className="font-sans text-xs font-medium text-slate-400 lg:text-sm">
           {wishlist.count} items
         </span>

@@ -1,15 +1,11 @@
 import { Button } from "@/components/ui/button"
-import { BackButton } from "@/components/back-button"
 import { CartItemCardSkeleton } from "@/components/user/cart/cart-item-card"
 
 export default function CartLoading() {
   return (
     <div className="flex flex-1 flex-col">
       <div className="mb-4 px-4 lg:px-8">
-        <div className="mb-2 flex items-center gap-2 lg:mb-4">
-          <BackButton />
-          <h1 className="text-base font-medium lg:text-xl">Cart</h1>
-        </div>
+        <h1 className="mb-2 text-base font-medium lg:text-xl">Cart</h1>
         <span className="font-sans text-xs font-medium text-slate-400 lg:text-sm">
           0 items
         </span>

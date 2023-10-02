@@ -5,7 +5,6 @@ import invariant from "tiny-invariant"
 
 import { prisma } from "@/lib/prisma"
 import { Separator } from "@/components/ui/separator"
-import { BackButton } from "@/components/back-button"
 import { AddToCartSection } from "@/components/user/product-details/add-to-cart-section"
 import { ProductImages } from "@/components/user/product-details/product-images"
 import { ReviewCard } from "@/components/user/product-details/review-card"
@@ -47,9 +46,6 @@ export default async function ProductPage(props: {
     <div className="flex flex-1 flex-col items-center">
       <div className=" flex w-full flex-wrap justify-between gap-10 lg:w-5/6 lg:flex-nowrap">
         <div className="relative w-full space-y-10 lg:w-4/6">
-          <div className="absolute left-4 top-0">
-            <BackButton size={20} />
-          </div>
           <div className="flex flex-wrap justify-center gap-10 lg:flex-nowrap lg:justify-normal">
             <ProductImages
               imageUrls={productDetails?.images.map((image) => image.image_url)}
