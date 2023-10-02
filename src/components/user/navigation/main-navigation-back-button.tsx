@@ -1,10 +1,8 @@
 "use client"
 
-import { usePathname, useRouter } from "next/navigation"
+import { useParams, usePathname, useRouter } from "next/navigation"
 import clsx from "clsx"
 import { BsArrowLeft } from "react-icons/bs"
-
-import { Button } from "../../ui/button"
 
 type BackButtonProps = {
   size?: string | number
@@ -16,16 +14,22 @@ export const MainNavigationBackButton = ({
 }: Readonly<BackButtonProps>) => {
   const { back } = useRouter()
   const pathName = usePathname()
-  const pathNameLength = pathName.split("/").length
+  const params = useParams()
+
+  const active =
+    pathName.includes("cart") ||
+    pathName.includes("wishlist") ||
+    params.productId
+
   return (
-    <Button
+    <button
       onClick={back}
       className={clsx(
-        "flex gap-2 bg-transparent p-3 lg:hidden",
-        pathNameLength === 2 && "hidden"
+        "flex items-center justify-center lg:hidden",
+        !active && "hidden"
       )}
     >
       <BsArrowLeft size={size ?? 16} />
-    </Button>
+    </button>
   )
 }
