@@ -7,11 +7,7 @@ export const metadata: Metadata = {
   title: "Wishlist | Next Marketplace",
 }
 
-type Props = {
-  searchParams: { pmin: string; pmax: string; sort: string }
-}
-
-export default async function WishlistPage({ searchParams }: Props) {
+export default async function WishlistPage() {
   const wishlist = await getWishlist()
   return (
     <div className="flex flex-1 flex-col">
