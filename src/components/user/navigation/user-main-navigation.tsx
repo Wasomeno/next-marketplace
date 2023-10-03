@@ -10,8 +10,8 @@ import { UserMenu } from "./user-menu"
 
 export async function UserMainNavigation() {
   return (
-    <div className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-b-gray-200 bg-white px-2 shadow-sm dark:border-gray-800 dark:bg-neutral-950 lg:px-4">
-      <div className="flex w-full items-center gap-2 lg:w-3/6">
+    <div className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-b-gray-200 bg-white px-4 shadow-sm dark:border-gray-800 dark:bg-neutral-950">
+      <div className="flex w-full items-center gap-4 lg:w-3/6">
         <MainNavigationBackButton size={20} />
         <Link
           href="/"
