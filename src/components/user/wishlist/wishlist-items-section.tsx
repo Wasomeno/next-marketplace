@@ -34,7 +34,7 @@ export const WishlistItemsSection = ({ items }: WishlistItemsSectionProps) => {
             ))
           ) : (
             <div className="flex h-96 flex-col items-center justify-center gap-2.5 opacity-50">
-              <span className="text-sm lg:text-base">No items in Cart</span>
+              <span className="text-sm lg:text-base">No items in Wishlist</span>
               <RxCrossCircled size="20" />
             </div>
           )}
