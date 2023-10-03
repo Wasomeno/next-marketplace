@@ -9,7 +9,6 @@ import { useForm } from "react-hook-form"
 import { toast } from "react-toastify"
 import * as z from "zod"
 
-import { queryClient } from "@/lib/react-query-client"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
@@ -56,7 +55,6 @@ export function AddCategoryModal() {
       ),
     {
       onMutate: () => router.push("/admin/categories"),
-      onSettled: () => queryClient.invalidateQueries(["categories"]),
     }
   )
 
