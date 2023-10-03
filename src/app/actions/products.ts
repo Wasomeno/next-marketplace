@@ -1,7 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { Prisma } from "@prisma/client"
+import { Prisma, Product } from "@prisma/client"
 
 import { prisma } from "@/lib/prisma"
 
@@ -35,6 +35,29 @@ type UpdateProductParams = {
   categoryId: number
 }
 
+type AddProductProps = {
+  product: Omit<Product, "id">
+  image_urls: { image_url: string }[]
+}
+export async function addProduct({ product, image_urls }: AddProductProps) {
+  try {
+    await prisma.product.create({
+      data: {
+        images: { createMany: { data: image_urls } },
+        name: product.name,
+        description: product.description,
+        stock: product.stock,
+        price: product.price,
+        slug: product.slug,
+        category: { connect: { id: product.category_id } },
+      },
+    })
+    revalidatePath("/")
+  } catch (error) {
+    throw error
+  }
+}
+
 export async function updateProduct({
   productId,
   name,
@@ -53,6 +76,17 @@ export async function updateProduct({
         description: description,
         category: { connect: { id: categoryId } },
       },
+    })
+    revalidatePath("/")
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function deleteProduct(productIds: number[]) {
+  try {
+    await prisma.product.deleteMany({
+      where: { id: { in: productIds } },
     })
     revalidatePath("/")
   } catch (error) {
