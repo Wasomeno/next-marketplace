@@ -2,17 +2,17 @@ import Image from "next/image"
 import Link from "next/link"
 
 import { Separator } from "@/components/ui/separator"
-import { MainNavigationBackButton } from "@/components/user/navigation/main-navigation-back-button"
+import { BackButton } from "@/components/user/navigation/back-button"
 
 import { CartButton } from "./cart-button"
 import { ProductSearchInput } from "./product-search-input"
 import { UserMenu } from "./user-menu"
 
-export async function UserMainNavigation() {
+export async function UserMainNavigation({ back }: { back?: boolean }) {
   return (
     <div className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-b-gray-200 bg-white px-4 shadow-sm dark:border-gray-800 dark:bg-neutral-950">
       <div className="flex w-full items-center gap-4 lg:w-3/6">
-        <MainNavigationBackButton size={20} />
+        {back && <BackButton size={20} />}
         <Link
           href="/"
           className="relative  hidden h-12 w-12 justify-center lg:flex lg:h-16 lg:w-16"
