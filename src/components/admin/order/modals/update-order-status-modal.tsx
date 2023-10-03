@@ -1,9 +1,9 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
-import { Order, OrderStatus } from "@prisma/client"
+import { OrderStatus } from "@prisma/client"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { FaSpinner } from "react-icons/fa"
 import { Id, toast } from "react-toastify"
@@ -14,7 +14,7 @@ import { getOrder, updateOrderStatus } from "@/app/actions/order"
 
 import { OrderStatusPicker } from "./order-status-picker"
 
-export function EditOrderModal() {
+export function UpdateOrderStatusModal() {
   const toastRef = useRef<Id>(0)
   const params = useSearchParams()
   const router = useRouter()
