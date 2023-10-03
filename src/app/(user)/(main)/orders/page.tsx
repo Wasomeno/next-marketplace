@@ -23,13 +23,13 @@ export const metadata = {
   title: "Orders | Next Marketplace",
 }
 
-async function getUserOrderProduct(statusId?: number, page?: number) {
+async function getUserOrderProduct(statusId?: string, page?: string) {
   const session = await getServerSession()
-  const userOrderProducts = await prisma.orderProduct.count({
+  const orderProductCount = await prisma.orderProduct.count({
     where: {
       order: {
         user_email: { equals: session?.user.email as string },
-        status_id: statusId ? statusId : undefined,
+        status_id: statusId ? parseInt(statusId) : undefined,
       },
     },
   })
@@ -38,23 +38,23 @@ async function getUserOrderProduct(statusId?: number, page?: number) {
     where: {
       order: {
         user_email: { equals: session?.user.email as string },
-        status_id: statusId ? statusId : undefined,
+        status_id: statusId ? parseInt(statusId) : undefined,
       },
     },
     include: {
       order: { include: { status: true } },
       product: { include: { images: true } },
     },
-    skip: page ? page * 5 - 5 : 0,
-    take: page ? page * 5 : 5,
+    skip: page ? parseInt(page) * 5 - 5 : 0,
+    take: page ? parseInt(page) * 5 : 5,
   })
-  return { orderProducts, count: userOrderProducts }
+  return { orderProducts, count: orderProductCount }
 }
 
 export default async function OrdersPage({ searchParams }: Props) {
   const { orderProducts, count } = await getUserOrderProduct(
-    parseInt(searchParams.status),
-    parseInt(searchParams.page)
+    searchParams.status,
+    searchParams.page
   )
 
   return (
