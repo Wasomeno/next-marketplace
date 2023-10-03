@@ -11,13 +11,6 @@ export const UserMobileNavigation = () => {
   const params = useParams()
 
   const pathSplit = pathname.split("/")[1] !== "" ? pathname.split("/")[1] : "/"
-  if (
-    params?.productId ||
-    pathname === "/cart" ||
-    pathname === "/wishlist" ||
-    pathname === "/cart/checkout"
-  )
-    return
   return (
     <div className="sticky bottom-0 z-10 flex w-full items-center justify-around border-t bg-white p-2.5 dark:border-t-gray-800 dark:bg-neutral-950 lg:hidden">
       {userMobilePaths.map((path) => (
