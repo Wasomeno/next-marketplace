@@ -5,17 +5,16 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { useUploadThing } from "@/utils/uploadthing"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
-import axios from "axios"
 import { useForm } from "react-hook-form"
 import { Id, toast } from "react-toastify"
 import * as z from "zod"
 
-import { queryClient } from "@/lib/react-query-client"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
 import { FileImage, ImageUploader } from "@/components/image-uploader"
+import { addProduct } from "@/app/actions/products"
 
 import { CategoryPicker } from "../category-picker"
 
@@ -43,15 +42,14 @@ export function AddProductModal() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  const open = searchParams.get("add") !== null
-
   const mutation = useMutation(
     async () => {
       const uploadedFiles = await startUpload(files)
-      return await axios.post("/api/products", {
-        ...getValues(),
-        category_id: selectedCategory,
-        image_urls: uploadedFiles?.map((file) => ({ image_url: file.url })),
+      return await addProduct({
+        product: { ...getValues(), category_id: selectedCategory },
+        image_urls: uploadedFiles?.map((file) => ({ image_url: file.url })) as {
+          image_url: string
+        }[],
       })
     },
     {
@@ -59,22 +57,21 @@ export function AddProductModal() {
         router.push("/admin/products")
         toastRef.current = toast.loading(`Adding ${getValues("name")}`)
       },
-      onSuccess: (response) => {
+      onSuccess: () => {
         reset()
         setSelectedCategory(0)
         setFiles([])
         toast.update(toastRef.current, {
           type: "success",
-          render: response.data.message,
+          render: `Successfully add new product`,
           isLoading: false,
           autoClose: 1500,
         })
       },
-      onSettled: () => {
-        queryClient.invalidateQueries(["products"])
-      },
     }
   )
+
+  const open = searchParams.get("add") !== null
 
   return (
     <Dialog
