@@ -21,8 +21,8 @@ type WishlistItemsSectionProps = {
 export const WishlistItemsSection = ({ items }: WishlistItemsSectionProps) => {
   const [selectedItems, setSelectedItems] = useState<number[]>([])
   return (
-    <div className="flex flex-1 flex-col justify-between lg:flex-row">
-      <div className="w-full lg:w-7/12">
+    <div className="flex flex-1 flex-col justify-between  lg:flex-row ">
+      <div className="w-full px-4 lg:w-7/12 lg:px-8">
         <div className="mt-2">
           {items?.length ? (
             items?.map((item) => (
@@ -40,7 +40,7 @@ export const WishlistItemsSection = ({ items }: WishlistItemsSectionProps) => {
           )}
         </div>
       </div>
-      <div className="sticky bottom-0 w-full bg-white dark:bg-neutral-950 lg:w-2/6">
+      <div className="sticky bottom-0 w-full bg-white dark:bg-neutral-950 lg:w-2/6 lg:px-8">
         <div className="flex flex-col justify-between border-t border-slate-200 p-2.5 shadow-[0_3px_10px_rgb(0,0,0,0.1)] dark:border-gray-800 lg:h-72 lg:rounded-lg lg:border lg:border-slate-300 lg:p-4 lg:shadow-none">
           <div className="">
             <span className="hidden text-xs font-medium lg:inline lg:text-base">
