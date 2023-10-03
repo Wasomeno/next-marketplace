@@ -1,11 +1,10 @@
 import React, { useRef } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useMutation } from "@tanstack/react-query"
-import axios from "axios"
 import { Id, toast } from "react-toastify"
 
-import { queryClient } from "@/lib/react-query-client"
 import { ConfirmationDialog } from "@/components/confirmation-dialog"
+import { deleteProduct } from "@/app/actions/products"
 
 type DeleteProductModalProps = {
   selectedProducts: Array<number>
@@ -20,23 +19,22 @@ export function DeleteProductModal({
   const searchParams = useSearchParams()
 
   const isDeleteModalOpen = searchParams.get("delete") !== null
-  const deleteProduct = useMutation(
-    () =>
-      axios.post("/api/products/delete", {
-        productIds: selectedProducts,
-      }),
+  const deleteProductMutation = useMutation(
+    () => deleteProduct(selectedProducts),
     {
       onMutate() {
-        toastRef.current = toast.loading("Deleting products")
+        toastRef.current = toast.loading(
+          `Deleting ${selectedProducts.length} products`
+        )
       },
-      onSuccess(response) {
+      onSuccess() {
         toast.update(toastRef.current, {
           type: "success",
-          render: response.data.message,
+          render: `Successfully deleted ${selectedProducts.length} products`,
           isLoading: false,
           autoClose: 1000,
         })
-        queryClient.invalidateQueries(["products"])
+        router.push("/admin/products")
       },
       onError(response: string) {
         toast.update(toastRef.current, {
@@ -53,7 +51,7 @@ export function DeleteProductModal({
       title="Delete Product"
       body={`Confirm delete ${selectedProducts.length} product?`}
       onOpenChange={() => router.push("/admin/products")}
-      onConfirm={deleteProduct.mutate}
+      onConfirm={deleteProductMutation.mutate}
       onCancel={() => router.push("/admin/products")}
     />
   )
