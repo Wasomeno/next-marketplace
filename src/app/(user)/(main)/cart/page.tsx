@@ -1,5 +1,4 @@
 import { getCartItems } from "@/app/actions/cart";
-import { BackButton } from "@/components/back-button";
 import { CartItemsSection } from "@/components/user/cart/cart-items-section";
 import { Cart, Prisma } from "@prisma/client";
 
