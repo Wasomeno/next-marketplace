@@ -1,4 +1,4 @@
-import { EditOrderModal } from "@/components/admin/order/modals/edit-order-modal"
+import { UpdateOrderStatusModal } from "@/components/admin/order/modals/update-order-status-modal"
 import { ViewOrderModal } from "@/components/admin/order/modals/view-order-modal"
 import { OrderTable } from "@/components/admin/order/order-table"
 import { getOrders } from "@/app/actions/order"
@@ -18,7 +18,7 @@ export default async function AdminOrdersPage() {
       </div>
       <OrderTable orders={orders} />
       <ViewOrderModal />
-      <EditOrderModal />
+      <UpdateOrderStatusModal />
     </div>
   )
 }
