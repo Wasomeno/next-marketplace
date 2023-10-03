@@ -1,28 +1,34 @@
-import { Metadata } from "next";
+import { Metadata } from "next"
 
-import { ProductsSection } from "@/components/products-section";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/prisma"
+import { ProductsSection } from "@/components/products-section"
 
 type Props = {
-  searchParams: { q: string; pmin: string; pmax: string; sort: string };
-};
+  searchParams: {
+    q: string
+    pmin: string
+    pmax: string
+    sort: string
+    category: string
+  }
+}
 
-export async function generateMetadata({
-  searchParams,
-}: Props): Promise<Metadata> {
+export async function generateMetadata(): Promise<Metadata> {
   return {
     title: `Product Search`,
-  };
+  }
 }
 
 export default async function SearchPage({ searchParams }: Props) {
-  const priceMin = searchParams.pmin;
-  const priceMax = searchParams.pmax;
-  const sort = searchParams.sort ? [searchParams.sort.split(".")] : [];
+  const priceMin = searchParams.pmin
+  const priceMax = searchParams.pmax
+  const categoryId = searchParams.category && parseInt(searchParams.category)
+  const sort = searchParams.sort ? [searchParams.sort.split(".")] : []
 
   const products = await prisma.product.findMany({
     where: {
       name: { contains: searchParams.q },
+      category_id: categoryId as number,
       price: {
         lte: priceMax ? parseInt(priceMax as string) : 5000000,
         gte: priceMin ? parseInt(priceMin as string) : 100,
@@ -31,6 +37,6 @@ export default async function SearchPage({ searchParams }: Props) {
     orderBy: !sort.length ? { price: "asc" } : Object.fromEntries(sort as []),
 
     include: { category: true, images: true },
-  });
-  return <ProductsSection products={products} />;
+  })
+  return <ProductsSection products={products} />
 }
