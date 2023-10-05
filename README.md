@@ -17,7 +17,8 @@ It is a simple shopping website like tokopedia, you can sign in and then you can
 ### Admin
 
 - Sign in / Sign (Credentials only)
-- CRUD in categories, products, and orders
+- CRUD in categories, products
+- Update Order Status
 - And there's a simple chart in the admin dashboard (on proccess)
 
 ## Tech
