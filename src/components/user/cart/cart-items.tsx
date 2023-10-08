@@ -10,7 +10,7 @@ import { CartItem } from "@/app/(user)/(main)/cart/page"
 import { CartCheckoutDialog } from "./cart-checkout-dialog"
 import { CartItemCard } from "./cart-item-card"
 
-export const CartItemsSection = ({
+export const CartItems = ({
   items,
 }: {
   items:
