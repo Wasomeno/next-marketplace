@@ -1,6 +1,6 @@
 import { Metadata } from "next"
 
-import { WishlistItemsSection } from "@/components/user/wishlist/wishlist-items-section"
+import { WishlistItems } from "@/components/user/wishlist/wishlist-items"
 import { getWishlist } from "@/app/actions/wishlist"
 
 export const metadata: Metadata = {
@@ -17,7 +17,7 @@ export default async function WishlistPage() {
           {wishlist.count} items
         </span>
       </div>
-      <WishlistItemsSection items={wishlist.items} />
+      <WishlistItems items={wishlist.items} />
     </div>
   )
 }

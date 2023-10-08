@@ -5,7 +5,7 @@ import invariant from "tiny-invariant"
 
 import { prisma } from "@/lib/prisma"
 import { Separator } from "@/components/ui/separator"
-import { AddToCartSection } from "@/components/user/product-details/add-to-cart-section"
+import { AddToCartForm } from "@/components/user/product-details/add-to-cart-form"
 import { ProductImages } from "@/components/user/product-details/product-images"
 import { ReviewCard } from "@/components/user/product-details/review-card"
 import { WishListButton } from "@/components/user/product-details/wishlist-button"
@@ -131,7 +131,7 @@ export default async function ProductPage(props: {
             </div>
           </div>
         </div>
-        <AddToCartSection productDetails={productDetails} />
+        <AddToCartForm productDetails={productDetails} />
       </div>
     </div>
   )

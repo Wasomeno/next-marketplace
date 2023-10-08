@@ -1,7 +1,6 @@
-import { BackButton } from "@/components/back-button"
-import { CheckoutPaymentModal } from "@/components/user/cart/checkout-payment-modal"
-import { CheckoutSelectedCartItems } from "@/components/user/cart/checkout-selected-cart-items"
-import { CheckoutSummary } from "@/components/user/cart/checkout-summary"
+import { CheckoutPaymentModal } from "@/components/user/checkout/checkout-payment-modal"
+import { CheckoutSelectedCartItems } from "@/components/user/checkout/checkout-selected-cart-items"
+import { CheckoutSummary } from "@/components/user/checkout/checkout-summary"
 import { getUserAddress } from "@/app/actions/user-details"
 
 export const metadata = {

@@ -1,5 +1,5 @@
 import { getCartItems } from "@/app/actions/cart";
-import { CartItemsSection } from "@/components/user/cart/cart-items-section";
+import { CartItems } from "@/components/user/cart/cart-items";
 import { Cart, Prisma } from "@prisma/client";
 
 export type CartItem = Prisma.CartItemGetPayload<{
@@ -25,7 +25,7 @@ export default async function Cart() {
           {cart.count} items
         </span>
       </div>
-      <CartItemsSection items={cart.items} />
+      <CartItems items={cart.items} />
     </div>
   );
 }
