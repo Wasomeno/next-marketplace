@@ -8,7 +8,7 @@ import { toast } from "react-toastify"
 import { Button } from "@/components/ui/button"
 import { addWishlistsToCart } from "@/app/actions/wishlist"
 
-import { WishListItemCard } from "./wishlist-item-card"
+import { WishlistItemCard } from "./wishlist-item-card"
 
 type WishlistItemsSectionProps = {
   items:
@@ -18,7 +18,7 @@ type WishlistItemsSectionProps = {
     | undefined
 }
 
-export const WishlistItemsSection = ({ items }: WishlistItemsSectionProps) => {
+export function WishlistItems({ items }: WishlistItemsSectionProps) {
   const [selectedItems, setSelectedItems] = useState<number[]>([])
   return (
     <div className="flex flex-1 flex-col justify-between  lg:flex-row ">
@@ -26,7 +26,7 @@ export const WishlistItemsSection = ({ items }: WishlistItemsSectionProps) => {
         <div className="mt-2">
           {items?.length ? (
             items?.map((item) => (
-              <WishListItemCard
+              <WishlistItemCard
                 key={item.id}
                 item={item}
                 setSelectedItems={setSelectedItems}
