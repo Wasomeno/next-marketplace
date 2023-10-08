@@ -5,8 +5,8 @@ import { RxCrossCircled } from "react-icons/rx"
 
 import ProductCard from "@/components/user/product-card"
 
-import { ProductsFilter } from "./product-filter"
-import { ProductSorter } from "./product-sorter"
+import { ProductsFilter } from "../product-filter"
+import { ProductSorter } from "../product-sorter"
 
 type ProductsSectionProps = {
   products:
@@ -16,7 +16,7 @@ type ProductsSectionProps = {
     | undefined
 }
 
-export const ProductsSection = ({ products }: ProductsSectionProps) => {
+export function Products({ products }: ProductsSectionProps) {
   return (
     <div className="relative flex w-full flex-1 justify-center gap-10 px-4 lg:px-10">
       <div className="w-full">
