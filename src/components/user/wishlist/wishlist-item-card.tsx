@@ -18,10 +18,10 @@ type WishListItemCardProps = {
   }>
 }
 
-export const WishListItemCard = ({
+export function WishlistItemCard({
   setSelectedItems,
   item,
-}: WishListItemCardProps) => {
+}: WishListItemCardProps) {
   const [isPending, startTransition] = useTransition()
   return (
     <div className="flex items-center gap-4 border-t p-4 dark:border-t-gray-800">
@@ -83,7 +83,7 @@ export const WishListItemCard = ({
   )
 }
 
-export const WishListItemCardSkeleton = () => {
+export function WishListItemCardSkeleton() {
   return (
     <div className="flex items-center gap-4 border-t p-4">
       <Checkbox.Root
