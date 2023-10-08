@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 
 import { prisma } from "@/lib/prisma"
-import { ProductsSection } from "@/components/products-section"
+import { Products } from "@/components/user/products"
 
 type Props = {
   params: { category: string }
@@ -49,7 +49,7 @@ export default async function CategoryProductsPage({
           {category?.name}
         </h2>
       </div>
-      <ProductsSection products={category?.products} />
+      <Products products={category?.products} />
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 
 import { prisma } from "@/lib/prisma"
-import { ProductsSection } from "@/components/products-section"
+import { Products } from "@/components/user/products"
 
 type Props = {
   searchParams: {
@@ -38,5 +38,5 @@ export default async function SearchPage({ searchParams }: Props) {
 
     include: { category: true, images: true },
   })
-  return <ProductsSection products={products} />
+  return <Products products={products} />
 }
