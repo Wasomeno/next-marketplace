@@ -122,6 +122,7 @@ export async function addWishlistsToCart(productIds: number[]) {
     where: { user_email: session?.user?.email as string },
     include: { items: true },
   })
+
   if (!cart) {
     const cartItems = productIds.map((productId) => ({
       product_id: productId,

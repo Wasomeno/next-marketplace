@@ -37,7 +37,7 @@ export function WishlistItemCard({
             }
           })
         }
-        className="flex h-[15px] w-[15px] items-center justify-center rounded-sm border border-slate-400 bg-slate-50 dark:border-gray-700 dark:bg-neutral-800 lg:h-5 lg:w-5"
+        className="flex h-[15px] w-[15px] items-center justify-center rounded-sm border border-slate-400 bg-slate-50 lg:h-5 lg:w-5 dark:border-gray-700 dark:bg-neutral-800"
       >
         <Checkbox.Indicator color="black">
           <BsCheck size="18" />
@@ -48,7 +48,7 @@ export function WishlistItemCard({
           <div className="w-[60px] lg:w-[120px]">
             <div className="relative h-16 w-full rounded-md bg-slate-200 lg:h-32">
               <Image
-                src={item.product.images[0].image_url}
+                src={item.product.featured_image_url}
                 alt="product-image"
                 fill
               />
@@ -67,7 +67,7 @@ export function WishlistItemCard({
           <Button
             variant="danger"
             size="sm"
-            className="h-7 w-7 p-2 text-white dark:bg-red-800 lg:h-8 lg:w-8"
+            className="h-7 w-7 p-2 text-white lg:h-8 lg:w-8 dark:bg-red-800"
             onClick={() =>
               startTransition(async () => {
                 await removeProductFromWishlist(item.product.id, "/wishlist")

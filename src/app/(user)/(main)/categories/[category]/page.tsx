@@ -37,14 +37,14 @@ export default async function CategoryProductsPage({
             gte: priceMin ? parseInt(priceMin) : 100,
           },
         },
-        include: { images: true, category: true, reviews: true },
+        include: { images: true, categories: true, reviews: true, store: true },
       },
     },
   })
 
   return (
     <div className="flex w-full flex-1 flex-col items-center gap-6">
-      <div className="flex h-36 w-full items-center justify-between bg-slate-100 px-10 dark:bg-neutral-900 lg:h-72 lg:px-16 ">
+      <div className="flex h-36 w-full items-center justify-between bg-slate-100 px-10 lg:h-72 lg:px-16 dark:bg-neutral-900 ">
         <h2 className="text-lg font-medium tracking-wider lg:text-4xl">
           {category?.name}
         </h2>

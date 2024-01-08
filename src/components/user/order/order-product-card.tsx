@@ -12,8 +12,8 @@ import { buttonVariants } from "@/components/ui/button"
 type OrderCardProps = {
   orderProduct: Prisma.OrderProductGetPayload<{
     include: {
-      order: { include: { status: true } }
-      product: { include: { images: true } }
+      order: true
+      product: true
     }
   }>
 }
@@ -35,17 +35,17 @@ export const OrderProductCard = ({ orderProduct }: OrderCardProps) => {
       <div className="flex items-center gap-3 lg:h-10">
         <div className="text-xs">{date.toDateString()}</div>
         <span className="rounded-md bg-blue-200 p-1.5 text-xs font-medium tracking-wide dark:bg-blue-900">
-          {orderProduct.order.status.name}
+          {orderProduct.order.status}
         </span>
         <div className="hidden text-xs lg:block">
           {orderProduct.order.invoice}
         </div>
       </div>
       <div className="flex flex-wrap items-center gap-2 lg:gap-10">
-        <div className="flex w-full items-center gap-4 border-r-slate-200 dark:border-r-gray-800  lg:w-4/6 lg:border-r">
-          <div className="relative h-16 w-16 overflow-hidden rounded-md border dark:border-gray-800 lg:h-20 lg:w-20">
+        <div className="flex w-full items-center gap-4 border-r-slate-200 lg:w-4/6  lg:border-r dark:border-r-gray-800">
+          <div className="relative h-16 w-16 overflow-hidden rounded-md border lg:h-20 lg:w-20 dark:border-gray-800">
             <Image
-              src={orderProduct.product.images[0].image_url}
+              src={orderProduct.product.featured_image_url}
               alt="product-image"
               fill
             />
@@ -85,7 +85,7 @@ export const OrderProductCard = ({ orderProduct }: OrderCardProps) => {
         >
           View Order Details
         </Link>
-        {orderProduct.order.status_id === 6 && (
+        {orderProduct.order.status === "Done" && (
           <Link
             href={`/orders?${getSearchParams([
               ["id", orderProduct.product.id.toString()],

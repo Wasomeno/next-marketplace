@@ -13,7 +13,7 @@ import {
 
 export const WishListButton = ({ isWishlisted }: { isWishlisted: boolean }) => {
   const [isPending, startTransition] = useTransition()
-  const { product: productId } = useParams()
+  const { productId } = useParams()
 
   const router = useRouter()
 

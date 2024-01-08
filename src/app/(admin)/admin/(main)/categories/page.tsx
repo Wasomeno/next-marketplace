@@ -8,7 +8,7 @@ export const metadata = {
   title: "Admin | Categories",
 }
 
-export default async function AdminCategoriesPages() {
+export default async function CategoriesPages() {
   const categories = await getCategories()
   return (
     <div className="flex w-full flex-1 flex-col bg-slate-50 p-5 dark:bg-neutral-900">

@@ -13,10 +13,10 @@ export function ViewCategoryModal() {
   const categoryId = parseInt(searchParams.get("id") ?? "0")
   const isDetailsModalOpen = searchParams.get("view") !== null
 
-  const categoryDetails = useQuery(
-    ["categoryDetails", categoryId],
-    async () => await getCategory(categoryId)
-  )
+  const categoryDetails = useQuery({
+    queryKey: ["categoryDetails", categoryId],
+    queryFn: async () => await getCategory(categoryId),
+  })
 
   return (
     <Dialog

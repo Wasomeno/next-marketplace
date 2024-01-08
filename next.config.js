@@ -11,10 +11,6 @@ const nextConfig = {
     GOOGLE_CLIENT_SECRET: "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",
     NEXTAUTH_SECRET: "5c3d24485bb838879e06f5bebca5652f",
   },
-  experimental: {
-    serverActions: true,
-    serverActionsBodySizeLimit: "2mb",
-  },
   images: {
     domains: ["lh3.googleusercontent.com"],
     remotePatterns: [

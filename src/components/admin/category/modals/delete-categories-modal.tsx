@@ -18,29 +18,28 @@ export function DeleteCategoriesModal({
   const router = useRouter()
 
   const open = searchParams.get("delete") !== null
-  const deleteCategoriesMutation = useMutation(
-    async () => await deleteCategories({ categoryIds: selectedCategories }),
-    {
-      onMutate() {
-        toastRef.current = toast.loading("Deleting categories")
-        router.push("/admin/categories")
-      },
-      onSuccess() {
-        toast.update(toastRef.current, {
-          type: "success",
-          render: "Succesfully Delete Categories",
-          isLoading: false,
-          autoClose: 1000,
-        })
-      },
-      onError(response: string) {
-        toast.update(toastRef.current, {
-          type: toast.TYPE.ERROR,
-          render: response,
-        })
-      },
-    }
-  )
+  const deleteCategoriesMutation = useMutation({
+    mutationFn: async () =>
+      await deleteCategories({ categoryIds: selectedCategories }),
+    onMutate() {
+      toastRef.current = toast.loading("Deleting categories")
+      router.push("/admin/categories")
+    },
+    onSuccess() {
+      toast.update(toastRef.current, {
+        type: "success",
+        render: "Succesfully Delete Categories",
+        isLoading: false,
+        autoClose: 1000,
+      })
+    },
+    onError(response: string) {
+      toast.update(toastRef.current, {
+        type: toast.TYPE.ERROR,
+        render: response,
+      })
+    },
+  })
 
   return (
     <ConfirmationDialog
@@ -49,7 +48,7 @@ export function DeleteCategoriesModal({
       body={`Confirm delete ${selectedCategories.length} category?`}
       onOpenChange={() => router.push("/admin/categories")}
       onConfirm={deleteCategoriesMutation.mutate}
-      onCancel={() => router.push("/admin/products")}
+      onCancel={() => router.push("/admin/categories")}
     />
   )
 }

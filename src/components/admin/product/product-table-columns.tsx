@@ -1,27 +1,38 @@
 import Image from "next/image"
-import { Category, Prisma, ProductImage } from "@prisma/client"
+import { Prisma } from "@prisma/client"
+import * as HoverCard from "@radix-ui/react-hover-card"
 import { ColumnDef } from "@tanstack/react-table"
+import { GiCookingPot, GiPoloShirt } from "react-icons/gi"
 
-import { TableRowMenu } from "@/components/table-row-menu"
+import { TableActions } from "@/components/table-row-menu"
+
+function getCategoryIcons(name: string) {
+  switch (name) {
+    case "Clothing":
+      return <GiPoloShirt size={20} />
+
+    case "Kitchen Ware":
+      return <GiCookingPot size={20} />
+  }
+}
 
 export const productTableColumns: ColumnDef<
-  Prisma.ProductGetPayload<{ include: { images: true; category: true } }>
+  Prisma.ProductGetPayload<{ include: { images: true; categories: true } }>
 >[] = [
   {
     accessorKey: "id",
     header: "Id",
-    cell: (category) => category.getValue(),
+    cell: (id) => id.getValue(),
     enableColumnFilter: false,
   },
   {
-    accessorKey: "images",
+    accessorKey: "featured_image_url",
     header: "Image",
-    cell: (info) => {
-      const images = info.getValue() as ProductImage[]
+    cell: (url) => {
       return (
         <div className="relative flex items-center justify-center">
           <Image
-            src={images[0].image_url}
+            src={url.getValue() as string}
             alt="product-image"
             width={90}
             height={90}
@@ -35,42 +46,64 @@ export const productTableColumns: ColumnDef<
     id: "name",
     accessorKey: "name",
     header: "Name",
-    cell: (category) => category.getValue(),
+    cell: (name) => name.getValue(),
   },
   {
-    accessorKey: "category",
+    accessorKey: "categories",
     header: "Category",
-    cell: (category) => {
-      const value = category.getValue() as Category
+    cell: ({ row }) => {
+      const categories = row.original.categories.map(
+        (category) => category.name
+      )
       return (
-        <button className="w-28 rounded-md bg-gray-100 py-2.5 text-xs tracking-wider text-slate-800">
-          {value.name}
-        </button>
+        <div className="flex items-center justify-center gap-1.5">
+          {categories.map((category) => (
+            <HoverCard.Root key={category} openDelay={0.1} closeDelay={0.1}>
+              <HoverCard.Trigger asChild>
+                <div
+                  key={category}
+                  className="flex h-10 w-10 items-center justify-center rounded-md border border-gray-50 bg-gray-100 p-2 text-gray-500 transition-all duration-200 hover:bg-gray-200 hover:text-black"
+                >
+                  {getCategoryIcons(category)}
+                </div>
+              </HoverCard.Trigger>
+              <HoverCard.Portal>
+                <HoverCard.Content
+                  sideOffset={3}
+                  className="rounded-md border border-gray-100 bg-white px-4 py-2 text-xs font-medium text-gray-500 shadow-sm"
+                >
+                  {category}
+                </HoverCard.Content>
+              </HoverCard.Portal>
+            </HoverCard.Root>
+          ))}
+        </div>
       )
     },
   },
   {
     accessorKey: "stock",
     header: "Stock",
-    cell: (category) => category.getValue(),
+    cell: (stock) => stock.getValue(),
   },
   {
     id: "action",
     header: "Actions",
     cell: ({ row }) => {
       return (
-        <TableRowMenu>
-          <TableRowMenu.Link
-            href={`/admin/products?id=${row.original.id}&view=true`}
-          >
-            View Product
-          </TableRowMenu.Link>
-          <TableRowMenu.Link
-            href={`/admin/products?id=${row.original.id}&edit=true`}
-          >
-            Edit Product
-          </TableRowMenu.Link>
-        </TableRowMenu>
+        <TableActions
+          viewAction={
+            <TableActions.View
+              href={`/store/products/view/${row.original.id}`}
+            />
+          }
+          editAction={
+            <TableActions.Edit
+              href={`/store/products/edit/${row.original.id}`}
+            />
+          }
+          deleteAction={<TableActions.Delete href={""} />}
+        />
       )
     },
   },

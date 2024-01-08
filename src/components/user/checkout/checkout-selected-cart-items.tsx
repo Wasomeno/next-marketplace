@@ -16,9 +16,9 @@ export function CheckoutSelectedCartItems() {
         >
           <div className="flex w-full flex-wrap items-end justify-between gap-2">
             <div className="flex w-full gap-2 lg:w-4/6 lg:gap-4">
-              <div className="relative h-12 w-16 rounded-md bg-slate-300 dark:bg-neutral-400 lg:h-20 lg:w-24">
+              <div className="relative h-12 w-16 rounded-md bg-slate-300 lg:h-20 lg:w-24 dark:bg-neutral-400">
                 <Image
-                  src={selectedCartItem.product.images[0].image_url}
+                  src={selectedCartItem.product.images[0].url}
                   alt="product-image"
                   fill
                 />

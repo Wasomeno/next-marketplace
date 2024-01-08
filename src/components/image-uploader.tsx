@@ -1,7 +1,10 @@
-import React, { SetStateAction } from "react"
+"use client"
+
+import React, { SetStateAction, useRef, useState } from "react"
 import Image from "next/image"
 import { useDropzone } from "react-dropzone"
 import { RxCross1 } from "react-icons/rx"
+import FileResizer from "react-image-file-resizer"
 
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
@@ -21,13 +24,37 @@ export const ImageUploader = ({
 }: ImageUploaderProps) => {
   const { getInputProps, getRootProps } = useDropzone({
     onDrop: (selectedFiles) => {
-      setFiles(
-        selectedFiles.map((file) =>
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
-          })
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      for (const selectedFile of selectedFiles) {
+        FileResizer.imageFileResizer(
+          selectedFile,
+          500,
+          500,
+          "WEBP",
+          100,
+          0,
+          (uri) => {
+            var byteString = atob((uri as string).split(",")[1])
+            var ab = new ArrayBuffer(byteString.length)
+            var ia = new Uint8Array(ab)
+            for (var i = 0; i < byteString.length; i++) {
+              ia[i] = byteString.charCodeAt(i)
+            }
+
+            const imageBlob = new Blob([ab], { type: "image/webp" })
+            const imageFile = new File([imageBlob], selectedFile.name)
+            setFiles((imageFiles) => [
+              ...imageFiles,
+              Object.assign(imageFile, {
+                preview: URL.createObjectURL(imageFile),
+              }),
+            ])
+          },
+          "base64",
+          500,
+          500
         )
-      )
+      }
     },
   })
 
@@ -69,4 +96,10 @@ export const ImageUploader = ({
       )}
     </div>
   )
+}
+
+function useImageResizer(file: File): FileImage {
+  let image = {}
+
+  return image as FileImage
 }

@@ -3,14 +3,13 @@
 import { useRef, useState } from "react"
 import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
-import { OrderStatus } from "@prisma/client"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { FaSpinner } from "react-icons/fa"
 import { Id, toast } from "react-toastify"
 
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
-import { getOrder, updateOrderStatus } from "@/app/actions/order"
+import { getOrder, TOrderStatus, updateOrderStatus } from "@/app/actions/order"
 
 import { OrderStatusPicker } from "./order-status-picker"
 
@@ -21,49 +20,42 @@ export function UpdateOrderStatusModal() {
   const orderId = parseInt(params.get("id") as string)
   const open = params.get("edit") !== null
 
-  const orderDetails = useQuery(
-    ["orderDetails", orderId],
-    async () => await getOrder(orderId),
-    {
-      enabled: open,
-    }
+  const order = useQuery({
+    queryKey: ["order", orderId],
+    queryFn: async () => await getOrder(orderId),
+    enabled: open,
+  })
+
+  const [selectedStatus, setSelectedStatus] = useState<TOrderStatus>(
+    order.data?.status as TOrderStatus
   )
 
-  const [selectedStatus, setSelectedStatus] = useState<OrderStatus | undefined>(
-    orderDetails.data?.status
-  )
+  const date = new Date(order.data?.created_at as Date)
 
-  const date = new Date(orderDetails.data?.created_at as Date)
-
-  const updateOrder = useMutation(
-    () =>
-      updateOrderStatus({ orderId, statusId: selectedStatus?.id as number }),
-    {
-      onMutate: () => {
-        router.push("/admin/orders")
-        toastRef.current = toast.loading(
-          `Updating Order ${orderDetails.data?.invoice}`
-        )
-      },
-      onSuccess: () => {
-        toast.update(toastRef.current, {
-          type: "success",
-          render: "Update Success",
-          isLoading: false,
-          autoClose: 1500,
-        })
-      },
-    }
-  )
+  const updateOrder = useMutation({
+    mutationFn: () => updateOrderStatus({ orderId, status: selectedStatus }),
+    onMutate: () => {
+      router.push("/admin/orders")
+      toastRef.current = toast.loading(`Updating Order ${order.data?.invoice}`)
+    },
+    onSuccess: () => {
+      toast.update(toastRef.current, {
+        type: "success",
+        render: "Update Success",
+        isLoading: false,
+        autoClose: 1500,
+      })
+    },
+  })
 
   return (
-    <Dialog open={open} onOpenChange={() => router.push("/admin/orders")}>
+    <Dialog open={open} onOpenChange={() => router.push("/store/orders")}>
       <DialogContent
         open={open}
         className="flex flex-col gap-4 lg:h-4/6 lg:w-3/6"
       >
         <DialogHeader title="Edit Order" />
-        {orderDetails.isLoading ? (
+        {order.isLoading ? (
           <div className="flex flex-1 items-center justify-center">
             <FaSpinner className="animate-spin fill-blue-500" size={30} />
           </div>
@@ -71,16 +63,12 @@ export function UpdateOrderStatusModal() {
           <>
             <div className="px-4">
               <OrderStatusPicker
-                status={
-                  selectedStatus ?? (orderDetails.data?.status as OrderStatus)
-                }
-                selectStatus={(status) =>
-                  setSelectedStatus(status as OrderStatus)
-                }
+                status={selectedStatus ?? order.data?.status}
+                selectStatus={(status) => setSelectedStatus(status)}
               />
               <div className="my-4 flex items-center justify-between text-xs lg:text-sm">
                 <span className="font-medium ">Invoice Number</span>
-                <span>{orderDetails.data?.invoice}</span>
+                <span>{order.data?.invoice}</span>
               </div>
               <div className="flex items-center justify-between text-xs lg:text-sm">
                 <span className="font-medium ">Transaction Date</span>
@@ -92,16 +80,16 @@ export function UpdateOrderStatusModal() {
                 Products
               </span>
               <div className="mt-4 flex flex-col gap-2.5">
-                {orderDetails.data?.products.map((orderProduct) => (
+                {order.data?.products.map((orderProduct) => (
                   <div
                     key={orderProduct.id}
                     className="flex items-center gap-4 border-t p-4 dark:border-t-neutral-700"
                   >
                     <div className="flex w-full flex-wrap items-end justify-between gap-2">
                       <div className="flex w-full gap-2 lg:w-4/6 lg:gap-4">
-                        <div className="relative h-20 w-28 rounded-md bg-slate-300 dark:bg-neutral-400 lg:h-20 lg:w-24">
+                        <div className="relative h-20 w-28 rounded-md bg-slate-300 lg:h-20 lg:w-24 dark:bg-neutral-400">
                           <Image
-                            src={orderProduct.product.images[0].image_url}
+                            src={orderProduct.product.featured_image_url}
                             alt="orderProduct-image"
                             fill
                           />

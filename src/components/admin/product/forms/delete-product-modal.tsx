@@ -19,31 +19,29 @@ export function DeleteProductModal({
   const searchParams = useSearchParams()
 
   const isDeleteModalOpen = searchParams.get("delete") !== null
-  const deleteProductMutation = useMutation(
-    () => deleteProduct(selectedProducts),
-    {
-      onMutate() {
-        toastRef.current = toast.loading(
-          `Deleting ${selectedProducts.length} products`
-        )
-      },
-      onSuccess() {
-        toast.update(toastRef.current, {
-          type: "success",
-          render: `Successfully deleted ${selectedProducts.length} products`,
-          isLoading: false,
-          autoClose: 1000,
-        })
-        router.push("/admin/products")
-      },
-      onError(response: string) {
-        toast.update(toastRef.current, {
-          type: toast.TYPE.ERROR,
-          render: response,
-        })
-      },
-    }
-  )
+  const deleteProductMutation = useMutation({
+    mutationFn: () => deleteProduct(selectedProducts),
+    onMutate() {
+      toastRef.current = toast.loading(
+        `Deleting ${selectedProducts.length} products`
+      )
+    },
+    onSuccess() {
+      toast.update(toastRef.current, {
+        type: "success",
+        render: `Successfully deleted ${selectedProducts.length} products`,
+        isLoading: false,
+        autoClose: 1000,
+      })
+      router.push("/admin/products")
+    },
+    onError(response: string) {
+      toast.update(toastRef.current, {
+        type: toast.TYPE.ERROR,
+        render: response,
+      })
+    },
+  })
 
   return (
     <ConfirmationDialog

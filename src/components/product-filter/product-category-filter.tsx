@@ -22,7 +22,10 @@ export function ProductCategoryFilter() {
   const pathname = usePathname()
   const router = useRouter()
 
-  const categories = useQuery(["categories"], () => getCategories())
+  const categories = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => getCategories(),
+  })
 
   const [category, setCategory] = useState<Category | undefined>()
 

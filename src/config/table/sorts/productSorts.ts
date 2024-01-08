@@ -7,7 +7,7 @@ import { TableSort } from "@/components/table-data-sorter"
 
 export function getProductSorts(
   table?: Table<
-    Prisma.ProductGetPayload<{ include: { images: true; category: true } }>
+    Prisma.ProductGetPayload<{ include: { images: true; categories: true } }>
   >
 ): TableSort[] {
   return [

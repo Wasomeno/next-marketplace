@@ -2,7 +2,7 @@ import { Table } from "@tanstack/react-table"
 
 import { TableSort } from "@/components/table-data-sorter"
 
-export function getCategorySorts(table?: Table<any>): TableSort[] {
+export function getCategorySorts<T>(table?: Table<T>): TableSort[] {
   return [
     {
       id: 1,

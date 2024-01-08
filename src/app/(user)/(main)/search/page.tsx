@@ -22,13 +22,11 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function SearchPage({ searchParams }: Props) {
   const priceMin = searchParams.pmin
   const priceMax = searchParams.pmax
-  const categoryId = searchParams.category && parseInt(searchParams.category)
   const sort = searchParams.sort ? [searchParams.sort.split(".")] : []
 
   const products = await prisma.product.findMany({
     where: {
       name: { contains: searchParams.q },
-      category_id: categoryId as number,
       price: {
         lte: priceMax ? parseInt(priceMax as string) : 5000000,
         gte: priceMin ? parseInt(priceMin as string) : 100,
@@ -36,7 +34,7 @@ export default async function SearchPage({ searchParams }: Props) {
     },
     orderBy: !sort.length ? { price: "asc" } : Object.fromEntries(sort as []),
 
-    include: { category: true, images: true },
+    include: { categories: true, images: true, reviews: true, store: true },
   })
   return <Products products={products} />
 }

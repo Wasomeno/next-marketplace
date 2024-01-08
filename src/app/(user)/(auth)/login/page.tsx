@@ -38,7 +38,7 @@ export default async function Login() {
               orientation="horizontal"
               className="dark: h-px w-full bg-slate-200 dark:bg-gray-500"
             />
-            <span className="text-xs text-slate-500 dark:text-gray-500 lg:text-sm">
+            <span className="text-xs text-slate-500 lg:text-sm dark:text-gray-500">
               Or
             </span>
             <Separator
@@ -74,7 +74,7 @@ export default async function Login() {
             <Button
               disabled
               variant="default"
-              className="mt-4 w-full text-xs font-medium tracking-wide active:hover:bg-blue-400  dark:bg-blue-900 lg:text-sm"
+              className="mt-4 w-full text-xs font-medium tracking-wide active:hover:bg-blue-400  lg:text-sm dark:bg-blue-900"
             >
               Submit
             </Button>

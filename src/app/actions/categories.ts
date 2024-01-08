@@ -1,7 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { Prisma } from "@prisma/client"
+import { Prisma, ProductImage } from "@prisma/client"
 
 import { prisma } from "@/lib/prisma"
 
@@ -32,14 +32,23 @@ type AddCategoryParams = {
   name: string
   description: string
   slug: string
-  imageUrls: string[]
+
+  images: { name: string; url: string }[]
+}
+
+type UpdateCategoryParams = {
+  id: number
+  name: string
+  description: string
+  slug: string
+  images: { name: string; url: string }[]
 }
 
 export async function addCategory({
   name,
   description,
   slug,
-  imageUrls,
+  images,
 }: AddCategoryParams) {
   try {
     await prisma.category.create({
@@ -49,7 +58,7 @@ export async function addCategory({
         slug,
         images: {
           createMany: {
-            data: imageUrls.map((imageUrl) => ({ image_url: imageUrl })),
+            data: images.map((image) => ({ name: image.name, url: image.url })),
           },
         },
       },
@@ -60,18 +69,18 @@ export async function addCategory({
   }
 }
 
-export async function updateCategory(
-  id: number,
-  name: string,
-  description: string,
-  slug: string
-) {
+export async function updateCategory({
+  id,
+  name,
+  description,
+  slug,
+}: UpdateCategoryParams) {
   try {
     await prisma.category.update({
       where: { id },
       data: { name, description, slug },
     })
-    revalidatePath("/")
+    revalidatePath("/admin/categories")
   } catch (error) {
     throw error
   }

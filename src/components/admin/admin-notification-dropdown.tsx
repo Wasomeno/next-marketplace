@@ -16,10 +16,10 @@ export function AdminNotificationDropdown() {
   const [isOpen, setIsOpen] = useState(false)
   const viewport = useViewport()
 
-  const recentOrders = useQuery(
-    ["recentOrders"],
-    async () => await getRecentOrders()
-  )
+  const recentOrders = useQuery({
+    queryKey: ["recentOrders"],
+    queryFn: async () => await getRecentOrders(),
+  })
 
   return (
     <Dropdown open={isOpen} onOpenChange={(open) => setIsOpen(open)}>

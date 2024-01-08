@@ -13,22 +13,22 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   const categories = await prisma.category.findMany({
-    include: { images: { select: { image_url: true } } },
+    include: { images: { select: { url: true } } },
   })
   const products = await prisma.product.findMany({
     include: {
-      category: { select: { name: true, slug: true } },
-      images: { select: { image_url: true } },
+      images: { select: { url: true } },
       reviews: { select: { rating: true } },
+      store: { select: { name: true } },
     },
     orderBy: { price: "desc" },
   })
 
   return (
-    <div className="relative flex flex-col items-center justify-start gap-6 bg-white px-4 dark:bg-neutral-950 lg:px-8">
+    <div className="relative flex flex-col items-center justify-start gap-6 bg-white px-4 lg:px-8 dark:bg-neutral-950">
       <HomeBannerSlider />
       <div className="w-full lg:w-11/12">
-        <div className="w-full rounded-lg border p-4 shadow-sm dark:border-gray-800 lg:w-3/6 ">
+        <div className="w-full rounded-lg border p-4 shadow-sm lg:w-3/6 dark:border-gray-800 ">
           <h2 className="mb-2 font-sans text-sm font-medium lg:mb-4 lg:text-xl">
             Categories
           </h2>
@@ -41,7 +41,7 @@ export default async function Home() {
               >
                 <div className="relative h-20 w-20 lg:h-24 lg:w-24">
                   <Image
-                    src={category.images[0].image_url}
+                    src={category.images[0].url}
                     alt="category-image"
                     fill
                     className="rounded-md border-2 transition duration-200 hover:border-blue-300 dark:border-gray-700"
@@ -63,21 +63,15 @@ export default async function Home() {
             <ProductCard
               key={product.id}
               href={`/${product.id}`}
-              image={<ProductCard.Image image={product.images[0].image_url} />}
+              image={<ProductCard.Image image={product.featured_image_url} />}
               name={<ProductCard.Name name={product.name} />}
               price={<ProductCard.Price price={product.price} />}
-              category={<ProductCard.Category category={product.category} />}
+              store={<ProductCard.Store name={product.store.name} />}
               rating={
-                product.reviews.length !== 0 && (
-                  <ProductCard.Rating
-                    rating={
-                      product.reviews.reduce(
-                        (rating, review) => rating + review.rating,
-                        0
-                      ) / product.reviews.length
-                    }
-                  />
-                )
+                <ProductCard.Rating
+                  rating={0}
+                  reviewCount={product.reviews.length}
+                />
               }
             />
           ))}

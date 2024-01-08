@@ -1,7 +1,6 @@
 "use client"
 
 import { Dispatch, SetStateAction, useState } from "react"
-import { OrderStatus } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
 import { AnimatePresence, motion } from "framer-motion"
 import { BiChevronRight } from "react-icons/bi"
@@ -12,23 +11,30 @@ import {
   DropdownItem,
   DropdownTrigger,
 } from "@/components/ui/dropdown"
-import { getOrderStatuses } from "@/app/actions/order"
+import { TOrderStatus } from "@/app/actions/order"
+
+const statuses = [
+  "Payment Confirmed",
+  "On Shipping",
+  "On Proccess",
+  "Done",
+  "Arrived",
+] as TOrderStatus[]
 
 export function OrderStatusPicker({
   status,
   selectStatus,
 }: {
-  status: OrderStatus
-  selectStatus: Dispatch<SetStateAction<OrderStatus>>
+  status: TOrderStatus
+  selectStatus: Dispatch<SetStateAction<TOrderStatus>>
 }) {
   const [open, setOpen] = useState(false)
-  const statuses = useQuery(["statuses"], () => getOrderStatuses())
   return (
     <Dropdown open={open} onOpenChange={setOpen}>
       <DropdownTrigger asChild>
-        <button className="flex h-9 w-48 items-center justify-between rounded-md  border bg-white px-3 outline-0 dark:border-gray-800 dark:bg-slate-950 lg:h-10 lg:w-52">
+        <button className="flex h-9 w-48 items-center justify-between rounded-md  border bg-white px-3 outline-0 lg:h-10 lg:w-52 dark:border-gray-800 dark:bg-slate-950">
           <span className="text-xs font-medium lg:block lg:text-sm">
-            {status?.name}
+            {status}
           </span>
           <div className="w-5">
             <BiChevronRight
@@ -45,15 +51,15 @@ export function OrderStatusPicker({
               initial={{ height: "0px" }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: "0px" }}
-              className="flex w-48 flex-col overflow-hidden rounded-md border bg-white text-sm shadow-sm dark:border-gray-800 dark:bg-slate-950 lg:w-52 lg:rounded-b-md lg:rounded-t-none lg:border-t-0"
+              className="flex w-48 flex-col overflow-hidden rounded-md border bg-white text-sm shadow-sm lg:w-52 lg:rounded-b-md lg:rounded-t-none lg:border-t-0 dark:border-gray-800 dark:bg-slate-950"
             >
-              {statuses.data?.map((status) => (
-                <DropdownItem key={status?.id} asChild>
+              {statuses.map((status) => (
+                <DropdownItem key={status} asChild>
                   <button
                     onClick={() => selectStatus(status)}
-                    className="px-3 py-2 text-start text-xs font-medium outline-0 ring-0 transition  duration-200 hover:bg-slate-100 hover:dark:bg-slate-800 lg:text-sm"
+                    className="px-3 py-2 text-start text-xs font-medium outline-0 ring-0 transition  duration-200 hover:bg-slate-100 lg:text-sm hover:dark:bg-slate-800"
                   >
-                    {status?.name}
+                    {status}
                   </button>
                 </DropdownItem>
               ))}

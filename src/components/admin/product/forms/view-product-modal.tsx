@@ -13,11 +13,11 @@ export function ViewProductModal() {
   const productId = parseInt(searchParams.get("id") as string)
   const open = searchParams.get("view") !== null
 
-  const productDetails = useQuery(
-    ["productDetails", productId],
-    async () => await getProduct(productId),
-    { enabled: open }
-  )
+  const productDetails = useQuery({
+    queryKey: ["productDetails", productId],
+    queryFn: async () => await getProduct(productId),
+    enabled: open,
+  })
 
   return (
     <Dialog open={open} onOpenChange={() => router.push("/admin/products")}>

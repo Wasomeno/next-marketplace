@@ -11,7 +11,7 @@ import { ProductSorter } from "../product-sorter"
 type ProductsSectionProps = {
   products:
     | Prisma.ProductGetPayload<{
-        include: { category: true; images: true }
+        include: { categories: true; images: true; store: true; reviews: true }
       }>[]
     | undefined
 }
@@ -33,17 +33,21 @@ export function Products({ products }: ProductsSectionProps) {
               <ProductCard
                 key={product.id}
                 href={`/${product.id}`}
-                image={
-                  <ProductCard.Image image={product.images[0].image_url} />
-                }
+                image={<ProductCard.Image image={product.featured_image_url} />}
                 name={<ProductCard.Name name={product.name} />}
                 price={<ProductCard.Price price={product.price} />}
-                category={<ProductCard.Category category={product.category} />}
+                store={<ProductCard.Store name={product.store.name} />}
+                rating={
+                  <ProductCard.Rating
+                    rating={0}
+                    reviewCount={product.reviews.length}
+                  />
+                }
               />
             ))}
           {products?.length === 0 && (
             <div className="col-span-12 flex h-96 flex-col items-center justify-center gap-2">
-              <span className="text-sm text-slate-800  text-opacity-50 dark:text-gray-500 lg:text-base">
+              <span className="text-sm text-slate-800  text-opacity-50 lg:text-base dark:text-gray-500">
                 No products found
               </span>
               <span className="text-slate-800 text-opacity-50 dark:text-gray-500">
