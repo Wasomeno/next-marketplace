@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form"
 import { BiChevronRight } from "react-icons/bi"
 import { IoShirt } from "react-icons/io5"
 import { Id, toast } from "react-toastify"
+import invariant from "tiny-invariant"
 import * as z from "zod"
 
 import { Button } from "@/components/ui/button"
@@ -88,6 +89,7 @@ export function AddProductForm({
       toastRef.current = toast.loading(`Adding ${inputs.name}`)
       try {
         const uploadedFiles = await startUpload(files)
+        invariant(uploadedFiles)
         await addProduct({
           ...inputs,
           slug: generateSlug(),

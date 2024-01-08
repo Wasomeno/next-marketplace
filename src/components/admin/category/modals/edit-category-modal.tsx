@@ -49,7 +49,7 @@ export function EditCategoryModal() {
           ...inputs,
           id: categoryId,
           slug: generateSlug(),
-          imageUrls: [],
+          images: [],
         }),
         {
           error: "Error",

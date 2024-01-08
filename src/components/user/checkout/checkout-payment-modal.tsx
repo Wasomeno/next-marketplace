@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import checkMarkSuccess from "@/components/lottie/files/checkmark_success.json"
-import { checkout } from "@/app/actions/checkout"
+import { checkout } from "@/app/actions/order"
 
 type PaymentMethod = {
   id: number

@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Category, Prisma } from "@prisma/client"
 import { useForm } from "react-hook-form"
 import { toast } from "react-toastify"
+import invariant from "tiny-invariant"
 
 import { Button } from "@/components/ui/button"
 import { Fieldset } from "@/components/ui/fieldset"
@@ -65,6 +66,7 @@ export function EditProductForm({ product, categories }: Props) {
     startTransition(async () => {
       try {
         const uploadedImages = await startUpload(images)
+        invariant(uploadedImages)
         await toast.promise(
           updateProduct({
             ...inputs,
