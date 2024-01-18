@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useUploadThing } from "@/utils/uploadthing"
+import { useImageFiles } from "@/utils/useImageFiles"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
@@ -26,7 +27,7 @@ export type CategoryFormData = z.infer<typeof CategorySchema>
 
 export function AddCategoryModal() {
   const [isLoading, startTransition] = useTransition()
-  const [images, setImages] = useState<FileImage[]>([])
+  const { files, addFiles, clearFiles, removeFile } = useImageFiles()
 
   const uploadthing = useUploadThing("imageUploader")
 
@@ -49,7 +50,7 @@ export function AddCategoryModal() {
       try {
         await toast.promise(
           async () => {
-            const imageResults = await uploadthing.startUpload(images)
+            const imageResults = await uploadthing.startUpload(files)
             addCategory({
               ...inputs,
               images: imageResults?.map((result) => ({
@@ -81,13 +82,9 @@ export function AddCategoryModal() {
           <div className="flex flex-col gap-4">
             <Fieldset label="Image">
               <ImageUploader
-                files={images}
-                setFiles={setImages}
-                deselectFile={(index) =>
-                  setImages(
-                    images.filter((image, imageIndex) => index !== imageIndex)
-                  )
-                }
+                files={files}
+                selectFiles={addFiles}
+                deselectFile={(index) => removeFile(index)}
               />
             </Fieldset>
             <Fieldset label="Name" error={formState.errors.name}>

@@ -13,16 +13,16 @@ export async function getStoreOrders() {
   return orders
 }
 
-export async function getStoreOrder(orderId: number): Promise<
-  Prisma.OrderGetPayload<{
-    include: {
-      user: true
-      products: {
-        include: { product: true }
-      }
+export async function getStoreOrder(
+  orderId: number
+): Promise<Prisma.OrderGetPayload<{
+  include: {
+    user: true
+    products: {
+      include: { product: true }
     }
-  }>
-> {
+  }
+}> | null> {
   const store = await getStore()
   const order = await prisma.order.findUnique({
     where: { id: orderId },

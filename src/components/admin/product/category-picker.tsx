@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 import clsx from "clsx"
 import { twMerge } from "tailwind-merge"
 
-import { getCategories } from "@/app/actions/admin/categories"
+import { getCategories } from "@/app/actions/categories"
 
 interface CategoryScrollableListProps {
   selectedCategory: number

@@ -6,7 +6,7 @@ import { Category } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
 import { AnimatePresence, motion } from "framer-motion"
 
-import { getCategories } from "@/app/actions/admin/categories"
+import { getCategories } from "@/app/actions/categories"
 
 import {
   Dropdown,

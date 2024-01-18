@@ -44,7 +44,6 @@ export function DeleteCategoriesModal({
   return (
     <ConfirmationDialog
       open={open}
-      title="Delete Category"
       body={`Confirm delete ${selectedCategories.length} category?`}
       onOpenChange={() => router.push("/admin/categories")}
       onConfirm={deleteCategoriesMutation.mutate}

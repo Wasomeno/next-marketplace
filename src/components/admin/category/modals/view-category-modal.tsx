@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
 
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
-import { getCategory } from "@/app/actions/admin/categories"
+import { getCategory } from "@/app/actions/categories"
 
 export function ViewCategoryModal() {
   const router = useRouter()
@@ -36,12 +36,6 @@ export function ViewCategoryModal() {
           <div className="flex w-full flex-col items-start gap-1">
             <h6 className="text-sm font-medium text-gray-400">Name</h6>
             <h5 className="text-lg">{categoryDetails.data?.name}</h5>
-          </div>
-          <div className="flex w-full flex-col items-start gap-1">
-            <h6 className="text-sm font-medium text-gray-400">Products</h6>
-            <h5 className="text-lg">
-              {categoryDetails.data?.products?.length}
-            </h5>
           </div>
         </div>
       </DialogContent>

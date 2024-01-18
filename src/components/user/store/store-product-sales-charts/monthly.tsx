@@ -92,7 +92,12 @@ export const ProductSalesMonthlyChart = () => {
         </Dropdown>
       </div>
       <ProductSalesChart
-        data={sales.data?.map((sale) => ({ name: sale.date, uv: sale.sales }))}
+        data={
+          sales.data?.map((sale) => ({
+            name: sale.date.toString(),
+            uv: sale.sales,
+          })) ?? []
+        }
       />
     </div>
   )

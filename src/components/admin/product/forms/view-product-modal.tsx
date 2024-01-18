@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
 
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
-import { getProduct } from "@/app/actions/store/products"
+import { getProduct } from "@/app/actions/product"
 
 export function ViewProductModal() {
   const searchParams = useSearchParams()

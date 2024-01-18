@@ -9,7 +9,7 @@ type StoreOrderPageProps = {
 }
 
 export default async function StoreOrderPage({ params }: StoreOrderPageProps) {
-  const { user, ...order } = await getStoreOrder(parseInt(params.orderId))
+  const order = await getStoreOrder(parseInt(params.orderId))
   return (
     <div className="w-full space-y-6">
       <div className="space-y-2">
@@ -62,15 +62,15 @@ export default async function StoreOrderPage({ params }: StoreOrderPageProps) {
             <div className="flex items-center gap-3 ">
               <div className="relative h-8 w-8 overflow-hidden rounded-full">
                 <Image
-                  src={user?.image as string}
+                  src={order?.user?.image as string}
                   fill
                   alt="user-profile-image"
                 />
               </div>
               <div className="space-y-1">
-                <div className="text-sm font-medium">{user.name}</div>
+                <div className="text-sm font-medium">{order?.user.name}</div>
                 <div className="text-sm font-medium text-gray-500">
-                  {user.email}
+                  {order?.user.email}
                 </div>
               </div>
             </div>
@@ -81,7 +81,7 @@ export default async function StoreOrderPage({ params }: StoreOrderPageProps) {
             </div>
             <div className="space-y-2">
               <h4 className="text-sm font-medium">Shipping Address</h4>
-              <p className="text-sm">{user.address ?? "No Address"}</p>
+              <p className="text-sm">{order?.user.address ?? "No Address"}</p>
             </div>
           </div>
         </div>
