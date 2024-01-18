@@ -14,7 +14,7 @@ import { Fieldset } from "@/components/ui/fieldset"
 import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
 import checkMarkSuccess from "@/components/lottie/files/checkmark_success.json"
-import { createStore } from "@/app/actions/store"
+import { createStore } from "@/app/actions/store/store"
 
 const createStoreSchema = z.object({
   name: z.string().min(10, "10 characters minimum"),

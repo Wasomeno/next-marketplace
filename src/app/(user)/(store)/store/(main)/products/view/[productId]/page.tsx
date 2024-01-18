@@ -2,10 +2,9 @@ import { Metadata } from "next"
 import { BiCheck } from "react-icons/bi"
 import invariant from "tiny-invariant"
 
-import { ProductSalesChart } from "@/components/admin/product/product-sales-chart"
-import { ProductSalesDropdown } from "@/components/admin/product/product-sales-dropdown"
 import { ProductImages } from "@/components/user/product-details/product-images"
-import { getProduct } from "@/app/actions/products"
+import { ProductSalesMonthlyChart } from "@/components/user/store/store-product-sales-charts/monthly"
+import { getProduct } from "@/app/actions/product"
 
 type ProductPageProps = {
   params: { productId: string }
@@ -81,22 +80,8 @@ export default async function AdminProductPage({ params }: ProductPageProps) {
       </div>
       <div className="space-y-4">
         <h2 className="text-lg font-medium">Sales</h2>
-        <div className="grid w-full grid-flow-col grid-cols-3 grid-rows-3 gap-4 lg:grid-flow-row">
-          <div className="col-span-3 space-y-4 rounded-md border border-gray-300 p-3 lg:col-span-1">
-            <div className="flex items-center justify-between">
-              <span className="font-medium">Today</span>
-              <ProductSalesDropdown />
-            </div>
-            <ProductSalesChart />
-          </div>
-          <div className="col-span-3 space-y-4 rounded-md border border-gray-300 p-3 lg:col-span-1">
-            <span className="font-medium">This Week</span>
-            <ProductSalesChart />
-          </div>
-          <div className="col-span-3 space-y-4 rounded-md  border border-gray-300 p-3 lg:col-span-1">
-            <span className="font-medium">This Month</span>
-            <ProductSalesChart />
-          </div>
+        <div className="grid w-full grid-flow-col gap-4 lg:grid-flow-row">
+          <ProductSalesMonthlyChart />
         </div>
       </div>
     </div>

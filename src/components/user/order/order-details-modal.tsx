@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query"
 import { FaSpinner } from "react-icons/fa"
 
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
-import { getOrder } from "@/app/actions/order"
+import { getOrder } from "@/app/actions/user/order"
 
 export function OrderDetailsModal() {
   const router = useRouter()

@@ -32,14 +32,16 @@ export const OrderProductCard = ({ orderProduct }: OrderCardProps) => {
 
   return (
     <div className="flex flex-col gap-2 rounded-md border bg-slate-50 bg-opacity-50 px-4 py-2.5 shadow-sm dark:border-gray-800 dark:bg-slate-950 dark:bg-opacity-50 dark:shadow-gray-800 ">
-      <div className="flex items-center gap-3 lg:h-10">
-        <div className="text-xs">{date.toDateString()}</div>
-        <span className="rounded-md bg-blue-200 p-1.5 text-xs font-medium tracking-wide dark:bg-blue-900">
-          {orderProduct.order.status}
-        </span>
-        <div className="hidden text-xs lg:block">
-          {orderProduct.order.invoice}
+      <div className="flex items-center justify-between lg:h-10">
+        <div className="flex items-center gap-2">
+          <div className="hidden text-xs lg:block">
+            {orderProduct.order.invoice}
+          </div>
+          <span className="rounded-md bg-blue-200 p-1.5 text-xs font-medium tracking-wide dark:bg-blue-900">
+            {orderProduct.order.status}
+          </span>
         </div>
+        <div className="text-xs">{date.toDateString()}</div>
       </div>
       <div className="flex flex-wrap items-center gap-2 lg:gap-10">
         <div className="flex w-full items-center gap-4 border-r-slate-200 lg:w-4/6  lg:border-r dark:border-r-gray-800">
@@ -85,10 +87,11 @@ export const OrderProductCard = ({ orderProduct }: OrderCardProps) => {
         >
           View Order Details
         </Link>
-        {orderProduct.order.status === "Done" && (
+        {orderProduct.order.status === "Done" && !orderProduct.isReviewed ? (
           <Link
             href={`/orders?${getSearchParams([
-              ["id", orderProduct.product.id.toString()],
+              ["productId", orderProduct.order_id.toString()],
+              ["orderProductId", orderProduct.id.toString()],
               ["rating", "true"],
             ])}`}
             className={twMerge(
@@ -103,7 +106,7 @@ export const OrderProductCard = ({ orderProduct }: OrderCardProps) => {
           >
             Rate Product
           </Link>
-        )}
+        ) : null}
       </div>
     </div>
   )

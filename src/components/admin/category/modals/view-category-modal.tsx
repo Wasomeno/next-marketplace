@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
 
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
-import { getCategory } from "@/app/actions/categories"
+import { getCategory } from "@/app/actions/admin/categories"
 
 export function ViewCategoryModal() {
   const router = useRouter()

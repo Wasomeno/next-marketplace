@@ -7,12 +7,14 @@ type Props = LinkProps & {
   text: string
   isOpen?: boolean
   icon?: ReactElement
+  isMobile?: boolean
 }
 
 export const StoreSideNavigationLink = ({
-  isOpen,
+  isOpen = true,
   icon,
   text,
+  isMobile = false,
   ...props
 }: Props) => {
   const pathname = usePathname()
@@ -21,12 +23,14 @@ export const StoreSideNavigationLink = ({
     <Link {...props} className="w-full">
       <div
         className={clsx(
-          "mx-6 flex w-full items-center gap-4 overflow-hidden py-2.5 text-start transition-colors duration-200 hover:text-blue-500",
+          "flex w-full flex-col items-center gap-2 overflow-hidden py-2.5 text-start transition-colors duration-200 hover:text-blue-500 lg:mx-6 lg:flex-row lg:gap-4",
           isActive ? "text-blue-500" : "text-gray-400"
         )}
       >
         {icon}
-        {isOpen && <span className="text-sm font-medium">{text}</span>}
+        {!isMobile && isOpen ? (
+          <span className="text-xs font-medium lg:text-sm">{text}</span>
+        ) : null}
       </div>
     </Link>
   )

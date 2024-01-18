@@ -1,40 +1,26 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { Prisma, Product } from "@prisma/client"
+import { Product } from "@prisma/client"
 
 import { prisma } from "@/lib/prisma"
 
-import { getUserStore } from "./user-details"
+import { getProduct } from "../product"
+import { getUserStore } from "../user/user-details"
 
-export async function getProducts(): Promise<
-  Prisma.ProductGetPayload<{ include: { images: true; categories: true } }>[]
-> {
-  const products = await prisma.product.findMany({
-    include: { images: true, categories: true },
-  })
-  return products
-}
-
-export async function getProduct(
-  productId: number
-): Promise<Prisma.ProductGetPayload<{
-  include: { images: true; categories: true; store: true }
-}> | null> {
-  const productDetails = await prisma.product.findUnique({
-    where: { id: productId },
-    include: { images: true, categories: true, store: true },
-  })
-  return productDetails
-}
-
-type UpdateProductParams = Omit<Product, "status" | "store_id"> & {
+type UpdateProductParams = Omit<
+  Product,
+  "status" | "store_id" | "sold" | "slug"
+> & {
   status: "draft" | "published"
   images: { name: string; url: string }[]
   categoryIds: number[]
 }
 
-type AddProductProps = Omit<Product, "status" | "id" | "store_id"> & {
+type AddProductProps = Omit<
+  Product,
+  "status" | "id" | "store_id" | "sold" | "slug"
+> & {
   status: "draft" | "published"
   images: { name: string; url: string }[]
   categoryIds: number[]
@@ -50,6 +36,7 @@ export async function addProduct({
     await prisma.product.create({
       data: {
         ...product,
+        slug: generateSlug(product.name),
         store_id: userStore?.id as number,
         images: { createMany: { data: images } },
         categories: { connect: categoryIds.map((id) => ({ id: id })) },
@@ -63,6 +50,7 @@ export async function addProduct({
 
 export async function updateProduct(product: UpdateProductParams) {
   const userStore = await getUserStore()
+  const currentProduct = await getProduct(product.id)
   try {
     await prisma.product.update({
       where: { id: product.id },
@@ -71,10 +59,15 @@ export async function updateProduct(product: UpdateProductParams) {
         description: product.description,
         price: product.price,
         stock: product.stock,
-        slug: product.slug,
+        slug: generateSlug(product.name),
         featured_image_url: product.featured_image_url,
         store_id: userStore?.id,
-        categories: { connect: product.categoryIds.map((id) => ({ id: id })) },
+        categories: {
+          connect: product.categoryIds.map((id) => ({ id: id })),
+          disconnect: currentProduct?.categories.filter(
+            (category) => !product.categoryIds.includes(category.id)
+          ),
+        },
         images: {
           deleteMany: {},
         },
@@ -116,4 +109,8 @@ export async function deleteProduct(productIds: number[]) {
   } catch (error) {
     throw error
   }
+}
+
+function generateSlug(name: string) {
+  return name.toLowerCase().replaceAll(" ", "-")
 }

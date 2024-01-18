@@ -9,7 +9,7 @@ import { AddToCartForm } from "@/components/user/product-details/add-to-cart-for
 import { ProductImages } from "@/components/user/product-details/product-images"
 import { ReviewCard } from "@/components/user/product-details/review-card"
 import { WishListButton } from "@/components/user/product-details/wishlist-button"
-import { isProductInWishlist } from "@/app/actions/wishlist"
+import { isProductInWishlist } from "@/app/actions/user/wishlist"
 
 type Props = {
   params: { productId: string }

@@ -17,7 +17,7 @@ export function TableSearchInput({
     <div
       className={twMerge(
         clsx(
-          "flex h-8 w-40 items-center rounded-md border bg-white p-1.5 dark:border-neutral-600 dark:bg-neutral-900 lg:h-10 lg:w-96",
+          "flex h-8 w-full items-center rounded-md border bg-white p-1.5 lg:h-10 lg:w-96 dark:border-neutral-600 dark:bg-neutral-900",
           props.disabled && "opacity-70"
         )
       )}
@@ -34,7 +34,7 @@ export function TableSearchInput({
         type="text"
         className={twMerge(
           clsx(
-            "h-auto w-full appearance-none border-none p-0 text-xs focus:border-0 focus-visible:ring-0 dark:bg-neutral-900 lg:text-base",
+            "h-auto w-full appearance-none border-none p-0 text-xs focus:border-0 focus-visible:ring-0 lg:text-base dark:bg-neutral-900",
             className
           )
         )}

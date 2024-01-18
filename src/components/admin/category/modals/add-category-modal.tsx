@@ -15,7 +15,7 @@ import { Fieldset } from "@/components/ui/fieldset"
 import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
 import { FileImage, ImageUploader } from "@/components/image-uploader"
-import { addCategory } from "@/app/actions/categories"
+import { addCategory } from "@/app/actions/admin/categories"
 
 export const CategorySchema = z.object({
   name: z.string().min(5).max(100),

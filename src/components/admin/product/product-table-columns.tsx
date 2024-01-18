@@ -82,6 +82,11 @@ export const productTableColumns: ColumnDef<
     },
   },
   {
+    accessorKey: "status",
+    header: "Status",
+    cell: (status) => status.getValue(),
+  },
+  {
     accessorKey: "stock",
     header: "Stock",
     cell: (stock) => stock.getValue(),

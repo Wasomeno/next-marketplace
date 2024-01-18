@@ -9,7 +9,7 @@ import { toast } from "react-toastify"
 
 import { Button } from "@/components/ui/button"
 import { CartItem } from "@/app/(user)/(main)/cart/page"
-import { removeFromCart, updateCartItem } from "@/app/actions/cart"
+import { removeFromCart, updateCartItem } from "@/app/actions/user/cart"
 
 interface CartItemCardProps {
   isSelected: boolean

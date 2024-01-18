@@ -23,7 +23,11 @@ export const metadata = {
   title: "Orders | Next Marketplace",
 }
 
-async function getUserOrderProduct(status?: string, page?: string) {
+async function getUserOrderProduct(
+  status?: string,
+  page?: string,
+  size?: number
+) {
   const session = await getServerSession()
   const orderProductCount = await prisma.orderProduct.count({
     where: {
@@ -54,7 +58,8 @@ async function getUserOrderProduct(status?: string, page?: string) {
 export default async function OrdersPage({ searchParams }: Props) {
   const { orderProducts, count } = await getUserOrderProduct(
     searchParams.status,
-    searchParams.page
+    searchParams.page,
+    5
   )
 
   return (

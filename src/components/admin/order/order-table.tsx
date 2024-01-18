@@ -5,6 +5,7 @@ import { Prisma } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
 
 import { getOrderSorts } from "@/config/table/sorts/orderSorts"
+import { Button } from "@/components/ui/button"
 import { TableActions } from "@/components/table-row-menu"
 
 import { DataTable } from "../data-table"
@@ -67,12 +68,12 @@ export const OrderTable = ({
             <TableActions
               editAction={
                 <TableActions.Edit
-                  href={`/store/orders?id=${row.original.id}&edit=true`}
+                  href={`/store/orders/edit/${row.original.id}`}
                 />
               }
               viewAction={
                 <TableActions.View
-                  href={`/store/orders?id=${row.original.id}&view=true`}
+                  href={`/store/orders/view/${row.original.id}`}
                 />
               }
             />

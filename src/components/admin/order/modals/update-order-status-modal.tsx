@@ -9,7 +9,11 @@ import { Id, toast } from "react-toastify"
 
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
-import { getOrder, TOrderStatus, updateOrderStatus } from "@/app/actions/order"
+import {
+  getOrder,
+  TOrderStatus,
+  updateOrderStatus,
+} from "@/app/actions/user/order"
 
 import { OrderStatusPicker } from "./order-status-picker"
 
@@ -61,47 +65,45 @@ export function UpdateOrderStatusModal() {
           </div>
         ) : (
           <>
-            <div className="px-4">
-              <OrderStatusPicker
-                status={selectedStatus ?? order.data?.status}
-                selectStatus={(status) => setSelectedStatus(status)}
-              />
-              <div className="my-4 flex items-center justify-between text-xs lg:text-sm">
+            <div className="mb-4 px-6">
+              <div className="mb-4 flex items-center justify-between text-xs lg:text-sm">
                 <span className="font-medium ">Invoice Number</span>
                 <span>{order.data?.invoice}</span>
               </div>
               <div className="flex items-center justify-between text-xs lg:text-sm">
                 <span className="font-medium ">Transaction Date</span>
-                <span>{date.toDateString()}</span>
+                <span>{date.toLocaleString()}</span>
               </div>
             </div>
-            <div className="flex w-full flex-1 flex-col px-4">
+            <div className="flex w-full flex-1 flex-col gap-2 px-6">
               <span className="text-sm font-semibold lg:text-base">
                 Products
               </span>
-              <div className="mt-4 flex flex-col gap-2.5">
+              <span className="w-full border-t border-gray-200" />
+              <div className="mt-2 flex flex-col gap-2.5">
                 {order.data?.products.map((orderProduct) => (
                   <div
                     key={orderProduct.id}
-                    className="flex items-center gap-4 border-t p-4 dark:border-t-neutral-700"
+                    className="flex w-full gap-2 lg:gap-4"
                   >
-                    <div className="flex w-full flex-wrap items-end justify-between gap-2">
-                      <div className="flex w-full gap-2 lg:w-4/6 lg:gap-4">
-                        <div className="relative h-20 w-28 rounded-md bg-slate-300 lg:h-20 lg:w-24 dark:bg-neutral-400">
-                          <Image
-                            src={orderProduct.product.featured_image_url}
-                            alt="orderProduct-image"
-                            fill
-                          />
-                        </div>
-                        <div className="flex w-4/6 flex-col gap-1 lg:w-3/6">
-                          <span className="text-sm font-medium">
-                            {orderProduct.product.name}
-                          </span>
-                          <span className="text-sm">
-                            Rp {orderProduct.product.price.toLocaleString("id")}
-                          </span>
-                        </div>
+                    <div className="relative h-20 w-28 overflow-hidden rounded-md border border-gray-300 bg-slate-300 lg:h-20 lg:w-24 dark:bg-neutral-400">
+                      <Image
+                        src={orderProduct.product.featured_image_url}
+                        alt="orderProduct-image"
+                        fill
+                      />
+                    </div>
+                    <div className="flex w-full items-center justify-between">
+                      <span className="text-sm">
+                        {orderProduct.product.name}
+                      </span>
+                      <div className="flex flex-col items-end gap-1 text-sm">
+                        <span>
+                          Rp {orderProduct.product.price.toLocaleString("id")}
+                        </span>
+                        <span className="font-medium text-gray-400">
+                          Qty: {orderProduct.amount}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -110,16 +112,6 @@ export function UpdateOrderStatusModal() {
             </div>
           </>
         )}
-
-        <div className="sticky bottom-0 flex  items-center justify-center border-t bg-slate-50 py-2">
-          <Button
-            onClick={() => updateOrder.mutate()}
-            variant="success"
-            className="text-sm font-medium text-white"
-          >
-            Update Order
-          </Button>
-        </div>
       </DialogContent>
     </Dialog>
   )

@@ -1,5 +1,6 @@
-import React from "react"
+import React, { Fragment } from "react"
 import Link from "next/link"
+import clsx from "clsx"
 import { getServerSession } from "next-auth"
 import { BiStore } from "react-icons/bi"
 import invariant from "tiny-invariant"
@@ -27,7 +28,10 @@ export async function UserStoreButton() {
 
   if (session && !store) {
     return (
-      <Link href="/store/create?step=name" className={linkStyle}>
+      <Link
+        href="/store/create?step=name"
+        className={clsx(linkStyle, "hidden lg:inline-block")}
+      >
         <BiStore />
         Create Store
       </Link>
@@ -37,8 +41,16 @@ export async function UserStoreButton() {
   invariant(store)
 
   return (
-    <Link href="/store/home" className={linkStyle}>
-      {store.name}
-    </Link>
+    <Fragment>
+      <Link
+        href="/store/home"
+        className={clsx(linkStyle, "hidden lg:inline-block")}
+      >
+        {store.name}
+      </Link>
+      <Link href="/store/home" className="inline-block lg:hidden">
+        <BiStore size={20} />
+      </Link>
+    </Fragment>
   )
 }

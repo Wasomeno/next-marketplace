@@ -9,7 +9,7 @@ import { BsCheck } from "react-icons/bs"
 import { toast } from "react-toastify"
 
 import { Button } from "@/components/ui/button"
-import { removeProductFromWishlist } from "@/app/actions/wishlist"
+import { removeProductFromWishlist } from "@/app/actions/user/wishlist"
 
 type WishListItemCardProps = {
   setSelectedItems: Dispatch<SetStateAction<number[]>>

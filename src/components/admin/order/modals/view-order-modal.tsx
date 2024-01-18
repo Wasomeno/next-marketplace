@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
 
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
-import { getOrder } from "@/app/actions/order"
+import { getOrder } from "@/app/actions/user/order"
 
 export const ViewOrderModal = () => {
   const params = useSearchParams()

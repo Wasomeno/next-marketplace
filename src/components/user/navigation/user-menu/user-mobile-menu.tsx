@@ -8,6 +8,7 @@ import { Session } from "next-auth"
 import { signOut } from "next-auth/react"
 import { BsBox2Heart } from "react-icons/bs"
 import { HiMenu, HiX } from "react-icons/hi"
+import { IoSettingsOutline } from "react-icons/io5"
 import { VscSignOut } from "react-icons/vsc"
 
 import { ThemeSwitcher } from "@/components/theme-switcher"
@@ -81,6 +82,18 @@ export function UserMobileMenu({ session }: { session: Session }) {
                     <BsBox2Heart size="16" />
                   </span>
                   <span className="text-sm">Wishlist</span>
+                </button>
+                <button
+                  onClick={() => {
+                    router.push("/wishlist")
+                    setShowMenu(false)
+                  }}
+                  className="flex items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200"
+                >
+                  <span>
+                    <IoSettingsOutline size="16" />
+                  </span>
+                  <span className="text-sm">Settings</span>
                 </button>
               </div>
               <div className="px-4 py-2">

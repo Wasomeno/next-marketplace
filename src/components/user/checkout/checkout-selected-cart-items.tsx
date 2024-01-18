@@ -18,7 +18,7 @@ export function CheckoutSelectedCartItems() {
             <div className="flex w-full gap-2 lg:w-4/6 lg:gap-4">
               <div className="relative h-12 w-16 rounded-md bg-slate-300 lg:h-20 lg:w-24 dark:bg-neutral-400">
                 <Image
-                  src={selectedCartItem.product.images[0].url}
+                  src={selectedCartItem.product.featured_image_url}
                   alt="product-image"
                   fill
                 />

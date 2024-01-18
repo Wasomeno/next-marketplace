@@ -11,7 +11,7 @@ import {
   DropdownItem,
   DropdownTrigger,
 } from "@/components/ui/dropdown"
-import { TOrderStatus } from "@/app/actions/order"
+import { TOrderStatus } from "@/app/actions/user/order"
 
 const statuses = [
   "Payment Confirmed",

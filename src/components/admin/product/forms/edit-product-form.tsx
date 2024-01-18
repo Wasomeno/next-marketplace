@@ -3,6 +3,7 @@
 import { useEffect, useState, useTransition } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { useUploadThing } from "@/utils/uploadthing"
+import { useImageFiles } from "@/utils/useImageFiles"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Category, Prisma } from "@prisma/client"
 import { useForm } from "react-hook-form"
@@ -13,9 +14,10 @@ import { Button } from "@/components/ui/button"
 import { Fieldset } from "@/components/ui/fieldset"
 import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
+import { Dropdown } from "@/components/dropdown"
 import { FileImage, ImageUploader } from "@/components/image-uploader"
 import { MultiSelectDropdown, Option } from "@/components/multi-select-dropdown"
-import { updateProduct } from "@/app/actions/products"
+import { updateProduct } from "@/app/actions/store/products"
 
 import { ProductFormData, ProductSchema } from "./add-product-form"
 
@@ -34,26 +36,17 @@ export function EditProductForm({ product, categories }: Props) {
     }))
   )
 
-  const [images, setImages] = useState<Array<FileImage>>([])
+  const { files, addFiles, removeFile } = useImageFiles(product.images)
+
   const [isLoading, startTransition] = useTransition()
 
-  const params = useParams()
-
-  const productId = parseInt(params.productId as string)
+  const params = useParams<{ productId: string }>()
   const router = useRouter()
 
-  const {
-    getValues,
-    register,
-    reset,
-    watch,
-    setValue,
-    formState,
-    handleSubmit,
-    clearErrors,
-  } = useForm<ProductFormData>({
-    resolver: zodResolver(ProductSchema),
-  })
+  const { getValues, register, reset, formState, handleSubmit } =
+    useForm<ProductFormData>({
+      resolver: zodResolver(ProductSchema),
+    })
 
   const { startUpload } = useUploadThing("imageUploader")
 
@@ -65,23 +58,26 @@ export function EditProductForm({ product, categories }: Props) {
   function onSubmit(inputs: ProductFormData) {
     startTransition(async () => {
       try {
-        const uploadedImages = await startUpload(images)
-        invariant(uploadedImages)
         await toast.promise(
-          updateProduct({
-            ...inputs,
-            id: productId,
-            slug: generateSlug(),
-            categoryIds: selectedCategories.map(
-              (category) => category.value as number
-            ),
-            images: uploadedImages?.map((image) => ({
-              name: image.name,
-              url: image.url,
-            })) as { name: string; url: string }[],
-            status: "published",
-            featured_image_url: uploadedImages[0]?.url,
-          }),
+          async () => {
+            const uploadedImages = await startUpload(files)
+
+            invariant(uploadedImages)
+
+            return updateProduct({
+              ...inputs,
+              id: parseInt(params.productId),
+              categoryIds: selectedCategories.map(
+                (category) => category.value as number
+              ),
+              images: uploadedImages?.map((image) => ({
+                name: image.name,
+                url: image.url,
+              })) as { name: string; url: string }[],
+              status: "published",
+              featured_image_url: uploadedImages[0]?.url,
+            })
+          },
           {
             error: `Error when updating ${product.name}`,
             success: "Update Success",
@@ -93,28 +89,10 @@ export function EditProductForm({ product, categories }: Props) {
     })
   }
 
-  function generateSlug() {
-    return getValues("name")?.toLowerCase().replaceAll(" ", "-")
-  }
-
   useEffect(() => {
     reset({
       ...product,
     })
-    Promise.all(
-      product?.images.map((image) =>
-        fetch(image.url)
-          .then((image) => image.blob())
-          .then((blobImage) => {
-            const imageFile = new File([blobImage], image.name, {
-              type: blobImage.type,
-            })
-            return Object.assign(imageFile, {
-              preview: URL.createObjectURL(imageFile),
-            })
-          })
-      )
-    ).then((result) => setImages(result))
   }, [product])
 
   return (
@@ -123,13 +101,9 @@ export function EditProductForm({ product, categories }: Props) {
       className="flex w-full flex-col gap-4 lg:w-4/6"
     >
       <ImageUploader
-        files={images}
-        setFiles={setImages}
-        deselectFile={(fileIndex) => {
-          setImages((selectedFiles) =>
-            selectedFiles.filter((_, index) => fileIndex !== index)
-          )
-        }}
+        files={files}
+        selectFiles={addFiles}
+        deselectFile={removeFile}
       />
       <Fieldset
         label="Name"
@@ -141,12 +115,18 @@ export function EditProductForm({ product, categories }: Props) {
         label="Categories"
         className="flex flex-col gap-2 rounded-lg border border-gray-100 p-3"
       >
-        <MultiSelectDropdown
+        <Dropdown
           options={categoryOptions}
           selectedOptions={selectedCategories}
-          onSelect={(option) =>
+          onOptionClick={(option) =>
             setSelectedCategories((categories) => [...categories, option])
           }
+          deselectOption={(option) => {
+            setSelectedCategories((categories) =>
+              categories.filter((category) => category.value !== option.value)
+            )
+          }}
+          isMulti
         />
       </Fieldset>
       <Fieldset

@@ -2,7 +2,7 @@ import { CategoryTable } from "@/components/admin/category/category-table"
 import { AddCategoryModal } from "@/components/admin/category/modals/add-category-modal"
 import { EditCategoryModal } from "@/components/admin/category/modals/edit-category-modal"
 import { ViewCategoryModal } from "@/components/admin/category/modals/view-category-modal"
-import { getCategories } from "@/app/actions/categories"
+import { getCategories } from "@/app/actions/admin/categories"
 
 export const metadata = {
   title: "Admin | Categories",

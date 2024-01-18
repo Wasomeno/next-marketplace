@@ -1,13 +1,11 @@
 "use client"
 
 import React, { useState } from "react"
-import Link from "next/link"
 import { Store } from "@prisma/client"
 import clsx from "clsx"
 import { motion } from "framer-motion"
 import {
   HiChevronRight,
-  HiHome,
   HiListBullet,
   HiOutlineArchiveBox,
   HiOutlineChatBubbleLeftEllipsis,
@@ -16,7 +14,7 @@ import {
 
 import { StoreSideNavigationLink } from "./store-side-navigation-link"
 
-export const StoreSideNavigation = ({ store }: { store: Store }) => {
+export const StoreSideNavigation = ({ store }: { store: Store | null }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -26,7 +24,7 @@ export const StoreSideNavigation = ({ store }: { store: Store }) => {
         width: isOpen ? "256px" : "70px",
       }}
       transition={{ ease: "easeOut", duration: 0.3, velocity: 0.5 }}
-      className="sticky left-0 top-0 flex flex-col gap-2 border-r border-r-gray-100 shadow-md"
+      className="sticky left-0 top-0 hidden flex-col gap-2 border-r border-gray-100 bg-white shadow-md lg:flex"
     >
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -34,7 +32,12 @@ export const StoreSideNavigation = ({ store }: { store: Store }) => {
       >
         <HiChevronRight size={18} />
       </button>
-      <div className={clsx("flex flex-col gap-4", !isOpen && "items-center")}>
+      <div
+        className={clsx(
+          "flex flex-row gap-4 lg:flex-col",
+          !isOpen && "items-center"
+        )}
+      >
         <div
           className={clsx(
             "flex items-center gap-4 overflow-hidden py-2",

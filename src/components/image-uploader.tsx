@@ -1,8 +1,10 @@
 "use client"
 
-import React, { SetStateAction, useRef, useState } from "react"
+import React from "react"
+import { GetServerSidePropsContext } from "next"
 import Image from "next/image"
 import { useDropzone } from "react-dropzone"
+import { LuImagePlus } from "react-icons/lu"
 import { RxCross1 } from "react-icons/rx"
 import FileResizer from "react-image-file-resizer"
 
@@ -13,18 +15,17 @@ export type FileImage = File & { preview: string }
 
 interface ImageUploaderProps {
   files: Array<File & { preview: string }>
-  setFiles: React.Dispatch<SetStateAction<FileImage[]>>
-  deselectFile?: (index: number) => void
+  selectFiles: (files: FileImage[]) => void
+  deselectFile: (index: number) => void
 }
 
 export const ImageUploader = ({
   files,
-  setFiles,
+  selectFiles,
   deselectFile,
 }: ImageUploaderProps) => {
   const { getInputProps, getRootProps } = useDropzone({
     onDrop: (selectedFiles) => {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
       for (const selectedFile of selectedFiles) {
         FileResizer.imageFileResizer(
           selectedFile,
@@ -43,8 +44,7 @@ export const ImageUploader = ({
 
             const imageBlob = new Blob([ab], { type: "image/webp" })
             const imageFile = new File([imageBlob], selectedFile.name)
-            setFiles((imageFiles) => [
-              ...imageFiles,
+            selectFiles([
               Object.assign(imageFile, {
                 preview: URL.createObjectURL(imageFile),
               }),
@@ -64,10 +64,11 @@ export const ImageUploader = ({
         <div
           {...getRootProps({
             className:
-              "flex items-center cursor-pointer rounded-md bg-white dark:bg-neutral-800 dark:border-neutral-600 h-32 justify-center border   ",
+              "flex items-center flex-col gap-2 cursor-pointer rounded-md bg-white dark:bg-neutral-800 dark:border-neutral-600 h-32 justify-center border-dashed border border-gray-300",
           })}
         >
           <Input {...getInputProps()} />
+          <LuImagePlus className="text-black text-opacity-50" size={20} />
           <p className="text-sm opacity-50">Drop your images here</p>
         </div>
       )}
@@ -78,7 +79,7 @@ export const ImageUploader = ({
             {files.map((file, index) => (
               <div
                 key={index}
-                className="relative flex h-20 w-20 items-center justify-center rounded-md border bg-white  p-2"
+                className="relative flex h-28 w-28 items-center justify-center rounded-md border bg-white  p-2"
               >
                 <Button
                   variant="danger"
@@ -91,15 +92,18 @@ export const ImageUploader = ({
                 <Image src={file.preview} alt="image-preview" fill />
               </div>
             ))}
+            <div
+              {...getRootProps({
+                className:
+                  "flex h-28 w-28 flex-col gap-2 items-center justify-center rounded-md border border-dashed border-gray-300 bg-gray-50",
+              })}
+            >
+              <Input {...getInputProps()} />
+              <LuImagePlus className="text-gray-500" size={24} />
+            </div>
           </div>
         </div>
       )}
     </div>
   )
-}
-
-function useImageResizer(file: File): FileImage {
-  let image = {}
-
-  return image as FileImage
 }

@@ -15,7 +15,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <ClientSessionProvider>
         <ReactQueryProvider>
-          <body className="bg-slate-50 antialiased dark:bg-slate-950">
+          <body className="flex min-h-screen flex-1 flex-col overflow-y-scroll antialiased dark:bg-slate-950">
             <ThemeClientProvider>
               {children}
               <div className="fixed" />

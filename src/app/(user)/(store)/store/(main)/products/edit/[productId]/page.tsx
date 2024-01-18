@@ -5,7 +5,7 @@ import invariant from "tiny-invariant"
 
 import { EditProductForm } from "@/components/admin/product/forms/edit-product-form"
 import { getCategories } from "@/app/actions/categories"
-import { getProduct } from "@/app/actions/products"
+import { getProduct } from "@/app/actions/product"
 
 type ProductPageProps = {
   params: { productId: string }

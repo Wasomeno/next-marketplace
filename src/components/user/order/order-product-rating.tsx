@@ -2,8 +2,8 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { useRouter, useSearchParams } from "next/navigation"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useQuery } from "@tanstack/react-query"
 import clsx from "clsx"
 import { AiFillStar } from "react-icons/ai"
 import { BiStore } from "react-icons/bi"
@@ -15,52 +15,48 @@ import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
 import { Fieldset } from "@/components/ui/fieldset"
 import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
-import { getProduct } from "@/app/actions/products"
-import { addReview } from "@/app/actions/review"
+import { getProduct } from "@/app/actions/product"
+import { addReview } from "@/app/actions/store/review"
 
 export function OrderProductRating() {
   const [selectedRating, setSelectedRating] = useState<number | null>()
   const [rating, setRating] = useState<number | null>()
   const [review, setReview] = useState("")
 
+  const pathname = usePathname()
   const searchParams = useSearchParams()
   const router = useRouter()
 
   const open = searchParams.get("rating") !== null
-  const productId = searchParams.get("id") as string
+  const productId = searchParams.get("productId") as string
+  const orderProductId = searchParams.get("orderProductId") as string
 
   const product = useQuery({
     queryKey: ["product", productId],
     queryFn: () => getProduct(parseInt(productId as string)),
   })
 
-  const addReviewMutation = useMutation({
-    mutationFn: () =>
-      toast.promise(
-        async () =>
-          await addReview({
-            id: parseInt(productId),
-            rating: (rating as number) + 1,
-            review: review,
-          }),
-        {
-          pending: "Adding Review",
-          success: "Succesfully added review",
-          error: "Error",
-        }
-      ),
-  })
+  console.log(product)
+
+  async function addProductReview() {
+    toast.promise(
+      async () =>
+        await addReview({
+          orderProductId: parseInt(orderProductId),
+          productId: parseInt(productId),
+          rating: (rating as number) + 1,
+          review: review,
+        }),
+      {
+        pending: "Adding Review",
+        success: "Succesfully added review",
+        error: "Error",
+      }
+    )
+  }
 
   return (
-    <Dialog
-      open={open}
-      onOpenChange={() => {
-        const newSearchParams = new URLSearchParams(searchParams.toString())
-        newSearchParams.delete("rating")
-        newSearchParams.delete("id")
-        router.push(`/orders?${newSearchParams.toString()}`)
-      }}
-    >
+    <Dialog open={open} onOpenChange={() => router.push(pathname)}>
       <DialogContent
         open={open}
         className="flex h-3/6 flex-1 flex-col gap-4 lg:h-4/6 lg:w-3/6"
@@ -120,14 +116,14 @@ export function OrderProductRating() {
         </div>
         <div className="flex items-center gap-4 px-6 py-4">
           <Button
-            onClick={() => addReviewMutation.mutate()}
+            onClick={() => router.push(pathname)}
             variant="danger"
             className="font-medium text-white"
           >
             No Thanks
           </Button>
           <Button
-            onClick={() => addReviewMutation.mutate()}
+            onClick={addProductReview}
             variant="default"
             className="bg-blue-400 font-medium text-white"
           >

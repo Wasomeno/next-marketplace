@@ -1,33 +1,24 @@
 "use client"
 
-import { error, table } from "console"
-import { url } from "inspector"
-import { useEffect, useRef, useState, useTransition } from "react"
-import { useRouter } from "next/navigation"
-import { useUploadThing } from "@/utils/uploadthing"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Category } from "@prisma/client"
-import { AnimatePresence, motion } from "framer-motion"
-import { useForm } from "react-hook-form"
-import { BiChevronRight } from "react-icons/bi"
-import { IoShirt } from "react-icons/io5"
-import { Id, toast } from "react-toastify"
-import invariant from "tiny-invariant"
-import * as z from "zod"
+import { useRouter } from "next/navigation";
+import { useRef, useState, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { Id, toast } from "react-toastify";
+import invariant from "tiny-invariant";
+import * as z from "zod";
 
-import { Button } from "@/components/ui/button"
-import {
-  Dropdown,
-  DropdownContent,
-  DropdownItem,
-  DropdownTrigger,
-} from "@/components/ui/dropdown"
-import { Fieldset } from "@/components/ui/fieldset"
-import { Input } from "@/components/ui/input"
-import { TextArea } from "@/components/ui/text-area"
-import { FileImage, ImageUploader } from "@/components/image-uploader"
-import { MultiSelectDropdown, Option } from "@/components/multi-select-dropdown"
-import { addProduct } from "@/app/actions/products"
+import { addProduct } from "@/app/actions/store/products";
+import { Dropdown } from "@/components/dropdown";
+import { ImageUploader } from "@/components/image-uploader";
+import { Option } from "@/components/multi-select-dropdown";
+import { Button } from "@/components/ui/button";
+import { Fieldset } from "@/components/ui/fieldset";
+import { Input } from "@/components/ui/input";
+import { TextArea } from "@/components/ui/text-area";
+import { useUploadThing } from "@/utils/uploadthing";
+import { useImageFiles } from "@/utils/useImageFiles";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Category } from "@prisma/client";
 
 export const ProductSchema = z.object({
   name: z
@@ -41,7 +32,7 @@ export const ProductSchema = z.object({
   description: z
     .string()
     .min(20, "Description must have at least 20 characters")
-    .max(200, "Description can't be more than 200 characters"),
+    .max(750, "Description can't be more than 200 characters"),
   stock: z
     .number()
     .min(10, "Stock must have at least 10")
@@ -56,15 +47,12 @@ export function AddProductForm({
   categories: Pick<Category, "id" | "name">[]
 }) {
   const [selectedCategories, setSelectedCategories] = useState<Option[]>([])
-  const [files, setFiles] = useState<Array<FileImage>>([])
+  const { files, addFiles, clearFiles, removeFile } = useImageFiles()
   const [isLoading, startTransition] = useTransition()
   const {
-    watch,
-    setValue,
     register,
     handleSubmit,
     formState: { isValid },
-    getValues,
     reset,
   } = useForm<ProductFormData>({
     resolver: zodResolver(ProductSchema),
@@ -73,16 +61,11 @@ export function AddProductForm({
   const { startUpload } = useUploadThing("imageUploader")
 
   const toastRef = useRef<Id>(0)
-  const router = useRouter()
 
   const categoryOptions = categories.map((category) => ({
     label: category.name,
     value: category.id,
   }))
-
-  function generateSlug() {
-    return getValues("name")?.toLowerCase().replaceAll(" ", "-")
-  }
 
   function onSubmit(inputs: ProductFormData) {
     startTransition(async () => {
@@ -92,7 +75,6 @@ export function AddProductForm({
         invariant(uploadedFiles)
         await addProduct({
           ...inputs,
-          slug: generateSlug(),
           images: uploadedFiles?.map((file) => ({
             name: file.name,
             url: file.url,
@@ -110,7 +92,7 @@ export function AddProductForm({
           autoClose: 1500,
         })
         reset()
-        setFiles([])
+        clearFiles()
       } catch (error) {}
     })
   }
@@ -122,11 +104,9 @@ export function AddProductForm({
     >
       <ImageUploader
         files={files}
-        setFiles={setFiles}
+        selectFiles={addFiles}
         deselectFile={(fileIndex) => {
-          setFiles((selectedFiles) =>
-            selectedFiles.filter((_, index) => fileIndex !== index)
-          )
+          removeFile(fileIndex)
         }}
       />
       <Fieldset
@@ -143,12 +123,18 @@ export function AddProductForm({
         label="Categories"
         className="flex flex-col gap-2 rounded-lg border border-gray-100 p-3"
       >
-        <MultiSelectDropdown
+        <Dropdown
           options={categoryOptions}
           selectedOptions={selectedCategories}
-          onSelect={(option) =>
+          onOptionClick={(option) =>
             setSelectedCategories((categories) => [...categories, option])
           }
+          deselectOption={(option) =>
+            setSelectedCategories((categories) =>
+              categories.filter((category) => category.value !== option.value)
+            )
+          }
+          isMulti
         />
       </Fieldset>
       <Fieldset

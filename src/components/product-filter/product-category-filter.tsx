@@ -6,7 +6,7 @@ import { Category } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
 import { AnimatePresence, motion } from "framer-motion"
 
-import { getCategories } from "@/app/actions/categories"
+import { getCategories } from "@/app/actions/admin/categories"
 
 import {
   Dropdown,
@@ -57,7 +57,7 @@ export function ProductCategoryFilter() {
       {!categories.isLoading && (
         <Dropdown open={isOpen} onOpenChange={setIsOpen}>
           <DropdownTrigger asChild>
-            <button className="block h-10 w-52 items-center justify-center rounded-md border bg-white px-3 text-start text-xs font-medium outline-0 dark:border-gray-800 dark:bg-slate-950 lg:justify-between lg:text-sm">
+            <button className="block h-10 w-52 items-center justify-center rounded-md border bg-white px-3 text-start text-xs font-medium outline-0 lg:justify-between lg:text-sm dark:border-gray-800 dark:bg-slate-950">
               {category?.name ?? "Select Category"}
             </button>
           </DropdownTrigger>
@@ -68,7 +68,7 @@ export function ProductCategoryFilter() {
                   initial={{ height: "0px" }}
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: "0px" }}
-                  className="z-[60] flex w-52 flex-col overflow-hidden rounded-md border bg-white text-sm shadow-sm dark:border-gray-800 dark:bg-slate-950 lg:rounded-b-md lg:rounded-t-none lg:border-t-0"
+                  className="z-[60] flex w-52 flex-col overflow-hidden rounded-md border bg-white text-sm shadow-sm lg:rounded-b-md lg:rounded-t-none lg:border-t-0 dark:border-gray-800 dark:bg-slate-950"
                 >
                   <DropdownItem asChild>
                     <button
@@ -82,7 +82,7 @@ export function ProductCategoryFilter() {
                           `${pathname}?${newSearchParams.toString()}`
                         )
                       }}
-                      className="px-3 py-2  text-start text-xs font-medium outline-0 ring-0 transition  duration-200 hover:bg-slate-100 hover:dark:bg-slate-800 lg:text-sm"
+                      className="px-3 py-2  text-start text-xs font-medium outline-0 ring-0 transition  duration-200 hover:bg-slate-100 lg:text-sm hover:dark:bg-slate-800"
                     >
                       All Category
                     </button>
@@ -91,7 +91,7 @@ export function ProductCategoryFilter() {
                     <DropdownItem key={category.id} asChild>
                       <button
                         onClick={() => selectCategory(category)}
-                        className="px-3 py-2  text-start text-xs font-medium outline-0 ring-0 transition  duration-200 hover:bg-slate-100 hover:dark:bg-slate-800 lg:text-sm"
+                        className="px-3 py-2  text-start text-xs font-medium outline-0 ring-0 transition  duration-200 hover:bg-slate-100 lg:text-sm hover:dark:bg-slate-800"
                       >
                         {category.name}
                       </button>

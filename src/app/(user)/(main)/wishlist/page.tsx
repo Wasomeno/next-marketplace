@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 
 import { WishlistItems } from "@/components/user/wishlist/wishlist-items"
-import { getWishlist } from "@/app/actions/wishlist"
+import { getWishlist } from "@/app/actions/user/wishlist"
 
 export const metadata: Metadata = {
   title: "Wishlist | Next Marketplace",

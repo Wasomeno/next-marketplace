@@ -26,12 +26,13 @@ model Product {
   id                 Int             @id @default(autoincrement())
   store_id           Int
   name               String          @unique
-  description        String
+  description        String          @db.LongText
   price              Int
   stock              Int
   slug               String
   featured_image_url String
   status             String
+  sold               Int             @default(0)
   reviews            ProductReview[]
   cart_items         CartItem[]
   wishlist_items     WishlistItem[]
@@ -148,6 +149,7 @@ model OrderProduct {
   total      Int
   order_id   Int
   product_id Int
+  isReviewed Boolean @default(false)
   product    Product @relation(fields: [product_id], references: [id])
   order      Order   @relation(fields: [order_id], references: [id])
 
@@ -225,9 +227,28 @@ model User {
   accounts      Account[]
   sessions      Session[]
   store         Store?
+  addresses     UserAddress[]
 
   @@index([store_id])
   @@map("users")
+}
+
+model UserAddress {
+  id              String  @id @default(cuid())
+  title           String
+  city            String
+  province        String
+  subdistrict     String
+  postNumber      String
+  street          String
+  additionalNotes String  @db.LongText
+  userEmail       String
+  phoneNumber     String
+  recipient       String
+  isMainAddress   Boolean @default(false)
+  user            User    @relation(fields: [userEmail], references: [email])
+
+  @@index([userEmail])
 }
 
 model VerificationToken {

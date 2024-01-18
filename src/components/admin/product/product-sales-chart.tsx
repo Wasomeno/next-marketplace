@@ -17,13 +17,17 @@ function generateDummyData() {
   return data
 }
 
-export const ProductSalesChart = () => {
+export const ProductSalesChart = ({
+  data,
+}: {
+  data: { name: string; uv: number }[]
+}) => {
   return (
     <ResponsiveContainer width={"100%"} height={180}>
       <AreaChart
         width={500}
         height={180}
-        data={generateDummyData()}
+        data={data}
         margin={{
           top: 10,
           right: 30,

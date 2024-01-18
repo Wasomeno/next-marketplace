@@ -1,17 +1,19 @@
 "use client"
 
-import { useRouter } from "next/navigation";
-import { BsPlus, BsTrash3 } from "react-icons/bs";
-import { GiCookingPot, GiShirt } from "react-icons/gi";
+import { useState, useTransition } from "react"
+import { useRouter } from "next/navigation"
+import { Prisma } from "@prisma/client"
+import { ColumnDef } from "@tanstack/react-table"
+import { BsPlus, BsTrash3 } from "react-icons/bs"
+import { toast } from "react-toastify"
 
-import { Button } from "@/components/ui/button";
-import { getProductSorts } from "@/config/table/sorts/productSorts";
-import { Prisma } from "@prisma/client";
-import { ColumnDef } from "@tanstack/react-table";
+import { getProductSorts } from "@/config/table/sorts/productSorts"
+import { Button } from "@/components/ui/button"
+import { ConfirmationDialog } from "@/components/confirmation-dialog"
+import { deleteProduct } from "@/app/actions/store/products"
 
-import { DataTable, useSelectedData } from "../data-table";
-import { DeleteProductModal } from "./forms/delete-product-modal";
-import { productTableColumns } from "./product-table-columns";
+import { DataTable, useSelectedData } from "../data-table"
+import { productTableColumns } from "./product-table-columns"
 
 export const ProductTable = ({
   products,
@@ -20,6 +22,8 @@ export const ProductTable = ({
     include: { images: true; categories: true }
   }>[]
 }) => {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [isLoading, startTransition] = useTransition()
   const {
     selectedData,
     selectData,
@@ -69,6 +73,21 @@ export const ProductTable = ({
 
   const router = useRouter()
 
+  function deleteProducts() {
+    startTransition(async () => {
+      await toast.promise(deleteProduct(selectedData), {
+        success: `Successfully deleted ${selectedData.length} products`,
+        pending: {
+          render() {
+            setIsDeleteModalOpen(false)
+            return `Deleting ${selectedData.length} products`
+          },
+        },
+        error: "Error when deleting products",
+      })
+      deselectAllData()
+    })
+  }
 
   return (
     <>
@@ -91,14 +110,21 @@ export const ProductTable = ({
             variant="danger"
             size="sm"
             disabled={!selectedData.length}
-            onClick={() => router.replace("/store/products?delete=true")}
+            onClick={() => setIsDeleteModalOpen(true)}
             className="h-8 w-8 hover:scale-[105%] lg:h-9 lg:w-9"
           >
             <BsTrash3 className="text-slate-50" />
           </Button>
         }
       />
-      <DeleteProductModal selectedProducts={selectedData} />
+
+      <ConfirmationDialog
+        open={isDeleteModalOpen}
+        body={`Delete ${selectedData.length} products? This action can't be undone`}
+        onOpenChange={() => setIsDeleteModalOpen(true)}
+        onConfirm={() => deleteProducts()}
+        onCancel={() => setIsDeleteModalOpen(false)}
+      />
     </>
   )
 }

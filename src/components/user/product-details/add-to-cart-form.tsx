@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react"
 import { toast } from "react-toastify"
 
 import { Button } from "@/components/ui/button"
-import { addToCart } from "@/app/actions/cart"
+import { addToCart } from "@/app/actions/user/cart"
 
 type AddToCartFormProps = {
   productDetails: Product
@@ -32,8 +32,8 @@ export const AddToCartForm = ({ productDetails }: AddToCartFormProps) => {
   }
 
   return (
-    <div className="sticky bottom-0 w-full bg-white dark:bg-neutral-950 lg:w-3/12">
-      <div className="border-t border-slate-200 p-2 shadow-[0_3px_10px_rgb(0,0,0,0.1)] dark:border-t-gray-800 lg:rounded-md lg:border lg:border-slate-400 lg:p-4 lg:shadow-none lg:dark:border-gray-800">
+    <div className="sticky bottom-0 w-full bg-white lg:w-3/12 dark:bg-neutral-950">
+      <div className="border-t border-slate-200 p-2 shadow-[0_3px_10px_rgb(0,0,0,0.1)] lg:rounded-md lg:border lg:border-slate-400 lg:p-4 lg:shadow-none dark:border-t-gray-800 lg:dark:border-gray-800">
         <div className="hidden lg:block">
           <span className="text-sm lg:text-base">Product Amount</span>
           <div className="my-4 flex items-center justify-center gap-4">
@@ -68,7 +68,7 @@ export const AddToCartForm = ({ productDetails }: AddToCartFormProps) => {
                   })
                 : router.push("/login")
             }
-            className="my my-2 h-8 w-full rounded-lg  bg-blue-400 text-xs font-medium text-slate-50 dark:bg-blue-900 lg:h-10 lg:text-sm"
+            className="my my-2 h-8 w-full rounded-lg  bg-blue-400 text-xs font-medium text-slate-50 lg:h-10 lg:text-sm dark:bg-blue-900"
           >
             Add to Cart
           </Button>

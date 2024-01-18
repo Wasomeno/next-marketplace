@@ -18,8 +18,8 @@ export async function getUserAddress() {
   const session = await getServerSession(authOptions)
   const userDetails = await prisma.user.findUnique({
     where: { email: session?.user?.email as string },
-    select: { address: true },
+    select: { addresses: { where: { isMainAddress: true } } },
   })
 
-  return userDetails?.address ?? ""
+  return userDetails?.addresses[0]
 }

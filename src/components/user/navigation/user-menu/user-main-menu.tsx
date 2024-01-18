@@ -9,6 +9,7 @@ import { Session } from "next-auth"
 import { signOut } from "next-auth/react"
 import { BsBox2Heart } from "react-icons/bs"
 import { HiOutlineClipboard } from "react-icons/hi"
+import { IoSettingsOutline } from "react-icons/io5"
 import { VscSignOut } from "react-icons/vsc"
 
 import { ThemeSwitcher } from "@/components/theme-switcher"
@@ -45,7 +46,7 @@ export const UserMainMenu = ({ session }: { session: Session }) => {
             >
               <motion.div
                 initial={{ height: "0px", opacity: 0 }}
-                animate={{ height: "240px", opacity: 1 }}
+                animate={{ height: "280px", opacity: 1 }}
                 exit={{ height: "0px", opacity: 0 }}
                 transition={{ duration: 0.2, ease: "backIn" }}
                 className="z-30 w-64 overflow-hidden rounded-md border border-slate-300 bg-white transition-all duration-200 dark:border-gray-800 dark:bg-neutral-950"
@@ -81,6 +82,15 @@ export const UserMainMenu = ({ session }: { session: Session }) => {
                 </div>
                 <div className="p-1.5">
                   <ThemeSwitcher />
+                  <Link
+                    href="/settings"
+                    className="flex items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-gray-100 hover:dark:bg-slate-800"
+                  >
+                    <span>
+                      <IoSettingsOutline size="16" />
+                    </span>
+                    <span className="text-sm">Settings</span>
+                  </Link>
                   <button
                     onClick={() => signOut()}
                     className="flex w-full items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-gray-100 hover:dark:bg-slate-800"

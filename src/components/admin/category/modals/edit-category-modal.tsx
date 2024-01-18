@@ -15,7 +15,7 @@ import { Fieldset } from "@/components/ui/fieldset"
 import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
 import { ImageUploader } from "@/components/image-uploader"
-import { getCategory, updateCategory } from "@/app/actions/categories"
+import { getCategory, updateCategory } from "@/app/actions/admin/categories"
 
 import { CategoryFormData, CategorySchema } from "./add-category-modal"
 

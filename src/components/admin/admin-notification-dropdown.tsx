@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "framer-motion"
 import { BsBell } from "react-icons/bs"
 import { HiXMark } from "react-icons/hi2"
 
-import { getRecentOrders } from "@/app/actions/order"
+import { getRecentOrders } from "@/app/actions/user/order"
 
 import { useViewport } from "../hooks/useViewport"
 import { Dropdown, DropdownContent, DropdownTrigger } from "../ui/dropdown"
@@ -46,9 +46,9 @@ export function AdminNotificationDropdown() {
                 opacity: 1,
               }}
               exit={{ height: "50px", opacity: 0 }}
-              className="z-40 flex h-screen w-screen flex-1 flex-col overflow-y-scroll rounded-lg border-t bg-white dark:border-neutral-700  dark:bg-neutral-900 lg:h-80 lg:w-72 lg:border"
+              className="z-40 flex h-screen w-screen flex-1 flex-col overflow-y-scroll rounded-lg border-t bg-white lg:h-80  lg:w-72 lg:border dark:border-neutral-700 dark:bg-neutral-900"
             >
-              <div className="sticky top-0 flex items-center border-b bg-white px-4 py-2 dark:border-b-neutral-600 dark:bg-neutral-900 lg:justify-normal">
+              <div className="sticky top-0 flex items-center border-b bg-white px-4 py-2 lg:justify-normal dark:border-b-neutral-600 dark:bg-neutral-900">
                 <div className="flex w-full items-center gap-4 lg:justify-between">
                   <h5 className="font-medium">Notification</h5>
                   <span className="flex h-6 w-6 items-center justify-center rounded-full bg-red-700 text-sm font-semibold text-white">

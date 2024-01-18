@@ -64,8 +64,8 @@ export const DataTable = <T extends Record<string, unknown>>({
 
   return (
     <div className="flex w-full flex-1 flex-col overflow-y-scroll">
-      <div className="my-2 flex justify-between gap-2.5">
-        <div className="flex items-center gap-2">
+      <div className="mb-2 flex  justify-between gap-2.5">
+        <div className="flex w-full items-center gap-2">
           <TableSearchInput
             onChange={(event) =>
               table.getColumn("name")?.setFilterValue(event.target.value)

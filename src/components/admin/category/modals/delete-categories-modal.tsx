@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query"
 import { Id, toast } from "react-toastify"
 
 import { ConfirmationDialog } from "@/components/confirmation-dialog"
-import { deleteCategories } from "@/app/actions/categories"
+import { deleteCategories } from "@/app/actions/admin/categories"
 
 interface DeleteCategoriesModalProps {
   selectedCategories: Array<number>

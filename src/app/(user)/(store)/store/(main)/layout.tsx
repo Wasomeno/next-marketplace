@@ -1,9 +1,9 @@
 import React, { ReactNode } from "react"
-import invariant from "tiny-invariant"
 
+import { StoreMobileNavigation } from "@/components/user/store/store-mobile-navigation"
 import { StoreSideNavigation } from "@/components/user/store/store-side-navigation"
 import { StoreTopNavigation } from "@/components/user/store/store-top-navigation"
-import { getStore } from "@/app/actions/store"
+import { getStore } from "@/app/actions/store/store"
 
 export default async function StoreLayout({
   children,
@@ -12,15 +12,14 @@ export default async function StoreLayout({
 }) {
   const store = await getStore()
 
-  invariant(store)
-
   return (
-    <div className="flex flex-1 flex-col bg-white dark:bg-neutral-950">
+    <div className="flex max-h-screen flex-1 flex-col bg-white dark:bg-neutral-950">
       <StoreTopNavigation />
-      <div className="flex flex-1">
+      <div className="flex flex-1 flex-col lg:flex-row">
         <StoreSideNavigation store={store} />
-        <div className="flex flex-1 flex-col p-6">{children}</div>
+        <div className="flex flex-1 flex-col p-4 lg:p-6">{children}</div>
       </div>
+      <StoreMobileNavigation />
     </div>
   )
 }

@@ -23,12 +23,14 @@ export async function UserMainNavigation({ back }: { back?: boolean }) {
         <ProductSearchInput />
       </div>
       <div className="flex w-4/6 items-center justify-end gap-6 px-2 lg:w-2/6">
-        <CartButton />
-        <Separator
-          className="h-7 w-px rounded-full bg-slate-200 dark:bg-gray-700"
-          orientation="vertical"
-        />
-        <UserStoreButton />
+        <div className="flex items-center gap-4">
+          <CartButton />
+          <Separator
+            className="h-7 w-px rounded-full bg-slate-200 dark:bg-gray-700"
+            orientation="vertical"
+          />
+          <UserStoreButton />
+        </div>
         <UserMenu />
       </div>
     </div>

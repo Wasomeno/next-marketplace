@@ -9,7 +9,7 @@ import { toast } from "react-toastify"
 import {
   addProductToWishlist,
   removeProductFromWishlist,
-} from "@/app/actions/wishlist"
+} from "@/app/actions/user/wishlist"
 
 export const WishListButton = ({ isWishlisted }: { isWishlisted: boolean }) => {
   const [isPending, startTransition] = useTransition()
