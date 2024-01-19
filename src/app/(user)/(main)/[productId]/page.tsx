@@ -47,12 +47,11 @@ export default async function ProductPage(props: {
       <div className="flex w-full flex-wrap gap-10 lg:w-5/6 lg:flex-nowrap">
         <div className="relative w-full space-y-10 lg:w-5/6">
           <div className="flex flex-wrap justify-center gap-10 lg:flex-nowrap lg:justify-normal">
-            <div className="w-96">
+            <div className="w-96 px-4 lg:p-0">
               <ProductImages
                 imageUrls={productDetails?.images.map((image) => image.url)}
               />
             </div>
-
             <div className="w-11/12 lg:w-5/6">
               <div className="mb-4 flex items-center justify-between">
                 <h1 className="text-base font-medium lg:text-xl">
