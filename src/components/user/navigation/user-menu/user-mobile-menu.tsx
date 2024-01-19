@@ -85,7 +85,7 @@ export function UserMobileMenu({ session }: { session: Session }) {
                 </button>
                 <button
                   onClick={() => {
-                    router.push("/wishlist")
+                    router.push("/settings")
                     setShowMenu(false)
                   }}
                   className="flex items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200"
