@@ -6,8 +6,7 @@ import Link from "next/link"
 import * as HoverCard from "@radix-ui/react-hover-card"
 import { AnimatePresence, motion } from "framer-motion"
 import { Session } from "next-auth"
-import { BsBox2Heart } from "react-icons/bs"
-import { HiOutlineClipboard } from "react-icons/hi2"
+import { IoSettingsOutline } from "react-icons/io5"
 import { VscSignOut } from "react-icons/vsc"
 
 import { ThemeSwitcher } from "@/components/theme-switcher"
@@ -22,7 +21,7 @@ export const UserStoreMenu = ({ session }: { session: Session }) => {
       closeDelay={0}
     >
       <HoverCard.Trigger asChild>
-        <div className="flex cursor-pointer items-center gap-2">
+        <div className="hidden cursor-pointer items-center gap-2 lg:flex">
           <div className="flex h-[60px] w-[60px] items-center justify-center">
             <Image
               src={session?.user?.picture as string}
@@ -61,13 +60,13 @@ export const UserStoreMenu = ({ session }: { session: Session }) => {
                 </div>
                 <div className="border-b p-1.5 dark:border-b-gray-800">
                   <Link
-                    href="/wishlist"
+                    href="/settings"
                     className="flex items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-gray-100 hover:dark:bg-slate-800"
                   >
                     <span>
-                      <BsBox2Heart size="16" />
+                      <IoSettingsOutline size="16" />
                     </span>
-                    <span className="text-sm">Wishlist</span>
+                    <span className="text-sm">Settings</span>
                   </Link>
                 </div>
                 <div className="p-1.5">

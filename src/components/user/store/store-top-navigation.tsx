@@ -7,6 +7,7 @@ import invariant from "tiny-invariant"
 import { authOptions } from "@/config/next-auth"
 
 import { UserStoreMenu } from "./user-store-menu"
+import { UserStoreMobileMenu } from "./user-store-mobile-menu"
 
 export async function StoreTopNavigation() {
   const session = await getServerSession(authOptions)
@@ -27,6 +28,7 @@ export async function StoreTopNavigation() {
         </Link>
       </div>
       <UserStoreMenu session={session} />
+      <UserStoreMobileMenu session={session} />
     </div>
   )
 }
