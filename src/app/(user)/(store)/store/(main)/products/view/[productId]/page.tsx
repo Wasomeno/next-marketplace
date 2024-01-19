@@ -28,7 +28,7 @@ export default async function AdminProductPage({ params }: ProductPageProps) {
   invariant(imageUrls)
 
   return (
-    <div className="w-full space-y-8">
+    <div className="w-full space-y-4 lg:space-y-8">
       <div className="flex items-center justify-between">
         <h1 className="text-base font-medium lg:text-2xl">{product?.name}</h1>
         <button className="flex items-center gap-2 rounded-md border border-gray-300 px-2.5 py-1.5 text-sm">
@@ -39,7 +39,7 @@ export default async function AdminProductPage({ params }: ProductPageProps) {
         </button>
       </div>
       <div className="flex flex-col items-center gap-6 lg:flex-row lg:items-start">
-        <div className="w-96">
+        <div className="w-96 px-4 lg:p-0">
           <ProductImages imageUrls={imageUrls} />
         </div>
         <div className="flex w-full flex-col gap-4 lg:w-4/6">
