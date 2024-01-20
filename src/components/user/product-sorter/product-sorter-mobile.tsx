@@ -59,7 +59,7 @@ export const ProductSorterMobile = ({
           />
         </button>
       </DialogTrigger>
-      <DialogContent open={isOpen} className="h-fit space-y-4">
+      <DialogContent open={isOpen} className="h-96 space-y-4">
         <DialogHeader title="Product Sorts" />
         <div className="flex flex-wrap items-center gap-2 px-4 pb-4">
           {sortOptions.map((option) => (
