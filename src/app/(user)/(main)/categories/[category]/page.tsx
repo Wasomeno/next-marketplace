@@ -18,28 +18,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function CategoryProductsPage({
-  params,
-  searchParams,
-}: Props) {
-  const priceMin = searchParams.pmin
-  const priceMax = searchParams.pmax
-  const sort = searchParams.sort ? [searchParams.sort.split(".")] : []
-
+export default async function CategoryProductsPage({ params }: Props) {
   const category = await prisma.category.findUnique({
     where: { slug: params.category },
-    include: {
-      products: {
-        orderBy: !sort.length ? { price: "asc" } : Object.fromEntries(sort),
-        where: {
-          price: {
-            lte: priceMax ? parseInt(priceMax) : 50000000,
-            gte: priceMin ? parseInt(priceMin) : 100,
-          },
-        },
-        include: { images: true, categories: true, reviews: true, store: true },
-      },
-    },
   })
 
   return (
@@ -49,7 +30,7 @@ export default async function CategoryProductsPage({
           {category?.name}
         </h2>
       </div>
-      <Products products={category?.products} />
+      <Products />
     </div>
   )
 }

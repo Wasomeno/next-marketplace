@@ -5,21 +5,34 @@ import { Prisma } from "@prisma/client"
 import { prisma } from "@/lib/prisma"
 
 type GetProductsProps = {
+  categorySlug?: string
   categoryIds?: number[]
   storeId?: number
+  priceStart?: number
+  priceEnd?: number
+  sort?: Record<string, "desc" | "asc">
 }
 
-export async function getProducts(
-  props: GetProductsProps
-): Promise<
-  Prisma.ProductGetPayload<{ include: { images: true; categories: true } }>[]
+export async function getProducts({
+  categorySlug,
+  categoryIds,
+  storeId,
+  priceEnd,
+  priceStart,
+  sort,
+}: GetProductsProps): Promise<
+  Prisma.ProductGetPayload<{
+    include: { images: true; categories: true; store: true; reviews: true }
+  }>[]
 > {
   const products = await prisma.product.findMany({
+    orderBy: sort,
     where: {
-      categories: { some: { id: { in: props.categoryIds } } },
-      store_id: props.storeId,
+      categories: { every: { slug: categorySlug } },
+      store_id: storeId,
+      price: { gte: priceStart, lte: priceEnd },
     },
-    include: { images: true, categories: true },
+    include: { images: true, categories: true, store: true, reviews: true },
   })
   return products
 }
