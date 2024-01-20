@@ -69,7 +69,12 @@ export default async function Home() {
               store={<ProductCard.Store name={product.store.name} />}
               rating={
                 <ProductCard.Rating
-                  rating={0}
+                  rating={
+                    product.reviews.reduce(
+                      (current, next) => (current += next.rating),
+                      0
+                    ) / product.reviews.length
+                  }
                   reviewCount={product.reviews.length}
                 />
               }
