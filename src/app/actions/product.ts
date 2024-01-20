@@ -5,6 +5,7 @@ import { Prisma } from "@prisma/client"
 import { prisma } from "@/lib/prisma"
 
 type GetProductsProps = {
+  q?: string
   categorySlug?: string
   categoryIds?: number[]
   storeId?: number
@@ -14,6 +15,7 @@ type GetProductsProps = {
 }
 
 export async function getProducts({
+  q,
   categorySlug,
   categoryIds,
   storeId,
@@ -28,6 +30,7 @@ export async function getProducts({
   const products = await prisma.product.findMany({
     orderBy: sort,
     where: {
+      name: { contains: q },
       categories: { every: { slug: categorySlug } },
       store_id: storeId,
       price: { gte: priceStart, lte: priceEnd },
