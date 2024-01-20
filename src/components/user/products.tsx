@@ -6,7 +6,7 @@ import { RxCrossCircled } from "react-icons/rx"
 import ProductCard from "@/components/user/product-card"
 
 import { ProductsFilter } from "../product-filter"
-import { ProductSorter } from "../product-sorter"
+import { ProductSorter } from "./product-sorter"
 
 type ProductsSectionProps = {
   products:
