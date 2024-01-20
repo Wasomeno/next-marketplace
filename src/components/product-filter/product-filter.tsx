@@ -21,7 +21,7 @@ export const ProductsFilter = () => {
         <Button
           onClick={() => setIsOpen(true)}
           variant="defaultOutline"
-          className="lg h-8 border-slate-200 dark:border-gray-800 dark:bg-slate-950 lg:h-10"
+          className="lg h-8 border-slate-200 lg:h-10 dark:border-gray-800 dark:bg-slate-950"
         >
           Filter
         </Button>
@@ -29,7 +29,7 @@ export const ProductsFilter = () => {
       <DialogContent
         open={isOpen}
         onOpenAutoFocus={(event) => event.preventDefault()}
-        className="flex h-5/6 w-full flex-col rounded-none border-l bg-white dark:border-l-gray-800 dark:bg-neutral-950 lg:right-0 lg:top-0 lg:h-screen lg:w-2/6 lg:translate-x-0 lg:translate-y-0"
+        className="flex h-96 w-full flex-col rounded-none border-l bg-white lg:right-0 lg:top-0 lg:h-screen lg:w-2/6 lg:translate-x-0 lg:translate-y-0 dark:border-l-gray-800 dark:bg-neutral-950"
       >
         <div className="mb-4 flex items-center justify-between border-b p-4 dark:border-b-gray-700">
           <h5 className="text-sm font-medium lg:text-lg">Filters</h5>
