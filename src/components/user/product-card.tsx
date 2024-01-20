@@ -79,7 +79,7 @@ const Rating = ({
     <span className="flex items-center gap-1 font-sans text-sm text-gray-500">
       <FaStar size="15" className="fill-yellow-400" />{" "}
       <span>
-        {Number.isNaN(rating) ? 0 : rating} ({reviewCount})
+        {Number.isNaN(rating) ? 0 : rating.toFixed(1)} ({reviewCount})
       </span>
     </span>
   )
