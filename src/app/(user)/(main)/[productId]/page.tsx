@@ -1,5 +1,6 @@
 import { Metadata } from "next"
 import { BiSolidStar } from "react-icons/bi"
+import { RiChatDeleteFill } from "react-icons/ri"
 import invariant from "tiny-invariant"
 
 import { prisma } from "@/lib/prisma"
@@ -45,7 +46,7 @@ export default async function ProductPage(props: {
     <div className="relative flex flex-1 flex-col gap-10 lg:flex-row">
       <div className="mx-5 flex-1 space-y-10 lg:ml-20 lg:mr-0">
         <div className="flex flex-1 flex-wrap justify-center gap-10 lg:flex-nowrap lg:justify-normal">
-          <div className="w-80 px-4 lg:p-0">
+          <div className="w-full lg:w-80">
             <ProductImages
               imageUrls={productDetails?.images.map((image) => image.url)}
             />
@@ -70,7 +71,7 @@ export default async function ProductPage(props: {
               <span className="text-sm font-medium lg:text-base">
                 Description
               </span>
-              <p className="text-sm font-light lg:text-base">
+              <p className="text-sm font-light lg:text-sm">
                 {productDetails?.description}
               </p>
             </div>
@@ -82,7 +83,7 @@ export default async function ProductPage(props: {
             />
           </div>
         </div>
-        <div className="flex flex-col items-center gap-5 lg:flex-row lg:items-start lg:justify-normal lg:gap-10">
+        <div className="flex flex-1 flex-col gap-5 lg:flex-row lg:items-start lg:justify-normal lg:gap-10">
           <div className="w-full space-y-2 lg:w-80 lg:space-y-4">
             <h2 className="text-base font-medium lg:text-lg">Overall Rating</h2>
             <div className="flex flex-col items-center gap-2">
@@ -103,19 +104,19 @@ export default async function ProductPage(props: {
           </div>
           <div className="flex flex-1 flex-col space-y-2 lg:space-y-4">
             <h2 className="text-base font-medium lg:text-lg">Reviews</h2>
-            <div className="flex w-full flex-col gap-4">
-              {productDetails.reviews.length === 0 && (
-                <div className="flex h-48 w-full items-center justify-center rounded-xl border">
-                  <div className="space-y-2">
-                    <div className="text-sm opacity-50">No Reviews</div>
-                  </div>
-                </div>
-              )}
-              {productDetails.reviews.length > 0 &&
-                productDetails.reviews.map((review) => (
+            {productDetails.reviews.length > 0 && (
+              <div className="flex flex-1 flex-col gap-4">
+                {productDetails.reviews.map((review) => (
                   <ReviewCard key={review.id} review={review} />
                 ))}
-            </div>
+              </div>
+            )}
+            {productDetails.reviews.length === 0 && (
+              <div className="flex h-48 flex-col items-center justify-center gap-2 rounded-xl border text-gray-400">
+                <RiChatDeleteFill size={20} />
+                <span className="text-sm">No Reviews</span>
+              </div>
+            )}
           </div>
         </div>
       </div>
