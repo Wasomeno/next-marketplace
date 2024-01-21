@@ -32,47 +32,49 @@ export const AddToCartForm = ({ productDetails }: AddToCartFormProps) => {
   }
 
   return (
-    <div className="sticky bottom-0 w-full bg-white lg:w-3/12 dark:bg-neutral-950">
-      <div className="border-t border-slate-200 p-2 shadow-[0_3px_10px_rgb(0,0,0,0.1)] lg:rounded-md lg:border lg:border-slate-400 lg:p-4 lg:shadow-none dark:border-t-gray-800 lg:dark:border-gray-800">
-        <div className="hidden lg:block">
-          <span className="text-sm lg:text-base">Product Amount</span>
-          <div className="my-4 flex items-center justify-center gap-4">
-            <div className="relative flex w-3/6 items-center justify-center gap-4 rounded-md bg-slate-200 text-sm font-medium dark:bg-slate-800">
-              <button onClick={decrement} className="h-6 w-6 lg:h-8 lg:w-8">
-                -
-              </button>
-              <span>{amount}</span>
-              <button onClick={increment} className="h-6 w-6 lg:h-8 lg:w-8">
-                +
-              </button>
-            </div>
-            <span className="w-3/6 text-end text-xs lg:text-sm">
-              Stock: {productDetails.stock}
-            </span>
+    <div className="sticky bottom-0 m-0 h-fit w-screen border-t border-slate-200 bg-white p-2 shadow-[0_3px_10px_rgb(0,0,0,0.1)] lg:top-20 lg:mr-20 lg:w-80 lg:rounded-lg lg:border lg:border-slate-200 lg:p-4 lg:shadow-sm dark:border-t-gray-800 lg:dark:border-gray-800">
+      <span className="hidden lg:inline-block">Add to Cart Details</span>
+      <div className="hidden lg:block">
+        <div className="my-4 flex items-center justify-between gap-4">
+          <span className="text-xs text-slate-500 lg:text-sm">Quantity</span>
+          <div className="relative flex w-fit items-center justify-center gap-4 overflow-hidden rounded-md border border-gray-200 text-sm font-medium dark:bg-slate-800">
+            <button
+              onClick={decrement}
+              className="border-r border-gray-200 bg-gray-50 lg:h-6 lg:w-6"
+            >
+              -
+            </button>
+            <span>{amount}</span>
+            <button
+              onClick={increment}
+              className="border-l border-gray-200 bg-gray-50 lg:h-6 lg:w-6"
+            >
+              +
+            </button>
           </div>
         </div>
-        <div className="my-2 hidden justify-between lg:flex">
-          <span className="text-xs text-slate-500 lg:text-base">Subtotal</span>
-          <span className="text-sm lg:text-lg">
-            Rp. {(amount * productDetails.price).toLocaleString("id")}
-          </span>
-        </div>
-        <div className="flex w-full gap-2 lg:flex-col lg:gap-0">
-          <Button
-            variant="default"
-            onClick={() =>
-              userEmail
-                ? startTransition(async () => {
-                    await addToCart(productDetails.id, amount)
-                    toast.success("Added to cart")
-                  })
-                : router.push("/login")
-            }
-            className="my my-2 h-8 w-full rounded-lg  bg-blue-400 text-xs font-medium text-slate-50 lg:h-10 lg:text-sm dark:bg-blue-900"
-          >
-            Add to Cart
-          </Button>
-        </div>
+      </div>
+      <div className="my-2 hidden items-center justify-between lg:flex">
+        <span className="text-xs text-slate-500 lg:text-sm">Subtotal</span>
+        <span className="text-sm lg:text-base">
+          Rp. {(amount * productDetails.price).toLocaleString("id")}
+        </span>
+      </div>
+      <div className="flex w-full gap-2 lg:flex-col lg:gap-0">
+        <Button
+          variant="default"
+          onClick={() =>
+            userEmail
+              ? startTransition(async () => {
+                  await addToCart(productDetails.id, amount)
+                  toast.success("Added to cart")
+                })
+              : router.push("/login")
+          }
+          className="my my-2 h-8 w-full rounded-lg  bg-blue-400 text-xs font-medium text-slate-50 lg:h-10 lg:text-sm dark:bg-blue-900"
+        >
+          Add to Cart
+        </Button>
       </div>
     </div>
   )

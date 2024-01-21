@@ -11,7 +11,7 @@ export function ReviewCard({
     return `${username.slice(0, 1)}*****${domain}`
   }
   return (
-    <div className="w-full space-y-2 border-b py-4">
+    <div className="w-full space-y-2 border-b pb-4">
       <div className="flex items-center gap-1.5">
         {Array(review.rating)
           .fill(" ")
