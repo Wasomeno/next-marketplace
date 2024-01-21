@@ -62,7 +62,7 @@ export default async function Home() {
           {products.map((product) => (
             <ProductCard
               key={product.id}
-              href={`/${product.id}`}
+              href={`/${product.slug}`}
               image={<ProductCard.Image image={product.featured_image_url} />}
               name={<ProductCard.Name name={product.name} />}
               price={<ProductCard.Price price={product.price} />}
