@@ -80,27 +80,6 @@ export async function getRecentOrders(): Promise<
   return recentOrders
 }
 
-export async function updateOrderStatus({
-  orderId,
-  status,
-}: {
-  orderId: number
-  status: TOrderStatus
-}) {
-  try {
-    await prisma.order.update({
-      where: { id: orderId },
-      data: {
-        status,
-      },
-    })
-  } catch (error) {
-    throw error
-  }
-
-  revalidatePath("/")
-}
-
 type TCheckout = {
   cartItems: Prisma.CartItemGetPayload<{
     include: { product: { include: { images: true } } }

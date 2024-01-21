@@ -1,8 +1,18 @@
+"use server"
+
+import { revalidatePath } from "next/cache"
 import { Prisma } from "@prisma/client"
 
 import { prisma } from "@/lib/prisma"
 
 import { getStore } from "./store"
+
+export type OrderStatus =
+  | "Payment Confirmed"
+  | "On Proccess"
+  | "On Shipping"
+  | "Arrived"
+  | "Done"
 
 export async function getStoreOrders() {
   const store = await getStore()
@@ -36,4 +46,25 @@ export async function getStoreOrder(
   })
 
   return order
+}
+
+export async function updateOrderStatus({
+  orderId,
+  status,
+}: {
+  orderId: number
+  status: OrderStatus
+}) {
+  try {
+    await prisma.order.update({
+      where: { id: orderId },
+      data: {
+        status,
+      },
+    })
+  } catch (error) {
+    throw error
+  }
+
+  revalidatePath("/")
 }
