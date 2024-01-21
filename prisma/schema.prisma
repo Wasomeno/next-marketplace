@@ -29,7 +29,7 @@ model Product {
   description        String          @db.LongText
   price              Int
   stock              Int
-  slug               String
+  slug               String          @unique
   featured_image_url String
   status             String
   sold               Int             @default(0)
