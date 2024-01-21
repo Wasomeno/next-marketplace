@@ -16,7 +16,7 @@ export function Products() {
   const productProps = createProps()
 
   const products = useQuery({
-    queryKey: ["products", searchParams.toString()],
+    queryKey: ["products", searchParams.toString(), params.category],
     queryFn: () =>
       getProducts({ ...productProps, categorySlug: params.category as string }),
   })
