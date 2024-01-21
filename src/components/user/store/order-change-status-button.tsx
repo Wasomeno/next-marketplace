@@ -60,7 +60,7 @@ export const OrderChangeStatusButton = ({
           <BiChevronRight size={20} />
         </Button>
       )
-    case "Arrived":
+    case "On Shipping":
       return (
         <Button
           onClick={() => changeStatus("Arrived")}
