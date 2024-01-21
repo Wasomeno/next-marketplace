@@ -1,4 +1,3 @@
-import { UpdateOrderStatusModal } from "@/components/admin/order/modals/update-order-status-modal"
 import { ViewOrderModal } from "@/components/admin/order/modals/view-order-modal"
 import { OrderTable } from "@/components/admin/order/order-table"
 import { getOrders } from "@/app/actions/user/order"
@@ -10,7 +9,6 @@ export default async function UserStoreOrders() {
       <h1 className="text-lg font-medium lg:text-2xl">Orders</h1>
       <OrderTable orders={orders} />
       <ViewOrderModal />
-      <UpdateOrderStatusModal />
     </div>
   )
 }
