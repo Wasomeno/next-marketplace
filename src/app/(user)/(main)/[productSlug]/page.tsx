@@ -12,13 +12,13 @@ import { WishListButton } from "@/components/user/product-details/wishlist-butto
 import { isProductInWishlist } from "@/app/actions/user/wishlist"
 
 type Props = {
-  params: { productId: string }
+  params: { productSlug: string }
   searchParams: { [key: string]: string | string[] | undefined }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const productDetails = await prisma.product.findUnique({
-    where: { id: parseInt(params?.productId) },
+    where: { slug: params?.productSlug },
   })
   return {
     title: `${productDetails?.name} | Next Marketplace `,
@@ -27,18 +27,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ProductPage(props: {
-  params: { productId: string }
+  params: { productSlug: string }
 }) {
-  const { productId } = props.params
+  const { productSlug } = props.params
   const productDetails = await prisma.product.findUnique({
-    where: { id: parseInt(productId) },
+    where: { slug: productSlug },
     include: {
       images: { select: { url: true } },
       reviews: { include: { user: true } },
     },
   })
 
-  const isWishlisted = await isProductInWishlist(parseInt(productId))
+  const isWishlisted = await isProductInWishlist(productDetails?.id as number)
 
   invariant(productDetails, "Type error")
 
