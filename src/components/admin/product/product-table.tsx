@@ -7,13 +7,31 @@ import { ColumnDef } from "@tanstack/react-table"
 import { BsPlus, BsTrash3 } from "react-icons/bs"
 import { toast } from "react-toastify"
 
-import { getProductSorts } from "@/config/table/sorts/productSorts"
 import { Button } from "@/components/ui/button"
 import { ConfirmationDialog } from "@/components/confirmation-dialog"
 import { deleteProduct } from "@/app/actions/store/products"
 
 import { DataTable, useSelectedData } from "../data-table"
 import { productTableColumns } from "./product-table-columns"
+
+export const productSortOptions = [
+  {
+    label: "Id from low to high",
+    value: "id.asc",
+  },
+  {
+    label: "Id from high to low",
+    value: "id.desc",
+  },
+  {
+    label: "Stock from high to low",
+    value: "stock.asc",
+  },
+  {
+    label: "Stock from low to high",
+    value: "stock.desc",
+  },
+]
 
 export const ProductTable = ({
   products,
@@ -94,7 +112,7 @@ export const ProductTable = ({
       <DataTable
         data={products}
         columns={columns}
-        getSortsData={(table) => getProductSorts(table)}
+        sortOptions={productSortOptions}
         addTrigger={
           <Button
             variant="success"

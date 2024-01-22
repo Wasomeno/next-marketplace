@@ -5,16 +5,12 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  PaginationState,
-  SortingState,
   Table,
   useReactTable,
 } from "@tanstack/react-table"
 
-import { TableDataSorter, TableSort } from "../table-data-sorter"
+import { Option } from "../dropdown"
+import { TableDataSorter } from "../table-data-sorter"
 import { TableSearchInput } from "../table-search-input"
 import { Button } from "../ui/button"
 import {
@@ -29,7 +25,7 @@ import {
 type DataTableProps<T> = {
   columns: ColumnDef<T>[]
   data: T[]
-  getSortsData: (table: Table<T>) => TableSort[]
+  sortOptions: Option[]
   deleteTrigger?: ReactElement
   addTrigger?: ReactElement
 }
@@ -37,29 +33,14 @@ type DataTableProps<T> = {
 export const DataTable = <T extends Record<string, unknown>>({
   columns,
   data,
-  getSortsData,
   deleteTrigger,
   addTrigger,
+  sortOptions,
 }: DataTableProps<T>) => {
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 8,
-  })
-
   const table = useReactTable<T>({
     data,
     columns,
-    state: {
-      sorting,
-      pagination,
-    },
-    onSortingChange: setSorting,
-    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
   })
 
   return (
@@ -72,7 +53,7 @@ export const DataTable = <T extends Record<string, unknown>>({
             }
             placeholder="Search by product name"
           />
-          <TableDataSorter table={table} sortsData={getSortsData(table)} />
+          <TableDataSorter sortOptions={sortOptions} />
         </div>
         <div className="flex items-center gap-2">
           {deleteTrigger}

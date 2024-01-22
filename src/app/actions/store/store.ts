@@ -6,6 +6,13 @@ import { getServerSession } from "next-auth"
 
 import { prisma } from "@/lib/prisma"
 
+type GetStoreProductsProps = {
+  search?: string
+  categoryIds?: number[]
+  sort?: Record<string, "desc" | "asc">
+  status?: string
+}
+
 type CreateStoreParams = Omit<Store, "id">
 type UpdateStoreParams = Store
 
@@ -18,11 +25,18 @@ export async function getStore() {
   return store
 }
 
-export async function getStoreProducts() {
+export async function getStoreProducts(props: GetStoreProductsProps) {
   const session = await getServerSession()
+  console.log(props)
   const store = await prisma.store.findUnique({
     where: { owner_email: session?.user.email ?? "" },
-    select: { products: { include: { images: true, categories: true } } },
+    select: {
+      products: {
+        orderBy: props.sort,
+        where: { name: { contains: props.search }, status: props.status },
+        include: { images: true, categories: true },
+      },
+    },
   })
 
   return store?.products

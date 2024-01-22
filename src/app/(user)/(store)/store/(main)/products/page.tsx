@@ -1,8 +1,18 @@
 import { Metadata } from "next"
+import { split } from "postcss/lib/list"
 import invariant from "tiny-invariant"
 
 import { ProductTable } from "@/components/admin/product/product-table"
 import { getStore, getStoreProducts } from "@/app/actions/store/store"
+
+type UserStoreProductsProps = {
+  searchParams: {
+    sort?: string
+    search?: string
+    categoryId?: string
+    status?: string
+  }
+}
 
 export async function generateMetadata(): Promise<Metadata> {
   const store = await getStore()
@@ -11,8 +21,13 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default async function UserStoreProducts() {
-  const products = await getStoreProducts()
+export default async function UserStoreProducts(props: UserStoreProductsProps) {
+  const { status, search, sort } = props.searchParams
+  const sortProduct: Record<string, "asc" | "desc"> = sort
+    ? { [sort.split(".")[0]]: sort.split(".")[1] as "asc" | "desc" }
+    : { id: "asc" }
+
+  const products = await getStoreProducts({ status, search, sort: sortProduct })
 
   invariant(products)
 
