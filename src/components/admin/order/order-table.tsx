@@ -4,11 +4,20 @@ import { useMemo } from "react"
 import { Prisma } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
 
-import { getOrderSorts } from "@/config/table/sorts/orderSorts"
-import { Button } from "@/components/ui/button"
 import { TableActions } from "@/components/table-row-menu"
 
 import { DataTable } from "../data-table"
+
+export const orderSortOptions = [
+  {
+    label: "Id from low to high",
+    value: "id.asc",
+  },
+  {
+    label: "Id from high to low",
+    value: "id.desc",
+  },
+]
 
 export const OrderTable = ({
   orders,
@@ -85,11 +94,7 @@ export const OrderTable = ({
   )
 
   return (
-    <DataTable
-      data={orders}
-      columns={columns}
-      getSortsData={(table) => getOrderSorts(table)}
-    />
+    <DataTable data={orders} columns={columns} sortOptions={orderSortOptions} />
   )
 }
 
