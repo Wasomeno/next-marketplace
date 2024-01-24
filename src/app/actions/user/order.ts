@@ -15,7 +15,12 @@ export type TOrderStatus =
   | "Arrived"
   | "Done"
 
-export async function getOrders(dateTime?: Date): Promise<
+type GetOrdersProps = {
+  search?: string
+  sort?: Record<string, "desc" | "asc">
+}
+
+export async function getOrders(props: GetOrdersProps): Promise<
   Prisma.OrderGetPayload<{
     include: {
       products: { include: { product: { include: { images: true } } } }
@@ -27,7 +32,11 @@ export async function getOrders(dateTime?: Date): Promise<
   const store = await getUserStore()
 
   const orders = await prisma.order.findMany({
-    where: { products: { some: { product: { store_id: store?.id } } } },
+    orderBy: props.sort,
+    where: {
+      invoice: { contains: props?.search },
+      products: { some: { product: { store_id: store?.id } } },
+    },
     include: {
       products: {
         where: { product: { store_id: store?.id } },
@@ -35,7 +44,6 @@ export async function getOrders(dateTime?: Date): Promise<
       },
       _count: { select: { products: true } },
     },
-    orderBy: { created_at: "desc" },
   })
   return orders
 }
