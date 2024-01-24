@@ -26,7 +26,7 @@ export const TableDataSorter = ({
   sortOptions,
 }: TableDataSorterProps) => {
   const searchParams = useSearchParams()
-  const activeSort = sortOptions.find(
+  const activeSort = sortOptions?.find(
     (option) => option.value === searchParams.get("sort")
   )
 
