@@ -3,7 +3,6 @@
 import { BsPlus, BsTrash3 } from "react-icons/bs"
 import { ImSpinner7 } from "react-icons/im"
 
-import { getCategorySorts } from "@/config/table/sorts/categorySorts"
 import { Button } from "@/components/ui/button"
 import { PageTransitionWrapper } from "@/components/page-transition-wrapper"
 import { TableDataSorter } from "@/components/table-data-sorter"
@@ -20,7 +19,7 @@ export default function CategoryLoadingPage() {
       <div className="my-2 flex justify-between gap-2.5">
         <div className="flex items-center gap-2">
           <TableSearchInput placeholder="Search by category name" disabled />
-          <TableDataSorter disabled sortsData={getCategorySorts()} />
+          <TableDataSorter sortOptions={[]} disabled />
         </div>
         <div className="flex items-center gap-2">
           <Button
