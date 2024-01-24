@@ -5,7 +5,6 @@ import { Prisma } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
 import { BsPlus, BsTrash3 } from "react-icons/bs"
 
-import { getCategorySorts } from "@/config/table/sorts/categorySorts"
 import { Button } from "@/components/ui/button"
 import { TableActions } from "@/components/table-row-menu"
 
@@ -17,6 +16,17 @@ type CategoryTableProps = {
     include: { _count: { select: { products: true } }; images: true }
   }>[]
 }
+
+export const categorySortOptions = [
+  {
+    label: "Id from low to high",
+    value: "id.asc",
+  },
+  {
+    label: "Id from high to low",
+    value: "id.desc",
+  },
+]
 
 export const CategoryTable = ({ categories }: CategoryTableProps) => {
   const router = useRouter()
@@ -113,7 +123,7 @@ export const CategoryTable = ({ categories }: CategoryTableProps) => {
       <DataTable
         data={categories}
         columns={columns}
-        getSortsData={(table) => getCategorySorts(table)}
+        sortOptions={categorySortOptions}
         addTrigger={
           <Button
             variant="success"
