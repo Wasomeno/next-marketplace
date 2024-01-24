@@ -1,5 +1,4 @@
 import { Metadata } from "next"
-import { split } from "postcss/lib/list"
 import invariant from "tiny-invariant"
 
 import { ProductTable } from "@/components/admin/product/product-table"
