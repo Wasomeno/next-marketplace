@@ -30,7 +30,7 @@ export async function UserStoreButton() {
     return (
       <Link
         href="/store/create?step=name"
-        className={clsx(linkStyle, "hidden lg:inline-block")}
+        className={clsx(linkStyle, "hidden items-center gap-2 lg:flex")}
       >
         <BiStore />
         Create Store
