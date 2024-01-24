@@ -6,7 +6,6 @@ import { Banner } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
 import { BsPlus, BsTrash3 } from "react-icons/bs"
 
-import { getCategorySorts } from "@/config/table/sorts/categorySorts"
 import { Button } from "@/components/ui/button"
 import { TableActions } from "@/components/table-row-menu"
 
@@ -97,7 +96,7 @@ export const BannerTable = ({ banners }: { banners: Banner[] }) => {
     <DataTable
       data={banners}
       columns={columns}
-      getSortsData={(table) => getCategorySorts(table)}
+      sortOptions={[]}
       addTrigger={
         <Button
           variant="success"
