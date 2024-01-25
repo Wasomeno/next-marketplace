@@ -62,7 +62,7 @@ export const productTableColumns: ColumnDef<
               <HoverCard.Trigger asChild>
                 <div
                   key={category}
-                  className="flex h-10 w-10 items-center justify-center rounded-md border border-gray-50 bg-gray-100 p-2 text-gray-500 transition-all duration-200 hover:bg-gray-200 hover:text-black"
+                  className="flex h-8 w-10 items-center justify-center rounded-lg border border-gray-50 bg-gray-100 p-2 text-gray-500 transition-all duration-200 hover:bg-gray-200 hover:text-black"
                 >
                   {getCategoryIcons(category)}
                 </div>
@@ -70,7 +70,7 @@ export const productTableColumns: ColumnDef<
               <HoverCard.Portal>
                 <HoverCard.Content
                   sideOffset={3}
-                  className="rounded-md border border-gray-100 bg-white px-4 py-2 text-xs font-medium text-gray-500 shadow-sm"
+                  className="rounded-lg border border-gray-100 bg-white px-4 py-2 text-xs font-medium text-gray-500 shadow-sm"
                 >
                   {category}
                 </HoverCard.Content>
@@ -107,6 +107,69 @@ export const productTableColumns: ColumnDef<
               href={`/store/products/edit/${row.original.id}`}
             />
           }
+          deleteAction={<TableActions.Delete href={""} />}
+        />
+      )
+    },
+  },
+]
+
+export const productTablePlaceholderColumns: ColumnDef<
+  Prisma.ProductGetPayload<{ include: { images: true; categories: true } }>
+>[] = [
+  {
+    header: "Id",
+    enableColumnFilter: false,
+    cell: () => (
+      <div className="h-8 w-20 animate-pulse rounded-lg bg-gray-200" />
+    ),
+  },
+  {
+    header: "Image",
+    cell: () => {
+      return (
+        <div className="h-[90px] w-[90px] animate-pulse rounded-lg bg-gray-200" />
+      )
+    },
+    enableColumnFilter: false,
+  },
+  {
+    id: "name",
+    header: "Name",
+    cell: (name) => (
+      <div className="h-8 w-20 animate-pulse rounded-lg bg-gray-200" />
+    ),
+  },
+  {
+    header: "Category",
+    cell: ({ row }) => {
+      return (
+        <div className="flex items-center justify-center gap-1.5">
+          <div className="h-8 w-20 animate-pulse rounded-lg bg-gray-200" />
+        </div>
+      )
+    },
+  },
+  {
+    header: "Status",
+    cell: () => (
+      <div className="h-8 w-20 animate-pulse rounded-lg bg-gray-200" />
+    ),
+  },
+  {
+    header: "Stock",
+    cell: (stock) => (
+      <div className="h-8 w-20 animate-pulse rounded-lg bg-gray-200" />
+    ),
+  },
+  {
+    id: "action",
+    header: "Actions",
+    cell: () => {
+      return (
+        <TableActions
+          viewAction={<TableActions.View href={""} />}
+          editAction={<TableActions.Edit href={""} />}
           deleteAction={<TableActions.Delete href={""} />}
         />
       )
