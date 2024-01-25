@@ -1,8 +1,10 @@
 "use client"
 
-import { useState, useTransition } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useSearchParamsValues } from "@/utils"
 import { Prisma } from "@prisma/client"
+import { useQuery } from "@tanstack/react-query"
 import { ColumnDef } from "@tanstack/react-table"
 import { BsPlus, BsTrash3 } from "react-icons/bs"
 import { toast } from "react-toastify"
@@ -10,9 +12,17 @@ import { toast } from "react-toastify"
 import { Button } from "@/components/ui/button"
 import { ConfirmationDialog } from "@/components/confirmation-dialog"
 import { deleteProduct } from "@/app/actions/store/products"
+import { getStoreProducts } from "@/app/actions/store/store"
 
 import { DataTable, useSelectedData } from "../data-table"
-import { productTableColumns } from "./product-table-columns"
+import {
+  productTableColumns,
+  productTablePlaceholderColumns,
+} from "./product-table-columns"
+
+type StoreProduct = Prisma.ProductGetPayload<{
+  include: { images: true; categories: true }
+}>
 
 export const productSortOptions = [
   {
@@ -25,23 +35,23 @@ export const productSortOptions = [
   },
   {
     label: "Stock from high to low",
-    value: "stock.asc",
+    value: "stock.desc",
   },
   {
     label: "Stock from low to high",
-    value: "stock.desc",
+    value: "stock.asc",
   },
 ]
 
-export const ProductTable = ({
-  products,
-}: {
-  products: Prisma.ProductGetPayload<{
-    include: { images: true; categories: true }
-  }>[]
-}) => {
+export const ProductTable = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-  const [isLoading, startTransition] = useTransition()
+
+  const searchParams = useSearchParamsValues<{
+    sort: Record<string, "desc" | "asc">
+    status: string
+    search: string
+  }>()
+
   const {
     selectedData,
     selectData,
@@ -50,9 +60,14 @@ export const ProductTable = ({
     deselectAllData,
   } = useSelectedData()
 
-  const columns: ColumnDef<
-    Prisma.ProductGetPayload<{ include: { images: true; categories: true } }>
-  >[] = [
+  const { data, isLoading } = useQuery({
+    queryKey: ["products", searchParams],
+    queryFn: () => getStoreProducts({ sort: searchParams?.sort }),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  })
+
+  const columns: ColumnDef<StoreProduct>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -89,29 +104,47 @@ export const ProductTable = ({
     ...productTableColumns,
   ]
 
+  const placeholderColumns: ColumnDef<
+    Prisma.ProductGetPayload<{ include: { images: true; categories: true } }>
+  >[] = [
+    {
+      id: "select",
+      header: () => (
+        <input type="checkbox" className="h-4 w-4 cursor-pointer p-1.5" />
+      ),
+      cell: () => (
+        <div className="px-1">
+          <input
+            type="checkbox"
+            className="h-4 w-4 cursor-pointer rounded-md accent-blue-300 dark:accent-gray-300"
+          />
+        </div>
+      ),
+    },
+    ...productTablePlaceholderColumns,
+  ]
+
   const router = useRouter()
 
-  function deleteProducts() {
-    startTransition(async () => {
-      await toast.promise(deleteProduct(selectedData), {
-        success: `Successfully deleted ${selectedData.length} products`,
-        pending: {
-          render() {
-            setIsDeleteModalOpen(false)
-            return `Deleting ${selectedData.length} products`
-          },
+  async function deleteProducts() {
+    await toast.promise(deleteProduct(selectedData), {
+      success: `Successfully deleted ${selectedData.length} products`,
+      pending: {
+        render() {
+          setIsDeleteModalOpen(false)
+          return `Deleting ${selectedData.length} products`
         },
-        error: "Error when deleting products",
-      })
-      deselectAllData()
+      },
+      error: "Error when deleting products",
     })
+    deselectAllData()
   }
 
   return (
     <>
       <DataTable
-        data={products}
-        columns={columns}
+        data={isLoading ? Array(5).fill({}) : (data as StoreProduct[])}
+        columns={isLoading ? placeholderColumns : columns}
         sortOptions={productSortOptions}
         addTrigger={
           <Button
@@ -135,7 +168,6 @@ export const ProductTable = ({
           </Button>
         }
       />
-
       <ConfirmationDialog
         open={isDeleteModalOpen}
         body={`Delete ${selectedData.length} products? This action can't be undone`}
