@@ -27,7 +27,6 @@ export async function getStore() {
 
 export async function getStoreProducts(props: GetStoreProductsProps) {
   const session = await getServerSession()
-  console.log(props)
   const store = await prisma.store.findUnique({
     where: { owner_email: session?.user.email ?? "" },
     select: {
@@ -39,7 +38,7 @@ export async function getStoreProducts(props: GetStoreProductsProps) {
     },
   })
 
-  return store?.products
+  return store?.products ?? []
 }
 
 export async function createStore(store: CreateStoreParams) {
