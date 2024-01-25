@@ -36,8 +36,6 @@ export function OrderProductRating() {
     queryFn: () => getProduct(parseInt(productId as string)),
   })
 
-  console.log(product)
-
   async function addProductReview() {
     toast.promise(
       async () =>
