@@ -76,14 +76,12 @@ export const DataTable = <T extends Record<string, unknown>>({
                       key={header.id}
                       colSpan={header.colSpan}
                     >
-                      {header.isPlaceholder ? null : (
-                        <div>
-                          {flexRender(
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
                             header.column.columnDef.header,
                             header.getContext()
                           )}
-                        </div>
-                      )}
                     </TableHead>
                   )
                 })}
@@ -102,10 +100,12 @@ export const DataTable = <T extends Record<string, unknown>>({
                       className="px-3 py-2 text-center text-xs  lg:px-6 lg:py-4 lg:text-sm dark:text-white"
                       key={cell.id}
                     >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                      <div className="flex items-center justify-center">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </div>
                     </TableCell>
                   ))}
                 </TableRow>
