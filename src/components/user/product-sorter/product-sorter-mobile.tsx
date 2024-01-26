@@ -2,6 +2,8 @@
 
 import { useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { DialogPortal } from "@radix-ui/react-dialog"
+import { AnimatePresence } from "framer-motion"
 import { HiArrowsUpDown } from "react-icons/hi2"
 
 import { Button } from "@/components/ui/button"
@@ -9,6 +11,7 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
+  DialogOverlay,
   DialogTrigger,
 } from "@/components/ui/dialog"
 
@@ -59,28 +62,37 @@ export const ProductSorterMobile = ({
           />
         </button>
       </DialogTrigger>
-      <DialogContent open={isOpen} className="h-96 space-y-4">
-        <DialogHeader title="Product Sorts" />
-        <div className="flex flex-wrap items-center gap-2 px-4 pb-4">
-          {sortOptions.map((option) => (
-            <Button
-              key={option.id}
-              variant="default"
-              size="default"
-              className={selectedSort?.id === option.id ? "bg-blue-200" : ""}
-              onClick={() => {
-                if (selectedSort?.id === option.id) {
-                  deselectSort(option)
-                  return
-                }
-                selectSort(option)
-              }}
-            >
-              {option.label}
-            </Button>
-          ))}
-        </div>
-      </DialogContent>
+      <AnimatePresence>
+        {isOpen && (
+          <DialogPortal forceMount>
+            <DialogOverlay />
+            <DialogContent open={isOpen} className="h-96 space-y-4">
+              <DialogHeader title="Product Sorts" />
+              <div className="flex flex-wrap items-center gap-2 px-4 pb-4">
+                {sortOptions.map((option) => (
+                  <Button
+                    key={option.id}
+                    variant="default"
+                    size="default"
+                    className={
+                      selectedSort?.id === option.id ? "bg-blue-200" : ""
+                    }
+                    onClick={() => {
+                      if (selectedSort?.id === option.id) {
+                        deselectSort(option)
+                        return
+                      }
+                      selectSort(option)
+                    }}
+                  >
+                    {option.label}
+                  </Button>
+                ))}
+              </div>
+            </DialogContent>
+          </DialogPortal>
+        )}
+      </AnimatePresence>
     </Dialog>
   )
 }
