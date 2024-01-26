@@ -77,13 +77,19 @@ const DialogContent = React.forwardRef<
   return (
     <DialogPrimitive.Content ref={ref} {...props}>
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ ease: "easeInOut", duration: 0.25, delay: 0.1 }}
-        className={twMerge(
-          "fixed bottom-0 right-1/2 z-50 flex h-[95%] w-full flex-1 translate-x-1/2 flex-col overflow-y-scroll rounded-lg bg-white shadow-md transition duration-300 lg:top-1/2 lg:-translate-y-1/2 dark:bg-neutral-900",
-          className
+        initial={{ bottom: "-40vh", opacity: 0 }}
+        animate={{ bottom: 0, opacity: 1 }}
+        exit={{ bottom: "-40vh", opacity: 0 }}
+        transition={{
+          type: "tween",
+          ease: "easeInOut",
+          duration: 0.25,
+        }}
+        className={clsx(
+          twMerge(
+            "fixed bottom-0 z-50 flex h-[95%] w-full flex-1 flex-col overflow-y-scroll rounded-lg bg-white shadow-md transition duration-300 lg:right-1/2 lg:top-1/2 lg:-translate-y-1/2 lg:translate-x-1/2 dark:bg-neutral-900 ",
+            className
+          )
         )}
       >
         {children}
