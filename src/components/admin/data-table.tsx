@@ -62,7 +62,7 @@ export const DataTable = <T extends Record<string, unknown>>({
       </div>
       <div className="flex-1 overflow-x-scroll rounded-lg border border-gray-200 bg-white shadow-sm dark:border-neutral-600 dark:bg-neutral-800">
         <ReactTable className="w-full border-collapse text-left text-sm text-gray-500 dark:bg-neutral-800">
-          <TableHeader className="bg-blue-100 dark:bg-blue-900">
+          <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
                 key={headerGroup.id}
@@ -76,12 +76,14 @@ export const DataTable = <T extends Record<string, unknown>>({
                       key={header.id}
                       colSpan={header.colSpan}
                     >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                      <div className="flex items-center justify-center">
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </div>
                     </TableHead>
                   )
                 })}
