@@ -1,8 +1,9 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
-import { AnimatePresence, motion } from "framer-motion"
+import clsx from "clsx"
+import { motion } from "framer-motion"
 import { RxCross2 } from "react-icons/rx"
 import { twMerge } from "tailwind-merge"
 
@@ -35,8 +36,19 @@ const DialogOverlay = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
 >(({ className, children, ...props }, ref) => {
   return (
-    <DialogPrimitive.Overlay ref={ref} {...props}>
-      {children}
+    <DialogPrimitive.Overlay ref={ref} {...props} asChild={children === null}>
+      {children ?? (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ ease: "easeInOut", duration: 0.25 }}
+          className={clsx(
+            "fixed inset-0 z-30 bg-neutral-950 bg-opacity-30 backdrop-blur-[2px]",
+            className
+          )}
+        />
+      )}
     </DialogPrimitive.Overlay>
   )
 })
@@ -62,47 +74,31 @@ const DialogContent = React.forwardRef<
     open: boolean
   }
 >(({ className, children, open, ...props }, ref) => {
-  const [clientReady, setClientReady] = useState(false)
-
-  useEffect(() => {
-    if (window !== undefined) {
-      setClientReady(true)
-    }
-  }, [])
-
   return (
-    <AnimatePresence>
-      {open && clientReady && (
-        <DialogPortal forceMount>
-          <DialogOverlay asChild>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ ease: "easeInOut", duration: 0.25 }}
-              className="fixed inset-0 z-30 bg-neutral-950 bg-opacity-30 backdrop-blur-[2px]"
-            />
-          </DialogOverlay>
-          <DialogPrimitive.Content asChild ref={ref} {...props}>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ ease: "easeInOut", duration: 0.25, delay: 0.1 }}
-              className={twMerge(
-                "fixed bottom-0 right-1/2 z-50 flex h-[95%] w-full flex-1 translate-x-1/2 flex-col overflow-y-scroll rounded-lg bg-white shadow-md transition duration-300 lg:top-1/2 lg:-translate-y-1/2 dark:bg-neutral-900",
-                className
-              )}
-            >
-              {children}
-            </motion.div>
-          </DialogPrimitive.Content>
-        </DialogPortal>
-      )}
-    </AnimatePresence>
+    <DialogPrimitive.Content ref={ref} {...props}>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ ease: "easeInOut", duration: 0.25, delay: 0.1 }}
+        className={twMerge(
+          "fixed bottom-0 right-1/2 z-50 flex h-[95%] w-full flex-1 translate-x-1/2 flex-col overflow-y-scroll rounded-lg bg-white shadow-md transition duration-300 lg:top-1/2 lg:-translate-y-1/2 dark:bg-neutral-900",
+          className
+        )}
+      >
+        {children}
+      </motion.div>
+    </DialogPrimitive.Content>
   )
 })
 
 DialogContent.displayName = DialogPrimitive.Content.displayName
 
-export { Dialog, DialogOverlay, DialogHeader, DialogContent, DialogTrigger }
+export {
+  Dialog,
+  DialogOverlay,
+  DialogHeader,
+  DialogContent,
+  DialogTrigger,
+  DialogPortal,
+}
