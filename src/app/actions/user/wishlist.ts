@@ -7,6 +7,8 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/config/next-auth"
 import { prisma } from "@/lib/prisma"
 
+import { getProduct } from "../product"
+
 export async function getWishlist() {
   const session = await getServerSession(authOptions)
   const wishList = await prisma.wishlist.findUnique({
@@ -43,7 +45,7 @@ export async function isProductInWishlist(productId: number) {
   }
 }
 
-export async function addProductToWishlist(productId: number) {
+export async function addProductToWishlist(productSlug: string) {
   const session = await getServerSession(authOptions)
   const wishlist = await prisma.wishlist.findUnique({
     where: { user_email: session?.user?.email as string },
@@ -52,7 +54,7 @@ export async function addProductToWishlist(productId: number) {
     await prisma.wishlist.update({
       where: { user_email: session?.user?.email as string },
       data: {
-        items: { create: { product: { connect: { id: productId } } } },
+        items: { create: { product: { connect: { slug: productSlug } } } },
       },
     })
   }
@@ -60,18 +62,21 @@ export async function addProductToWishlist(productId: number) {
     await prisma.wishlist.create({
       data: {
         user: { connect: { email: session?.user?.email as string } },
-        items: { create: { product: { connect: { id: productId } } } },
+        items: { create: { product: { connect: { slug: productSlug } } } },
       },
     })
   }
-  revalidatePath(`/${productId}`)
+  revalidatePath(`/${productSlug}`)
 }
 
 export async function removeProductFromWishlist(
-  productId: number,
+  productSlug: string,
   path?: string
 ) {
   const session = await getServerSession(authOptions)
+  const product = await prisma.product.findUnique({
+    where: { slug: productSlug },
+  })
   const wishlist = await prisma.wishlist.findUnique({
     where: { user_email: session?.user?.email as string },
   })
@@ -79,7 +84,7 @@ export async function removeProductFromWishlist(
   if (wishlist) {
     await prisma.wishlist.update({
       where: { user_email: session?.user?.email as string },
-      data: { items: { deleteMany: { product_id: productId } } },
+      data: { items: { deleteMany: { product_id: product?.id } } },
     })
   }
 
@@ -87,7 +92,7 @@ export async function removeProductFromWishlist(
     throw error
   }
 
-  revalidatePath(path ?? `/${productId}`)
+  revalidatePath(path ?? `/${productSlug}`)
 }
 
 export async function removeProductsFromWishlist(

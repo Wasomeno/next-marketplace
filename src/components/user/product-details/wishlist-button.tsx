@@ -13,7 +13,7 @@ import {
 
 export const WishListButton = ({ isWishlisted }: { isWishlisted: boolean }) => {
   const [isPending, startTransition] = useTransition()
-  const { productId } = useParams()
+  const { productSlug } = useParams()
 
   const router = useRouter()
 
@@ -21,7 +21,7 @@ export const WishListButton = ({ isWishlisted }: { isWishlisted: boolean }) => {
 
   async function addToWishlist() {
     if (session.data?.user.email) {
-      await addProductToWishlist(parseInt(productId as string))
+      await addProductToWishlist(productSlug as string)
       toast.success("Added to wishlist")
     } else {
       router.push("/login")
@@ -30,7 +30,7 @@ export const WishListButton = ({ isWishlisted }: { isWishlisted: boolean }) => {
 
   async function removeFromWishlist() {
     if (session.data?.user.email) {
-      await removeProductFromWishlist(parseInt(productId as string))
+      await removeProductFromWishlist(productSlug as string)
       toast.error("Removed from wishlist")
     } else {
       router.push("/login")
