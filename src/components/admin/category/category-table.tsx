@@ -6,6 +6,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import { BsPlus, BsTrash3 } from "react-icons/bs"
 
 import { Button } from "@/components/ui/button"
+import { CheckBox } from "@/components/ui/checkbox"
 import { TableActions } from "@/components/table-row-menu"
 
 import { DataTable, useSelectedData } from "../data-table"
@@ -45,11 +46,9 @@ export const CategoryTable = ({ categories }: CategoryTableProps) => {
     {
       id: "select",
       header: ({ table }) => (
-        <input
-          type="checkbox"
-          className="h-4 w-4 cursor-pointer rounded-md border border-slate-300 accent-white dark:accent-gray-300"
+        <CheckBox
           checked={table.getCoreRowModel().rows.length === selectedData?.length}
-          onChange={() => {
+          onCheckedChange={() => {
             table.getCoreRowModel().rows.length === selectedData?.length
               ? deselectAllData()
               : selectAllData(
@@ -59,20 +58,16 @@ export const CategoryTable = ({ categories }: CategoryTableProps) => {
         />
       ),
       cell: ({ row }) => (
-        <div className="px-1">
-          <input
-            type="checkbox"
-            className="h-4 w-4 cursor-pointer rounded-md border accent-black dark:accent-gray-300"
-            checked={selectedData?.includes(row.original.id)}
-            onChange={() => {
-              if (selectedData?.includes(row.original.id)) {
-                deselectData(row.original.id)
-              } else {
-                selectData(row.original.id)
-              }
-            }}
-          />
-        </div>
+        <CheckBox
+          checked={selectedData?.includes(row.original.id)}
+          onCheckedChange={() => {
+            if (selectedData?.includes(row.original.id)) {
+              deselectData(row.original.id)
+            } else {
+              selectData(row.original.id)
+            }
+          }}
+        />
       ),
     },
     {

@@ -10,6 +10,7 @@ import { BsPlus, BsTrash3 } from "react-icons/bs"
 import { toast } from "react-toastify"
 
 import { Button } from "@/components/ui/button"
+import { CheckBox } from "@/components/ui/checkbox"
 import { ConfirmationDialog } from "@/components/confirmation-dialog"
 import { deleteProduct } from "@/app/actions/store/products"
 import { getStoreProducts } from "@/app/actions/store/store"
@@ -71,11 +72,9 @@ export const ProductTable = () => {
     {
       id: "select",
       header: ({ table }) => (
-        <input
-          type="checkbox"
-          className="h-4 w-4 cursor-pointer p-1.5"
+        <CheckBox
           checked={table.getCoreRowModel().rows.length === selectedData.length}
-          onChange={() => {
+          onCheckedChange={() => {
             table.getCoreRowModel().rows.length === selectedData.length
               ? deselectAllData()
               : selectAllData(
@@ -85,20 +84,16 @@ export const ProductTable = () => {
         />
       ),
       cell: ({ row }) => (
-        <div className="px-1">
-          <input
-            type="checkbox"
-            className="h-4 w-4 cursor-pointer rounded-md accent-blue-300 dark:accent-gray-300"
-            checked={selectedData.includes(row.original.id)}
-            onChange={() => {
-              if (selectedData.includes(row.original.id)) {
-                deselectData(row.original.id)
-              } else {
-                selectData(row.original.id)
-              }
-            }}
-          />
-        </div>
+        <CheckBox
+          checked={selectedData.includes(row.original.id)}
+          onCheckedChange={() => {
+            if (selectedData.includes(row.original.id)) {
+              deselectData(row.original.id)
+            } else {
+              selectData(row.original.id)
+            }
+          }}
+        />
       ),
     },
     ...productTableColumns,
@@ -109,17 +104,8 @@ export const ProductTable = () => {
   >[] = [
     {
       id: "select",
-      header: () => (
-        <input type="checkbox" className="h-4 w-4 cursor-pointer p-1.5" />
-      ),
-      cell: () => (
-        <div className="px-1">
-          <input
-            type="checkbox"
-            className="h-4 w-4 cursor-pointer rounded-md accent-blue-300 dark:accent-gray-300"
-          />
-        </div>
-      ),
+      header: () => <CheckBox disabled />,
+      cell: () => <CheckBox disabled />,
     },
     ...productTablePlaceholderColumns,
   ]
