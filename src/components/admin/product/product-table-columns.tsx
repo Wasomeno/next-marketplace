@@ -35,7 +35,7 @@ export const productTableColumns: ColumnDef<
             src={url.getValue() as string}
             alt="product-image"
             width={120}
-            height={90}
+            height={120}
             className="rounded-md"
           />
         </div>
