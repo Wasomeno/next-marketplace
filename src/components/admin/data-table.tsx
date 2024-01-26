@@ -72,11 +72,11 @@ export const DataTable = <T extends Record<string, unknown>>({
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
-                      className="px-6 py-4 text-center text-xs font-medium text-gray-900 lg:text-sm dark:text-white"
+                      className="text-xs font-medium text-gray-900 lg:text-sm dark:text-white"
                       key={header.id}
                       colSpan={header.colSpan}
                     >
-                      <div className="flex items-center justify-center">
+                      <div className="flex items-center justify-center px-3 py-2  lg:px-6 lg:py-4">
                         {header.isPlaceholder
                           ? null
                           : flexRender(
@@ -99,10 +99,10 @@ export const DataTable = <T extends Record<string, unknown>>({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
-                      className="px-3 py-2 text-center text-xs  lg:px-6 lg:py-4 lg:text-sm dark:text-white"
+                      className="text-center text-xs   lg:text-sm dark:text-white"
                       key={cell.id}
                     >
-                      <div className="flex items-center justify-center">
+                      <div className="flex  items-center justify-center px-3 py-2 lg:px-6 lg:py-4">
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
