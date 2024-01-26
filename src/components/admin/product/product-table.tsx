@@ -63,7 +63,11 @@ export const ProductTable = () => {
 
   const { data, isLoading } = useQuery({
     queryKey: ["products", searchParams],
-    queryFn: () => getStoreProducts({ sort: searchParams?.sort }),
+    queryFn: () =>
+      getStoreProducts({
+        sort: searchParams?.sort,
+        search: searchParams?.search,
+      }),
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   })
@@ -132,6 +136,12 @@ export const ProductTable = () => {
         data={isLoading ? Array(5).fill({}) : (data as StoreProduct[])}
         columns={isLoading ? placeholderColumns : columns}
         sortOptions={productSortOptions}
+        searchInput={
+          <DataTable.SearchInput
+            disabled={isLoading}
+            placeholder="Search by product name"
+          />
+        }
         addTrigger={
           <Button
             variant="success"

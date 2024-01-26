@@ -28,15 +28,17 @@ type DataTableProps<T> = {
   sortOptions: Option[]
   deleteTrigger?: ReactElement
   addTrigger?: ReactElement
+  searchInput?: ReactElement
 }
 
-export const DataTable = <T extends Record<string, unknown>>({
+export function DataTable<T extends Record<string, unknown>>({
   columns,
   data,
   deleteTrigger,
   addTrigger,
   sortOptions,
-}: DataTableProps<T>) => {
+  searchInput,
+}: DataTableProps<T>) {
   const table = useReactTable<T>({
     data,
     columns,
@@ -47,12 +49,7 @@ export const DataTable = <T extends Record<string, unknown>>({
     <div className="flex w-full flex-1 flex-col overflow-y-scroll">
       <div className="mb-2 flex  justify-between gap-2.5">
         <div className="flex w-full items-center gap-2">
-          <TableSearchInput
-            onChange={(event) =>
-              table.getColumn("name")?.setFilterValue(event.target.value)
-            }
-            placeholder="Search by product name"
-          />
+          {searchInput}
           <TableDataSorter sortOptions={sortOptions} />
         </div>
         <div className="flex items-center gap-2">
@@ -181,3 +178,5 @@ export function useSelectedData() {
     deselectAllData,
   }
 }
+
+DataTable.SearchInput = TableSearchInput
