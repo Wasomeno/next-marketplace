@@ -25,7 +25,7 @@ import {
 type DataTableProps<T> = {
   columns: ColumnDef<T>[]
   data: T[]
-  sortOptions: Option[]
+  dataSorter?: ReactElement
   deleteTrigger?: ReactElement
   addTrigger?: ReactElement
   searchInput?: ReactElement
@@ -36,7 +36,7 @@ export function DataTable<T extends Record<string, unknown>>({
   data,
   deleteTrigger,
   addTrigger,
-  sortOptions,
+  dataSorter,
   searchInput,
 }: DataTableProps<T>) {
   const table = useReactTable<T>({
@@ -50,7 +50,7 @@ export function DataTable<T extends Record<string, unknown>>({
       <div className="mb-2 flex  justify-between gap-2.5">
         <div className="flex w-full items-center gap-2">
           {searchInput}
-          <TableDataSorter sortOptions={sortOptions} />
+          {dataSorter}
         </div>
         <div className="flex items-center gap-2">
           {deleteTrigger}
@@ -180,3 +180,4 @@ export function useSelectedData() {
 }
 
 DataTable.SearchInput = TableSearchInput
+DataTable.Sorter = TableDataSorter
