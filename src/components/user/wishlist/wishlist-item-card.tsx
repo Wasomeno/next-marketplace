@@ -70,7 +70,7 @@ export function WishlistItemCard({
             className="h-7 w-7 p-2 text-white lg:h-8 lg:w-8 dark:bg-red-800"
             onClick={() =>
               startTransition(async () => {
-                await removeProductFromWishlist(item.product.id, "/wishlist")
+                await removeProductFromWishlist(item.product.slug, "/wishlist")
                 toast.error(`Removed ${item.product.name} from wishlist`)
               })
             }
