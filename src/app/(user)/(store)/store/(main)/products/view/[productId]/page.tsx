@@ -80,7 +80,7 @@ export default async function AdminProductPage({ params }: ProductPageProps) {
       </div>
       <div className="space-y-4">
         <h2 className="text-lg font-medium">Sales</h2>
-        <div className="grid w-full grid-flow-col gap-4 lg:grid-flow-row">
+        <div className="flex items-center gap-4">
           <ProductSalesMonthlyChart />
         </div>
       </div>
