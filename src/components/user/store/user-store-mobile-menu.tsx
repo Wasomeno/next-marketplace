@@ -47,11 +47,11 @@ export const UserStoreMobileMenu = ({ session }: { session: Session }) => {
               }}
               exit={{ opacity: 0 }}
             >
-              <div className="flex h-8 items-center gap-4 px-4">
+              <div className="flex h-8 items-center justify-between gap-4 px-4">
+                <span className="text-sm font-medium">Menu</span>
                 <button onClick={() => setShowMenu(false)}>
                   <HiX size="18" />
                 </button>
-                <span className="text-sm font-medium">Menu</span>
               </div>
               <div className="flex items-center gap-4 border-b px-4 py-2 dark:border-b-gray-800">
                 <div className="relative h-10 w-10">
