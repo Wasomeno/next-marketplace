@@ -1,7 +1,9 @@
 import React, { useState } from "react"
+import clsx from "clsx"
 import { AnimatePresence, motion } from "framer-motion"
 import { HiChevronRight, HiXMark } from "react-icons/hi2"
 import { IoShirt } from "react-icons/io5"
+import { twMerge } from "tailwind-merge"
 
 import {
   DropdownContent,
@@ -20,6 +22,7 @@ interface BaseDropdownProps {
   placeholder?: string
   onOptionClick: (option: Option) => void
   isMulti?: boolean
+  className?: string
 }
 
 interface MultipleProps extends BaseDropdownProps {
@@ -40,7 +43,12 @@ export const Dropdown = (props: DropdownProps) => {
   return (
     <DropdownRoot onOpenChange={(open) => setIsOpen(open)}>
       {props.isMulti && (
-        <div className="flex max-h-96 min-h-12 w-full max-w-96 items-center rounded-md border bg-white text-sm outline-0 disabled:opacity-50 dark:border-neutral-600 dark:bg-neutral-900">
+        <div
+          className={clsx(
+            "flex max-h-96 min-h-12 w-full max-w-96 items-center rounded-md border bg-white text-sm outline-0 disabled:opacity-50 dark:border-neutral-600 dark:bg-neutral-900",
+            props.className
+          )}
+        >
           {props?.selectedOptions !== undefined &&
           props.selectedOptions.length > 0 ? (
             <div className="flex flex-1 flex-wrap items-center gap-2 p-2">
@@ -80,7 +88,14 @@ export const Dropdown = (props: DropdownProps) => {
       )}
       {!props.isMulti && (
         <DropdownTrigger asChild>
-          <div className="flex h-10 w-full max-w-96 items-center rounded-md border bg-white px-4 py-2 text-sm outline-0 disabled:opacity-50 dark:border-neutral-600 dark:bg-neutral-900">
+          <div
+            className={clsx(
+              twMerge(
+                "flex h-10 w-full max-w-96 items-center rounded-md border bg-white px-4 py-2 text-sm outline-0 disabled:opacity-50 dark:border-neutral-600 dark:bg-neutral-900",
+                props.className
+              )
+            )}
+          >
             {props?.selectedOption !== undefined && props.selectedOption.label}
             {!props?.selectedOption && (
               <span className="text-gray-400">
@@ -101,7 +116,7 @@ export const Dropdown = (props: DropdownProps) => {
               initial={{ height: "0px" }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: "0px" }}
-              className="z-50 flex max-h-96 w-96 flex-col items-start overflow-hidden rounded-md border bg-white text-sm shadow-sm dark:border-neutral-600 dark:bg-neutral-900"
+              className="z-50 flex max-h-48 w-96 flex-col items-start overflow-y-scroll rounded-md border bg-white text-sm shadow-sm dark:border-neutral-600 dark:bg-neutral-900"
             >
               {props.options.map((option) => (
                 <DropdownItem key={option.value} asChild>
