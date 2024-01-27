@@ -96,7 +96,6 @@ export const BannerTable = ({ banners }: { banners: Banner[] }) => {
     <DataTable
       data={banners}
       columns={columns}
-      sortOptions={[]}
       addTrigger={
         <Button
           variant="success"

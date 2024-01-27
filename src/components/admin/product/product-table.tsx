@@ -135,7 +135,7 @@ export const ProductTable = () => {
       <DataTable
         data={isLoading ? Array(5).fill({}) : (data as StoreProduct[])}
         columns={isLoading ? placeholderColumns : columns}
-        sortOptions={productSortOptions}
+        dataSorter={<DataTable.Sorter sortOptions={productSortOptions} />}
         searchInput={
           <DataTable.SearchInput
             disabled={isLoading}

@@ -1,12 +1,17 @@
 "use client"
 
 import { useMemo } from "react"
-import { Prisma } from "@prisma/client"
+import { Order } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
+import moment from "moment"
 
 import { TableActions } from "@/components/table-row-menu"
 
 import { DataTable } from "../data-table"
+
+type StoreOrder = Order & {
+  productAmount: number
+}
 
 export const orderSortOptions = [
   {
@@ -19,34 +24,8 @@ export const orderSortOptions = [
   },
 ]
 
-export const OrderTable = ({
-  orders,
-}: {
-  orders: Prisma.OrderGetPayload<{
-    include: {
-      products: {
-        include: { product: { include: { images: true } } }
-      }
-      status: true
-      _count: { select: { products: true } }
-    }
-  }>[]
-}) => {
-  const columns = useMemo<
-    ColumnDef<
-      Prisma.OrderGetPayload<{
-        include: {
-          products: {
-            include: {
-              product: { include: { images: true } }
-            }
-          }
-          status: true
-          _count: { select: { products: true } }
-        }
-      }>
-    >[]
-  >(
+export const OrderTable = ({ orders }: { orders: StoreOrder[] }) => {
+  const columns = useMemo<ColumnDef<StoreOrder>[]>(
     () => [
       {
         accessorKey: "id",
@@ -61,12 +40,14 @@ export const OrderTable = ({
         enableColumnFilter: false,
       },
       {
-        accessorKey: "_count",
         header: "Product Amount",
-        cell: (info) => {
-          const count = info.getValue() as { products: number }
-          return count.products
-        },
+        accessorKey: "productAmount",
+        enableColumnFilter: false,
+      },
+      { header: "Status", accessorKey: "status", enableColumnFilter: false },
+      {
+        header: "Ordered At",
+        accessorFn: (order) => moment(order.created_at).format("LLL"),
         enableColumnFilter: false,
       },
       {
@@ -94,7 +75,12 @@ export const OrderTable = ({
   )
 
   return (
-    <DataTable data={orders} columns={columns} sortOptions={orderSortOptions} />
+    <DataTable
+      data={orders}
+      columns={columns}
+      searchInput={<DataTable.SearchInput placeholder="Search by invoice" />}
+      dataSorter={<DataTable.Sorter sortOptions={orderSortOptions} />}
+    />
   )
 }
 

@@ -118,7 +118,7 @@ export const CategoryTable = ({ categories }: CategoryTableProps) => {
       <DataTable
         data={categories}
         columns={columns}
-        sortOptions={categorySortOptions}
+        dataSorter={<DataTable.Sorter sortOptions={categorySortOptions} />}
         addTrigger={
           <Button
             variant="success"
