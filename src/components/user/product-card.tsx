@@ -33,7 +33,7 @@ const ProductCard = ({
     <div
       className={twMerge(
         clsx(
-          "col-span-5 h-60 cursor-pointer rounded-md bg-neutral-50 bg-opacity-50 shadow-[0_3px_7px_rgb(0,0,0,0.1)] lg:col-span-2 lg:h-auto dark:bg-neutral-900 dark:bg-opacity-50 dark:shadow-gray-700",
+          "col-span-5 h-64 cursor-pointer rounded-md bg-neutral-50 bg-opacity-50 shadow-[0_3px_7px_rgb(0,0,0,0.1)] lg:col-span-2 lg:h-auto dark:bg-neutral-900 dark:bg-opacity-50 dark:shadow-gray-700",
           className
         )
       )}
@@ -86,7 +86,11 @@ const Rating = ({
 }
 
 const Name = ({ name }: { name: string }) => {
-  return <span className="font-sans text-xs lg:text-sm">{name}</span>
+  return (
+    <span className="overflow-ellipsis font-sans text-xs lg:text-sm">
+      {name}
+    </span>
+  )
 }
 
 const Price = ({ price }: { price: number }) => {
