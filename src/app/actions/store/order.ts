@@ -1,11 +1,15 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { Prisma } from "@prisma/client"
+import { Order, Prisma } from "@prisma/client"
 
 import { prisma } from "@/lib/prisma"
 
 import { getStore } from "./store"
+
+interface StoreOrder extends Order {
+  productAmount: number
+}
 
 export type OrderStatus =
   | "Payment Confirmed"
@@ -14,13 +18,42 @@ export type OrderStatus =
   | "Arrived"
   | "Done"
 
-export async function getStoreOrders() {
+export async function getStoreOrders(): Promise<StoreOrder[]> {
+  type Keys =
+    | "productAmount"
+    | "id"
+    | "invoice"
+    | "total"
+    | "created_at"
+    | "user_email"
+    | "status"
+
   const store = await getStore()
   const orders = await prisma.order.findMany({
     where: { products: { some: { product: { store_id: store?.id } } } },
+    include: {
+      _count: {
+        select: { products: { where: { product: { store_id: store?.id } } } },
+      },
+    },
   })
 
-  return orders
+  const storeOrders = orders.map((order) => ({
+    ...order,
+    productAmount: order._count.products,
+  }))
+
+  const filteredStoreOrders = storeOrders.map(
+    (order) =>
+      Object.keys(order)
+        .filter((key) => key !== "_count")
+        .reduce(
+          (newOrder, key) => ({ ...newOrder, [key]: order[key as Keys] }),
+          {}
+        ) as StoreOrder
+  )
+
+  return filteredStoreOrders
 }
 
 export async function getStoreOrder(
