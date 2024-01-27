@@ -3,6 +3,7 @@ import Link from "next/link"
 import clsx from "clsx"
 import { getServerSession } from "next-auth"
 import { BiStore } from "react-icons/bi"
+import { HiPlus } from "react-icons/hi2"
 import invariant from "tiny-invariant"
 
 import { prisma } from "@/lib/prisma"
@@ -19,7 +20,7 @@ export async function UserStoreButton() {
   const linkStyle = buttonVariants({
     className: "gap-2",
     size: "default",
-    variant: "default",
+    variant: "defaultOutline",
   })
 
   if (!session) {
@@ -28,13 +29,26 @@ export async function UserStoreButton() {
 
   if (session && !store) {
     return (
-      <Link
-        href="/store/create?step=name"
-        className={clsx(linkStyle, "hidden items-center gap-2 lg:flex")}
-      >
-        <BiStore />
-        Create Store
-      </Link>
+      <>
+        <Link
+          href="/store/create?step=name"
+          className={clsx(
+            linkStyle,
+            "hidden items-center gap-2 lg:inline-block"
+          )}
+        >
+          <BiStore />
+        </Link>
+        <Link
+          href="/store/create?step=name"
+          className="relative inline-block lg:hidden"
+        >
+          <div className="absolute -right-[2px] top-0 flex h-2 w-2 items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm">
+            <HiPlus size={10} />
+          </div>
+          <BiStore size={20} />
+        </Link>
+      </>
     )
   }
 
@@ -44,8 +58,9 @@ export async function UserStoreButton() {
     <Fragment>
       <Link
         href="/store/home"
-        className={clsx(linkStyle, "hidden lg:inline-block")}
+        className={clsx(linkStyle, "items-cent hidden gap-2 lg:flex ")}
       >
+        <BiStore size={20} />
         {store.name}
       </Link>
       <Link href="/store/home" className="inline-block lg:hidden">
