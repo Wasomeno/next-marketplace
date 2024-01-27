@@ -36,10 +36,10 @@ export const OrderChangeStatusButton = ({
       return (
         <Button
           onClick={() => changeStatus("On Proccess")}
-          className="flex items-center justify-between bg-blue-200"
-          variant="default"
+          className="flex items-center justify-between border-gray-200 shadow-sm"
+          variant="defaultOutline"
         >
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 ">
             <LuPackage size={20} />
             <span>Change Status to On Proccess</span>
           </div>
@@ -50,8 +50,8 @@ export const OrderChangeStatusButton = ({
       return (
         <Button
           onClick={() => changeStatus("On Shipping")}
-          className="flex items-center justify-between bg-blue-200"
-          variant="default"
+          className="flex items-center justify-between border-gray-200 shadow-sm"
+          variant="defaultOutline"
         >
           <div className="flex items-center gap-2">
             <LuTruck size={20} />
@@ -64,8 +64,8 @@ export const OrderChangeStatusButton = ({
       return (
         <Button
           onClick={() => changeStatus("Arrived")}
-          className="flex items-center justify-between bg-blue-200"
-          variant="default"
+          className="flex items-center justify-between border-gray-200 shadow-sm"
+          variant="defaultOutline"
         >
           <div className="flex items-center gap-2">
             <LuPackageCheck size={20} />
