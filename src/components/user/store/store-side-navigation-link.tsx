@@ -2,6 +2,7 @@ import React, { ReactElement } from "react"
 import Link, { LinkProps } from "next/link"
 import { usePathname } from "next/navigation"
 import { clsx } from "clsx"
+import { AnimatePresence, motion } from "framer-motion"
 
 type Props = LinkProps & {
   text: string
@@ -28,9 +29,22 @@ export const StoreSideNavigationLink = ({
         )}
       >
         {icon}
-        {!isMobile && isOpen ? (
-          <span className="text-xs font-medium lg:text-sm">{text}</span>
-        ) : null}
+        <AnimatePresence>
+          {!isMobile && isOpen ? (
+            <motion.span
+              initial={{ width: 0, opacity: 0 }}
+              animate={{
+                width: "fit-content",
+                opacity: 1,
+              }}
+              exit={{ width: 0, opacity: 0 }}
+              transition={{ ease: "easeIn", velocity: 0, delay: 0, damping: 0 }}
+              className="overflow-hidden text-xs font-medium lg:text-sm"
+            >
+              {text}
+            </motion.span>
+          ) : null}
+        </AnimatePresence>
       </div>
     </Link>
   )

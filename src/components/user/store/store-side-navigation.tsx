@@ -3,7 +3,7 @@
 import React, { useState } from "react"
 import { Store } from "@prisma/client"
 import clsx from "clsx"
-import { motion } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
 import {
   HiChevronRight,
   HiListBullet,
@@ -23,8 +23,11 @@ export const StoreSideNavigation = ({ store }: { store: Store | null }) => {
       animate={{
         width: isOpen ? "256px" : "70px",
       }}
-      transition={{ ease: "easeOut", duration: 0.3, velocity: 0.5 }}
-      className="sticky left-0 top-0 hidden flex-col gap-2 border-r border-gray-100 bg-white shadow-md lg:flex"
+      transition={{
+        ease: "easeOut",
+        duration: 0.3,
+      }}
+      className="sticky left-0 top-0  flex-col gap-2 overflow-hidden border-r border-gray-100 bg-white shadow-md lg:flex"
     >
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -38,17 +41,6 @@ export const StoreSideNavigation = ({ store }: { store: Store | null }) => {
           !isOpen && "items-center"
         )}
       >
-        <div
-          className={clsx(
-            "flex items-center gap-4 overflow-hidden py-2",
-            isOpen && "px-6"
-          )}
-        >
-          <div className="h-8 w-8  rounded-full bg-slate-500" />
-          {isOpen && (
-            <div className="w-28 text-sm font-medium">{store?.name}</div>
-          )}
-        </div>
         <StoreSideNavigationLink
           text="Home"
           href="/store/home"
