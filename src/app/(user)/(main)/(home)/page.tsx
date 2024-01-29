@@ -1,10 +1,10 @@
-import { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
+import { Metadata } from "next"
+import Image from "next/image"
+import Link from "next/link"
 
-import { HomeBannerSlider } from "@/components/user/home-banner-slider";
-import ProductCard from "@/components/user/product-card";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/prisma"
+import { HomeBannerSlider } from "@/components/user/home-banner-slider"
+import ProductCard from "@/components/user/product-card"
 
 export const metadata: Metadata = {
   title: "Next Martketplace | Shopping Made Easy with Next Marketplace",
@@ -39,7 +39,7 @@ export default async function Home() {
                 href={"/categories/" + category.slug}
                 className="flex flex-col items-center gap-2 transition-all duration-200"
               >
-                <div className="relative h-20 w-20 overflow-hidden rounded-md lg:h-24 lg:w-24">
+                <div className="relative h-[72px] w-[72px] overflow-hidden rounded-md lg:h-24 lg:w-24">
                   <Image
                     src={category.images[0].url}
                     alt="category-image"
@@ -47,7 +47,7 @@ export default async function Home() {
                     quality={30}
                   />
                 </div>
-                <span className="text-center lg:text-sm text-xs tracking-wide">
+                <span className="text-center text-xs tracking-wide lg:text-sm">
                   {category.name}
                 </span>
               </Link>
