@@ -51,6 +51,7 @@ export const ProductTable = () => {
     sort: Record<string, "desc" | "asc">
     status: string
     search: string
+    page: string
   }>()
 
   const {
@@ -67,6 +68,8 @@ export const ProductTable = () => {
       getStoreProducts({
         sort: searchParams?.sort,
         search: searchParams?.search,
+        page: parseInt(searchParams?.page as string),
+        pageSize: 1,
       }),
     refetchOnMount: false,
     refetchOnWindowFocus: false,
@@ -132,6 +135,7 @@ export const ProductTable = () => {
 
   return (
     <>
+      <span className="font text-gray-500">{data?.length} Products</span>
       <DataTable
         data={isLoading ? Array(5).fill({}) : (data as StoreProduct[])}
         columns={isLoading ? placeholderColumns : columns}

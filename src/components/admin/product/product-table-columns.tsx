@@ -4,7 +4,7 @@ import * as HoverCard from "@radix-ui/react-hover-card"
 import { ColumnDef } from "@tanstack/react-table"
 import { GiCookingPot, GiPoloShirt } from "react-icons/gi"
 
-import { TableActions } from "@/components/table-row-menu"
+import { TableActions } from "@/components/table-actions"
 
 function getCategoryIcons(name: string) {
   switch (name) {
@@ -30,13 +30,12 @@ export const productTableColumns: ColumnDef<
     header: "Image",
     cell: (url) => {
       return (
-        <div className="relative flex items-center justify-center">
+        <div className="relative flex h-[140px] w-[120px] items-center justify-center">
           <Image
             src={url.getValue() as string}
             alt="product-image"
-            width={120}
-            height={120}
             className="rounded-md"
+            fill
           />
         </div>
       )
@@ -83,9 +82,14 @@ export const productTableColumns: ColumnDef<
     },
   },
   {
-    accessorKey: "status",
     header: "Status",
-    cell: (status) => status.getValue(),
+    cell: ({ row }) => (
+      <span className="rounded-lg bg-gray-100 p-2 font-medium">
+        {`${row.original.status[0].toUpperCase()}${row.original.status.slice(
+          1
+        )}`}
+      </span>
+    ),
   },
   {
     accessorKey: "stock",
@@ -101,14 +105,16 @@ export const productTableColumns: ColumnDef<
           viewAction={
             <TableActions.View
               href={`/store/products/view/${row.original.id}`}
+              asLink
             />
           }
           editAction={
             <TableActions.Edit
               href={`/store/products/edit/${row.original.id}`}
+              asLink
             />
           }
-          deleteAction={<TableActions.Delete href={""} />}
+          deleteAction={<TableActions.Delete href={""} asLink />}
         />
       )
     },
@@ -129,7 +135,7 @@ export const productTablePlaceholderColumns: ColumnDef<
     header: "Image",
     cell: () => {
       return (
-        <div className="h-[90px] w-[90px] animate-pulse rounded-lg bg-gray-200" />
+        <div className="h-[140px] w-[120px] animate-pulse rounded-lg bg-gray-200" />
       )
     },
     enableColumnFilter: false,
@@ -137,13 +143,13 @@ export const productTablePlaceholderColumns: ColumnDef<
   {
     id: "name",
     header: "Name",
-    cell: (name) => (
+    cell: () => (
       <div className="h-8 w-20 animate-pulse rounded-lg bg-gray-200" />
     ),
   },
   {
     header: "Category",
-    cell: ({ row }) => {
+    cell: () => {
       return (
         <div className="flex items-center justify-center gap-1.5">
           <div className="h-8 w-20 animate-pulse rounded-lg bg-gray-200" />
@@ -169,9 +175,9 @@ export const productTablePlaceholderColumns: ColumnDef<
     cell: () => {
       return (
         <TableActions
-          viewAction={<TableActions.View href={""} />}
-          editAction={<TableActions.Edit href={""} />}
-          deleteAction={<TableActions.Delete href={""} />}
+          viewAction={<TableActions.View asLink={false} />}
+          editAction={<TableActions.Edit asLink={false} />}
+          deleteAction={<TableActions.Delete asLink={false} />}
         />
       )
     },

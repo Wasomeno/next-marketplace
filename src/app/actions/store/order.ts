@@ -18,7 +18,14 @@ export type OrderStatus =
   | "Arrived"
   | "Done"
 
-export async function getStoreOrders(): Promise<StoreOrder[]> {
+type GetStoreOrderProps = {
+  sort?: Record<string, "asc" | "desc">
+  search?: string
+}
+
+export async function getStoreOrders(
+  props?: GetStoreOrderProps
+): Promise<StoreOrder[]> {
   type Keys =
     | "productAmount"
     | "id"
@@ -30,7 +37,11 @@ export async function getStoreOrders(): Promise<StoreOrder[]> {
 
   const store = await getStore()
   const orders = await prisma.order.findMany({
-    where: { products: { some: { product: { store_id: store?.id } } } },
+    orderBy: props?.sort,
+    where: {
+      products: { some: { product: { store_id: store?.id } } },
+      invoice: { contains: props?.search },
+    },
     include: {
       _count: {
         select: { products: { where: { product: { store_id: store?.id } } } },

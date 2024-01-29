@@ -2,7 +2,7 @@ import React from "react"
 import Image from "next/image"
 import moment from "moment"
 
-import { ProductsOrderedTable } from "@/components/products-ordered-table"
+import { ProductsOrderedTable } from "@/components/user/store/products-ordered-table"
 import { getStoreOrder } from "@/app/actions/store/order"
 
 type StoreOrderPageProps = {

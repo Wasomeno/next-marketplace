@@ -11,6 +11,8 @@ type GetStoreProductsProps = {
   categoryIds?: number[]
   sort?: Record<string, "desc" | "asc">
   status?: string
+  pageSize?: number
+  page?: number
 }
 
 type CreateStoreParams = Omit<Store, "id">
@@ -32,6 +34,8 @@ export async function getStoreProducts(props: GetStoreProductsProps) {
     select: {
       products: {
         orderBy: props.sort,
+        skip: (props.page ? props.page - 1 : 0) * (props.pageSize ?? 5),
+        take: props.pageSize ?? 5,
         where: { name: { contains: props.search }, status: props.status },
         include: { images: true, categories: true },
       },

@@ -7,7 +7,7 @@ import { BsPlus, BsTrash3 } from "react-icons/bs"
 
 import { Button } from "@/components/ui/button"
 import { CheckBox } from "@/components/ui/checkbox"
-import { TableActions } from "@/components/table-row-menu"
+import { TableActions } from "@/components/table-actions"
 
 import { DataTable, useSelectedData } from "../data-table"
 import { DeleteCategoriesModal } from "./modals/delete-categories-modal"
@@ -100,11 +100,13 @@ export const CategoryTable = ({ categories }: CategoryTableProps) => {
         <TableActions
           viewAction={
             <TableActions.View
+              asLink
               href={`/admin/categories?id=${row.original.id}&view=true`}
             />
           }
           editAction={
             <TableActions.Edit
+              asLink
               href={`/admin/categories?id=${row.original.id}&edit=true`}
             />
           }

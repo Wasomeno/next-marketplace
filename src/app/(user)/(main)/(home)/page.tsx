@@ -28,27 +28,28 @@ export default async function Home() {
     <div className="relative flex flex-col items-center justify-start gap-6 bg-white px-4 lg:px-8 dark:bg-neutral-950">
       <HomeBannerSlider />
       <div className="w-full lg:w-11/12">
-        <div className="w-full rounded-lg border p-4 shadow-sm lg:w-3/6 dark:border-gray-800 ">
+        <div className="w-full lg:w-3/6">
           <h2 className="mb-2 font-sans text-sm font-medium lg:mb-4 lg:text-xl">
             Categories
           </h2>
-          <div className="flex items-center justify-start gap-4 overflow-x-scroll">
+          <div className="flex items-center justify-start gap-6 overflow-x-scroll">
             {categories.map((category, index) => (
               <Link
                 key={index}
                 href={"/categories/" + category.slug}
-                className="flex flex-col items-center gap-2"
+                className="flex flex-col items-center gap-2 transition-all duration-200"
               >
-                <div className="relative h-20 w-20 lg:h-24 lg:w-24">
+                <div className="relative h-20 w-20 overflow-hidden rounded-md lg:h-24 lg:w-24">
                   <Image
                     src={category.images[0].url}
                     alt="category-image"
                     fill
-                    className="rounded-md border-2 transition duration-200 hover:border-blue-300 dark:border-gray-700"
                     quality={30}
                   />
                 </div>
-                <span className="text-center text-xs">{category.name}</span>
+                <span className="text-center text-sm tracking-wide">
+                  {category.name}
+                </span>
               </Link>
             ))}
           </div>

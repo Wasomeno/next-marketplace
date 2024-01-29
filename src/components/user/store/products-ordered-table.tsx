@@ -5,7 +5,7 @@ import Image from "next/image"
 import { Prisma } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
 
-import { DataTable } from "./admin/data-table"
+import { DataTable } from "../../admin/data-table"
 
 type OrderProduct = Prisma.OrderProductGetPayload<{
   include: { product: true }

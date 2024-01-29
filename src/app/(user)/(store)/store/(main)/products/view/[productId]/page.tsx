@@ -43,11 +43,11 @@ export default async function AdminProductPage({ params }: ProductPageProps) {
           <ProductImages imageUrls={imageUrls} />
         </div>
         <div className="flex w-full flex-col gap-4 lg:w-4/6">
-          <div className="col-span- flex flex-col gap-2 rounded-lg border border-gray-100 p-3">
+          <div className="col-span- flex flex-col gap-2 rounded-lg ">
             <span className="text-sm font-medium text-gray-400">Name</span>
             <span className="w-full">{product?.name}</span>
           </div>
-          <div className="col-span-1 flex flex-col gap-2 rounded-lg border border-gray-100 p-3">
+          <div className="col-span-1 flex flex-col gap-2 rounded-lg  ">
             <span className="text-sm font-medium text-gray-400">
               Categories
             </span>
@@ -62,15 +62,15 @@ export default async function AdminProductPage({ params }: ProductPageProps) {
               ))}
             </div>
           </div>
-          <div className="col-span- flex flex-col gap-2 rounded-lg border border-gray-100 p-3">
+          <div className="col-span- flex flex-col gap-2 rounded-lg  ">
             <span className="text-sm font-medium text-gray-400">Price</span>
             <span className="w-full">Rp. {product?.price}</span>
           </div>
-          <div className="col-span-1 flex flex-col gap-2 rounded-lg border border-gray-100 p-3">
+          <div className="col-span-1 flex flex-col gap-2 rounded-lg  ">
             <span className="text-sm font-medium text-gray-400">Stock</span>
             <span className="w-full">{product?.stock}</span>
           </div>
-          <div className="col-span-2 flex flex-col gap-2 rounded-lg border border-gray-100 p-3">
+          <div className="col-span-2 flex flex-col gap-2 rounded-lg  ">
             <span className="text-sm font-medium text-gray-400">
               Description
             </span>

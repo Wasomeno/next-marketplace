@@ -1,11 +1,14 @@
 "use client"
 
 import { useMemo } from "react"
+import { useSearchParamsValues } from "@/utils"
 import { Order } from "@prisma/client"
+import { useQuery } from "@tanstack/react-query"
 import { ColumnDef } from "@tanstack/react-table"
 import moment from "moment"
 
-import { TableActions } from "@/components/table-row-menu"
+import { TableActions } from "@/components/table-actions"
+import { getStoreOrders } from "@/app/actions/store/order"
 
 import { DataTable } from "../data-table"
 
@@ -24,7 +27,21 @@ export const orderSortOptions = [
   },
 ]
 
-export const OrderTable = ({ orders }: { orders: StoreOrder[] }) => {
+export const OrderTable = () => {
+  const searchParams = useSearchParamsValues<{
+    sort: Record<string, "asc" | "desc">
+    search: string
+  }>()
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["storeOrders", searchParams],
+    queryFn: () =>
+      getStoreOrders({
+        sort: searchParams?.sort,
+        search: searchParams?.search,
+      }),
+  })
+
   const columns = useMemo<ColumnDef<StoreOrder>[]>(
     () => [
       {
@@ -58,11 +75,13 @@ export const OrderTable = ({ orders }: { orders: StoreOrder[] }) => {
             <TableActions
               editAction={
                 <TableActions.Edit
+                  asLink
                   href={`/store/orders/edit/${row.original.id}`}
                 />
               }
               viewAction={
                 <TableActions.View
+                  asLink
                   href={`/store/orders/view/${row.original.id}`}
                 />
               }
@@ -71,13 +90,56 @@ export const OrderTable = ({ orders }: { orders: StoreOrder[] }) => {
         },
       },
     ],
-    [orders.length]
+    [data?.length]
+  )
+
+  const placeholderColumns = useMemo<ColumnDef<StoreOrder>[]>(
+    () => [
+      {
+        header: "Id",
+        cell: () => <div className="h-8 w-20 rounded-lg bg-gray-200" />,
+        enableColumnFilter: false,
+      },
+      {
+        header: "Invoice",
+        cell: () => <div className="h-8 w-20 rounded-lg bg-gray-200" />,
+        enableColumnFilter: false,
+      },
+      {
+        header: "Product Amount",
+        cell: () => <div className="h-8 w-20 rounded-lg bg-gray-200" />,
+        enableColumnFilter: false,
+      },
+      {
+        header: "Status",
+        cell: () => <div className="h-8 w-20 rounded-lg bg-gray-200" />,
+        enableColumnFilter: false,
+      },
+      {
+        header: "Ordered At",
+        cell: () => <div className="h-8 w-20 rounded-lg bg-gray-200" />,
+        enableColumnFilter: false,
+      },
+      {
+        id: "action",
+        header: "Actions",
+        cell: () => {
+          return (
+            <TableActions
+              editAction={<TableActions.Edit asLink={false} />}
+              viewAction={<TableActions.View asLink={false} />}
+            />
+          )
+        },
+      },
+    ],
+    [data?.length]
   )
 
   return (
     <DataTable
-      data={orders}
-      columns={columns}
+      data={isLoading ? Array(5).fill({}) : (data as StoreOrder[])}
+      columns={isLoading ? placeholderColumns : columns}
       searchInput={<DataTable.SearchInput placeholder="Search by invoice" />}
       dataSorter={<DataTable.Sorter sortOptions={orderSortOptions} />}
     />

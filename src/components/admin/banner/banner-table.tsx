@@ -7,7 +7,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import { BsPlus, BsTrash3 } from "react-icons/bs"
 
 import { Button } from "@/components/ui/button"
-import { TableActions } from "@/components/table-row-menu"
+import { TableActions } from "@/components/table-actions"
 
 import { DataTable, useSelectedData } from "../data-table"
 
@@ -80,11 +80,13 @@ export const BannerTable = ({ banners }: { banners: Banner[] }) => {
         <TableActions
           viewAction={
             <TableActions.View
+              asLink
               href={`/admin/banners?id=${row.original.id}&view=true`}
             />
           }
           editAction={
             <TableActions.Edit
+              asLink
               href={`/admin/banners?id=${row.original.id}&edit=true`}
             />
           }

@@ -33,7 +33,7 @@ const ProductCard = ({
     <div
       className={twMerge(
         clsx(
-          "col-span-5 h-64 cursor-pointer rounded-md bg-neutral-50 bg-opacity-50 shadow-[0_3px_7px_rgb(0,0,0,0.1)] lg:col-span-2 lg:h-auto dark:bg-neutral-900 dark:bg-opacity-50 dark:shadow-gray-700",
+          "col-span-5 h-64 cursor-pointer rounded-md shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] lg:col-span-2 lg:h-auto dark:bg-neutral-900 dark:bg-opacity-50 dark:shadow-gray-700",
           className
         )
       )}
@@ -55,7 +55,7 @@ const ProductCard = ({
 
 const Image = ({ image }: { image: string }) => {
   return (
-    <div className="relative h-32 w-full overflow-clip rounded-t-md border bg-slate-50 lg:h-40">
+    <div className="relative h-32 w-full overflow-clip rounded-t-md border-b bg-slate-50 lg:h-40">
       <NextImage
         src={image}
         alt="product-image"

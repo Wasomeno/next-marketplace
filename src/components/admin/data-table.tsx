@@ -5,11 +5,13 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
+  PaginationState,
   Table,
   useReactTable,
 } from "@tanstack/react-table"
+import { HiChevronLeft, HiChevronRight } from "react-icons/hi2"
 
-import { Option } from "../dropdown"
 import { TableDataSorter } from "../table-data-sorter"
 import { TableSearchInput } from "../table-search-input"
 import { Button } from "../ui/button"
@@ -43,6 +45,7 @@ export function DataTable<T extends Record<string, unknown>>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   })
 
   return (
@@ -123,24 +126,12 @@ export function DataTable<T extends Record<string, unknown>>({
           </TableBody>
         </ReactTable>
       </div>
-      <div className="my-2 flex items-center justify-start gap-2.5">
-        <Button
-          variant="default"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-          className="w-20 border dark:border-neutral-600 dark:bg-neutral-900"
-        >
-          Previous
+      <div className="my-2 flex items-center justify-center gap-2.5">
+        <Button variant="defaultOutline" onClick={() => table.previousPage()}>
+          <HiChevronLeft />
         </Button>
-        <Button
-          variant="default"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-          className="w-20 border dark:border-neutral-600 dark:bg-neutral-900"
-        >
-          Next
+        <Button variant="defaultOutline" onClick={() => table.nextPage()}>
+          <HiChevronRight />
         </Button>
       </div>
     </div>
