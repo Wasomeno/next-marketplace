@@ -11,7 +11,6 @@ export default async function StoreLayout({
   children: ReactNode
 }) {
   const store = await getStore()
-
   return (
     <div className="flex max-h-screen flex-1 flex-col dark:bg-neutral-950">
       <StoreTopNavigation />
