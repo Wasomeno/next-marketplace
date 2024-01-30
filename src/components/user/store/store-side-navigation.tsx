@@ -27,7 +27,7 @@ export const StoreSideNavigation = ({ store }: { store: Store | null }) => {
         ease: "easeOut",
         duration: 0.3,
       }}
-      className="sticky left-0 top-0  flex-col gap-2 overflow-hidden border-r border-gray-100 bg-white shadow-md lg:flex"
+      className="sticky left-0 top-0 hidden  flex-col gap-2 overflow-hidden border-r border-gray-100 bg-white shadow-md lg:flex"
     >
       <button
         onClick={() => setIsOpen(!isOpen)}
