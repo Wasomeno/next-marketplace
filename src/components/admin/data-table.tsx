@@ -13,6 +13,7 @@ import {
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi2"
 
 import { TableDataSorter } from "../table-data-sorter"
+import { TablePagination } from "../table-pagination"
 import { TableSearchInput } from "../table-search-input"
 import { Button } from "../ui/button"
 import {
@@ -31,6 +32,7 @@ type DataTableProps<T> = {
   deleteTrigger?: ReactElement
   addTrigger?: ReactElement
   searchInput?: ReactElement
+  pagination?: ReactElement
 }
 
 export function DataTable<T extends Record<string, unknown>>({
@@ -40,6 +42,7 @@ export function DataTable<T extends Record<string, unknown>>({
   addTrigger,
   dataSorter,
   searchInput,
+  pagination,
 }: DataTableProps<T>) {
   const table = useReactTable<T>({
     data,
@@ -126,14 +129,7 @@ export function DataTable<T extends Record<string, unknown>>({
           </TableBody>
         </ReactTable>
       </div>
-      <div className="my-2 flex items-center justify-center gap-2.5">
-        <Button variant="defaultOutline" onClick={() => table.previousPage()}>
-          <HiChevronLeft />
-        </Button>
-        <Button variant="defaultOutline" onClick={() => table.nextPage()}>
-          <HiChevronRight />
-        </Button>
-      </div>
+      {pagination}
     </div>
   )
 }
@@ -172,3 +168,4 @@ export function useSelectedData() {
 
 DataTable.SearchInput = TableSearchInput
 DataTable.Sorter = TableDataSorter
+DataTable.Pagination = TablePagination
