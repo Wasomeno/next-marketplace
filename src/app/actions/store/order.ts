@@ -5,6 +5,7 @@ import { Order, Prisma } from "@prisma/client"
 
 import { prisma } from "@/lib/prisma"
 
+import { BaseDataFilters } from "../../../../types"
 import { getStore } from "./store"
 
 interface StoreOrder extends Order {
@@ -18,14 +19,11 @@ export type OrderStatus =
   | "Arrived"
   | "Done"
 
-type GetStoreOrderProps = {
-  sort?: Record<string, "asc" | "desc">
-  search?: string
-}
+type GetStoreOrderProps = BaseDataFilters
 
 export async function getStoreOrders(
   props?: GetStoreOrderProps
-): Promise<StoreOrder[]> {
+): Promise<{ orders: StoreOrder[]; totalAmount: number }> {
   type Keys =
     | "productAmount"
     | "id"
@@ -36,8 +34,17 @@ export async function getStoreOrders(
     | "status"
 
   const store = await getStore()
+
+  const ordersTotalAmount = await prisma.order.count({
+    where: {
+      products: { some: { product: { store_id: store?.id } } },
+    },
+  })
+
   const orders = await prisma.order.findMany({
     orderBy: props?.sort,
+    skip: (props?.page ? props.page - 1 : 0) * (props?.pageSize ?? 5),
+    take: props?.pageSize ?? 5,
     where: {
       products: { some: { product: { store_id: store?.id } } },
       invoice: { contains: props?.search },
@@ -64,7 +71,7 @@ export async function getStoreOrders(
         ) as StoreOrder
   )
 
-  return filteredStoreOrders
+  return { orders: filteredStoreOrders, totalAmount: ordersTotalAmount }
 }
 
 export async function getStoreOrder(

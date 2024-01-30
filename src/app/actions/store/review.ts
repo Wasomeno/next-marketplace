@@ -7,26 +7,33 @@ import invariant from "tiny-invariant"
 import { authOptions } from "@/config/next-auth"
 import { prisma } from "@/lib/prisma"
 
+import { BaseDataFilters } from "../../../../types"
 import { getStore } from "./store"
 
-type GetStoreProductReviewsProps = {
-  search?: string
-  sort?: Record<string, "asc" | "desc">
-}
+type GetStoreProductReviewsProps = BaseDataFilters
 
 export async function getStoreProductReviews(
   props?: GetStoreProductReviewsProps
 ) {
   const store = await getStore()
+
+  const reviewsTotalAmount = await prisma.productReview.count({
+    where: {
+      product: { store_id: store?.id, name: { contains: props?.search } },
+    },
+  })
+
   const reviews = await prisma.productReview.findMany({
     orderBy: props?.sort,
+    skip: (props?.page ? props.page - 1 : 0) * (props?.pageSize ?? 5),
+    take: props?.pageSize ?? 5,
     where: {
       product: { store_id: store?.id, name: { contains: props?.search } },
     },
     include: { product: true, user: true },
   })
 
-  return reviews
+  return { reviews, totalAmount: reviewsTotalAmount }
 }
 
 async function changeOrderProductReviewStatus(orderProductId: number) {

@@ -6,13 +6,11 @@ import { getServerSession } from "next-auth"
 
 import { prisma } from "@/lib/prisma"
 
-type GetStoreProductsProps = {
-  search?: string
+import { BaseDataFilters } from "../../../../types"
+
+type GetStoreProductsProps = BaseDataFilters & {
   categoryIds?: number[]
-  sort?: Record<string, "desc" | "asc">
   status?: string
-  pageSize?: number
-  page?: number
 }
 
 type CreateStoreParams = Omit<Store, "id">
@@ -31,7 +29,8 @@ export async function getStoreProducts(props: GetStoreProductsProps) {
   const session = await getServerSession()
   const store = await prisma.store.findUnique({
     where: { owner_email: session?.user.email ?? "" },
-    select: {
+    include: {
+      _count: { select: { products: true } },
       products: {
         orderBy: props.sort,
         skip: (props.page ? props.page - 1 : 0) * (props.pageSize ?? 5),
@@ -42,7 +41,7 @@ export async function getStoreProducts(props: GetStoreProductsProps) {
     },
   })
 
-  return store?.products ?? []
+  return { products: store?.products, totalAmount: store?._count.products }
 }
 
 export async function createStore(store: CreateStoreParams) {
