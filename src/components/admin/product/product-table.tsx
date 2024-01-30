@@ -63,7 +63,13 @@ export const ProductTable = () => {
   } = useSelectedData()
 
   const { data, isLoading } = useQuery({
-    queryKey: ["products", searchParamsValues],
+    queryKey: [
+      "products",
+      searchParamsValues?.page,
+      searchParamsValues?.search,
+      searchParamsValues?.sort,
+      searchParamsValues?.status,
+    ],
     queryFn: () => getStoreProducts({ ...searchParamsValues, pageSize }),
     refetchOnMount: false,
     refetchOnWindowFocus: false,
