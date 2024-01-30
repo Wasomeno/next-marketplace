@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+import { pages } from "next/dist/build/templates/app-page"
 import { useSearchParamsValues } from "@/utils"
 import { Prisma } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
@@ -12,9 +13,13 @@ import { Option } from "@/components/dropdown"
 import { TableActions } from "@/components/table-actions"
 import { getStoreProductReviews } from "@/app/actions/store/review"
 
+import { BaseDataFilters } from "../../../../types"
+
 type ProductReview = Prisma.ProductReviewGetPayload<{
   include: { user: true; product: true }
 }>
+
+const pageSize = 5
 
 const reviewsSortOptions: Option[] = [
   { label: "Recent to Old", value: "created_at.desc" },
@@ -22,17 +27,14 @@ const reviewsSortOptions: Option[] = [
 ]
 
 export const StoreProductReviewsTable = () => {
-  const searchParamsValues = useSearchParamsValues<{
-    sort: Record<string, "asc" | "desc">
-    search: string
-  }>()
+  const searchParamsValues = useSearchParamsValues<BaseDataFilters>()
 
   const { data, isLoading } = useQuery({
     queryKey: ["storeProductReviews", searchParamsValues],
     queryFn: () =>
       getStoreProductReviews({
-        search: searchParamsValues?.search,
-        sort: searchParamsValues?.sort,
+        ...searchParamsValues,
+        pageSize,
       }),
   })
 
@@ -89,13 +91,26 @@ export const StoreProductReviewsTable = () => {
   ]
 
   return (
-    <DataTable
-      columns={isLoading ? placeholderColumns : columns}
-      data={isLoading ? Array(5).fill({}) : (data as ProductReview[])}
-      searchInput={
-        <DataTable.SearchInput placeholder="Search by product name" />
-      }
-      dataSorter={<DataTable.Sorter sortOptions={reviewsSortOptions} />}
-    />
+    <>
+      <span className="font text-sm text-gray-500 lg:text-base">
+        {data?.totalAmount ?? 0} Reviews
+      </span>
+      <DataTable
+        columns={isLoading ? placeholderColumns : columns}
+        data={
+          isLoading ? Array(5).fill({}) : (data?.reviews as ProductReview[])
+        }
+        searchInput={
+          <DataTable.SearchInput placeholder="Search by product name" />
+        }
+        dataSorter={<DataTable.Sorter sortOptions={reviewsSortOptions} />}
+        pagination={
+          <DataTable.Pagination
+            dataLength={data?.totalAmount as number}
+            pageSize={pageSize}
+          />
+        }
+      />
+    </>
   )
 }

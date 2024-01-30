@@ -10,6 +10,7 @@ import moment from "moment"
 import { TableActions } from "@/components/table-actions"
 import { getStoreOrders } from "@/app/actions/store/order"
 
+import { BaseDataFilters } from "../../../../types"
 import { DataTable } from "../data-table"
 
 type StoreOrder = Order & {
@@ -27,18 +28,17 @@ export const orderSortOptions = [
   },
 ]
 
+const pageSize = 3
+
 export const OrderTable = () => {
-  const searchParams = useSearchParamsValues<{
-    sort: Record<string, "asc" | "desc">
-    search: string
-  }>()
+  const searchParamsValues = useSearchParamsValues<BaseDataFilters>()
 
   const { data, isLoading } = useQuery({
-    queryKey: ["storeOrders", searchParams],
+    queryKey: ["storeOrders", searchParamsValues],
     queryFn: () =>
       getStoreOrders({
-        sort: searchParams?.sort,
-        search: searchParams?.search,
+        ...searchParamsValues,
+        pageSize,
       }),
   })
 
@@ -90,7 +90,7 @@ export const OrderTable = () => {
         },
       },
     ],
-    [data?.length]
+    [data?.orders.length]
   )
 
   const placeholderColumns = useMemo<ColumnDef<StoreOrder>[]>(
@@ -133,16 +133,27 @@ export const OrderTable = () => {
         },
       },
     ],
-    [data?.length]
+    [data?.orders.length]
   )
 
   return (
-    <DataTable
-      data={isLoading ? Array(5).fill({}) : (data as StoreOrder[])}
-      columns={isLoading ? placeholderColumns : columns}
-      searchInput={<DataTable.SearchInput placeholder="Search by invoice" />}
-      dataSorter={<DataTable.Sorter sortOptions={orderSortOptions} />}
-    />
+    <>
+      <span className="font text-sm text-gray-500 lg:text-base">
+        {data?.totalAmount ?? 0} Orders
+      </span>
+      <DataTable
+        data={isLoading ? Array(5).fill({}) : (data?.orders as StoreOrder[])}
+        columns={isLoading ? placeholderColumns : columns}
+        searchInput={<DataTable.SearchInput placeholder="Search by invoice" />}
+        dataSorter={<DataTable.Sorter sortOptions={orderSortOptions} />}
+        pagination={
+          <DataTable.Pagination
+            dataLength={data?.totalAmount as number}
+            pageSize={pageSize}
+          />
+        }
+      />
+    </>
   )
 }
 

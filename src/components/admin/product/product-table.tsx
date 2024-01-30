@@ -15,6 +15,7 @@ import { ConfirmationDialog } from "@/components/confirmation-dialog"
 import { deleteProduct } from "@/app/actions/store/products"
 import { getStoreProducts } from "@/app/actions/store/store"
 
+import { BaseDataFilters } from "../../../../types"
 import { DataTable, useSelectedData } from "../data-table"
 import {
   productTableColumns,
@@ -24,6 +25,8 @@ import {
 type StoreProduct = Prisma.ProductGetPayload<{
   include: { images: true; categories: true }
 }>
+
+const pageSize = 3
 
 export const productSortOptions = [
   {
@@ -47,12 +50,9 @@ export const productSortOptions = [
 export const ProductTable = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
-  const searchParams = useSearchParamsValues<{
-    sort: Record<string, "desc" | "asc">
-    status: string
-    search: string
-    page: string
-  }>()
+  const searchParamsValues = useSearchParamsValues<
+    BaseDataFilters & { status: string }
+  >()
 
   const {
     selectedData,
@@ -63,14 +63,8 @@ export const ProductTable = () => {
   } = useSelectedData()
 
   const { data, isLoading } = useQuery({
-    queryKey: ["products", searchParams],
-    queryFn: () =>
-      getStoreProducts({
-        sort: searchParams?.sort,
-        search: searchParams?.search,
-        page: parseInt(searchParams?.page as string),
-        pageSize: 1,
-      }),
+    queryKey: ["products", searchParamsValues],
+    queryFn: () => getStoreProducts({ ...searchParamsValues, pageSize }),
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   })
@@ -135,10 +129,20 @@ export const ProductTable = () => {
 
   return (
     <>
-      <span className="font text-gray-500">{data?.length} Products</span>
+      <span className="font text-sm text-gray-500 lg:text-base">
+        {data?.totalAmount ?? 0} Products
+      </span>
       <DataTable
-        data={isLoading ? Array(5).fill({}) : (data as StoreProduct[])}
+        data={
+          isLoading ? Array(5).fill({}) : (data?.products as StoreProduct[])
+        }
         columns={isLoading ? placeholderColumns : columns}
+        pagination={
+          <DataTable.Pagination
+            dataLength={data?.totalAmount ?? 0}
+            pageSize={pageSize}
+          />
+        }
         dataSorter={<DataTable.Sorter sortOptions={productSortOptions} />}
         searchInput={
           <DataTable.SearchInput
