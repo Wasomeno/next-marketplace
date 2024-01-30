@@ -45,11 +45,11 @@ export const UserMainMenu = ({ session }: { session: Session }) => {
               sideOffset={2.5}
             >
               <motion.div
-                initial={{ height: "0px", opacity: 0 }}
-                animate={{ height: "280px", opacity: 1 }}
-                exit={{ height: "0px", opacity: 0 }}
-                transition={{ duration: 0.2, ease: "backIn" }}
-                className="z-30 w-64 overflow-hidden rounded-md border border-slate-300 bg-white transition-all duration-200 dark:border-gray-800 dark:bg-neutral-950"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2, ease: "easeInOut" }}
+                className="z-30 h-fit w-64 overflow-hidden rounded-md border border-slate-300 bg-white transition-all duration-200 dark:border-gray-800 dark:bg-neutral-950"
                 style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
               >
                 <div className="border-b p-2.5 dark:border-b-gray-800">
