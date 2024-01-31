@@ -41,7 +41,7 @@ export function WishlistItems({ items }: WishlistItemsSectionProps) {
         </div>
       </div>
       <div className="sticky bottom-0 w-full bg-white lg:w-2/6 lg:px-8 dark:bg-neutral-950">
-        <div className="flex flex-col justify-between border-t border-slate-200 p-2.5 shadow-[0_3px_10px_rgb(0,0,0,0.1)] lg:h-72 lg:rounded-lg lg:border lg:border-slate-300 lg:p-4 lg:shadow-none dark:border-gray-800">
+        <div className="flex flex-col justify-between border-t border-gray-200 p-2.5 shadow-[0_3px_10px_rgb(0,0,0,0.1)] lg:h-72 lg:rounded-lg lg:border lg:border-gray-200 lg:p-4 lg:shadow-none dark:border-gray-800">
           <div className="">
             <span className="hidden text-xs font-medium lg:inline lg:text-base">
               Selected Items Summary
