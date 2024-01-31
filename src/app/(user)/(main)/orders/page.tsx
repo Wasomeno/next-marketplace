@@ -6,15 +6,15 @@ import { Input } from "@/components/ui/input"
 import { OrderDetailsModal } from "@/components/user/order/order-details-modal"
 import { OrderPagination } from "@/components/user/order/order-pagination"
 import { OrderProductCard } from "@/components/user/order/order-product-card"
-import { OrderProductRating } from "@/components/user/order/order-product-rating"
 import { OrderStatusFilter } from "@/components/user/order/order-status-filter"
+import { RateProductModal } from "@/components/user/order/rate-product-modal"
 
 type Props = {
   searchParams: {
     status: string
     page: string
     id: string
-    rating: string
+    rate: string
     view: string
   }
 }
@@ -99,7 +99,7 @@ export default async function OrdersPage({ searchParams }: Props) {
         {count > 5 && <OrderPagination count={count} />}
       </div>
       {searchParams.view && <OrderDetailsModal />}
-      {searchParams.rating && <OrderProductRating />}
+      {searchParams.rate && <RateProductModal />}
     </div>
   )
 }
