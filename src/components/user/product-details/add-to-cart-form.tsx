@@ -10,10 +10,10 @@ import { Button } from "@/components/ui/button"
 import { addToCart } from "@/app/actions/user/cart"
 
 type AddToCartFormProps = {
-  productDetails: Product
+  product: Product
 }
 
-export const AddToCartForm = ({ productDetails }: AddToCartFormProps) => {
+export const AddToCartForm = ({ product }: AddToCartFormProps) => {
   const [amount, setAmount] = useState<number>(1)
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
@@ -22,7 +22,7 @@ export const AddToCartForm = ({ productDetails }: AddToCartFormProps) => {
   const userEmail = session?.user?.email
 
   function increment() {
-    if (amount >= productDetails.stock) return
+    if (amount >= product.stock) return
     setAmount((currentAmount) => currentAmount + 1)
   }
 
@@ -57,7 +57,7 @@ export const AddToCartForm = ({ productDetails }: AddToCartFormProps) => {
       <div className="my-2 hidden items-center justify-between lg:flex">
         <span className="text-xs text-slate-500 lg:text-sm">Subtotal</span>
         <span className="text-sm lg:text-base">
-          Rp. {(amount * productDetails.price).toLocaleString("id")}
+          Rp. {(amount * product.price).toLocaleString("id")}
         </span>
       </div>
       <div className="flex w-full gap-2 lg:flex-col lg:gap-0">
@@ -66,7 +66,7 @@ export const AddToCartForm = ({ productDetails }: AddToCartFormProps) => {
           onClick={() =>
             userEmail
               ? startTransition(async () => {
-                  await addToCart(productDetails.id, amount)
+                  await addToCart(product.id, amount)
                   toast.success("Added to cart")
                 })
               : router.push("/login")

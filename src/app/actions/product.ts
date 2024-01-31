@@ -45,9 +45,18 @@ export async function getProduct(
 ): Promise<Prisma.ProductGetPayload<{
   include: { images: true; categories: true; store: true }
 }> | null> {
-  const productDetails = await prisma.product.findUnique({
+  const product = await prisma.product.findUnique({
     where: { id: productId },
     include: { images: true, categories: true, store: true },
   })
-  return productDetails
+  return product
+}
+
+export async function getProductReviews(productId: number) {
+  const reviews = await prisma.productReview.findMany({
+    where: { product_id: productId },
+    include: { user: true },
+  })
+
+  return reviews
 }
