@@ -1,4 +1,3 @@
-import { Suspense } from "react"
 import { Metadata } from "next"
 import invariant from "tiny-invariant"
 
@@ -74,7 +73,6 @@ export default async function ProductPage(props: {
                 {product?.description}
               </p>
             </div>
-
             <Separator
               decorative
               orientation="horizontal"
@@ -83,9 +81,7 @@ export default async function ProductPage(props: {
             />
           </div>
         </div>
-        <Suspense fallback={<div>Test Fallback reviews</div>}>
-          <ProductReviews productId={product.id} />
-        </Suspense>
+        <ProductReviews productId={product.id} />
       </div>
       <AddToCartForm product={product} />
     </div>
