@@ -2,12 +2,12 @@
 
 import { useTransition } from "react"
 import Image from "next/image"
-import * as Checkbox from "@radix-ui/react-checkbox"
+import { Checkbox } from "@radix-ui/react-checkbox"
 import { BiTrash } from "react-icons/bi"
-import { BsCheck } from "react-icons/bs"
 import { toast } from "react-toastify"
 
 import { Button } from "@/components/ui/button"
+import { CheckBox } from "@/components/ui/checkbox"
 import { CartItem } from "@/app/(user)/(main)/cart/page"
 import { removeFromCart, updateCartItem } from "@/app/actions/user/cart"
 
@@ -42,18 +42,10 @@ export const CartItemCard = ({
 
   return (
     <div className="flex items-center gap-4 border-t p-4 dark:border-t-gray-800">
-      <Checkbox.Root
-        checked={isSelected}
-        onClick={() => onClick()}
-        className="flex h-5 w-5 items-center justify-center rounded-sm border border-slate-400 bg-slate-50 lg:h-5 lg:w-5 dark:border-gray-700 dark:bg-slate-800"
-      >
-        <Checkbox.Indicator color="black">
-          <BsCheck className="h-4 w-4" />
-        </Checkbox.Indicator>
-      </Checkbox.Root>
+      <CheckBox onCheckedChange={onClick} checked={isSelected} />
       <div className="flex w-full flex-wrap items-end justify-between gap-2">
         <div className="flex w-full gap-2 lg:w-4/6 lg:gap-4">
-          <div className="relative h-20 w-28 rounded-md bg-slate-200 lg:h-32 lg:w-36">
+          <div className="relative h-20 w-20 overflow-hidden rounded-md bg-slate-200 lg:h-28 lg:w-28">
             <Image
               src={item.product.featured_image_url}
               alt="product-image"
@@ -97,14 +89,7 @@ export const CartItemCard = ({
 export const CartItemCardSkeleton = () => {
   return (
     <div className="flex items-center gap-4 border-t p-4 dark:border-t-gray-700">
-      <Checkbox.Root
-        disabled
-        className="flex h-5 w-5 items-center justify-center rounded-sm border border-slate-400 bg-slate-50 opacity-50 lg:h-5 lg:w-5 dark:border-slate-600 dark:bg-slate-800"
-      >
-        <Checkbox.Indicator color="black">
-          <BsCheck className="h-4 w-4" />
-        </Checkbox.Indicator>
-      </Checkbox.Root>
+      <Checkbox disabled />
       <div className="flex w-full flex-wrap items-center justify-between gap-2">
         <div className="flex w-full gap-2 lg:w-4/6 lg:gap-4">
           <div className="relative h-20 w-28 animate-pulse rounded-md bg-slate-300 lg:h-32 lg:w-36 dark:bg-neutral-400" />
