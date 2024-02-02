@@ -146,7 +146,6 @@ model Invoice {
   id         String         @id @unique
   store_id   Int
   order_id   String
-  address_id Int
   created_at DateTime       @default(now())
   status     String
   total      Int
