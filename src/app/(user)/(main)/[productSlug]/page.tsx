@@ -31,6 +31,7 @@ export default async function ProductPage(props: {
   const product = await prisma.product.findUnique({
     where: { slug: productSlug },
     include: {
+      store: true,
       images: { select: { url: true } },
       reviews: { include: { user: true } },
     },
@@ -65,7 +66,7 @@ export default async function ProductPage(props: {
               className="w-full bg-slate-200 dark:bg-gray-800"
               style={{ height: "1px" }}
             />
-            <div className="my-4 space-y-2">
+            <div className="my-4 h-24 space-y-2 lg:h-48">
               <span className="text-sm font-medium lg:text-base">
                 Description
               </span>
@@ -79,6 +80,14 @@ export default async function ProductPage(props: {
               className="w-full bg-slate-200 dark:bg-gray-800"
               style={{ height: "1px" }}
             />
+            <div className="my-4 flex h-10 items-center gap-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-lg shadow-sm">
+                {product.store.name[0].toUpperCase()}
+              </div>
+              <div className="space-y-2">
+                <span className="text-sm">{product.store.name}</span>
+              </div>
+            </div>
           </div>
         </div>
         <ProductReviews productId={product.id} />
