@@ -16,7 +16,7 @@ export async function getProductDailyStats(
       _count: {
         select: {
           order_products: {
-            where: { order: { created_at: { lt: new Date() } } },
+            where: { invoice: { created_at: { lt: new Date() } } },
           },
         },
       },
@@ -37,7 +37,7 @@ export async function getProductWeeklyStats(
       _count: {
         select: {
           order_products: {
-            where: { order: { created_at: { lt: new Date() } } },
+            where: { invoice: { created_at: { lt: new Date() } } },
           },
         },
       },
@@ -60,7 +60,7 @@ export async function getProductMonthlyStats(
     const daySales = await prisma.orderProduct.findMany({
       where: {
         product_id: productId,
-        order: {
+        invoice: {
           created_at: {
             gte: moment()
               .month(month as number)

@@ -18,6 +18,7 @@ model Store {
   owner_email   String    @unique
   products      Product[]
   owner         User      @relation(fields: [owner_email], references: [email])
+  invoices      Invoice[]
 
   @@index([owner_email])
 }
@@ -131,45 +132,51 @@ model CategoryImage {
 }
 
 model Order {
-  id         Int            @id @default(autoincrement())
-  invoice    String
+  id         String    @id @default(cuid())
   total      Int
-  created_at DateTime       @default(now())
+  created_at DateTime  @default(now())
   user_email String
-  status     String
-  user       User           @relation(fields: [user_email], references: [email])
-  products   OrderProduct[]
+  user       User      @relation(fields: [user_email], references: [email])
+  invoices   Invoice[]
 
   @@index([user_email])
 }
 
+model Invoice {
+  id         String         @id @unique
+  store_id   Int
+  order_id   String
+  address_id Int
+  created_at DateTime       @default(now())
+  status     String
+  total      Int
+  address    String         @default("")
+  store      Store          @relation(fields: [store_id], references: [id])
+  products   OrderProduct[]
+  order      Order          @relation(fields: [order_id], references: [id], onDelete: Cascade)
+
+  @@index([store_id])
+  @@index([order_id])
+}
+
 model OrderProduct {
   id         Int     @id @default(autoincrement())
+  invoice_id String
   amount     Int
   total      Int
-  order_id   Int
   product_id Int
   isReviewed Boolean @default(false)
   product    Product @relation(fields: [product_id], references: [id])
-  order      Order   @relation(fields: [order_id], references: [id])
+  invoice    Invoice @relation(fields: [invoice_id], references: [id], onDelete: Cascade)
 
   @@index([product_id])
-  @@index([order_id])
+  @@index([invoice_id])
 }
 
 model Admin {
   id       Int    @id @default(autoincrement())
   username String @unique
   password String
-}
-
-model OrderToProduct {
-  A Int
-  B Int
-
-  @@unique([A, B], map: "_OrderToProduct_AB_unique")
-  @@index([B], map: "_OrderToProduct_B_index")
-  @@map("_OrderToProduct")
 }
 
 model CartToProduct {

@@ -6,8 +6,6 @@ import { getServerSession } from "next-auth"
 
 import { prisma } from "@/lib/prisma"
 
-import { getUserStore } from "./user-details"
-
 export type TOrderStatus =
   | "Payment Confirmed"
   | "On Shipping"
@@ -15,117 +13,79 @@ export type TOrderStatus =
   | "Arrived"
   | "Done"
 
-type GetOrdersProps = {
-  search?: string
-  sort?: Record<string, "desc" | "asc">
-}
-
-export async function getOrders(props: GetOrdersProps): Promise<
-  Prisma.OrderGetPayload<{
-    include: {
-      products: { include: { product: { include: { images: true } } } }
-      status: true
-      _count: { select: { products: true } }
-    }
-  }>[]
-> {
-  const store = await getUserStore()
-
-  const orders = await prisma.order.findMany({
-    orderBy: props.sort,
-    where: {
-      invoice: { contains: props?.search },
-      products: { some: { product: { store_id: store?.id } } },
-    },
-    include: {
-      products: {
-        where: { product: { store_id: store?.id } },
-        include: { product: { include: { images: true } } },
-      },
-      _count: { select: { products: true } },
-    },
-  })
-  return orders
-}
-
-export async function getOrder(
-  orderId: number
-): Promise<Prisma.OrderGetPayload<{
-  include: {
-    products: { include: { product: { include: { images: true } } } }
-  }
-}> | null> {
-  const orderDetails = await prisma.order.findUnique({
-    where: { id: orderId },
-    include: {
-      products: { include: { product: { include: { images: true } } } },
-    },
-  })
-  return orderDetails
-}
-
-export async function getRecentOrders(): Promise<
-  | Prisma.OrderGetPayload<{
-      include: {
-        products: { include: { product: { include: { images: true } } } }
-        _count: { select: { products: true } }
-      }
-    }>[]
-  | null
-> {
-  const timeNow = new Date()
-  const timeDaysAgo = new Date()
-
-  timeDaysAgo.setDate(timeNow.getDate() - 2)
-  const recentOrders = await prisma.order.findMany({
-    where: { created_at: { lte: timeNow, gte: timeDaysAgo } },
-    include: {
-      products: { include: { product: { include: { images: true } } } },
-      _count: { select: { products: true } },
-    },
-    take: 5,
-  })
-  return recentOrders
-}
-
 type TCheckout = {
   cartItems: Prisma.CartItemGetPayload<{
     include: { product: { include: { images: true } } }
   }>[]
   total: number
-  invoice: string
+  address: string
 }
 
-export async function checkout({ cartItems, total, invoice }: TCheckout) {
+export async function checkout({ cartItems, address }: TCheckout) {
   const session = await getServerSession()
 
-  const orderProducts = cartItems.map((cartItem) => ({
-    product_id: cartItem.product_id,
-    total: cartItem.product.price * cartItem.amount,
-    amount: cartItem.amount,
-  }))
+  const storeIds = cartItems.reduce(
+    (currentIds, item) =>
+      currentIds.includes(item.product.store_id)
+        ? currentIds
+        : [...currentIds, item.product.store_id],
+    [] as number[]
+  )
+
+  const productsBasedOnStore: Record<string, typeof cartItems> =
+    storeIds.reduce(
+      (currentProducts, storeId) => ({
+        ...currentProducts,
+        [storeId]: cartItems.filter(
+          (cartItem) => cartItem.product.store_id === storeId
+        ),
+      }),
+      {}
+    )
 
   try {
-    await prisma.order
-      .create({
-        data: {
-          invoice,
-          user: { connect: { email: session?.user.email as string } },
-          products: { createMany: { data: orderProducts } },
-          total: total,
-          status: "Payment Confirmed",
-        },
-      })
-      .then(
-        async () =>
-          await prisma.cartItem.deleteMany({
-            where: {
-              id: {
-                in: cartItems.map((cartItem) => cartItem.id),
+    const date = new Date()
+
+    await prisma.order.create({
+      data: {
+        total: cartItems.reduce(
+          (total, cartItem) => total + cartItem.amount * cartItem.product.price,
+          0
+        ),
+        user_email: session?.user.email as string,
+        invoices: {
+          create: storeIds.map((storeId) => ({
+            id: `INV/${date.getFullYear()}/${date.getTime()}/${storeId}`,
+            store: { connect: { id: storeId } },
+            products: {
+              createMany: {
+                data: productsBasedOnStore[storeId].map((product) => ({
+                  product_id: product.product_id,
+                  total: product.product.price * product.amount,
+                  amount: product.amount,
+                })),
               },
             },
-          })
-      )
+            address,
+            created_at: new Date(),
+            status: "Payment Confirmed",
+            total: productsBasedOnStore[storeId].reduce(
+              (total, orderProduct) =>
+                total + orderProduct.amount * orderProduct.product.price,
+              0
+            ),
+          })),
+        },
+      },
+    })
+
+    await prisma.cartItem.deleteMany({
+      where: {
+        id: {
+          in: cartItems.map((cartItem) => cartItem.id),
+        },
+      },
+    })
   } catch (error) {
     throw error
   }
