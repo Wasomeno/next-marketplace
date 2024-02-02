@@ -1,14 +1,10 @@
 import { AdminMainMenu } from "./admin-main-menu"
-import { AdminNotificationDropdown } from "./admin-notification-dropdown"
 import { ToolbarThemeSwitcher } from "./toolbar-theme-switcher"
 
 export const AdminToolbar = () => {
   return (
     <div className="sticky top-0 z-10 flex w-full items-center justify-end  border-b bg-white px-5 py-2.5 dark:border-b-neutral-800 dark:bg-neutral-900">
       <div className="flex items-center justify-end gap-2.5">
-        <div className="flex w-10 justify-center lg:w-12">
-          <AdminNotificationDropdown />
-        </div>
         <div className="flex w-10 justify-center lg:w-12">
           <ToolbarThemeSwitcher />
         </div>

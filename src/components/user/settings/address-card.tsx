@@ -2,19 +2,10 @@
 
 import React from "react"
 import { UserAddress } from "@prisma/client"
-import { toast } from "react-toastify"
 
 import { setMainAddress } from "@/app/actions/user/settings"
 
 export const AddressCard = ({ address }: { address: UserAddress }) => {
-  function setAddress(id: string) {
-    toast.promise(async () => await setMainAddress(id), {
-      pending: "Setting Main Address",
-      success: "Successfully set main address",
-      error: "Error when setting main address",
-    })
-  }
-
   return (
     <div
       key={address.id}

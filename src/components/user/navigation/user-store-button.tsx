@@ -32,22 +32,20 @@ export async function UserStoreButton() {
       <>
         <Link
           href="/store/create?step=name"
-          className={clsx(
-            linkStyle,
-            "hidden items-center gap-2 lg:inline-block"
-          )}
+          className={clsx(linkStyle, " hidden items-center gap-2 lg:flex")}
         >
-          <BiStore />
+          <div className="relative">
+            <div className="absolute -right-[4px] -top-[4px] flex h-3 w-3 items-center justify-center rounded-full bg-blue-400 text-white shadow-sm">
+              <HiPlus size={10} />
+            </div>
+            <BiStore size={20} />
+          </div>
+          <span>Create Your Store</span>
         </Link>
         <Link
           href="/store/create?step=name"
           className="relative inline-block lg:hidden"
-        >
-          <div className="absolute -right-[2px] top-0 flex h-2 w-2 items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm">
-            <HiPlus size={10} />
-          </div>
-          <BiStore size={20} />
-        </Link>
+        ></Link>
       </>
     )
   }

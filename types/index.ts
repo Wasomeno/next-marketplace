@@ -4,3 +4,10 @@ export type BaseDataFilters = {
   pageSize?: number
   page?: number
 }
+
+export type OrderStatus =
+  | "Payment Confirmed"
+  | "On Proccess"
+  | "On Shipping"
+  | "Arrived"
+  | "Done"

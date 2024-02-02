@@ -46,7 +46,7 @@ const paymentMethods: PaymentMethod[] = [
   },
 ]
 
-export function CheckoutPaymentModal() {
+export function CheckoutPaymentModal({ address }: { address: string }) {
   const [selectedMethod, setSelectedMethod] = useState(0)
   const [status, setStatus] = useState("idle")
   const searchParams = useSearchParams()
@@ -125,11 +125,10 @@ export function CheckoutPaymentModal() {
                         onClick={async () => {
                           setStatus("loading")
                           const date = new Date()
-                          const invoice = `INV/${date.getFullYear()}/${date.getTime()}`
                           await checkout({
                             total,
-                            invoice,
                             cartItems: selectedCartItems,
+                            address,
                           })
                           setStatus("success")
                         }}

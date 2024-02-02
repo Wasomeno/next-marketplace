@@ -40,7 +40,9 @@ export default async function CheckoutPage() {
         </div>
         <CheckoutSummary />
       </div>
-      <CheckoutPaymentModal />
+      <CheckoutPaymentModal
+        address={`${address?.recipient} ${address?.province} ${address?.city} ${address?.subdistrict} ${address?.street} ${address?.postNumber} ${address?.phoneNumber}`}
+      />
     </div>
   )
 }
