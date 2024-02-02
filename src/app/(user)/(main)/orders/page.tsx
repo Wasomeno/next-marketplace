@@ -1,66 +1,28 @@
-import { getServerSession } from "next-auth"
+import { Metadata } from "next"
 import { RxCrossCircled, RxMagnifyingGlass } from "react-icons/rx"
 
-import { prisma } from "@/lib/prisma"
 import { Input } from "@/components/ui/input"
 import { OrderDetailsModal } from "@/components/user/order/order-details-modal"
-import { OrderPagination } from "@/components/user/order/order-pagination"
-import { OrderProductCard } from "@/components/user/order/order-product-card"
+import { InvoiceCard } from "@/components/user/order/order-product-card"
 import { OrderStatusFilter } from "@/components/user/order/order-status-filter"
 import { RateProductModal } from "@/components/user/order/rate-product-modal"
+import { getUserInvoices } from "@/app/actions/user/invoice"
 
 type Props = {
   searchParams: {
     status: string
     page: string
-    id: string
     rate: string
-    view: string
+    invoice: string
   }
 }
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Orders | Next Marketplace",
 }
 
-async function getUserOrderProduct(
-  status?: string,
-  page?: string,
-  size?: number
-) {
-  const session = await getServerSession()
-  const orderProductCount = await prisma.orderProduct.count({
-    where: {
-      order: {
-        user_email: { equals: session?.user.email as string },
-        status,
-      },
-    },
-  })
-
-  const orderProducts = await prisma.orderProduct.findMany({
-    where: {
-      order: {
-        user_email: { equals: session?.user.email as string },
-        status,
-      },
-    },
-    include: {
-      order: true,
-      product: { include: { images: true } },
-    },
-    skip: page ? parseInt(page) * 5 - 5 : 0,
-    take: page ? parseInt(page) * 5 : 5,
-  })
-  return { orderProducts, count: orderProductCount }
-}
-
 export default async function OrdersPage({ searchParams }: Props) {
-  const { orderProducts, count } = await getUserOrderProduct(
-    searchParams.status,
-    searchParams.page,
-    5
-  )
+  const invoices = await getUserInvoices()
 
   return (
     <div className="flex flex-1 flex-col px-5 lg:px-8">
@@ -82,23 +44,19 @@ export default async function OrdersPage({ searchParams }: Props) {
           <OrderStatusFilter />
         </div>
         <div className="flex flex-1 flex-col gap-2">
-          {orderProducts.length > 0 &&
-            orderProducts.map((orderProduct) => (
-              <OrderProductCard
-                key={orderProduct.id}
-                orderProduct={orderProduct}
-              />
+          {invoices.length > 0 &&
+            invoices.map((invoice) => (
+              <InvoiceCard key={invoice.id} invoice={invoice} />
             ))}
-          {orderProducts.length === 0 && (
+          {invoices.length === 0 && (
             <div className="flex flex-1 flex-col items-center justify-center gap-2.5 opacity-50">
               <span className="text-sm">No Transactions</span>
               <RxCrossCircled size="25" />
             </div>
           )}
         </div>
-        {count > 5 && <OrderPagination count={count} />}
       </div>
-      {searchParams.view && <OrderDetailsModal />}
+      {searchParams.invoice && <OrderDetailsModal />}
       {searchParams.rate && <RateProductModal />}
     </div>
   )
