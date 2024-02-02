@@ -7,26 +7,28 @@ import { LuPackage, LuPackageCheck, LuTruck } from "react-icons/lu"
 import { toast } from "react-toastify"
 
 import { Button } from "@/components/ui/button"
-import { OrderStatus, updateOrderStatus } from "@/app/actions/store/order"
+import { updateInvoiceStatus } from "@/app/actions/store/invoice"
 
-export const OrderChangeStatusButton = ({
+import { OrderStatus } from "../../../../types"
+
+export const InvoiceChangeStatusButton = ({
+  invoiceId,
   status,
 }: {
+  invoiceId: string
   status: OrderStatus
 }) => {
-  const params = useParams()
-
   async function changeStatus(status: OrderStatus) {
     toast.promise(
       () =>
-        updateOrderStatus({
-          orderId: Number(params.orderId as string),
+        updateInvoiceStatus({
+          invoiceId,
           status,
         }),
       {
-        pending: "Updating Order Status",
-        error: "Error When Updating Order Status",
-        success: `Order Status Updated to ${status}`,
+        pending: "Updating Invoice Status",
+        error: "Error When Updating Invoice Status",
+        success: `Invoice Status Updated to ${status}`,
       }
     )
   }
