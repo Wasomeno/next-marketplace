@@ -4,14 +4,18 @@ import { revalidatePath } from "next/cache"
 
 import { prisma } from "@/lib/prisma"
 
-import { OrderStatus } from "../../../../types"
+import { BaseDataFilters, OrderStatus } from "../../../../types"
 import { getUserStore } from "../user/user-details"
 
-export async function getStoreInvoices() {
+type GetStoreInvoicesProps = BaseDataFilters
+
+export async function getStoreInvoices(props?: GetStoreInvoicesProps) {
   const store = await getUserStore()
 
   const invoices = await prisma.invoice.findMany({
+    orderBy: props?.sort,
     where: {
+      id: { contains: props?.search },
       store_id: store?.id,
     },
     include: {
@@ -22,6 +26,7 @@ export async function getStoreInvoices() {
       _count: { select: { products: true } },
     },
   })
+
   return invoices
 }
 
