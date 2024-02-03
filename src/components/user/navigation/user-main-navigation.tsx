@@ -9,9 +9,9 @@ import { ProductSearchInput } from "./product-search-input"
 import { UserMenu } from "./user-menu"
 import { UserStoreButton } from "./user-store-button"
 
-export async function UserMainNavigation({ back }: { back?: boolean }) {
+export function UserMainNavigation({ back }: { back?: boolean }) {
   return (
-    <div className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-b-gray-200 bg-white px-4 shadow-sm dark:border-gray-800 dark:bg-neutral-950">
+    <div className="sticky top-0 z-50 flex h-16 w-full items-center justify-between border-b border-b-gray-200 bg-white px-4 shadow-sm dark:border-gray-800 dark:bg-neutral-950">
       <div className="flex w-full items-center gap-4 lg:w-3/6">
         {back && <BackButton size={20} />}
         <Link

@@ -4,7 +4,7 @@ interface UserLayoutProps {
 
 export default async function UserLayout({ children }: UserLayoutProps) {
   return (
-    <div className="flex min-h-screen flex-1 flex-col bg-white dark:bg-neutral-950">
+    <div className="relative flex min-h-screen flex-1 flex-col bg-white dark:bg-neutral-950">
       {children}
     </div>
   )

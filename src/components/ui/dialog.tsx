@@ -44,8 +44,10 @@ const DialogOverlay = React.forwardRef<
           exit={{ opacity: 0 }}
           transition={{ ease: "easeInOut", duration: 0.25 }}
           className={clsx(
-            "fixed inset-0 z-30 bg-neutral-950 bg-opacity-30 backdrop-blur-[2px]",
-            className
+            twMerge(
+              "fixed inset-0 z-30 bg-neutral-950 bg-opacity-30 backdrop-blur-[2px]",
+              className
+            )
           )}
         />
       )}
