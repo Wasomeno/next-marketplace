@@ -45,7 +45,7 @@ export const Dropdown = (props: DropdownProps) => {
       {props.isMulti && (
         <div
           className={clsx(
-            "flex max-h-96 min-h-12 w-full max-w-96 items-center rounded-md border bg-white text-sm outline-0 disabled:opacity-50 dark:border-neutral-600 dark:bg-neutral-900",
+            "flex max-h-96 min-h-8 w-full max-w-96 items-center rounded-md border bg-white text-sm outline-0 disabled:opacity-50 dark:border-neutral-600 dark:bg-neutral-900",
             props.className
           )}
         >

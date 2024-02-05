@@ -15,7 +15,7 @@ import {
 } from "../ui/dialog"
 import { TableDataSorterProps } from "./"
 
-export const TableDataSorterMobile = (props: TableDataSorterProps) => {
+export const DataSorterMobile = (props: TableDataSorterProps) => {
   const searchParams = useSearchParams()
   const activeSort = props.sortOptions?.find(
     (option) => option.value === searchParams.get("sort")

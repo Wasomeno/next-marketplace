@@ -17,12 +17,6 @@ export async function getStoreProductReviews(
 ) {
   const store = await getStore()
 
-  const reviewsTotalAmount = await prisma.productReview.count({
-    where: {
-      product: { store_id: store?.id, name: { contains: props?.search } },
-    },
-  })
-
   const reviews = await prisma.productReview.findMany({
     orderBy: props?.sort,
     skip: (props?.page ? props.page - 1 : 0) * (props?.pageSize ?? 5),
@@ -33,7 +27,21 @@ export async function getStoreProductReviews(
     include: { product: true, user: true },
   })
 
-  return { reviews, totalAmount: reviewsTotalAmount }
+  return reviews
+}
+
+export async function getStoreProductReviewsCount(
+  props: Pick<BaseDataFilters, "search">
+) {
+  const store = await getStore()
+
+  const reviewsCount = await prisma.productReview.count({
+    where: {
+      product: { store_id: store?.id, name: { contains: props?.search } },
+    },
+  })
+
+  return reviewsCount
 }
 
 async function changeOrderProductReviewStatus(orderProductId: number) {

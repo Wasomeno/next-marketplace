@@ -14,6 +14,8 @@ export async function getStoreInvoices(props?: GetStoreInvoicesProps) {
 
   const invoices = await prisma.invoice.findMany({
     orderBy: props?.sort,
+    skip: (props?.page ? props.page - 1 : 0) * (props?.pageSize ?? 5),
+    take: props?.pageSize ?? 5,
     where: {
       id: { contains: props?.search },
       store_id: store?.id,
@@ -48,6 +50,18 @@ export async function getStoreInvoice(invoiceId: string) {
   })
 
   return invoice
+}
+
+export async function getStoreInvoicesCount(
+  props: Pick<BaseDataFilters, "search">
+) {
+  const store = await getUserStore()
+
+  const orderTotalAmount = await prisma.invoice.count({
+    where: { store_id: store?.id, id: { contains: props?.search } },
+  })
+
+  return orderTotalAmount
 }
 
 export async function updateInvoiceStatus({

@@ -25,7 +25,7 @@ export function UserMobileMenu({ session }: { session: Session }) {
       <AnimatePresence>
         {showMenu && (
           <motion.div
-            className="fixed inset-x-0 z-30 h-screen w-screen rounded-t-lg bg-white py-2.5 shadow-[0_3px_10px_rgb(0,0,0,0.2)] dark:bg-neutral-950"
+            className="fixed inset-x-0 z-[60] h-screen w-screen rounded-t-lg bg-white py-2.5 shadow-[0_3px_10px_rgb(0,0,0,0.2)] dark:bg-neutral-950"
             initial={{ top: "100vh" }}
             animate={{ top: "0" }}
             transition={{

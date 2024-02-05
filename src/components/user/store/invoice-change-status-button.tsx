@@ -1,8 +1,8 @@
 "use client"
 
 import React from "react"
-import { useParams } from "next/navigation"
 import { BiChevronRight } from "react-icons/bi"
+import { IoCheckmark } from "react-icons/io5"
 import { LuPackage, LuPackageCheck, LuTruck } from "react-icons/lu"
 import { toast } from "react-toastify"
 
@@ -72,6 +72,20 @@ export const InvoiceChangeStatusButton = ({
           <div className="flex items-center gap-2">
             <LuPackageCheck size={20} />
             <span>Change Status to Arrived</span>
+          </div>
+          <BiChevronRight size={20} />
+        </Button>
+      )
+    case "Arrived":
+      return (
+        <Button
+          onClick={() => changeStatus("Done")}
+          className="flex items-center justify-between border-gray-200 shadow-sm"
+          variant="defaultOutline"
+        >
+          <div className="flex items-center gap-2">
+            <IoCheckmark size={20} />
+            <span>Change Status to Done</span>
           </div>
           <BiChevronRight size={20} />
         </Button>

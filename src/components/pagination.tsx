@@ -10,7 +10,7 @@ type TablePaginationProps = {
   dataLength: number
 }
 
-export const TablePagination = (props: TablePaginationProps) => {
+export const Pagination = (props: TablePaginationProps) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -59,7 +59,7 @@ export const TablePagination = (props: TablePaginationProps) => {
   return (
     <div className="my-2 flex items-center justify-center gap-2.5">
       <Button
-        disabled={!currentPage}
+        disabled={!currentPage || currentPage === "1"}
         variant="defaultOutline"
         size="sm"
         className="h-8 w-8 lg:h-10 lg:w-10"

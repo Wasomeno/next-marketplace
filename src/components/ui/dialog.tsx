@@ -45,7 +45,7 @@ const DialogOverlay = React.forwardRef<
           transition={{ ease: "easeInOut", duration: 0.25 }}
           className={clsx(
             twMerge(
-              "fixed inset-0 z-30 bg-neutral-950 bg-opacity-30 backdrop-blur-[2px]",
+              "fixed inset-0 z-[60] bg-neutral-950 bg-opacity-30 backdrop-blur-[2px]",
               className
             )
           )}
@@ -89,7 +89,7 @@ const DialogContent = React.forwardRef<
         }}
         className={clsx(
           twMerge(
-            "fixed bottom-0 z-50 flex h-[95%] w-full flex-1 flex-col overflow-y-scroll rounded-lg bg-white shadow-md transition duration-300 lg:right-1/2 lg:top-1/2 lg:-translate-y-1/2 lg:translate-x-1/2 dark:bg-neutral-900 ",
+            "fixed bottom-0 z-[70] flex h-[95%] w-full flex-1 flex-col overflow-y-scroll rounded-lg bg-white shadow-md transition duration-300 lg:right-1/2 lg:top-1/2 lg:-translate-y-1/2 lg:translate-x-1/2 dark:bg-neutral-900 ",
             className
           )
         )}

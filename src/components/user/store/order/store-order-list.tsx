@@ -1,15 +1,19 @@
 "use client"
 
-import React, { useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import React from "react"
 import { useSearchParamsValues } from "@/utils"
 import { useQuery } from "@tanstack/react-query"
 import { BsBoxSeam } from "react-icons/bs"
 import { HiXMark } from "react-icons/hi2"
 
-import { Dropdown, Option } from "@/components/dropdown"
+import { DataSorter } from "@/components/data-sorter"
+import { Option } from "@/components/dropdown"
+import { Pagination } from "@/components/pagination"
 import { TableSearchInput } from "@/components/table-search-input"
-import { getStoreInvoices } from "@/app/actions/store/invoice"
+import {
+  getStoreInvoices,
+  getStoreInvoicesCount,
+} from "@/app/actions/store/invoice"
 
 import { BaseDataFilters } from "../../../../../types"
 import { StoreOrderCard, StoreOrderCardSkeleton } from "./store-order-card"
@@ -26,60 +30,52 @@ const sortOptions: Option[] = [
 ]
 
 export const StoreOrderList = () => {
-  const searchParams = useSearchParams()
   const searchParamsValues = useSearchParamsValues<BaseDataFilters>()
 
-  const activeSort = sortOptions.find(
-    (sort) => searchParams?.get("sort") === sort.value
-  )
+  const { data: invoicesCount, isLoading: isInvoicesCountLoading } = useQuery({
+    queryKey: ["storeInvoicesCount", searchParamsValues?.search],
+    queryFn: () =>
+      getStoreInvoicesCount({
+        search: searchParamsValues?.search,
+      }),
+  })
 
-  const [selectedSort, setSelectedSort] = useState<Option>(activeSort as Option)
-
-  const router = useRouter()
-
-  const { data, isLoading } = useQuery({
+  const { data: invoices, isLoading: isInvoicesLoading } = useQuery({
     queryKey: ["storeOrders", searchParamsValues],
     queryFn: () =>
       getStoreInvoices({
         sort: searchParamsValues?.sort,
         search: searchParamsValues?.search,
+        page: searchParamsValues?.page,
+        pageSize: 5,
       }),
   })
 
-  function selectSort(sort: Option) {
-    const searchParamsValues = new URLSearchParams(searchParams.toString())
-    searchParamsValues.set("sort", sort.value as string)
-
-    setSelectedSort(sort)
-
-    router.replace(`/store/orders?${searchParamsValues.toString()}`)
-  }
-
   return (
     <>
+      {isInvoicesCountLoading ? (
+        <div className="h-[18px] w-20 animate-pulse rounded-lg bg-gray-200" />
+      ) : (
+        <span className="font text-sm text-gray-500 lg:text-base">
+          {invoicesCount} Reviews
+        </span>
+      )}
       <div className="flex items-center gap-4">
         <TableSearchInput placeholder="Search for order" />
-        <Dropdown
-          options={sortOptions}
-          selectedOption={selectedSort}
-          isMulti={false}
-          placeholder="Sort orders"
-          onOptionClick={selectSort}
-        />
+        <DataSorter sortOptions={sortOptions} />
       </div>
-
-      {isLoading &&
+      {isInvoicesLoading &&
         Array(5)
           .fill("")
           .map((_, index) => <StoreOrderCardSkeleton key={index} />)}
 
-      {!isLoading &&
-        (data?.length as number) > 0 &&
-        data?.map((invoice) => (
+      {!isInvoicesLoading &&
+        (invoices?.length as number) > 0 &&
+        invoices?.map((invoice) => (
           <StoreOrderCard key={invoice.id} invoice={invoice} />
         ))}
 
-      {!isLoading && (data?.length as number) < 1 && (
+      {!isInvoicesLoading && (invoices?.length as number) < 1 && (
         <div className="flex flex-1 items-center justify-center">
           <div className="flex flex-col items-center justify-center gap-2 text-gray-400">
             <div className="relative">
@@ -94,6 +90,7 @@ export const StoreOrderList = () => {
           </div>
         </div>
       )}
+      {invoicesCount && <Pagination dataLength={invoicesCount} pageSize={5} />}
     </>
   )
 }

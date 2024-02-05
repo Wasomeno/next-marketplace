@@ -6,16 +6,12 @@ import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
-  PaginationState,
-  Table,
   useReactTable,
 } from "@tanstack/react-table"
-import { HiChevronLeft, HiChevronRight } from "react-icons/hi2"
 
-import { TableDataSorter } from "../table-data-sorter"
-import { TablePagination } from "../table-pagination"
+import { DataSorter } from "../data-sorter"
+import { Pagination } from "../pagination"
 import { TableSearchInput } from "../table-search-input"
-import { Button } from "../ui/button"
 import {
   Table as ReactTable,
   TableBody,
@@ -167,5 +163,5 @@ export function useSelectedData() {
 }
 
 DataTable.SearchInput = TableSearchInput
-DataTable.Sorter = TableDataSorter
-DataTable.Pagination = TablePagination
+DataTable.Sorter = DataSorter
+DataTable.Pagination = Pagination

@@ -16,7 +16,7 @@ import {
 import { Option } from "../dropdown"
 import { TableDataSorterProps } from "./"
 
-export const TableDataSorterDesktop = ({
+export const DataSorterDesktop = ({
   disabled,
   sortOptions,
 }: TableDataSorterProps) => {
@@ -66,7 +66,10 @@ export const TableDataSorterDesktop = ({
             <div className="w-5">
               <BiChevronRight
                 size="20"
-                className="hidden text-slate-600 lg:block dark:text-white"
+                className={clsx(
+                  "hidden text-slate-600 transition duration-300 lg:block dark:text-white",
+                  isOpen && "rotate-90"
+                )}
               />
             </div>
           </button>

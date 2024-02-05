@@ -1,6 +1,5 @@
 "use client"
 
-import { useRouter } from "next/navigation";
 import { useRef, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { Id, toast } from "react-toastify";
@@ -108,10 +107,11 @@ export function AddProductForm({
         deselectFile={(fileIndex) => {
           removeFile(fileIndex)
         }}
+        isMultiple
       />
       <Fieldset
         label="Name"
-        className="flex flex-col gap-2 rounded-lg border border-gray-100 p-3"
+        className="flex flex-col gap-2 "
       >
         <Input
           placeholder="Input your product name"
@@ -121,7 +121,7 @@ export function AddProductForm({
       </Fieldset>
       <Fieldset
         label="Categories"
-        className="flex flex-col gap-2 rounded-lg border border-gray-100 p-3"
+        className="flex flex-col gap-2 "
       >
         <Dropdown
           options={categoryOptions}
@@ -139,7 +139,7 @@ export function AddProductForm({
       </Fieldset>
       <Fieldset
         label="Price"
-        className="flex flex-col gap-2 rounded-lg border border-gray-100 p-3"
+        className="flex flex-col gap-2 "
       >
         <Input
           type="number"
@@ -150,7 +150,7 @@ export function AddProductForm({
       </Fieldset>
       <Fieldset
         label="Stock"
-        className="flex flex-col gap-2 rounded-lg border border-gray-100 p-3"
+        className="flex flex-col gap-2 "
       >
         <Input
           type="number"
@@ -161,7 +161,7 @@ export function AddProductForm({
       </Fieldset>
       <Fieldset
         label="Description"
-        className="col-span-2 flex flex-col gap-2 rounded-lg border border-gray-100 p-3"
+        className="col-span-2 flex flex-col gap-2 "
       >
         <TextArea
           className="h-36 w-full"

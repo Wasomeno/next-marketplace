@@ -1,7 +1,6 @@
 "use client"
 
 import React from "react"
-import { pages } from "next/dist/build/templates/app-page"
 import { useSearchParamsValues } from "@/utils"
 import { Prisma } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
@@ -11,7 +10,10 @@ import moment from "moment"
 import { DataTable } from "@/components/admin/data-table"
 import { Option } from "@/components/dropdown"
 import { TableActions } from "@/components/table-actions"
-import { getStoreProductReviews } from "@/app/actions/store/review"
+import {
+  getStoreProductReviews,
+  getStoreProductReviewsCount,
+} from "@/app/actions/store/review"
 
 import { BaseDataFilters } from "../../../../types"
 
@@ -29,7 +31,13 @@ const reviewsSortOptions: Option[] = [
 export const StoreProductReviewsTable = () => {
   const searchParamsValues = useSearchParamsValues<BaseDataFilters>()
 
-  const { data, isLoading } = useQuery({
+  const { data: reviewsCount, isLoading: isReviewsCountLoading } = useQuery({
+    queryKey: ["storeProductReviewsCount", searchParamsValues?.search],
+    queryFn: () =>
+      getStoreProductReviewsCount({ search: searchParamsValues?.search }),
+  })
+
+  const { data: reviews, isLoading: isReviewsLoading } = useQuery({
     queryKey: ["storeProductReviews", searchParamsValues],
     queryFn: () =>
       getStoreProductReviews({
@@ -92,23 +100,31 @@ export const StoreProductReviewsTable = () => {
 
   return (
     <>
-      <span className="font text-sm text-gray-500 lg:text-base">
-        {data?.totalAmount ?? 0} Reviews
-      </span>
+      {isReviewsCountLoading ? (
+        <div className="h-[18px] w-20 animate-pulse rounded-lg bg-gray-200" />
+      ) : (
+        <span className="font text-sm text-gray-500 lg:text-base">
+          {reviewsCount} Reviews
+        </span>
+      )}
       <DataTable
-        columns={isLoading ? placeholderColumns : columns}
+        columns={isReviewsLoading ? placeholderColumns : columns}
         data={
-          isLoading ? Array(5).fill({}) : (data?.reviews as ProductReview[])
+          (isReviewsLoading ? Array(5).fill({}) : reviews) as ProductReview[]
         }
         searchInput={
           <DataTable.SearchInput placeholder="Search by product name" />
         }
         dataSorter={<DataTable.Sorter sortOptions={reviewsSortOptions} />}
         pagination={
-          <DataTable.Pagination
-            dataLength={data?.totalAmount as number}
-            pageSize={pageSize}
-          />
+          reviewsCount ? (
+            <DataTable.Pagination
+              dataLength={reviewsCount as number}
+              pageSize={pageSize}
+            />
+          ) : (
+            <></>
+          )
         }
       />
     </>

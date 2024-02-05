@@ -13,7 +13,10 @@ import { Button } from "@/components/ui/button"
 import { CheckBox } from "@/components/ui/checkbox"
 import { ConfirmationDialog } from "@/components/confirmation-dialog"
 import { deleteProduct } from "@/app/actions/store/products"
-import { getStoreProducts } from "@/app/actions/store/store"
+import {
+  getStoreProducts,
+  getStoreProductsCount,
+} from "@/app/actions/store/store"
 
 import { BaseDataFilters } from "../../../../types"
 import { DataTable, useSelectedData } from "../data-table"
@@ -62,7 +65,15 @@ export const ProductTable = () => {
     deselectAllData,
   } = useSelectedData()
 
-  const { data, isLoading } = useQuery({
+  const { data: productsCount, isLoading: isProductsCountLoading } = useQuery({
+    queryKey: ["productsCount", searchParamsValues?.search],
+    queryFn: () =>
+      getStoreProductsCount({ search: searchParamsValues?.search }),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  })
+
+  const { data: products, isLoading: isProductsLoading } = useQuery({
     queryKey: [
       "products",
       searchParamsValues?.page,
@@ -135,24 +146,32 @@ export const ProductTable = () => {
 
   return (
     <>
-      <span className="font text-sm text-gray-500 lg:text-base">
-        {data?.totalAmount ?? 0} Products
-      </span>
+      {isProductsCountLoading ? (
+        <div className="h-[18px] w-20 animate-pulse rounded-lg bg-gray-200" />
+      ) : (
+        <span className="font text-sm text-gray-500 lg:text-base">
+          {productsCount} Products
+        </span>
+      )}
       <DataTable
         data={
-          isLoading ? Array(5).fill({}) : (data?.products as StoreProduct[])
+          (isProductsLoading ? Array(5).fill({}) : products) as StoreProduct[]
         }
-        columns={isLoading ? placeholderColumns : columns}
+        columns={isProductsLoading ? placeholderColumns : columns}
         pagination={
-          <DataTable.Pagination
-            dataLength={data?.totalAmount ?? 0}
-            pageSize={pageSize}
-          />
+          products?.length ? (
+            <DataTable.Pagination
+              dataLength={productsCount ?? 0}
+              pageSize={pageSize}
+            />
+          ) : (
+            <></>
+          )
         }
         dataSorter={<DataTable.Sorter sortOptions={productSortOptions} />}
         searchInput={
           <DataTable.SearchInput
-            disabled={isLoading}
+            disabled={isProductsLoading}
             placeholder="Search by product name"
           />
         }

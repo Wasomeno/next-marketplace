@@ -104,17 +104,12 @@ export function EditProductForm({ product, categories }: Props) {
         files={files}
         selectFiles={addFiles}
         deselectFile={removeFile}
+        isMultiple
       />
-      <Fieldset
-        label="Name"
-        className="flex flex-col gap-2 rounded-lg border border-gray-100 p-3"
-      >
+      <Fieldset label="Name" className="flex flex-col gap-2 ">
         <Input className="w-full" {...register("name")} />
       </Fieldset>
-      <Fieldset
-        label="Categories"
-        className="flex flex-col gap-2 rounded-lg border border-gray-100 p-3"
-      >
+      <Fieldset label="Categories" className="flex flex-col gap-2 ">
         <Dropdown
           options={categoryOptions}
           selectedOptions={selectedCategories}
@@ -129,30 +124,21 @@ export function EditProductForm({ product, categories }: Props) {
           isMulti
         />
       </Fieldset>
-      <Fieldset
-        label="Price"
-        className="flex flex-col gap-2 rounded-lg border border-gray-100 p-3"
-      >
+      <Fieldset label="Price" className="flex flex-col gap-2 ">
         <Input
           type="number"
           className="w-full"
           {...register("price", { valueAsNumber: true })}
         />
       </Fieldset>
-      <Fieldset
-        label="Stock"
-        className="flex flex-col gap-2 rounded-lg border border-gray-100 p-3"
-      >
+      <Fieldset label="Stock" className="flex flex-col gap-2 ">
         <Input
           type="number"
           className="w-full"
           {...register("stock", { valueAsNumber: true })}
         />
       </Fieldset>
-      <Fieldset
-        label="Description"
-        className="col-span-2 flex flex-col gap-2 rounded-lg border border-gray-100 p-3"
-      >
+      <Fieldset label="Description" className="col-span-2 flex flex-col gap-2 ">
         <TextArea className="h-36 w-full" {...register("description")} />
       </Fieldset>
       <div className="flex items-center justify-center gap-6">

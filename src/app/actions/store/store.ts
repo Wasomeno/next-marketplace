@@ -30,7 +30,6 @@ export async function getStoreProducts(props: GetStoreProductsProps) {
   const store = await prisma.store.findUnique({
     where: { owner_email: session?.user.email ?? "" },
     include: {
-      _count: { select: { products: true } },
       products: {
         orderBy: props.sort,
         skip: (props.page ? props.page - 1 : 0) * (props.pageSize ?? 5),
@@ -41,7 +40,18 @@ export async function getStoreProducts(props: GetStoreProductsProps) {
     },
   })
 
-  return { products: store?.products, totalAmount: store?._count.products }
+  return store?.products
+}
+
+export async function getStoreProductsCount(
+  props: Pick<BaseDataFilters, "search">
+) {
+  const store = await getStore()
+  const productsCount = await prisma.product.count({
+    where: { store_id: store?.id, name: { contains: props.search } },
+  })
+
+  return productsCount
 }
 
 export async function createStore(store: CreateStoreParams) {
