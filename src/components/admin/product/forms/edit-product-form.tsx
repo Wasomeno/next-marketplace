@@ -15,8 +15,8 @@ import { Fieldset } from "@/components/ui/fieldset"
 import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
 import { Dropdown } from "@/components/dropdown"
-import { FileImage, ImageUploader } from "@/components/image-uploader"
-import { MultiSelectDropdown, Option } from "@/components/multi-select-dropdown"
+import { ImageUploader } from "@/components/image-uploader"
+import { Option } from "@/components/multi-select-dropdown"
 import { updateProduct } from "@/app/actions/store/products"
 
 import { ProductFormData, ProductSchema } from "./add-product-form"
@@ -100,12 +100,21 @@ export function EditProductForm({ product, categories }: Props) {
       onSubmit={handleSubmit(onSubmit)}
       className="flex w-full flex-col gap-4 lg:w-4/6"
     >
-      <ImageUploader
-        files={files}
-        selectFiles={addFiles}
-        deselectFile={removeFile}
-        isMultiple
-      />
+      {files.length < 1 ? (
+        <div className="flex items-center gap-2">
+          {Array(3).fill(
+            <div className="h-28 w-28 animate-pulse rounded-lg bg-gray-200" />
+          )}
+        </div>
+      ) : (
+        <ImageUploader
+          files={files}
+          selectFiles={addFiles}
+          deselectFile={removeFile}
+          isMultiple
+        />
+      )}
+
       <Fieldset label="Name" className="flex flex-col gap-2 ">
         <Input className="w-full" {...register("name")} />
       </Fieldset>
