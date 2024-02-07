@@ -88,8 +88,10 @@ export const StoreProfileImageUpload = () => {
   }
 
   return (
-    <div className="flex w-full flex-col items-center gap-2 lg:w-64 lg:items-start">
-      <Skeleton className={clsx("h-64 w-64 border border-gray-200")}>
+    <div className="flex w-52 flex-col items-center gap-2 lg:w-64 lg:items-start">
+      <Skeleton
+        className={clsx("h-52 w-52 border border-gray-200 lg:h-64 lg:w-64")}
+      >
         {!isFetching && (
           <Image
             src={image ? image.preview : data ?? ""}
@@ -101,7 +103,7 @@ export const StoreProfileImageUpload = () => {
       {!image && (
         <label
           id="imageUpload"
-          className="w-full cursor-pointer rounded-lg border border-gray-200 py-2 text-center text-sm font-medium"
+          className="w-full cursor-pointer rounded-lg border border-gray-200 py-2 text-center text-xs font-medium lg:text-sm"
         >
           Select photo
           <input

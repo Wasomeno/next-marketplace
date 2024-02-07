@@ -12,21 +12,21 @@ export default async function StoreDetailsPage() {
 
   return (
     <div className="flex flex-1 flex-col gap-2 lg:gap-4">
-      <h1 className="text-lg font-medium lg:text-2xl">Store Details</h1>
-      <div className="flex gap-4">
+      <h1 className="text-base font-medium lg:text-2xl">Store Details</h1>
+      <div className="flex flex-wrap justify-center gap-4">
         <StoreProfileImageUpload />
         <div className="flex flex-col gap-2">
           <div className="flex flex-col items-start gap-2  text-sm lg:flex-row lg:items-center">
-            <span className="w-48">Name</span>
-            <span className="font-medium">{store?.name}</span>
+            <span className="w-48 font-medium">Name</span>
+            <span className="">{store?.name}</span>
           </div>
           <div className="flex flex-col items-start gap-2  text-sm lg:flex-row lg:items-center">
-            <span className="w-48">Location</span>
-            <span className="font-medium">{store?.location}</span>
+            <span className="w-48 font-medium">Location</span>
+            <span className="">{store?.location}</span>
           </div>
           <div className="flex flex-col items-start gap-2  text-sm lg:flex-row lg:items-center">
-            <span className="w-48">Description</span>
-            <p className="font-medium">{store?.description}</p>
+            <span className="w-48 font-medium">Description</span>
+            <p>{store?.description}</p>
           </div>
         </div>
       </div>
