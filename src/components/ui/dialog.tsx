@@ -77,7 +77,7 @@ const DialogContent = React.forwardRef<
   }
 >(({ className, children, open, ...props }, ref) => {
   return (
-    <DialogPrimitive.Content ref={ref} {...props}>
+    <DialogPrimitive.Content asChild ref={ref} {...props}>
       <motion.div
         initial={{ bottom: "-40vh", opacity: 0 }}
         animate={{ bottom: 0, opacity: 1 }}
