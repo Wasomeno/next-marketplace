@@ -12,6 +12,7 @@ import { toast } from "react-toastify"
 import { Button } from "@/components/ui/button"
 import { CheckBox } from "@/components/ui/checkbox"
 import { ConfirmationDialog } from "@/components/confirmation-dialog"
+import { Skeleton } from "@/components/skeleton"
 import { deleteProduct } from "@/app/actions/store/products"
 import {
   getStoreProducts,
@@ -147,7 +148,7 @@ export const ProductTable = () => {
   return (
     <>
       {isProductsCountLoading ? (
-        <div className="h-[18px] w-20 animate-pulse rounded-lg bg-gray-200" />
+        <Skeleton className="h-[18px] w-20" />
       ) : (
         <span className="font text-sm text-gray-500 lg:text-base">
           {productsCount} Products

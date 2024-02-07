@@ -9,6 +9,7 @@ import { HiXMark } from "react-icons/hi2"
 import { DataSorter } from "@/components/data-sorter"
 import { Option } from "@/components/dropdown"
 import { Pagination } from "@/components/pagination"
+import { Skeleton } from "@/components/skeleton"
 import { TableSearchInput } from "@/components/table-search-input"
 import {
   getStoreInvoices,
@@ -54,7 +55,7 @@ export const StoreOrderList = () => {
   return (
     <>
       {isInvoicesCountLoading ? (
-        <div className="h-[18px] w-20 animate-pulse rounded-lg bg-gray-200" />
+        <Skeleton className="h-[18px] w-20" />
       ) : (
         <span className="font text-sm text-gray-500 lg:text-base">
           {invoicesCount} Reviews

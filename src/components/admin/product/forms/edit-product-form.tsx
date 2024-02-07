@@ -17,6 +17,7 @@ import { TextArea } from "@/components/ui/text-area"
 import { Dropdown } from "@/components/dropdown"
 import { ImageUploader } from "@/components/image-uploader"
 import { Option } from "@/components/multi-select-dropdown"
+import { Skeleton } from "@/components/skeleton"
 import { updateProduct } from "@/app/actions/store/products"
 
 import { ProductFormData, ProductSchema } from "./add-product-form"
@@ -102,9 +103,7 @@ export function EditProductForm({ product, categories }: Props) {
     >
       {files.length < 1 ? (
         <div className="flex items-center gap-2">
-          {Array(3).fill(
-            <div className="h-28 w-28 animate-pulse rounded-lg bg-gray-200" />
-          )}
+          {Array(3).fill(<Skeleton className="h-28 w-28" />)}
         </div>
       ) : (
         <ImageUploader

@@ -6,6 +6,7 @@ import { Prisma } from "@prisma/client"
 import moment from "moment"
 
 import { Separator } from "@/components/ui/separator"
+import { Skeleton } from "@/components/skeleton"
 
 import { OrderStatus } from "../../../../../types"
 import { InvoiceChangeStatusButton } from "../invoice-change-status-button"
@@ -120,19 +121,19 @@ export const StoreOrderCardSkeleton = () => {
   return (
     <div className="space-y-2 rounded-lg shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]">
       <div className="flex flex-wrap items-center justify-between border-b  border-b-gray-200 bg-gray-50 px-4 py-2">
-        <div className="h-[18px] w-32 animate-pulse rounded-lg bg-gray-200" />
-        <div className="h-[18px] w-36 animate-pulse rounded-lg bg-gray-200" />
+        <Skeleton className="h-[18px] w-32" />
+        <Skeleton className="h-[18px] w-36" />
       </div>
       <div className="space-y-2 p-4">
         <div className="flex flex-wrap gap-4 pb-0 lg:gap-10">
           <div className="space-y-2">
             <div className="flex w-72 gap-3">
-              <div className="h-28 w-28 animate-pulse rounded-lg border bg-gray-200 shadow-sm" />
+              <Skeleton className="h-28 w-28  shadow-sm" />
               <div className="space-y-2">
-                <div className="h-[18px] w-32 animate-pulse rounded-lg bg-gray-200" />
+                <Skeleton className="h-[18px] w-32" />
                 <div className="flex gap-2">
-                  <div className="h-[18px] w-10 animate-pulse rounded-lg bg-gray-200" />
-                  <div className="h-[18px] w-28 animate-pulse rounded-lg bg-gray-200" />
+                  <Skeleton className="h-[18px] w-10" />
+                  <Skeleton className="h-[18px] w-28" />
                 </div>
               </div>
             </div>
@@ -148,21 +149,21 @@ export const StoreOrderCardSkeleton = () => {
             className="h-px w-full bg-gray-200 lg:hidden"
           />
           <div className="w-48 space-y-2">
-            <div className="h-[18px] w-24 animate-pulse rounded-lg bg-gray-200" />
+            <Skeleton className="h-[18px] w-24" />
 
             <div className="flex flex-col gap-2">
-              <div className="h-[18px] w-36 animate-pulse rounded-lg bg-gray-200" />
-              <div className="h-[18px] w-32 animate-pulse rounded-lg bg-gray-200" />
-              <div className="h-[18px] w-28 animate-pulse rounded-lg bg-gray-200" />
+              <Skeleton className="h-[18px] w-36" />
+              <Skeleton className="h-[18px] w-32" />
+              <Skeleton className="h-[18px] w-28" />
             </div>
           </div>
         </div>
         <div className="flex items-center justify-between pt-0">
-          <div className="h-[18px] w-20 animate-pulse rounded-lg bg-gray-200" />
-          <div className="h-[20px] w-36 animate-pulse rounded-lg bg-gray-200" />
+          <Skeleton className="h-[18px] w-20" />
+          <Skeleton className="h-[20px] w-36" />
         </div>
         <div className="flex justify-end">
-          <div className="h-8 w-40 animate-pulse rounded-lg bg-gray-200" />
+          <Skeleton className="h-8 w-40" />
         </div>
       </div>
     </div>

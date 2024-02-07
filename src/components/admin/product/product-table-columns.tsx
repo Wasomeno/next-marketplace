@@ -4,6 +4,7 @@ import * as HoverCard from "@radix-ui/react-hover-card"
 import { ColumnDef } from "@tanstack/react-table"
 import { GiCookingPot, GiPoloShirt } from "react-icons/gi"
 
+import { Skeleton } from "@/components/skeleton"
 import { TableActions } from "@/components/table-actions"
 
 function getCategoryIcons(name: string) {
@@ -127,47 +128,37 @@ export const productTablePlaceholderColumns: ColumnDef<
   {
     header: "Id",
     enableColumnFilter: false,
-    cell: () => (
-      <div className="h-8 w-20 animate-pulse rounded-lg bg-gray-200" />
-    ),
+    cell: () => <Skeleton className="h-8 w-20 " />,
   },
   {
     header: "Image",
     cell: () => {
-      return (
-        <div className="h-[140px] w-[120px] animate-pulse rounded-lg bg-gray-200" />
-      )
+      return <Skeleton className="h-[140px] w-[120px] " />
     },
     enableColumnFilter: false,
   },
   {
     id: "name",
     header: "Name",
-    cell: () => (
-      <div className="h-8 w-20 animate-pulse rounded-lg bg-gray-200" />
-    ),
+    cell: () => <Skeleton className="h-8 w-20 " />,
   },
   {
     header: "Category",
     cell: () => {
       return (
         <div className="flex items-center justify-center gap-1.5">
-          <div className="h-8 w-20 animate-pulse rounded-lg bg-gray-200" />
+          <Skeleton className="h-8 w-20 " />
         </div>
       )
     },
   },
   {
     header: "Status",
-    cell: () => (
-      <div className="h-8 w-20 animate-pulse rounded-lg bg-gray-200" />
-    ),
+    cell: () => <Skeleton className="h-8 w-20 " />,
   },
   {
     header: "Stock",
-    cell: (stock) => (
-      <div className="h-8 w-20 animate-pulse rounded-lg bg-gray-200" />
-    ),
+    cell: (stock) => <Skeleton className="h-8 w-20 " />,
   },
   {
     id: "action",

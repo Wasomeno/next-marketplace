@@ -8,6 +8,7 @@ import { toast } from "react-toastify"
 
 import { Button } from "@/components/ui/button"
 import { CheckBox } from "@/components/ui/checkbox"
+import { Skeleton } from "@/components/skeleton"
 import { removeProductFromWishlist } from "@/app/actions/user/wishlist"
 
 type WishListItemCardProps = {
@@ -85,11 +86,11 @@ export function WishListItemCardSkeleton() {
       <div className="flex w-full items-end justify-between">
         <div className="flex w-full gap-4">
           <div className="w-[60px] lg:w-[120px]">
-            <div className="relative h-16 w-full animate-pulse rounded-md bg-slate-300 lg:h-32" />
+            <Skeleton className="h-16 w-full lg:h-32" />
           </div>
           <div className="flex w-4/6 flex-col gap-1 lg:w-3/6">
-            <div className="h-[0.75rem] w-32 animate-pulse rounded-md bg-slate-300 lg:h-[1rem]" />
-            <div className="h-[0.75rem] w-40 animate-pulse rounded-md bg-slate-300 lg:h-[1rem]" />
+            <Skeleton className="h-[0.75rem] w-32 lg:h-[1rem]" />
+            <Skeleton className="h-[0.75rem] w-40 lg:h-[1rem]" />
           </div>
         </div>
         <div>

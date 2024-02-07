@@ -8,6 +8,8 @@ import { BiStore } from "react-icons/bi"
 import { FaStar } from "react-icons/fa"
 import { twMerge } from "tailwind-merge"
 
+import { Skeleton } from "../skeleton"
+
 interface ProductCardProps extends React.HTMLAttributes<HTMLDivElement> {
   image?: React.ReactNode
   name?: React.ReactNode
@@ -122,19 +124,21 @@ const Category = ({
   )
 }
 
-const Skeleton = () => {
+const CardSkeleton = () => {
   return (
-    <div className="col-span-5 h-56 cursor-pointer rounded-md shadow-md lg:col-span-2 lg:h-auto dark:shadow-neutral-700">
-      <div className="h-32 w-full animate-pulse rounded-t-md bg-slate-300 lg:h-44 dark:bg-neutral-500" />
-      <div className="flex w-full flex-col gap-1 p-3">
-        <span className="h-6 w-32 animate-pulse rounded-lg bg-slate-200 dark:bg-neutral-500" />
-        <span className="h-6 w-24 animate-pulse rounded-lg bg-slate-200 dark:bg-neutral-500" />
+    <div className="col-span-5 h-64 rounded-md shadow-md lg:col-span-2 lg:h-auto dark:shadow-neutral-700">
+      <Skeleton className="h-32 w-full rounded-b-none" />
+      <div className="flex w-full flex-col gap-1.5 p-3">
+        <Skeleton className="h-[14px] w-36" />
+        <Skeleton className="h-[16px] w-28 " />
+        <Skeleton className="h-[14px] w-24 " />
+        <Skeleton className="h-[14px] w-20 " />
       </div>
     </div>
   )
 }
 
-ProductCard.Skeleton = Skeleton
+ProductCard.Skeleton = CardSkeleton
 ProductCard.Image = Image
 ProductCard.Rating = Rating
 ProductCard.Name = Name

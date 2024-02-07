@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/skeleton"
 import { CartItemCardSkeleton } from "@/components/user/cart/cart-item-card"
 
 export default function CartLoading() {
@@ -19,8 +20,8 @@ export default function CartLoading() {
             <CartItemCardSkeleton />
           </div>
         </div>
-        <div className="sticky bottom-0 w-full bg-white dark:bg-neutral-950 lg:w-2/6 lg:px-8">
-          <div className="border-t border-slate-200 p-2.5 shadow-[0_3px_10px_rgb(0,0,0,0.1)] dark:border-gray-800 lg:rounded-md lg:border lg:p-4 lg:shadow-none">
+        <div className="sticky bottom-0 w-full bg-white lg:w-2/6 lg:px-8 dark:bg-neutral-950">
+          <div className="border-t border-slate-200 p-2.5 shadow-[0_3px_10px_rgb(0,0,0,0.1)] lg:rounded-md lg:border lg:p-4 lg:shadow-none dark:border-gray-800">
             <span className="hidden text-xs lg:inline lg:text-lg">
               Cart Summary
             </span>
@@ -28,12 +29,12 @@ export default function CartLoading() {
               <span className="text-xs text-slate-500 lg:text-base">
                 Subtotal
               </span>
-              <div className="h-[14px] w-40 animate-pulse rounded-md bg-slate-300 dark:bg-neutral-400 lg:h-[18px]" />
+              <Skeleton className="h-[14px] w-40 lg:h-[18px]" />
             </div>
             <Button
               disabled
               variant="default"
-              className="my-1 w-full rounded-lg border-0 bg-blue-400 py-3 text-xs font-medium text-slate-50 dark:bg-blue-900 lg:text-sm"
+              className="my-1 w-full rounded-lg border-0 bg-blue-400 py-3 text-xs font-medium text-slate-50 lg:text-sm dark:bg-blue-900"
             >
               Checkout
             </Button>

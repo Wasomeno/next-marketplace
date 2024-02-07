@@ -8,6 +8,7 @@ import { toast } from "react-toastify"
 
 import { Button } from "@/components/ui/button"
 import { CheckBox } from "@/components/ui/checkbox"
+import { Skeleton } from "@/components/skeleton"
 import { CartItem } from "@/app/(user)/(main)/cart/page"
 import { removeFromCart, updateCartItem } from "@/app/actions/user/cart"
 
@@ -92,16 +93,16 @@ export const CartItemCardSkeleton = () => {
       <Checkbox disabled />
       <div className="flex w-full flex-wrap items-center justify-between gap-2">
         <div className="flex w-full gap-2 lg:w-4/6 lg:gap-4">
-          <div className="relative h-20 w-28 animate-pulse rounded-md bg-slate-300 lg:h-32 lg:w-36 dark:bg-neutral-400" />
+          <Skeleton className="relative h-20 w-28 lg:h-32 lg:w-36 " />
           <div className="flex w-4/6 flex-col gap-1 lg:w-3/6">
-            <div className="h-[14px] w-40 animate-pulse rounded-md bg-slate-300 lg:h-[18px] dark:bg-neutral-400" />
-            <div className="h-[12px] w-32 animate-pulse rounded-md bg-slate-300 lg:h-[18px] dark:bg-neutral-400" />
+            <Skeleton className="h-[14px] w-40  lg:h-[18px] " />
+            <Skeleton className="h-[12px] w-32  lg:h-[18px] " />
           </div>
         </div>
         <div className="flex w-full items-center justify-end gap-4 lg:w-auto">
-          <div className="bg-slate-white flex h-7 w-20 items-center justify-center gap-4 rounded-lg border border-slate-300 px-3 text-sm font-medium lg:h-10 lg:w-20 dark:border-gray-700">
+          <div className="flex h-7 w-20 items-center justify-center gap-4 rounded-lg border border-slate-300 bg-gray-200 px-3 text-sm font-medium lg:h-10 lg:w-20 dark:border-gray-700">
             <button disabled>-</button>
-            <div className="h-[12px] lg:h-[14px]" />
+            <Skeleton className="h-[12px] lg:h-[14px]" />
             <button disabled>+</button>
           </div>
           <Button

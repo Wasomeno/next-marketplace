@@ -7,6 +7,7 @@ import clsx from "clsx"
 import { twMerge } from "tailwind-merge"
 
 import { Button, buttonVariants } from "@/components/ui/button"
+import { Skeleton } from "@/components/skeleton"
 
 type OrderCardProps = {
   invoice: Prisma.InvoiceGetPayload<{
@@ -110,21 +111,21 @@ export const OrderProductCardSkeleton = () => {
   return (
     <div className="flex h-40 flex-col gap-2 rounded-md border bg-slate-50 bg-opacity-50 p-2.5 shadow-md dark:border-gray-800 dark:bg-slate-950 dark:bg-opacity-50">
       <div className="flex h-10 items-center gap-3">
-        <div className="h-6 w-24 animate-pulse rounded-md bg-slate-300 dark:bg-neutral-400" />
+        <Skeleton className="h-6 w-24 " />
         <div>
-          <div className="h-6 w-28 animate-pulse rounded-md bg-slate-300 dark:bg-neutral-400" />
+          <Skeleton className="h-6 w-28 " />
         </div>
-        <div className="h-6 w-32 animate-pulse rounded-md bg-slate-300 dark:bg-neutral-400" />
+        <Skeleton className="h-6 w-32 " />
       </div>
       <div className="flex items-center gap-10">
         <div className="flex w-4/6 items-center gap-2.5 border-r border-r-slate-300 dark:border-r-gray-800">
-          <div className="h-16 w-16 animate-pulse rounded-md bg-slate-300 dark:bg-neutral-400" />
-          <div className="h-16 w-16 animate-pulse rounded-md bg-slate-300 dark:bg-neutral-400" />
-          <div className="h-16 w-16 animate-pulse rounded-md bg-slate-300 dark:bg-neutral-400" />
+          <Skeleton className="h-16 w-16 " />
+          <Skeleton className="h-16 w-16 " />
+          <Skeleton className="h-16 w-16 " />
         </div>
         <div className="space-y-2">
-          <div className="h-6 w-10 animate-pulse rounded-md bg-slate-300 dark:bg-neutral-400" />
-          <div className="h-6 w-7 animate-pulse rounded-md bg-slate-300 dark:bg-neutral-400" />
+          <Skeleton className="h-6 w-10 " />
+          <Skeleton className="h-6 w-7 " />
         </div>
       </div>
     </div>

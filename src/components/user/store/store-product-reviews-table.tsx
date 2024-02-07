@@ -9,6 +9,7 @@ import moment from "moment"
 
 import { DataTable } from "@/components/admin/data-table"
 import { Option } from "@/components/dropdown"
+import { Skeleton } from "@/components/skeleton"
 import { TableActions } from "@/components/table-actions"
 import {
   getStoreProductReviews,
@@ -68,27 +69,19 @@ export const StoreProductReviewsTable = () => {
   const placeholderColumns: ColumnDef<ProductReview>[] = [
     {
       header: "Product Name",
-      cell: () => (
-        <div className="h-8 w-20 animate-pulse rounded-lg bg-gray-200" />
-      ),
+      cell: () => <Skeleton className="h-8 w-20 " />,
     },
     {
       header: "Rating",
-      cell: () => (
-        <div className="h-8 w-20 animate-pulse rounded-lg bg-gray-200" />
-      ),
+      cell: () => <Skeleton className="h-8 w-20 " />,
     },
     {
       header: "User",
-      cell: () => (
-        <div className="h-8 w-20 animate-pulse rounded-lg bg-gray-200" />
-      ),
+      cell: () => <Skeleton className="h-8 w-20 " />,
     },
     {
       header: "Reviewed At",
-      cell: () => (
-        <div className="h-8 w-20 animate-pulse rounded-lg bg-gray-200" />
-      ),
+      cell: () => <Skeleton className="h-8 w-20 " />,
     },
     {
       header: "Actions",
@@ -101,7 +94,7 @@ export const StoreProductReviewsTable = () => {
   return (
     <>
       {isReviewsCountLoading ? (
-        <div className="h-[18px] w-20 animate-pulse rounded-lg bg-gray-200" />
+        <Skeleton className="h-[18px] w-20 " />
       ) : (
         <span className="font text-sm text-gray-500 lg:text-base">
           {reviewsCount} Reviews
