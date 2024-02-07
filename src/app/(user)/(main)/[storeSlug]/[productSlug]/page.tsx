@@ -1,4 +1,5 @@
 import { Metadata } from "next"
+import Link from "next/link"
 import invariant from "tiny-invariant"
 
 import { prisma } from "@/lib/prisma"
@@ -80,14 +81,17 @@ export default async function ProductPage(props: {
               className="w-full bg-slate-200 dark:bg-gray-800"
               style={{ height: "1px" }}
             />
-            <div className="my-4 flex h-10 items-center gap-4">
+            <Link
+              href={`/${product.store.slug}`}
+              className="my-4 flex h-10 items-center gap-4"
+            >
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-lg shadow-sm">
                 {product.store.name[0].toUpperCase()}
               </div>
               <div className="space-y-2">
                 <span className="text-sm">{product.store.name}</span>
               </div>
-            </div>
+            </Link>
           </div>
         </div>
         <ProductReviews productId={product.id} />
