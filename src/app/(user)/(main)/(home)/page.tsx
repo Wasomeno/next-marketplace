@@ -15,11 +15,12 @@ export default async function Home() {
   const categories = await prisma.category.findMany({
     include: { images: { select: { url: true } } },
   })
+
   const products = await prisma.product.findMany({
     include: {
       images: { select: { url: true } },
       reviews: { select: { rating: true } },
-      store: { select: { name: true } },
+      store: { select: { name: true, slug: true } },
     },
     orderBy: { price: "desc" },
   })
@@ -63,7 +64,7 @@ export default async function Home() {
           {products.map((product) => (
             <ProductCard
               key={product.id}
-              href={`/${product.slug}`}
+              href={`/${product.store.slug}/${product.slug}`}
               image={<ProductCard.Image image={product.featured_image_url} />}
               name={<ProductCard.Name name={product.name} />}
               price={<ProductCard.Price price={product.price} />}
