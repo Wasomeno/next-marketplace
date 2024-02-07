@@ -65,3 +65,17 @@ export async function createStore(store: CreateStoreParams) {
 
   revalidatePath("/")
 }
+
+export async function getStoreProfileImage() {
+  const store = await getStore()
+  return store?.profile_image
+}
+
+export async function updateStoreProfileImage(url: string, name: string) {
+  const store = await getStore()
+
+  await prisma.store.update({
+    where: { id: store?.id },
+    data: { profile_image: url },
+  })
+}
