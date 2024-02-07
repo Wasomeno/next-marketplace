@@ -5,7 +5,7 @@ import { Separator } from "@/components/ui/separator"
 import { BackButton } from "@/components/user/navigation/back-button"
 
 import { CartButton } from "./cart-button"
-import { ProductSearchInput } from "./product-search-input"
+import { NavigationSearchInput } from "./navigation-search-input"
 import { UserMenu } from "./user-menu"
 import { UserStoreButton } from "./user-store-button"
 
@@ -20,7 +20,7 @@ export function UserMainNavigation({ back }: { back?: boolean }) {
         >
           <Image src="/next_marketplace.webp" alt="next-logo" fill />
         </Link>
-        <ProductSearchInput />
+        <NavigationSearchInput />
       </div>
       <div className="flex w-4/6 items-center justify-end gap-6 px-2 lg:w-2/6">
         <div className="flex items-center gap-4">
