@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import clsx from "clsx"
