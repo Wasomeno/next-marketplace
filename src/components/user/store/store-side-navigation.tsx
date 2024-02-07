@@ -1,9 +1,9 @@
 "use client"
 
 import React, { useState } from "react"
-import { Store } from "@prisma/client"
 import clsx from "clsx"
-import { AnimatePresence, motion } from "framer-motion"
+import { motion } from "framer-motion"
+import { BiStore } from "react-icons/bi"
 import {
   HiChevronRight,
   HiListBullet,
@@ -14,7 +14,7 @@ import {
 
 import { StoreSideNavigationLink } from "./store-side-navigation-link"
 
-export const StoreSideNavigation = ({ store }: { store: Store | null }) => {
+export const StoreSideNavigation = () => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -62,7 +62,7 @@ export const StoreSideNavigation = ({ store }: { store: Store | null }) => {
         <StoreSideNavigationLink
           text="Details"
           href="/store/details"
-          icon={<HiOutlineChatBubbleLeftEllipsis size={20} />}
+          icon={<BiStore size={20} />}
           isOpen={isOpen}
         />
         <StoreSideNavigationLink
