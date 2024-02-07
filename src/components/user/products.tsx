@@ -61,7 +61,7 @@ export function Products() {
             products?.data?.map((product) => (
               <ProductCard
                 key={product.id}
-                href={`/${product.slug}`}
+                href={`/${product.store.slug}/${product.slug}`}
                 image={<ProductCard.Image image={product.featured_image_url} />}
                 name={<ProductCard.Name name={product.name} />}
                 price={<ProductCard.Price price={product.price} />}
