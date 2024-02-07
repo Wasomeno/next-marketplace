@@ -1,4 +1,5 @@
 import { Metadata } from "next"
+import Image from "next/image"
 import Link from "next/link"
 import invariant from "tiny-invariant"
 
@@ -85,11 +86,17 @@ export default async function ProductPage(props: {
               href={`/${product.store.slug}`}
               className="my-4 flex h-10 items-center gap-4"
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-lg shadow-sm">
-                {product.store.name[0].toUpperCase()}
+              <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gray-100 text-lg shadow-sm">
+                <Image
+                  src={product.store.profile_image}
+                  fill
+                  alt="store-profile-image"
+                />
               </div>
-              <div className="space-y-2">
-                <span className="text-sm">{product.store.name}</span>
+              <div className="space-y-1">
+                <span className="text-sm font-medium">
+                  {product.store.name}
+                </span>
               </div>
             </Link>
           </div>
