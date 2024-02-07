@@ -46,6 +46,7 @@ export function CreateStoreForm() {
     try {
       await createStore({
         ...store,
+        slug: store.name.split(" ").join("-"),
         profile_image: store.image ?? "",
         created_at: new Date(),
         owner_email: session.data?.user.email as string,
