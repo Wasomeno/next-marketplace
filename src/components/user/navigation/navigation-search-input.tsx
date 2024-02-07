@@ -12,7 +12,7 @@ import { PiSpinner } from "react-icons/pi"
 import { Input } from "@/components/ui/input"
 import { searchProductsAndStores } from "@/app/actions/user/search"
 
-export function ProductSearchInput() {
+export function NavigationSearchInput() {
   const [isModalActive, setIsModalActive] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const router = useRouter()
@@ -51,7 +51,10 @@ export function ProductSearchInput() {
       <form
         onSubmit={(event) => {
           event.preventDefault()
-          router.push("/search?q=" + searchQuery)
+          if (searchQuery.length > 0) {
+            router.push("/search?q=" + searchQuery)
+            return
+          }
         }}
         className="w-full lg:w-96"
       >
