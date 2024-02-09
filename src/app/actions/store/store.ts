@@ -9,6 +9,7 @@ import { prisma } from "@/lib/prisma"
 import { BaseDataFilters } from "../../../../types"
 
 type GetStoreProductsProps = BaseDataFilters & {
+  slug?: string
   categoryIds?: number[]
   status?: string
 }
@@ -16,10 +17,10 @@ type GetStoreProductsProps = BaseDataFilters & {
 type CreateStoreParams = Omit<Store, "id">
 type UpdateStoreParams = Store
 
-export async function getStore() {
+export async function getStore(slug?: string) {
   const session = await getServerSession()
   const store = await prisma.store.findUnique({
-    where: { owner_email: session?.user.email ?? "" },
+    where: !slug ? { owner_email: session?.user.email ?? "" } : { slug: slug },
   })
 
   return store
@@ -28,14 +29,16 @@ export async function getStore() {
 export async function getStoreProducts(props: GetStoreProductsProps) {
   const session = await getServerSession()
   const store = await prisma.store.findUnique({
-    where: { owner_email: session?.user.email ?? "" },
+    where: !props.slug
+      ? { owner_email: session?.user.email ?? "" }
+      : { slug: props.slug },
     include: {
       products: {
         orderBy: props.sort,
         skip: (props.page ? props.page - 1 : 0) * (props.pageSize ?? 5),
         take: props.pageSize ?? 5,
         where: { name: { contains: props.search }, status: props.status },
-        include: { images: true, categories: true },
+        include: { images: true, categories: true, reviews: true, store: true },
       },
     },
   })
