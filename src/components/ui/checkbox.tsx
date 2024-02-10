@@ -3,6 +3,7 @@ import * as CheckBoxPrimitive from "@radix-ui/react-checkbox"
 import clsx from "clsx"
 import { AnimatePresence, motion } from "framer-motion"
 import { BiCheck } from "react-icons/bi"
+import { twMerge } from "tailwind-merge"
 
 export const CheckBox = forwardRef<
   RefAttributes<HTMLButtonElement>,
@@ -11,8 +12,10 @@ export const CheckBox = forwardRef<
   return (
     <CheckBoxPrimitive.Root
       className={clsx(
-        "flex h-5 w-5 items-center justify-center rounded border border-gray-300 bg-transparent disabled:cursor-default disabled:bg-gray-100 disabled:bg-opacity-50",
-        className
+        twMerge(
+          "flex h-5 w-5 items-center justify-center rounded border border-gray-300 bg-transparent disabled:cursor-default disabled:bg-gray-100 disabled:bg-opacity-50",
+          className
+        )
       )}
       {...props}
     >

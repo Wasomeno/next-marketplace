@@ -48,7 +48,7 @@ export function Products() {
           <h6 className="text-sm font-medium lg:text-lg">Products</h6>
           <div className="flex items-center gap-2">
             <ProductSorter />
-            <ProductsFilter />
+            <ProductsFilter withCategories />
           </div>
         </div>
         <div className="grid grid-cols-10 gap-4 lg:grid-cols-12">
@@ -77,7 +77,7 @@ export function Products() {
 
           {ProductNotExist && (
             <div className="col-span-12 flex h-96 flex-col items-center justify-center gap-2">
-              <span className="text-sm text-slate-800  text-opacity-50 lg:text-base dark:text-gray-500">
+              <span className="text-sm text-slate-800  text-opacity-50 dark:text-gray-500 lg:text-base">
                 No products found
               </span>
               <span className="text-slate-800 text-opacity-50 dark:text-gray-500">

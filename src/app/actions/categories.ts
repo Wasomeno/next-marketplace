@@ -1,5 +1,8 @@
-import { prisma } from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
+"use server"
+
+import { Prisma } from "@prisma/client"
+
+import { prisma } from "@/lib/prisma"
 
 type GetCategoriesProps = {
   search?: string
