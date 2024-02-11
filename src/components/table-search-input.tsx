@@ -40,7 +40,7 @@ export const TableSearchInput = ({
     <div
       className={twMerge(
         clsx(
-          "flex h-8 w-full items-center rounded-md border border-gray-200 bg-white lg:h-10 lg:w-96",
+          "flex h-8 w-44 items-center rounded-md border border-gray-200 bg-white lg:h-10 lg:w-96",
           props.disabled && "opacity-80"
         )
       )}
@@ -55,7 +55,7 @@ export const TableSearchInput = ({
         onChange={search}
         className={twMerge(
           clsx(
-            "h-auto w-full appearance-none border-none p-0 text-xs focus:border-0 focus-visible:ring-0 lg:text-base dark:bg-neutral-900",
+            "h-auto w-full appearance-none border-none p-0 text-xs focus:border-0 focus-visible:ring-0 dark:bg-neutral-900 lg:text-base",
             className
           )
         )}

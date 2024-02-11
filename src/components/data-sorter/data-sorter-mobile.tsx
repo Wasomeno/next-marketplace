@@ -48,12 +48,12 @@ export const DataSorterMobile = (props: TableDataSorterProps) => {
       <DialogTrigger asChild>
         <button
           disabled={props?.disabled}
-          className="flex h-8 w-8 items-center justify-center rounded-md border bg-white px-3 text-sm outline-0 disabled:opacity-50 lg:hidden dark:border-neutral-600 dark:bg-neutral-900"
+          className="flex h-8 w-8 items-center justify-center rounded-md border bg-white px-3 text-sm outline-0 disabled:opacity-50 dark:border-neutral-600 dark:bg-neutral-900 lg:hidden"
         >
           <div className="w-5">
             <HiArrowsUpDown
               size="16"
-              className="text-slate-600 lg:hidden dark:text-white"
+              className="text-slate-600 dark:text-white lg:hidden"
             />
           </div>
         </button>
@@ -62,7 +62,7 @@ export const DataSorterMobile = (props: TableDataSorterProps) => {
         {isOpen && (
           <DialogPortal forceMount>
             <DialogOverlay className="lg:hidden" />
-            <DialogContent open={isOpen} className="h-72 lg:hidden" asChild>
+            <DialogContent open={isOpen} className="h-72 lg:hidden">
               <DialogHeader title="Sort Products" />
               <div className="flex flex-wrap items-center gap-2 p-4">
                 {props.sortOptions.map((option) => (

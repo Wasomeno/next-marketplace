@@ -1,30 +1,33 @@
 "use client"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { useSearchParamsValues } from "@/utils"
-import { Prisma } from "@prisma/client"
-import { useQuery } from "@tanstack/react-query"
-import { ColumnDef } from "@tanstack/react-table"
-import { BsPlus, BsTrash3 } from "react-icons/bs"
-import { toast } from "react-toastify"
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { BsPlus, BsTrash3 } from "react-icons/bs";
+import { toast } from "react-toastify";
 
-import { Button } from "@/components/ui/button"
-import { CheckBox } from "@/components/ui/checkbox"
-import { ConfirmationDialog } from "@/components/confirmation-dialog"
-import { Skeleton } from "@/components/skeleton"
-import { deleteProduct } from "@/app/actions/store/products"
+import { deleteProduct } from "@/app/actions/store/products";
 import {
   getStoreProducts,
-  getStoreProductsCount,
-} from "@/app/actions/store/store"
+  getStoreProductsCount
+} from "@/app/actions/store/store";
+import { ConfirmationDialog } from "@/components/confirmation-dialog";
+import { DataFilterDesktop } from "@/components/data-filter/data-filter-desktop";
+import { OptionWithChild } from "@/components/dropdown";
+import { Skeleton } from "@/components/skeleton";
+import { Button } from "@/components/ui/button";
+import { CheckBox } from "@/components/ui/checkbox";
+import { useSearchParamsValues } from "@/utils";
+import { Prisma } from "@prisma/client";
+import { useQuery } from "@tanstack/react-query";
+import { ColumnDef } from "@tanstack/react-table";
 
-import { BaseDataFilters } from "../../../../types"
-import { DataTable, useSelectedData } from "../data-table"
+import { BaseDataFilters } from "../../../../types";
+import { DataTable, useSelectedData } from "../data-table";
+import { ProductFilter } from "./product-filter";
 import {
   productTableColumns,
-  productTablePlaceholderColumns,
-} from "./product-table-columns"
+  productTablePlaceholderColumns
+} from "./product-table-columns";
 
 type StoreProduct = Prisma.ProductGetPayload<{
   include: { images: true; categories: true }
@@ -170,6 +173,7 @@ export const ProductTable = () => {
           )
         }
         dataSorter={<DataTable.Sorter sortOptions={productSortOptions} />}
+        dataFilter={<ProductFilter />}
         searchInput={
           <DataTable.SearchInput
             disabled={isProductsLoading}

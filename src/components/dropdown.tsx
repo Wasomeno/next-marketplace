@@ -1,20 +1,24 @@
-import React, { useState } from "react"
-import clsx from "clsx"
-import { AnimatePresence, motion } from "framer-motion"
-import { HiChevronRight, HiXMark } from "react-icons/hi2"
-import { IoShirt } from "react-icons/io5"
-import { twMerge } from "tailwind-merge"
+import clsx from "clsx";
+import { AnimatePresence, motion } from "framer-motion";
+import React, { useState } from "react";
+import { HiChevronRight, HiXMark } from "react-icons/hi2";
+import { IoShirt } from "react-icons/io5";
+import { twMerge } from "tailwind-merge";
 
 import {
+  Dropdown as DropdownRoot,
   DropdownContent,
   DropdownItem,
-  Dropdown as DropdownRoot,
-  DropdownTrigger,
-} from "./ui/dropdown"
+  DropdownTrigger
+} from "./ui/dropdown";
 
 export type Option = {
   label: string
   value: string | number
+}
+
+export type OptionWithChild = Option & {
+  children: Option[]
 }
 
 interface BaseDropdownProps {

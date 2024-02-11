@@ -9,6 +9,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 
+import { DataFilterDesktop } from "../data-filter/data-filter-desktop"
 import { DataSorter } from "../data-sorter"
 import { Pagination } from "../pagination"
 import { TableSearchInput } from "../table-search-input"
@@ -25,6 +26,7 @@ type DataTableProps<T> = {
   columns: ColumnDef<T>[]
   data: T[]
   dataSorter?: ReactElement
+  dataFilter?: ReactElement
   deleteTrigger?: ReactElement
   addTrigger?: ReactElement
   searchInput?: ReactElement
@@ -39,6 +41,7 @@ export function DataTable<T extends Record<string, unknown>>({
   dataSorter,
   searchInput,
   pagination,
+  dataFilter,
 }: DataTableProps<T>) {
   const table = useReactTable<T>({
     data,
@@ -48,11 +51,12 @@ export function DataTable<T extends Record<string, unknown>>({
   })
 
   return (
-    <div className="flex w-full flex-1 flex-col overflow-y-scroll">
+    <div className="flex w-full flex-1 flex-col">
       <div className="mb-2 flex  justify-between gap-2.5">
         <div className="flex w-full items-center gap-2">
           {searchInput}
           {dataSorter}
+          {dataFilter}
         </div>
         <div className="flex items-center gap-2">
           {deleteTrigger}
@@ -71,7 +75,7 @@ export function DataTable<T extends Record<string, unknown>>({
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
-                      className="text-xs font-medium text-gray-900 lg:text-sm dark:text-white"
+                      className="text-xs font-medium text-gray-900 dark:text-white lg:text-sm"
                       key={header.id}
                       colSpan={header.colSpan}
                     >
@@ -98,7 +102,7 @@ export function DataTable<T extends Record<string, unknown>>({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
-                      className="text-center text-xs   lg:text-sm dark:text-white"
+                      className="text-center text-xs   dark:text-white lg:text-sm"
                       key={cell.id}
                     >
                       <div className="flex  items-center justify-center px-3 py-2 lg:px-6 lg:py-4">
