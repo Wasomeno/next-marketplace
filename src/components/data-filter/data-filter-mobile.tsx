@@ -67,10 +67,10 @@ export const DataFilterMobile = ({
                           variant="default"
                           size="sm"
                           className={clsx(
-                            activeFilters?.some(
-                              (filter) =>
-                                filter[option.value as string] ===
-                                childOption.value
+                            activeFilters?.some((filter) =>
+                              filter[option.value as string]
+                                ?.split(" ")
+                                ?.includes(childOption.value.toString())
                             ) && "bg-blue-400 text-white"
                           )}
                         >

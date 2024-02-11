@@ -118,10 +118,10 @@ export const DataFilterDesktop = ({
                           >
                             <CheckBox
                               id={childOption.label}
-                              checked={activeFilters?.some(
-                                (filter) =>
-                                  filter[option.value as string] ===
-                                  childOption.value
+                              checked={activeFilters?.some((filter) =>
+                                filter[option.value as string]
+                                  ?.split(" ")
+                                  .includes(childOption.value.toString())
                               )}
                               onCheckedChange={() =>
                                 onOptionClick(option, childOption)
