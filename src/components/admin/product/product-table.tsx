@@ -1,36 +1,36 @@
 "use client"
 
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { BsPlus, BsTrash3 } from "react-icons/bs";
-import { toast } from "react-toastify";
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { useSearchParamsValues } from "@/utils"
+import { Prisma } from "@prisma/client"
+import { useQuery } from "@tanstack/react-query"
+import { ColumnDef } from "@tanstack/react-table"
+import { BsPlus, BsTrash3 } from "react-icons/bs"
+import { toast } from "react-toastify"
 
-import { deleteProduct } from "@/app/actions/store/products";
+import { Button } from "@/components/ui/button"
+import { CheckBox } from "@/components/ui/checkbox"
+import { ConfirmationDialog } from "@/components/confirmation-dialog"
+import { DataFilterDesktop } from "@/components/data-filter/data-filter-desktop"
+import { OptionWithChild } from "@/components/dropdown"
+import { Skeleton } from "@/components/skeleton"
+import { deleteProduct } from "@/app/actions/store/products"
 import {
   getStoreProducts,
-  getStoreProductsCount
-} from "@/app/actions/store/store";
-import { ConfirmationDialog } from "@/components/confirmation-dialog";
-import { DataFilterDesktop } from "@/components/data-filter/data-filter-desktop";
-import { OptionWithChild } from "@/components/dropdown";
-import { Skeleton } from "@/components/skeleton";
-import { Button } from "@/components/ui/button";
-import { CheckBox } from "@/components/ui/checkbox";
-import { useSearchParamsValues } from "@/utils";
-import { Prisma } from "@prisma/client";
-import { useQuery } from "@tanstack/react-query";
-import { ColumnDef } from "@tanstack/react-table";
+  getStoreProductsCount,
+} from "@/app/actions/store/store"
 
-import { BaseDataFilters } from "../../../../types";
-import { DataTable, useSelectedData } from "../data-table";
-import { ProductFilter } from "./product-filter";
+import { BaseDataFilters } from "../../../../types"
+import { DataTable, useSelectedData } from "../data-table"
+import { ProductFilter } from "./product-filter"
 import {
   productTableColumns,
-  productTablePlaceholderColumns
-} from "./product-table-columns";
+  productTablePlaceholderColumns,
+} from "./product-table-columns"
 
 type StoreProduct = Prisma.ProductGetPayload<{
-  include: { images: true; categories: true }
+  include: { images: true; categories: true; reviews: true; store: true }
 }>
 
 const pageSize = 3
@@ -58,7 +58,7 @@ export const ProductTable = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
   const searchParamsValues = useSearchParamsValues<
-    BaseDataFilters & { status: string }
+    BaseDataFilters & { status: string; categories: string }
   >()
 
   const {
@@ -77,15 +77,20 @@ export const ProductTable = () => {
     refetchOnWindowFocus: false,
   })
 
-  const { data: products, isLoading: isProductsLoading } = useQuery({
-    queryKey: [
-      "products",
-      searchParamsValues?.page,
-      searchParamsValues?.search,
-      searchParamsValues?.sort,
-      searchParamsValues?.status,
-    ],
-    queryFn: () => getStoreProducts({ ...searchParamsValues, pageSize }),
+  const {
+    data: products,
+    isLoading: isProductsLoading,
+    error,
+  } = useQuery({
+    queryKey: ["products", searchParamsValues],
+    queryFn: () =>
+      getStoreProducts({
+        ...searchParamsValues,
+        pageSize,
+        categoryIds: searchParamsValues?.categories
+          ?.split(" ")
+          ?.map((categoryId) => parseInt(categoryId)),
+      }),
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   })
@@ -122,7 +127,9 @@ export const ProductTable = () => {
   ]
 
   const placeholderColumns: ColumnDef<
-    Prisma.ProductGetPayload<{ include: { images: true; categories: true } }>
+    Prisma.ProductGetPayload<{
+      include: { images: true; categories: true; reviews: true; store: true }
+    }>
   >[] = [
     {
       id: "select",

@@ -1,11 +1,11 @@
-import Image from "next/image"
-import { Prisma } from "@prisma/client"
-import * as HoverCard from "@radix-ui/react-hover-card"
-import { ColumnDef } from "@tanstack/react-table"
-import { GiCookingPot, GiPoloShirt } from "react-icons/gi"
+import Image from "next/image";
+import { GiCookingPot, GiPoloShirt } from "react-icons/gi";
 
-import { Skeleton } from "@/components/skeleton"
-import { TableActions } from "@/components/table-actions"
+import { Skeleton } from "@/components/skeleton";
+import { TableActions } from "@/components/table-actions";
+import { Prisma } from "@prisma/client";
+import * as HoverCard from "@radix-ui/react-hover-card";
+import { ColumnDef } from "@tanstack/react-table";
 
 function getCategoryIcons(name: string) {
   switch (name) {
@@ -18,7 +18,9 @@ function getCategoryIcons(name: string) {
 }
 
 export const productTableColumns: ColumnDef<
-  Prisma.ProductGetPayload<{ include: { images: true; categories: true } }>
+  Prisma.ProductGetPayload<{
+    include: { images: true; categories: true; reviews: true; store: true }
+  }>
 >[] = [
   {
     accessorKey: "id",
@@ -53,12 +55,12 @@ export const productTableColumns: ColumnDef<
     accessorKey: "categories",
     header: "Category",
     cell: ({ row }) => {
-      const categories = row.original.categories.map(
+      const categories = row.original.categories?.map(
         (category) => category.name
       )
       return (
         <div className="flex items-center justify-center gap-1.5">
-          {categories.map((category) => (
+          {categories?.map((category) => (
             <HoverCard.Root key={category} openDelay={0.1} closeDelay={0.1}>
               <HoverCard.Trigger asChild>
                 <div
@@ -69,7 +71,7 @@ export const productTableColumns: ColumnDef<
                 </div>
               </HoverCard.Trigger>
               <HoverCard.Portal>
-                <HoverCard.Content
+                <HoverCard.Content  
                   sideOffset={3}
                   className="rounded-lg border border-gray-100 bg-white px-4 py-2 text-xs font-medium text-gray-500 shadow-sm"
                 >
@@ -123,7 +125,9 @@ export const productTableColumns: ColumnDef<
 ]
 
 export const productTablePlaceholderColumns: ColumnDef<
-  Prisma.ProductGetPayload<{ include: { images: true; categories: true } }>
+  Prisma.ProductGetPayload<{
+    include: { images: true; categories: true; reviews: true; store: true }
+  }>
 >[] = [
   {
     header: "Id",

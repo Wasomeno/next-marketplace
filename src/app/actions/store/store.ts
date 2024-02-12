@@ -37,7 +37,11 @@ export async function getStoreProducts(props: GetStoreProductsProps) {
         orderBy: props.sort,
         skip: (props.page ? props.page - 1 : 0) * (props.pageSize ?? 5),
         take: props.pageSize ?? 5,
-        where: { name: { contains: props.search }, status: props.status },
+        where: {
+          name: { contains: props.search },
+          status: props.status,
+          categories: { some: { id: { in: props.categoryIds } } },
+        },
         include: { images: true, categories: true, reviews: true, store: true },
       },
     },
