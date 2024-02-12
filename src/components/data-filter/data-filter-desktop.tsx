@@ -1,9 +1,11 @@
 import { useState } from "react"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
 import clsx from "clsx"
 import { AnimatePresence, motion } from "framer-motion"
 import { BiChevronRight } from "react-icons/bi"
 
+import { Option } from "../dropdown"
 import { CheckBox } from "../ui/checkbox"
 import {
   Dropdown,
@@ -12,18 +14,23 @@ import {
   DropdownPortal,
   DropdownTrigger,
 } from "../ui/dropdown"
-import { DataFilterProps } from "./"
+import { DataFilterOption, DataFilterProps } from "./"
 
 export const DataFilterDesktop = ({
-  activeFilters,
-  onOptionClick,
   filterOptions,
   disabled,
   placeholder,
 }: DataFilterProps) => {
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
   const [isOpen, setIsOpen] = useState(false)
 
   const [activeParent, setActiveParent] = useState<string | null>()
+
+  const [activeFilters, setActiveFilters] =
+    useState<Record<string, string>[]>(getActiveFilters())
 
   const isActive =
     activeFilters &&
@@ -34,6 +41,124 @@ export const DataFilterDesktop = ({
   const activeFilterAmount = activeFilters?.filter((filter) =>
     Object.values(filter).every((value) => value !== "")
   ).length
+
+  function getActiveFilters() {
+    const activeFilters = filterOptions.map((option) => ({
+      [option.value as string]: searchParams.get(option.value as string) ?? "",
+    }))
+
+    return activeFilters
+  }
+
+  function selectFilter(parentOption: DataFilterOption, childOption: Option) {
+    const newSearchParams = new URLSearchParams(searchParams.toString())
+    if (childOption.value === "") {
+      newSearchParams.delete(parentOption.value as string)
+    } else if (parentOption.isMultipleValues) {
+      const searchParamsValue =
+        searchParams.get(parentOption.value as string)?.split(" ") ?? []
+      newSearchParams.set(
+        parentOption.value as string,
+        [...searchParamsValue, childOption.value].join(" ")
+      )
+    } else {
+      newSearchParams.set(
+        parentOption.value as string,
+        childOption.value as string
+      )
+    }
+
+    const currentActiveFilters = activeFilters
+
+    const filterIndex = currentActiveFilters.findIndex((filter) =>
+      Object.keys(filter).includes(parentOption.value as string)
+    )
+    if (!parentOption.isMultipleValues) {
+      currentActiveFilters[filterIndex] = {
+        [parentOption.value as string]: childOption.value as string,
+      }
+    } else {
+      currentActiveFilters[filterIndex] = {
+        [parentOption.value as string]: [
+          ...currentActiveFilters[filterIndex][parentOption.value].split(" "),
+          childOption.value,
+        ].join(
+          currentActiveFilters[filterIndex][parentOption.value].length > 0
+            ? " "
+            : ""
+        ),
+      }
+    }
+
+    setActiveFilters(currentActiveFilters)
+
+    const url = `${pathname}?${newSearchParams.toString()}`
+
+    router.replace(url)
+  }
+
+  function deselectFilter(parentOption: DataFilterOption, childOption: Option) {
+    const newSearchParams = new URLSearchParams(searchParams.toString())
+    if (!parentOption.isMultipleValues) {
+      newSearchParams.delete(parentOption.value as string)
+    } else {
+      const filterValues =
+        searchParams.get(parentOption.value as string)?.split(" ") ?? []
+
+      const filteredFilterValues = filterValues.filter(
+        (value) => value !== childOption.value.toString()
+      )
+
+      if (filteredFilterValues.length > 0) {
+        newSearchParams.set(
+          parentOption.value as string,
+          filteredFilterValues.join(" ")
+        )
+      } else {
+        newSearchParams.delete(parentOption.value as string)
+      }
+    }
+
+    const currentActiveFilters = activeFilters
+
+    const filterIndex = currentActiveFilters.findIndex((filter) =>
+      Object.keys(filter).includes(parentOption.value as string)
+    )
+
+    if (!parentOption.isMultipleValues) {
+      currentActiveFilters[filterIndex] = {
+        [parentOption.value as string]: "",
+      }
+    } else {
+      currentActiveFilters[filterIndex] = {
+        [parentOption.value as string]: currentActiveFilters[filterIndex][
+          parentOption.value
+        ]
+          .split(" ")
+          .filter((value) => value !== childOption.value.toString())
+          .join(" "),
+      }
+    }
+
+    setActiveFilters(currentActiveFilters)
+
+    const url = `${pathname}?${newSearchParams.toString()}`
+
+    router.replace(url)
+  }
+
+  function getIsFilterActive(
+    parentOption: DataFilterOption,
+    childOption: Option
+  ) {
+    return activeFilters?.some(
+      (filter) =>
+        filter[parentOption.value as string] !== undefined &&
+        filter[parentOption.value as string]
+          ?.split(" ")
+          .includes(childOption.value.toString())
+    )
+  }
 
   return (
     <Dropdown
@@ -118,13 +243,11 @@ export const DataFilterDesktop = ({
                           >
                             <CheckBox
                               id={childOption.label}
-                              checked={activeFilters?.some((filter) =>
-                                filter[option.value as string]
-                                  ?.split(" ")
-                                  .includes(childOption.value.toString())
-                              )}
+                              checked={getIsFilterActive(option, childOption)}
                               onCheckedChange={() =>
-                                onOptionClick(option, childOption)
+                                getIsFilterActive(option, childOption)
+                                  ? deselectFilter(option, childOption)
+                                  : selectFilter(option, childOption)
                               }
                             />
                             <span className="text-sm">{childOption.label}</span>
