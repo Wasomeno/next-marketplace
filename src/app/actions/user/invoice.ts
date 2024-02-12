@@ -4,11 +4,12 @@ import { getServerSession } from "next-auth"
 
 import { prisma } from "@/lib/prisma"
 
-export async function getUserInvoices() {
+export async function getUserInvoices(props: { status?: string }) {
   const session = await getServerSession()
 
   const invoices = await prisma.invoice.findMany({
     where: {
+      status: props.status,
       order: { user_email: session?.user.email as string },
     },
     include: {
