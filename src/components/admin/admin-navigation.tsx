@@ -5,12 +5,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import clsx from "clsx"
 import { IconType } from "react-icons"
-import {
-  MdGridView,
-  MdOutlineRequestQuote,
-  MdOutlineTableChart,
-  MdSpaceDashboard,
-} from "react-icons/md"
+import { MdGridView, MdOutlineImage, MdSpaceDashboard } from "react-icons/md"
 import { twMerge } from "tailwind-merge"
 
 interface NavigationLinkProps {
@@ -23,7 +18,7 @@ interface NavigationLinkProps {
 const AdminNavigation = () => {
   const path = usePathname()
   return (
-    <div className="sticky left-0 top-0 hidden h-screen w-64 border-r bg-white dark:border-r-neutral-800 dark:bg-neutral-900 lg:block">
+    <div className="sticky left-0 top-0 hidden h-screen w-64 border-r bg-white lg:block dark:border-r-neutral-800 dark:bg-neutral-900">
       <div className="flex h-20 items-center justify-center gap-2">
         <Image
           src="/next_marketplace.webp"
@@ -48,15 +43,9 @@ const AdminNavigation = () => {
           />
           <NavigationLink
             path={path}
-            href="/admin/products"
-            Icon={MdOutlineTableChart}
-            title="Products"
-          />
-          <NavigationLink
-            path={path}
-            href="/admin/orders"
-            Icon={MdOutlineRequestQuote}
-            title="Orders"
+            href="/admin/banners"
+            Icon={MdOutlineImage}
+            title="Promo Banners"
           />
         </div>
       </div>

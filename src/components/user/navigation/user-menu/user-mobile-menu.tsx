@@ -8,6 +8,7 @@ import { Session } from "next-auth"
 import { signOut } from "next-auth/react"
 import { BsBox2Heart } from "react-icons/bs"
 import { HiMenu, HiX } from "react-icons/hi"
+import { IoSettingsOutline } from "react-icons/io5"
 import { VscSignOut } from "react-icons/vsc"
 
 import { ThemeSwitcher } from "@/components/theme-switcher"
@@ -24,7 +25,7 @@ export function UserMobileMenu({ session }: { session: Session }) {
       <AnimatePresence>
         {showMenu && (
           <motion.div
-            className="fixed inset-x-0 z-30 h-screen w-screen rounded-t-lg bg-white py-2.5 shadow-[0_3px_10px_rgb(0,0,0,0.2)] dark:bg-neutral-950"
+            className="fixed inset-x-0 z-[60] h-screen w-screen rounded-t-lg bg-white py-2.5 shadow-[0_3px_10px_rgb(0,0,0,0.2)] dark:bg-neutral-950"
             initial={{ top: "100vh" }}
             animate={{ top: "0" }}
             transition={{
@@ -45,11 +46,11 @@ export function UserMobileMenu({ session }: { session: Session }) {
               }}
               exit={{ opacity: 0 }}
             >
-              <div className="flex h-8 items-center gap-4 px-4">
+              <div className="flex h-8 items-center justify-between gap-4 px-4">
+                <span className="text-sm font-medium">Menu</span>
                 <button onClick={() => setShowMenu(false)}>
                   <HiX size="18" />
                 </button>
-                <span className="text-sm font-medium">Menu</span>
               </div>
               <div className="flex items-center gap-4 border-b px-4 py-2 dark:border-b-gray-800">
                 <div className="relative h-10 w-10">
@@ -81,6 +82,18 @@ export function UserMobileMenu({ session }: { session: Session }) {
                     <BsBox2Heart size="16" />
                   </span>
                   <span className="text-sm">Wishlist</span>
+                </button>
+                <button
+                  onClick={() => {
+                    router.push("/settings")
+                    setShowMenu(false)
+                  }}
+                  className="flex items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200"
+                >
+                  <span>
+                    <IoSettingsOutline size="16" />
+                  </span>
+                  <span className="text-sm">Settings</span>
                 </button>
               </div>
               <div className="px-4 py-2">

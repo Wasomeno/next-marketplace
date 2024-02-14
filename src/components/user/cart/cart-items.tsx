@@ -19,13 +19,13 @@ export const CartItems = ({
       }>[]
     | undefined
 }) => {
-  const [selectedItems, setSelectedItems] = useState<Array<CartItem>>([])
+  const [selectedItems, setSelectedItems] = useState<CartItem[]>([])
 
-  function selectCartItem(cartItem: CartItem) {
+  function selectItem(cartItem: CartItem) {
     setSelectedItems((items) => [...items, cartItem])
   }
 
-  function deselectCartItem(cartItemId: number) {
+  function deselectItem(cartItemId: number) {
     setSelectedItems(
       (items) => items?.filter((selectedItem) => cartItemId !== selectedItem.id)
     )
@@ -41,7 +41,7 @@ export const CartItems = ({
             items.map((item) => (
               <CartItemCard
                 key={item.id}
-                itemDetails={item}
+                item={item}
                 isSelected={selectedItems?.some(
                   (selectedItem) => selectedItem.id === item.id
                 )}
@@ -49,8 +49,8 @@ export const CartItems = ({
                   selectedItems?.some(
                     (selectedItem) => selectedItem.id === item.id
                   )
-                    ? deselectCartItem(item.id)
-                    : selectCartItem(item)
+                    ? deselectItem(item.id)
+                    : selectItem(item)
                 }
               />
             ))}

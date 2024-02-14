@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query"
 import { Id, toast } from "react-toastify"
 
 import { ConfirmationDialog } from "@/components/confirmation-dialog"
-import { deleteCategories } from "@/app/actions/categories"
+import { deleteCategories } from "@/app/actions/admin/categories"
 
 interface DeleteCategoriesModalProps {
   selectedCategories: Array<number>
@@ -18,38 +18,36 @@ export function DeleteCategoriesModal({
   const router = useRouter()
 
   const open = searchParams.get("delete") !== null
-  const deleteCategoriesMutation = useMutation(
-    async () => await deleteCategories({ categoryIds: selectedCategories }),
-    {
-      onMutate() {
-        toastRef.current = toast.loading("Deleting categories")
-        router.push("/admin/categories")
-      },
-      onSuccess() {
-        toast.update(toastRef.current, {
-          type: "success",
-          render: "Succesfully Delete Categories",
-          isLoading: false,
-          autoClose: 1000,
-        })
-      },
-      onError(response: string) {
-        toast.update(toastRef.current, {
-          type: toast.TYPE.ERROR,
-          render: response,
-        })
-      },
-    }
-  )
+  const deleteCategoriesMutation = useMutation({
+    mutationFn: async () =>
+      await deleteCategories({ categoryIds: selectedCategories }),
+    onMutate() {
+      toastRef.current = toast.loading("Deleting categories")
+      router.push("/admin/categories")
+    },
+    onSuccess() {
+      toast.update(toastRef.current, {
+        type: "success",
+        render: "Succesfully Delete Categories",
+        isLoading: false,
+        autoClose: 1000,
+      })
+    },
+    onError(response: string) {
+      toast.update(toastRef.current, {
+        type: toast.TYPE.ERROR,
+        render: response,
+      })
+    },
+  })
 
   return (
     <ConfirmationDialog
       open={open}
-      title="Delete Category"
       body={`Confirm delete ${selectedCategories.length} category?`}
       onOpenChange={() => router.push("/admin/categories")}
       onConfirm={deleteCategoriesMutation.mutate}
-      onCancel={() => router.push("/admin/products")}
+      onCancel={() => router.push("/admin/categories")}
     />
   )
 }

@@ -8,8 +8,8 @@ export const ProductImages = ({ imageUrls }: { imageUrls: string[] }) => {
   const [selectedImage, setSelectedImage] = useState(imageUrls[0])
   const [activeImage, setActiveImage] = useState(imageUrls[0])
   return (
-    <div className="w-11/12 lg:w-5/12">
-      <div className="relative h-80 rounded-md">
+    <div className="flex w-full flex-col lg:items-start">
+      <div className="relative h-80 w-full self-center overflow-hidden rounded-md">
         <Image src={activeImage} alt="product-image-main" fill />
       </div>
       <div className="mt-4 flex items-center gap-2.5">

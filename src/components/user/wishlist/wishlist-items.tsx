@@ -6,7 +6,7 @@ import { RxCrossCircled } from "react-icons/rx"
 import { toast } from "react-toastify"
 
 import { Button } from "@/components/ui/button"
-import { addWishlistsToCart } from "@/app/actions/wishlist"
+import { addWishlistsToCart } from "@/app/actions/user/wishlist"
 
 import { WishlistItemCard } from "./wishlist-item-card"
 
@@ -40,8 +40,8 @@ export function WishlistItems({ items }: WishlistItemsSectionProps) {
           )}
         </div>
       </div>
-      <div className="sticky bottom-0 w-full bg-white dark:bg-neutral-950 lg:w-2/6 lg:px-8">
-        <div className="flex flex-col justify-between border-t border-slate-200 p-2.5 shadow-[0_3px_10px_rgb(0,0,0,0.1)] dark:border-gray-800 lg:h-72 lg:rounded-lg lg:border lg:border-slate-300 lg:p-4 lg:shadow-none">
+      <div className="sticky bottom-0 w-full bg-white lg:w-2/6 lg:px-8 dark:bg-neutral-950">
+        <div className="flex flex-col justify-between border-t border-gray-200 p-2.5 shadow-[0_3px_10px_rgb(0,0,0,0.1)] lg:h-72 lg:rounded-lg lg:border lg:border-gray-200 lg:p-4 lg:shadow-none dark:border-gray-800">
           <div className="">
             <span className="hidden text-xs font-medium lg:inline lg:text-base">
               Selected Items Summary
@@ -56,7 +56,7 @@ export function WishlistItems({ items }: WishlistItemsSectionProps) {
           <Button
             disabled={!selectedItems.length}
             variant="default"
-            className="my-1 w-full rounded-lg bg-blue-400 py-3 text-xs font-medium text-slate-50 dark:bg-blue-900 lg:text-sm"
+            className="my-1 w-full rounded-lg bg-blue-400 py-3 text-xs font-medium text-slate-50 lg:text-sm dark:bg-blue-900"
             onClick={async () => {
               await addWishlistsToCart(selectedItems)
               toast.success("Added all selected items to cart")

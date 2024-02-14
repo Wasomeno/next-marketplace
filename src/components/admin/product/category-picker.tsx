@@ -15,9 +15,12 @@ export function CategoryPicker({
   selectedCategory,
   selectCategory,
 }: CategoryScrollableListProps) {
-  const categories = useQuery(["categories"], () => getCategories(), {})
-  const skeletons = Array(5).fill("")
+  const categories = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => getCategories(),
+  })
 
+  const skeletons = Array(5).fill("")
   if (categories.isLoading) {
     return (
       <div className="h-72 w-full overflow-hidden rounded-md border dark:border-neutral-600">

@@ -56,7 +56,8 @@ export default function AdminLoginPage() {
             <label className="text-xs font-medium lg:text-sm">Username</label>
             <Input
               type="string"
-              className="w-72 text-xs dark:border-neutral-600 dark:bg-neutral-800 lg:text-sm"
+              placeholder="Username"
+              className="w-72 text-xs lg:text-sm dark:border-neutral-600 dark:bg-neutral-800"
               {...register("username")}
             />
             <AnimatePresence>
@@ -65,7 +66,7 @@ export default function AdminLoginPage() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="text-xs text-red-600 dark:text-red-800 lg:text-sm"
+                  className="text-xs text-red-600 lg:text-sm dark:text-red-800"
                 >
                   {formState.errors.username?.message}
                 </motion.span>
@@ -76,7 +77,8 @@ export default function AdminLoginPage() {
             <label className="text-xs font-medium lg:text-sm">Password</label>
             <Input
               type="password"
-              className="w-72 text-xs dark:border-neutral-600 dark:bg-neutral-800 lg:text-sm"
+              placeholder="Password"
+              className="w-72 text-xs lg:text-sm dark:border-neutral-600 dark:bg-neutral-800"
               {...register("password")}
             />
             <AnimatePresence></AnimatePresence>
@@ -85,7 +87,7 @@ export default function AdminLoginPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="text-xs text-red-600 dark:text-red-800 lg:text-sm"
+                className="text-xs text-red-600 lg:text-sm dark:text-red-800"
               >
                 {formState.errors.password?.message}
               </motion.span>

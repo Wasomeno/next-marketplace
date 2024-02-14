@@ -13,10 +13,10 @@ export function ViewCategoryModal() {
   const categoryId = parseInt(searchParams.get("id") ?? "0")
   const isDetailsModalOpen = searchParams.get("view") !== null
 
-  const categoryDetails = useQuery(
-    ["categoryDetails", categoryId],
-    async () => await getCategory(categoryId)
-  )
+  const categoryDetails = useQuery({
+    queryKey: ["categoryDetails", categoryId],
+    queryFn: async () => await getCategory(categoryId),
+  })
 
   return (
     <Dialog
@@ -36,12 +36,6 @@ export function ViewCategoryModal() {
           <div className="flex w-full flex-col items-start gap-1">
             <h6 className="text-sm font-medium text-gray-400">Name</h6>
             <h5 className="text-lg">{categoryDetails.data?.name}</h5>
-          </div>
-          <div className="flex w-full flex-col items-start gap-1">
-            <h6 className="text-sm font-medium text-gray-400">Products</h6>
-            <h5 className="text-lg">
-              {categoryDetails.data?.products?.length}
-            </h5>
           </div>
         </div>
       </DialogContent>

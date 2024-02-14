@@ -14,7 +14,7 @@ export const ThemeSwitcher = () => {
           setTheme("dark")
         }
       }}
-      className="flex w-full items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200 hover:dark:bg-slate-800"
+      className="flex w-full items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-gray-100 hover:dark:bg-slate-800"
     >
       <span>
         {resolvedTheme === "light" && <BsSun size={16} />}

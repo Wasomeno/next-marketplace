@@ -25,14 +25,15 @@ export const ProductPriceFilter = () => {
   }
 
   return (
-    <div>
-      <h6 className="text-xs font-medium tracking-wide lg:text-sm">Price</h6>
-      <div className="mt-2 flex gap-2">
+    <div className="space-y-2">
+      <span className="text-sm font-medium tracking-wide lg:text-base">
+        Price
+      </span>
+      <div className="flex gap-2">
         <Input
           type="number"
           placeholder="Min Price"
           className="text-xs dark:border-gray-800 dark:bg-neutral-900 lg:text-sm"
-          value={price.min}
           onChange={(event) =>
             onPriceChange({ ...price, min: event?.target.value })
           }
@@ -41,7 +42,6 @@ export const ProductPriceFilter = () => {
           type="number"
           placeholder="Max Price"
           className="text-xs dark:border-gray-800 dark:bg-neutral-900 lg:text-sm"
-          value={price.max}
           onChange={(event) =>
             onPriceChange({ ...price, max: event?.target.value })
           }

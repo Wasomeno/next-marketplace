@@ -1,17 +1,18 @@
 "use client"
 
-import { AnimatePresence, motion } from "framer-motion";
-import { Session } from "next-auth";
-import { signOut } from "next-auth/react";
-import Image from "next/image";
-import Link from "next/link";
-import { useState } from "react";
-import { BsBox2Heart } from "react-icons/bs";
-import { HiOutlineClipboard } from "react-icons/hi";
-import { VscSignOut } from "react-icons/vsc";
+import { useState } from "react"
+import Image from "next/image"
+import Link from "next/link"
+import * as HoverCard from "@radix-ui/react-hover-card"
+import { AnimatePresence, motion } from "framer-motion"
+import { Session } from "next-auth"
+import { signOut } from "next-auth/react"
+import { BsBox2Heart } from "react-icons/bs"
+import { HiOutlineClipboard } from "react-icons/hi"
+import { IoSettingsOutline } from "react-icons/io5"
+import { VscSignOut } from "react-icons/vsc"
 
-import { ThemeSwitcher } from "@/components/theme-switcher";
-import * as HoverCard from "@radix-ui/react-hover-card";
+import { ThemeSwitcher } from "@/components/theme-switcher"
 
 export const UserMainMenu = ({ session }: { session: Session }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -44,14 +45,14 @@ export const UserMainMenu = ({ session }: { session: Session }) => {
               sideOffset={2.5}
             >
               <motion.div
-                initial={{ height: "0px", opacity: 0 }}
-                animate={{ height: "240px", opacity: 1 }}
-                exit={{ height: "0px", opacity: 0 }}
-                transition={{ duration: 0.2, ease: "backIn" }}
-                className="z-30 w-64 overflow-hidden rounded-md border border-slate-300 bg-white transition-all duration-200 dark:border-gray-800 dark:bg-neutral-950"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2, ease: "easeInOut" }}
+                className="z-[60] h-fit w-64 overflow-hidden rounded-md border border-slate-300 bg-white transition-all duration-200 dark:border-gray-800 dark:bg-neutral-950"
                 style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
               >
-                <div className="border-b  px-2.5 py-2 dark:border-b-gray-800">
+                <div className="border-b p-2.5 dark:border-b-gray-800">
                   <h5 className="font-sans font-medium">
                     {session?.user?.name}
                   </h5>
@@ -62,7 +63,7 @@ export const UserMainMenu = ({ session }: { session: Session }) => {
                 <div className="border-b p-1.5 dark:border-b-gray-800">
                   <Link
                     href="/orders"
-                    className="flex items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200 hover:dark:bg-slate-800"
+                    className="flex items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-gray-100 hover:dark:bg-slate-800"
                   >
                     <span>
                       <HiOutlineClipboard size="16" />
@@ -71,7 +72,7 @@ export const UserMainMenu = ({ session }: { session: Session }) => {
                   </Link>
                   <Link
                     href="/wishlist"
-                    className="flex items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200 hover:dark:bg-slate-800"
+                    className="flex items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-gray-100 hover:dark:bg-slate-800"
                   >
                     <span>
                       <BsBox2Heart size="16" />
@@ -81,9 +82,18 @@ export const UserMainMenu = ({ session }: { session: Session }) => {
                 </div>
                 <div className="p-1.5">
                   <ThemeSwitcher />
+                  <Link
+                    href="/settings"
+                    className="flex items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-gray-100 hover:dark:bg-slate-800"
+                  >
+                    <span>
+                      <IoSettingsOutline size="16" />
+                    </span>
+                    <span className="text-sm">Settings</span>
+                  </Link>
                   <button
                     onClick={() => signOut()}
-                    className="flex w-full items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200 hover:dark:bg-slate-800"
+                    className="flex w-full items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-gray-100 hover:dark:bg-slate-800"
                   >
                     <span>
                       <VscSignOut size="16" />

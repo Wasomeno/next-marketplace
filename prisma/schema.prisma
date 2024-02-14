@@ -8,28 +8,49 @@ datasource db {
   relationMode = "prisma"
 }
 
-model Product {
-  id             Int             @id @default(autoincrement())
-  name           String          @unique
-  description    String
-  price          Int
-  stock          Int
-  category_id    Int
-  slug           String
-  reviews        ProductReview[]
-  cart_items     CartItem[]
-  wishlist_items WishlistItem[]
-  images         ProductImage[]
-  order_products OrderProduct[]
-  category       Category        @relation(fields: [category_id], references: [id], onDelete: Cascade)
+model Store {
+  id            Int       @id @default(autoincrement())
+  name          String
+  description   String
+  profile_image String
+  location      String
+  created_at    DateTime  @default(now())
+  owner_email   String    @unique
+  slug          String    @unique
+  products      Product[]
+  owner         User      @relation(fields: [owner_email], references: [email])
+  invoices      Invoice[]
 
-  @@index([category_id])
+  @@index([owner_email])
+}
+
+model Product {
+  id                 Int             @id @default(autoincrement())
+  store_id           Int
+  name               String          @unique
+  description        String          @db.LongText
+  price              Int
+  stock              Int
+  slug               String          @unique
+  featured_image_url String
+  status             String
+  sold               Int             @default(0)
+  reviews            ProductReview[]
+  cart_items         CartItem[]
+  wishlist_items     WishlistItem[]
+  images             ProductImage[]
+  order_products     OrderProduct[]
+  categories         Category[]
+  store              Store           @relation(fields: [store_id], references: [id])
+
+  @@index([store_id])
 }
 
 model ProductImage {
   id         Int     @id @default(autoincrement())
+  name       String
   product_id Int
-  image_url  String
+  url        String
   product    Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
 
   @@index([product_id])
@@ -47,6 +68,12 @@ model ProductReview {
 
   @@index([user_id])
   @@index([product_id])
+}
+
+model Banner {
+  id   Int    @id @default(autoincrement())
+  name String
+  url  String
 }
 
 model Cart {
@@ -97,60 +124,59 @@ model Category {
 
 model CategoryImage {
   id          Int      @id @default(autoincrement())
+  name        String
   category_id Int
-  image_url   String
+  url         String
   category    Category @relation(fields: [category_id], references: [id], onDelete: Cascade)
 
   @@index([category_id])
 }
 
 model Order {
-  id         Int            @id @default(autoincrement())
-  invoice    String
+  id         String    @id @default(cuid())
   total      Int
-  status_id  Int
-  created_at DateTime       @default(now())
+  created_at DateTime  @default(now())
   user_email String
-  user       User           @relation(fields: [user_email], references: [email])
-  status     OrderStatus    @relation(fields: [status_id], references: [id])
-  products   OrderProduct[]
+  user       User      @relation(fields: [user_email], references: [email])
+  invoices   Invoice[]
 
   @@index([user_email])
-  @@index([status_id])
+}
+
+model Invoice {
+  id         String         @id @unique
+  store_id   Int
+  order_id   String
+  created_at DateTime       @default(now())
+  status     String
+  total      Int
+  address    String         @default("")
+  store      Store          @relation(fields: [store_id], references: [id])
+  products   OrderProduct[]
+  order      Order          @relation(fields: [order_id], references: [id], onDelete: Cascade)
+
+  @@index([store_id])
+  @@index([order_id])
 }
 
 model OrderProduct {
   id         Int     @id @default(autoincrement())
+  invoice_id String
   amount     Int
   total      Int
-  order_id   Int
   product_id Int
+  isReviewed Boolean @default(false)
   product    Product @relation(fields: [product_id], references: [id])
-  order      Order   @relation(fields: [order_id], references: [id])
+  invoice    Invoice @relation(fields: [invoice_id], references: [id], onDelete: Cascade)
 
   @@index([product_id])
-  @@index([order_id])
-}
-
-model OrderStatus {
-  id     Int     @id @default(autoincrement())
-  name   String
-  orders Order[]
+  @@index([invoice_id])
 }
 
 model Admin {
   id       Int    @id @default(autoincrement())
   username String @unique
   password String
-}
-
-model OrderToProduct {
-  A Int
-  B Int
-
-  @@unique([A, B], map: "_OrderToProduct_AB_unique")
-  @@index([B], map: "_OrderToProduct_B_index")
-  @@map("_OrderToProduct")
 }
 
 model CartToProduct {
@@ -200,14 +226,36 @@ model User {
   emailVerified DateTime?       @map("email_verified")
   image         String?
   address       String?
+  store_id      Int?
   cart          Cart?
   orders        Order[]
   reviews       ProductReview[]
   wishlist      Wishlist?
   accounts      Account[]
   sessions      Session[]
+  store         Store?
+  addresses     UserAddress[]
 
+  @@index([store_id])
   @@map("users")
+}
+
+model UserAddress {
+  id              String  @id @default(cuid())
+  title           String
+  city            String
+  province        String
+  subdistrict     String
+  postNumber      String
+  street          String
+  additionalNotes String  @db.LongText
+  userEmail       String
+  phoneNumber     String
+  recipient       String
+  isMainAddress   Boolean @default(false)
+  user            User    @relation(fields: [userEmail], references: [email])
+
+  @@index([userEmail])
 }
 
 model VerificationToken {
@@ -217,4 +265,13 @@ model VerificationToken {
 
   @@unique([identifier, token])
   @@map("verificationtokens")
+}
+
+model CategoryToProduct {
+  A Int
+  B Int
+
+  @@unique([A, B], map: "_CategoryToProduct_AB_unique")
+  @@index([B], map: "_CategoryToProduct_B_index")
+  @@map("_CategoryToProduct")
 }

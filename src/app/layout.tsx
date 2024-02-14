@@ -15,20 +15,18 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <ClientSessionProvider>
         <ReactQueryProvider>
-          <body className="bg-slate-50 antialiased dark:bg-slate-950">
+          <body className="flex min-h-screen flex-1 flex-col overflow-y-scroll antialiased dark:bg-slate-950">
             <ThemeClientProvider>
               {children}
               <div className="fixed" />
             </ThemeClientProvider>
             <ToastifyContainer
               closeButton={false}
-              position="bottom-center"
+              position="bottom-right"
               autoClose={2000}
               hideProgressBar={true}
-              newestOnTop={false}
-              rtl={false}
-              toastClassName="bg-white border border-slate-300 dark:border-gray-700 dark:bg-slate-950 rounded-lg"
-              bodyClassName="text-sm font-medium flex gap-4 font-sans text-slate-600 dark:text-slate-50"
+              toastClassName="bg-white border border-slate-300 dark:border-gray-700 dark:bg-slate-950"
+              bodyClassName="text-sm font-medium flex gap-4 font-sans text-slate-600 dark:text-slate-50 rounded-xl"
             />
           </body>
         </ReactQueryProvider>

@@ -1,11 +1,14 @@
 "use client "
 
 import React from "react"
-import Image from "next/image"
+import NextImage from "next/image"
 import Link from "next/link"
 import clsx from "clsx"
+import { BiStore } from "react-icons/bi"
 import { FaStar } from "react-icons/fa"
 import { twMerge } from "tailwind-merge"
+
+import { Skeleton } from "../skeleton"
 
 interface ProductCardProps extends React.HTMLAttributes<HTMLDivElement> {
   image?: React.ReactNode
@@ -13,6 +16,7 @@ interface ProductCardProps extends React.HTMLAttributes<HTMLDivElement> {
   price?: React.ReactNode
   category?: React.ReactNode
   rating?: React.ReactNode
+  store?: React.ReactNode
   href: string
 }
 
@@ -24,13 +28,14 @@ const ProductCard = ({
   rating,
   href,
   className,
+  store,
   ...props
 }: ProductCardProps) => {
   return (
     <div
       className={twMerge(
         clsx(
-          "col-span-5 h-60 cursor-pointer rounded-md bg-neutral-50 bg-opacity-50 shadow-[0_3px_7px_rgb(0,0,0,0.1)] dark:bg-neutral-900 dark:bg-opacity-50 dark:shadow-gray-700 lg:col-span-2 lg:h-auto",
+          "col-span-5 h-64 cursor-pointer rounded-md shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] lg:col-span-2 lg:h-auto dark:bg-neutral-900 dark:bg-opacity-50 dark:shadow-gray-700",
           className
         )
       )}
@@ -42,6 +47,7 @@ const ProductCard = ({
           {name}
           {price}
           {category}
+          {store}
           {rating}
         </div>
       </Link>
@@ -49,13 +55,13 @@ const ProductCard = ({
   )
 }
 
-const ProductImage = ({ image }: { image: string }) => {
+const Image = ({ image }: { image: string }) => {
   return (
-    <div className="relative h-32 w-full overflow-clip rounded-t-md border bg-slate-50 lg:h-44">
-      <Image
+    <div className="relative h-32 w-full overflow-clip rounded-t-md border-b bg-slate-50 lg:h-40">
+      <NextImage
         src={image}
         alt="product-image"
-        className="object-cover object-top"
+        className="object-center"
         sizes="(max-width: 320px) 100vw, (max-width: 160px) 50vw, 33vw"
         quality={75}
         fill
@@ -64,16 +70,29 @@ const ProductImage = ({ image }: { image: string }) => {
   )
 }
 
-const Rating = ({ rating }: { rating: number }) => {
+const Rating = ({
+  rating,
+  reviewCount,
+}: {
+  rating: number
+  reviewCount: number
+}) => {
   return (
-    <span className="flex items-center gap-1 font-sans text-sm">
-      <FaStar size="15" className="fill-yellow-400" /> <span>{rating}</span>
+    <span className="flex items-center gap-1 font-sans text-sm text-gray-500">
+      <FaStar size="15" className="fill-yellow-400" />{" "}
+      <span>
+        {Number.isNaN(rating) ? 0 : rating.toFixed(1)} ({reviewCount})
+      </span>
     </span>
   )
 }
 
 const Name = ({ name }: { name: string }) => {
-  return <span className="font-sans text-xs lg:text-sm">{name}</span>
+  return (
+    <span className="overflow-ellipsis font-sans text-xs lg:text-sm">
+      {name}
+    </span>
+  )
 }
 
 const Price = ({ price }: { price: number }) => {
@@ -84,35 +103,47 @@ const Price = ({ price }: { price: number }) => {
   )
 }
 
+const StoreName = ({ name }: { name: string }) => {
+  return (
+    <div className="flex items-center gap-1.5 text-gray-500">
+      <BiStore />
+      <span className="text-sm">{name}</span>
+    </div>
+  )
+}
+
 const Category = ({
   category,
 }: {
   category: { name: string; slug: string }
 }) => {
   return (
-    <span className="font-sans text-xs text-gray-400 lg:text-sm">
+    <span className="font-sans text-xs text-gray-500 lg:text-sm">
       {category.name}
     </span>
   )
 }
 
-const Skeleton = () => {
+const CardSkeleton = () => {
   return (
-    <div className="col-span-5 h-56 cursor-pointer rounded-md shadow-md dark:shadow-neutral-700 lg:col-span-2 lg:h-auto">
-      <div className="h-32 w-full animate-pulse rounded-t-md bg-slate-300 dark:bg-neutral-500 lg:h-44" />
-      <div className="flex w-full flex-col gap-1 p-3">
-        <span className="h-6 w-32 animate-pulse rounded-lg bg-slate-200 dark:bg-neutral-500" />
-        <span className="h-6 w-24 animate-pulse rounded-lg bg-slate-200 dark:bg-neutral-500" />
+    <div className="col-span-5 h-64 rounded-md shadow-md lg:col-span-2 lg:h-auto dark:shadow-neutral-700">
+      <Skeleton className="h-32 w-full rounded-b-none" />
+      <div className="flex w-full flex-col gap-1.5 p-3">
+        <Skeleton className="h-[14px] w-36" />
+        <Skeleton className="h-[16px] w-28 " />
+        <Skeleton className="h-[14px] w-24 " />
+        <Skeleton className="h-[14px] w-20 " />
       </div>
     </div>
   )
 }
 
-ProductCard.Skeleton = Skeleton
-ProductCard.Image = ProductImage
+ProductCard.Skeleton = CardSkeleton
+ProductCard.Image = Image
 ProductCard.Rating = Rating
 ProductCard.Name = Name
 ProductCard.Price = Price
 ProductCard.Category = Category
+ProductCard.Store = StoreName
 
 export default ProductCard

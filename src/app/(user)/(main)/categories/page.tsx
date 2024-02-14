@@ -16,7 +16,7 @@ export default async function CategoriesPage() {
 
   return (
     <div className="flex flex-1 flex-col items-center">
-      <div className="flex h-36 w-full items-center justify-between bg-slate-100 px-10 dark:bg-neutral-900 lg:h-72 lg:px-16 ">
+      <div className="flex h-36 w-full items-center justify-between bg-gradient-to-r from-blue-300 to-sky-100 px-6 dark:bg-neutral-900 lg:h-72 lg:px-16 ">
         <h2 className="text-lg font-medium tracking-wider lg:text-4xl">
           Categories
         </h2>
@@ -38,7 +38,7 @@ export default async function CategoriesPage() {
             <div className="relative h-5/6 w-full">
               <Image
                 fill
-                src={category.images[0].image_url}
+                src={category.images[0].url}
                 className="rounded-md"
                 alt="category-image"
               />

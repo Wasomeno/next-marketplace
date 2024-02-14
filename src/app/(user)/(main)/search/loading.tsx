@@ -1,6 +1,6 @@
-import { ProductSorterSkeleton } from "@/components/product-sorter";
-import { Button } from "@/components/ui/button";
-import ProductCard from "@/components/user/product-card";
+import { Button } from "@/components/ui/button"
+import ProductCard from "@/components/user/product-card"
+import { ProductSorterSkeleton } from "@/components/user/product-sorter/product-sorter-skeleton"
 
 export default async function SearchLoading() {
   return (
@@ -30,5 +30,5 @@ export default async function SearchLoading() {
         </div>
       </div>
     </div>
-  );
+  )
 }

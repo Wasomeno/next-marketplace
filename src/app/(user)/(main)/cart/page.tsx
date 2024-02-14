@@ -1,4 +1,4 @@
-import { getCartItems } from "@/app/actions/cart";
+import { getCartItems } from "@/app/actions/user/cart";
 import { CartItems } from "@/components/user/cart/cart-items";
 import { Cart, Prisma } from "@prisma/client";
 

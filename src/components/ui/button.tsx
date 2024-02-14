@@ -8,8 +8,8 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-slate-100",
-        defaultOutline: "border border-slate-100",
+        default: "bg-gray-100",
+        defaultOutline: "border border-gray-200",
         danger: "bg-red-700 dark:bg-red-800",
         warning: "bg-yellow-600",
         success: "bg-green-700 dark:bg-green-800",
