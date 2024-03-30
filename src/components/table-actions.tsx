@@ -3,7 +3,7 @@ import Link, { LinkProps } from "next/link"
 import { BiPencil, BiTrash } from "react-icons/bi"
 import { BsEye } from "react-icons/bs"
 
-import { Button } from "./ui/button"
+import { Button, ButtonProps } from "./ui/button"
 
 type TableActionsProps = {
   viewAction?: ReactElement
@@ -11,17 +11,11 @@ type TableActionsProps = {
   deleteAction?: ReactElement
 }
 
-type BaseActionProps = { asLink?: boolean }
+type ButtonActionProps = { asLink: false } & ButtonProps
 
-type ButtonActionProps = HTMLAttributes<HTMLButtonElement> &
-  BaseActionProps & {
-    asLink: false
-  }
-
-type LinkActionProps = LinkProps &
-  BaseActionProps & {
-    asLink: true
-  }
+type LinkActionProps = {
+  asLink: true
+} & LinkProps
 
 type ActionProps = ButtonActionProps | LinkActionProps
 

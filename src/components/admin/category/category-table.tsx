@@ -1,22 +1,21 @@
 "use client"
 
 import { useRouter } from "next/navigation"
+import { useSearchParamsValues } from "@/utils"
 import { Prisma } from "@prisma/client"
+import { useQuery } from "@tanstack/react-query"
 import { ColumnDef } from "@tanstack/react-table"
 import { BsPlus, BsTrash3 } from "react-icons/bs"
 
 import { Button } from "@/components/ui/button"
 import { CheckBox } from "@/components/ui/checkbox"
+import { Skeleton } from "@/components/skeleton"
 import { TableActions } from "@/components/table-actions"
+import { getCategories } from "@/app/actions/categories"
 
+import { BaseDataFilters } from "../../../../types"
 import { DataTable, useSelectedData } from "../data-table"
 import { DeleteCategoriesModal } from "./modals/delete-categories-modal"
-
-type CategoryTableProps = {
-  categories: Prisma.CategoryGetPayload<{
-    include: { _count: { select: { products: true } }; images: true }
-  }>[]
-}
 
 export const categorySortOptions = [
   {
@@ -29,7 +28,7 @@ export const categorySortOptions = [
   },
 ]
 
-export const CategoryTable = ({ categories }: CategoryTableProps) => {
+export const CategoryTable = () => {
   const router = useRouter()
   const {
     selectedData,
@@ -38,6 +37,14 @@ export const CategoryTable = ({ categories }: CategoryTableProps) => {
     selectData,
     selectAllData,
   } = useSelectedData()
+
+  const searchParamsValues = useSearchParamsValues<BaseDataFilters>()
+
+  const { data: categories, isLoading } = useQuery({
+    queryKey: ["categories", searchParamsValues],
+    queryFn: () => getCategories({ ...searchParamsValues }),
+  })
+
   const columns: ColumnDef<
     Prisma.CategoryGetPayload<{
       include: { _count: { select: { products: true } }; images: true }
@@ -101,13 +108,13 @@ export const CategoryTable = ({ categories }: CategoryTableProps) => {
           viewAction={
             <TableActions.View
               asLink
-              href={`/admin/categories?id=${row.original.id}&view=true`}
+              href={`/admin/categories/${row.original.id}`}
             />
           }
           editAction={
             <TableActions.Edit
               asLink
-              href={`/admin/categories?id=${row.original.id}&edit=true`}
+              href={`/admin/categories/${row.original.id}/edit`}
             />
           }
         />
@@ -115,18 +122,53 @@ export const CategoryTable = ({ categories }: CategoryTableProps) => {
     },
   ]
 
+  const placeHolderColumns: ColumnDef<
+    Prisma.CategoryGetPayload<{
+      include: { _count: { select: { products: true } }; images: true }
+    }>
+  >[] = [
+    {
+      id: "select",
+      header: () => <CheckBox disabled />,
+      cell: () => <CheckBox disabled />,
+    },
+    {
+      header: "Id",
+      cell: () => <Skeleton className="h-[20px] w-24" />,
+    },
+    {
+      header: "Name",
+      cell: () => <Skeleton className="h-[20px] w-44" />,
+    },
+    {
+      header: "Product Amount",
+      cell: () => <Skeleton className="h-[20px] w-28" />,
+    },
+    {
+      header: "Actions",
+      cell: () => (
+        <TableActions
+          viewAction={<TableActions.View asLink={false} disabled />}
+          editAction={<TableActions.Edit asLink={false} disabled />}
+        />
+      ),
+    },
+  ]
+
+  const placeholderData = Array(5).fill("")
+
   return (
     <>
       <DataTable
-        data={categories}
-        columns={columns}
+        data={categories ?? placeholderData}
+        columns={isLoading ? placeHolderColumns : columns}
         dataSorter={<DataTable.Sorter sortOptions={categorySortOptions} />}
         addTrigger={
           <Button
             variant="success"
             size="sm"
             onClick={() => {
-              router.push(`/admin/categories?add=true`)
+              router.push("/admin/categories/add")
             }}
             className="h-8 w-8 hover:scale-[105%] lg:h-9 lg:w-9"
           >

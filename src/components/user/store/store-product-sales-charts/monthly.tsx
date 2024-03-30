@@ -5,8 +5,8 @@ import { useParams } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
 import moment from "moment"
 
-import { ProductSalesChart } from "@/components/admin/product/product-sales-chart"
 import { Dropdown, Option } from "@/components/dropdown"
+import { ProductSalesChart } from "@/components/user/store/product/product-sales-chart"
 import { getProductMonthlyStats } from "@/app/actions/store/product-sales"
 
 function getMonthOptions() {

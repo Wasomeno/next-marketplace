@@ -53,7 +53,6 @@ export function NavigationSearchInput() {
           event.preventDefault()
           if (searchQuery.length > 0) {
             router.push("/search?q=" + searchQuery)
-            return
           }
         }}
         className="w-full lg:w-96"
@@ -61,7 +60,7 @@ export function NavigationSearchInput() {
         <Input
           ref={searchInputRef as any}
           placeholder="Search..."
-          className="h-8 w-full rounded-md border bg-slate-50 p-2 font-sans text-xs lg:h-10 lg:text-sm dark:border-gray-700 dark:bg-slate-950"
+          className="h-8 w-full rounded-md border bg-slate-50 p-2 font-sans text-xs dark:border-gray-700 dark:bg-slate-950 lg:h-10 lg:text-sm"
           onFocus={() => setIsModalActive(true)}
           onBlur={() => setIsModalActive(false)}
           onChange={search}
