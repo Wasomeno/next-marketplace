@@ -1,41 +1,52 @@
 "use client"
 
 import { useParams, useSearchParams } from "next/navigation"
+import { useSearchParamsValues } from "@/utils"
 import { useQuery } from "@tanstack/react-query"
 import { RxCrossCircled } from "react-icons/rx"
 
 import ProductCard from "@/components/user/product-card"
 import { getProducts } from "@/app/actions/product"
 
+import { BaseDataFilters } from "../../../types"
+import { DataSorter } from "../data-sorter"
+import { Option } from "../dropdown"
 import { ProductsFilter } from "../product-filter"
-import { ProductSorter } from "./product-sorter"
+
+const sortOptions: Option[] = [
+  {
+    label: "Price low to high",
+    value: "price.asc",
+  },
+  {
+    label: "Price high to low",
+    value: "price.desc",
+  },
+  {
+    label: "Name from A to Z",
+    value: "name.asc",
+  },
+  {
+    label: "Name from Z to A",
+    value: "name.desc",
+  },
+]
 
 export function Products() {
   const params = useParams()
-  const searchParams = useSearchParams()
-  const productProps = createProps()
+
+  const searchParamsValues = useSearchParamsValues<
+    BaseDataFilters & { q: string }
+  >()
 
   const products = useQuery({
-    queryKey: ["products", searchParams.toString(), params.category],
+    queryKey: ["products", searchParamsValues, params.category],
     queryFn: () =>
-      getProducts({ ...productProps, categorySlug: params.category as string }),
+      getProducts({
+        ...searchParamsValues,
+        categorySlug: params.category as string,
+      }),
   })
-
-  function createProps() {
-    let props = {}
-    for (const [key, value] of searchParams) {
-      props = {
-        ...props,
-        [key]:
-          key === "sort"
-            ? { [value.split(".")[0]]: value.split(".")[1] }
-            : key.includes("price")
-              ? parseInt(value)
-              : value,
-      }
-    }
-    return props
-  }
 
   const ProductsExist = products?.data?.length !== 0 && !products.isLoading
   const ProductNotExist =
@@ -47,7 +58,7 @@ export function Products() {
         <div className="mb-4 flex items-center justify-between">
           <h6 className="text-sm font-medium lg:text-lg">Products</h6>
           <div className="flex items-center gap-2">
-            <ProductSorter />
+            <DataSorter sortOptions={sortOptions} />
             <ProductsFilter withCategories />
           </div>
         </div>

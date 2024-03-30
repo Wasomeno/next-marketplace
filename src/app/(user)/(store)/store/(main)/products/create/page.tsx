@@ -1,7 +1,7 @@
 import React from "react"
 import { Metadata } from "next"
 
-import { AddProductForm } from "@/components/admin/product/forms/add-product-form"
+import { AddProductForm } from "@/components/user/store/product/forms/add-product-form"
 import { getCategories } from "@/app/actions/categories"
 import { getStore } from "@/app/actions/store/store"
 

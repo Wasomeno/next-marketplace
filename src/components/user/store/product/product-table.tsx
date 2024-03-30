@@ -21,8 +21,8 @@ import {
   getStoreProductsCount,
 } from "@/app/actions/store/store"
 
-import { BaseDataFilters } from "../../../../types"
-import { DataTable, useSelectedData } from "../data-table"
+import { BaseDataFilters } from "../../../../../types"
+import { DataTable, useSelectedData } from "../../../admin/data-table"
 import { ProductFilter } from "./product-filter"
 import {
   productTableColumns,

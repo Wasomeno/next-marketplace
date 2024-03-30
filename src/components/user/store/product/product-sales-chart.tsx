@@ -9,14 +9,6 @@ import {
   XAxis,
 } from "recharts"
 
-function generateDummyData() {
-  let data: { name: string; uv: number }[] = new Array(31)
-  for (let i = 0; i < 31; i++) {
-    data[i] = { name: (i + 1).toString(), uv: Math.floor(Math.random() * 500) }
-  }
-  return data
-}
-
 export const ProductSalesChart = ({
   data,
 }: {

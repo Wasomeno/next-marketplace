@@ -19,6 +19,7 @@ export async function getCategories(props?: GetCategoriesProps): Promise<
     where: { name: { contains: props?.search } },
     include: { _count: { select: { products: true } }, images: true },
   })
+
   return categories
 }
 
