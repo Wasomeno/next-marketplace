@@ -1,6 +1,6 @@
-import { AdminMobileNavigation } from "@/components/admin/admin-mobile-navigation"
-import AdminNavigation from "@/components/admin/admin-navigation"
-import { AdminToolbar } from "@/components/admin/admin-toolbar"
+import { AdminMobileNavigation } from "@/modules/admin/common/components/admin-mobile-navigation"
+import AdminNavigation from "@/modules/admin/common/components/admin-navigation"
+import { AdminToolbar } from "@/modules/admin/common/components/admin-toolbar"
 
 interface AdminLayoutProps {
   children: React.ReactNode

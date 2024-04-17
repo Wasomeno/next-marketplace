@@ -1,7 +1,6 @@
 import React from "react"
 import { Metadata } from "next"
-
-import { CreateStoreForm } from "@/components/user/store/create-store-form"
+import { CreateStoreForm } from "@/modules/user/store/create-store-page/components/create-store-form"
 
 export const metadata: Metadata = {
   title: "Create Your Own Store",

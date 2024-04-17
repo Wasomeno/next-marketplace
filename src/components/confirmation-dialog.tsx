@@ -5,6 +5,7 @@ import { Button } from "./ui/button"
 import { Dialog, DialogContent, DialogOverlay, DialogPortal } from "./ui/dialog"
 
 type ConfirmationDialogProps = {
+  title: string
   open: boolean
   onOpenChange: () => void
   onConfirm: () => void
@@ -18,6 +19,7 @@ export function ConfirmationDialog({
   onConfirm,
   onCancel,
   body,
+  title,
 }: ConfirmationDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -27,20 +29,17 @@ export function ConfirmationDialog({
             <DialogOverlay />
             <DialogContent
               open={open}
-              className="flex h-48 flex-col justify-between lg:h-fit lg:w-96"
+              className="flex h-48 flex-col justify-between gap-2 p-6 lg:h-48 lg:w-[30rem]"
             >
-              <div className="border-b border-gray-300 px-4 py-2">
-                <span className="font-medium">Are you sure ?</span>
+              <div className="space-y-2">
+                <h5 className="text-lg font-semibold">{title}</h5>
+                <p className="text-sm">{body}</p>
               </div>
-              <div className="p-4">
-                <p>{body}</p>
-              </div>
-              <div className="flex w-full items-center justify-evenly gap-2 px-4 pb-2">
+              <div className="flex w-full items-center justify-end gap-2">
                 <Button
-                  variant="success"
                   size="sm"
                   onClick={onConfirm}
-                  className="w-full rounded-lg border py-2.5 text-xs font-medium text-white"
+                  className="w-32 rounded-lg border py-2.5 text-xs font-medium"
                 >
                   Confirm
                 </Button>
@@ -48,7 +47,7 @@ export function ConfirmationDialog({
                   variant="danger"
                   size="sm"
                   onClick={onCancel}
-                  className="w-full rounded-lg border py-2.5 text-xs font-medium text-white"
+                  className="w-32 rounded-lg border py-2.5 text-xs font-medium text-white"
                 >
                   Cancel
                 </Button>

@@ -1,13 +1,12 @@
 import { Suspense } from "react"
 import { Metadata } from "next"
-import Image from "next/image"
+import {
+  CategoryHero,
+  CategoryHeroSkeleton,
+} from "@/modules/user/category-page/components/category-hero"
+import { CategoryProducts } from "@/modules/user/category-page/components/category-products"
 
 import { prisma } from "@/lib/prisma"
-import {
-  CategoryDetailsSection,
-  CategoryDetailsSectionSkeleton,
-} from "@/components/user/category/category-details-section"
-import { Products } from "@/components/user/products"
 
 type Props = {
   params: { category: string }
@@ -26,10 +25,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default function CategoryProductsPage({ params }: Props) {
   return (
     <div className="flex w-full flex-1 flex-col items-center gap-6">
-      <Suspense fallback={<CategoryDetailsSectionSkeleton />}>
-        <CategoryDetailsSection categorySlug={params.category} />
+      <Suspense fallback={<CategoryHeroSkeleton />}>
+        <CategoryHero categorySlug={params.category} />
       </Suspense>
-      <Products />
+      <CategoryProducts />
     </div>
   )
 }

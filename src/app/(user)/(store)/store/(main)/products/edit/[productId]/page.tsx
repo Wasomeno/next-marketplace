@@ -1,11 +1,10 @@
 import React from "react"
 import { Metadata } from "next"
+import { getCategories } from "@/actions/categories"
+import { getProduct } from "@/actions/product"
+import { StoreProductEditForm } from "@/modules/user/store/product-page/components/store-product-edit-form"
 import { BiCheck } from "react-icons/bi"
 import invariant from "tiny-invariant"
-
-import { EditProductForm } from "@/components/user/store/product/forms/edit-product-form"
-import { getCategories } from "@/app/actions/categories"
-import { getProduct } from "@/app/actions/product"
 
 type ProductPageProps = {
   params: { productId: string }
@@ -17,7 +16,7 @@ export async function generateMetadata({
 }: ProductPageProps): Promise<Metadata> {
   const product = await getProduct(parseInt(params.productId))
   return {
-    title: `${product?.name} | Product Details`,
+    title: `${product?.name} | Edit Store Product`,
     description: `Details about product ${product?.name}`,
   }
 }
@@ -42,7 +41,7 @@ export default async function UserStoreProductEditPage({
         </button>
       </div>
       <div className="flex w-full flex-col items-center gap-6 lg:flex-row lg:items-start lg:justify-center">
-        <EditProductForm product={product} categories={categories} />
+        <StoreProductEditForm product={product} categories={categories} />
       </div>
     </div>
   )

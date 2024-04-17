@@ -9,8 +9,8 @@ import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { ToolbarThemeSwitcher } from "@/components/admin/toolbar-theme-switcher"
 import { PageTransitionWrapper } from "@/components/page-transition-wrapper"
+import { ThemeSwitcher } from "@/components/theme-switcher"
 
 const AdminLoginSchema = z.object({
   username: z.string().min(5).max(25),
@@ -33,7 +33,7 @@ export default function AdminLoginPage() {
           <h1 className="font-sans text-2xl font-semibold lg:text-3xl">
             Sign In
           </h1>
-          <ToolbarThemeSwitcher />
+          <ThemeSwitcher />
         </div>
         <form
           onSubmit={handleSubmit(() =>
@@ -57,7 +57,7 @@ export default function AdminLoginPage() {
             <Input
               type="string"
               placeholder="Username"
-              className="w-72 text-xs lg:text-sm dark:border-neutral-600 dark:bg-neutral-800"
+              className="w-72 text-xs dark:border-neutral-600 dark:bg-neutral-800 lg:text-sm"
               {...register("username")}
             />
             <AnimatePresence>
@@ -66,7 +66,7 @@ export default function AdminLoginPage() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="text-xs text-red-600 lg:text-sm dark:text-red-800"
+                  className="text-xs text-red-600 dark:text-red-800 lg:text-sm"
                 >
                   {formState.errors.username?.message}
                 </motion.span>
@@ -78,7 +78,7 @@ export default function AdminLoginPage() {
             <Input
               type="password"
               placeholder="Password"
-              className="w-72 text-xs lg:text-sm dark:border-neutral-600 dark:bg-neutral-800"
+              className="w-72 text-xs dark:border-neutral-600 dark:bg-neutral-800 lg:text-sm"
               {...register("password")}
             />
             <AnimatePresence></AnimatePresence>
@@ -87,7 +87,7 @@ export default function AdminLoginPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="text-xs text-red-600 lg:text-sm dark:text-red-800"
+                className="text-xs text-red-600 dark:text-red-800 lg:text-sm"
               >
                 {formState.errors.password?.message}
               </motion.span>

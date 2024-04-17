@@ -1,9 +1,7 @@
 import React, { ReactNode } from "react"
-
-import { StoreMobileNavigation } from "@/components/user/store/store-mobile-navigation"
-import { StoreSideNavigation } from "@/components/user/store/store-side-navigation"
-import { StoreTopNavigation } from "@/components/user/store/store-top-navigation"
-import { getStore } from "@/app/actions/store/store"
+import { StoreMobileNavigation } from "@/modules/user/store/common/components/store-mobile-navigation"
+import { StoreSideNavigation } from "@/modules/user/store/common/components/store-side-navigation"
+import { StoreTopNavigation } from "@/modules/user/store/common/components/store-top-navigation"
 
 export default async function StoreLayout({
   children,

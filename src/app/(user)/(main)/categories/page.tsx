@@ -6,7 +6,7 @@ import { HiChevronRight } from "react-icons/hi2"
 import { prisma } from "@/lib/prisma"
 
 export const metadata: Metadata = {
-  title: "Categories | Next Marketplace",
+  title: "Categories",
 }
 
 export default async function CategoriesPage() {

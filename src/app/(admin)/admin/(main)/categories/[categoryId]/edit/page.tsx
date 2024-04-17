@@ -1,9 +1,14 @@
 "use client"
 
 import { useTransition } from "react"
-import { useParams, useRouter, useSearchParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
+import { getCategory, updateCategory } from "@/actions/categories"
+import {
+  CategoryFormData,
+  CategorySchema,
+} from "@/modules/admin/category-page/components/add-category-modal"
+import { categoryQueryKeys } from "@/modules/user/common/queryKeys/categoryQueryKeys"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Dialog, DialogContent } from "@radix-ui/react-dialog"
 import { useQuery } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { FaSpinner } from "react-icons/fa"
@@ -11,16 +16,9 @@ import { toast } from "react-toastify"
 import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
-import { DialogHeader } from "@/components/ui/dialog"
 import { Fieldset } from "@/components/ui/fieldset"
 import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
-import {
-  CategoryFormData,
-  CategorySchema,
-} from "@/components/admin/category/modals/add-category-modal"
-import { updateCategory } from "@/app/actions/admin/categories"
-import { getCategory } from "@/app/actions/categories"
 
 export default function EditCategoryPage() {
   const [isLoading, startTransition] = useTransition()
@@ -30,7 +28,7 @@ export default function EditCategoryPage() {
   const categoryId = parseInt((params.categoryId as string) ?? "0")
 
   const categoryDetails = useQuery({
-    queryKey: ["categoryDetails", categoryId],
+    queryKey: categoryQueryKeys.single(categoryId),
     queryFn: async () => await getCategory(categoryId),
   })
 

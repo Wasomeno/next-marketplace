@@ -1,12 +1,13 @@
+import { Suspense } from "react"
 import { Metadata } from "next"
+import { getUserInvoices } from "@/actions/user/invoice"
+import { OrderCard } from "@/modules/user/order-page/components/order-card"
+import { UserViewOrderModal } from "@/modules/user/order-page/components/order-details-modal"
+import { RateProductModal } from "@/modules/user/order-page/components/rate-product-modal"
 import { RxCrossCircled, RxMagnifyingGlass } from "react-icons/rx"
 
 import { Input } from "@/components/ui/input"
 import { DataFilter, DataFilterOption } from "@/components/data-filter"
-import { OrderDetailsModal } from "@/components/user/order/order-details-modal"
-import { InvoiceCard } from "@/components/user/order/order-product-card"
-import { RateProductModal } from "@/components/user/order/rate-product-modal"
-import { getUserInvoices } from "@/app/actions/user/invoice"
 
 type Props = {
   searchParams: {
@@ -18,7 +19,7 @@ type Props = {
 }
 
 export const metadata: Metadata = {
-  title: "Orders | Next Marketplace",
+  title: "Orders",
 }
 
 const statusOptions: DataFilterOption[] = [
@@ -57,15 +58,19 @@ export default async function OrdersPage({ searchParams }: Props) {
               placeholder="Search orders"
             />
           </div>
-          <DataFilter
-            placeholder="Select Filter"
-            filterOptions={statusOptions}
-          />
+          <Suspense fallback={<>Hello</>}>
+            <DataFilter
+              placeholder="Select Filter"
+              filterOptions={statusOptions}
+            />
+          </Suspense>
         </div>
         <div className="flex flex-1 flex-col gap-2">
           {invoices.length > 0 &&
             invoices.map((invoice) => (
-              <InvoiceCard key={invoice.id} invoice={invoice} />
+              <Suspense key={invoice.id} fallback={<>Hello</>}>
+                <OrderCard invoice={invoice} />
+              </Suspense>
             ))}
           {invoices.length === 0 && (
             <div className="flex flex-1 flex-col items-center justify-center gap-2.5 opacity-50">
@@ -75,8 +80,16 @@ export default async function OrdersPage({ searchParams }: Props) {
           )}
         </div>
       </div>
-      {searchParams.invoice && <OrderDetailsModal />}
-      {searchParams.rate && <RateProductModal />}
+      {searchParams.invoice && (
+        <Suspense fallback={<>Hello</>}>
+          <UserViewOrderModal />
+        </Suspense>
+      )}
+      {searchParams.rate && (
+        <Suspense fallback={<>Hello</>}>
+          <RateProductModal />
+        </Suspense>
+      )}
     </div>
   )
 }

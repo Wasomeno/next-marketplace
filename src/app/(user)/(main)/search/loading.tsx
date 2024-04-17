@@ -1,6 +1,6 @@
+import ProductCard from "@/modules/user/common/components/product-card"
+
 import { Button } from "@/components/ui/button"
-import ProductCard from "@/components/user/product-card"
-import { ProductSorterSkeleton } from "@/components/user/product-sorter/product-sorter-skeleton"
 
 export default async function SearchLoading() {
   return (
@@ -10,7 +10,6 @@ export default async function SearchLoading() {
           <div className="mb-4 flex items-center justify-between">
             <h6 className="text-sm font-medium lg:text-lg">Products</h6>
             <div className="flex items-center gap-2">
-              <ProductSorterSkeleton />
               <Button
                 disabled
                 variant="defaultOutline"

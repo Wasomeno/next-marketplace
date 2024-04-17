@@ -1,9 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
 import { AnimatePresence, motion } from "framer-motion"
-import { BiChevronRight } from "react-icons/bi"
 import { HiXMark } from "react-icons/hi2"
 import { IoShirt } from "react-icons/io5"
 

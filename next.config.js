@@ -5,6 +5,9 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 })
 
 const nextConfig = {
+  experimental: {
+    missingSuspenseWithCSRBailout: false,
+  },
   env: {
     GOOGLE_CLIENT_ID:
       "624622164114-ejdv1uvca13mi9cpid2fj8qf6pulbo1b.apps.googleusercontent.com",

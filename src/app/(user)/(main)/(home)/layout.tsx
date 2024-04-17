@@ -1,8 +1,7 @@
 import { ReactNode } from "react"
-
-import { Footer } from "@/components/user/footer"
-import { UserMainNavigation } from "@/components/user/navigation/user-main-navigation"
-import { UserMobileNavigation } from "@/components/user/navigation/user-mobile-navigation"
+import { Footer } from "@/modules/user/common/components/footer"
+import { UserMainNavigation } from "@/modules/user/common/components/navigation/user-main-navigation/user-main-navigation"
+import { UserMobileNavigation } from "@/modules/user/common/components/navigation/user-mobile-navigation"
 
 export default async function HomeLayout({
   children,

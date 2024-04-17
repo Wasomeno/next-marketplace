@@ -1,7 +1,6 @@
 import { ReactNode } from "react"
-
-import { Footer } from "@/components/user/footer"
-import { UserMainNavigation } from "@/components/user/navigation/user-main-navigation"
+import { Footer } from "@/modules/user/common/components/footer"
+import { UserMainNavigation } from "@/modules/user/common/components/navigation/user-main-navigation/user-main-navigation"
 
 export default async function CartLayout({
   children,

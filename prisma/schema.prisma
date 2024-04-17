@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider     = "mysql"
+  provider     = "postgresql"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
@@ -28,7 +28,7 @@ model Product {
   id                 Int             @id @default(autoincrement())
   store_id           Int
   name               String          @unique
-  description        String          @db.LongText
+  description        String
   price              Int
   stock              Int
   slug               String          @unique
@@ -194,12 +194,12 @@ model Account {
   type              String
   provider          String
   providerAccountId String  @map("provider_account_id")
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -248,7 +248,7 @@ model UserAddress {
   subdistrict     String
   postNumber      String
   street          String
-  additionalNotes String  @db.LongText
+  additionalNotes String
   userEmail       String
   phoneNumber     String
   recipient       String

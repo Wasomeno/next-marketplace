@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator"
 import { SignInProviders } from "@/components/sign-in-providers"
 
 export const metadata: Metadata = {
-  title: "Sign in | Next Marketplace",
+  title: "Sign in",
 }
 
 export default async function Login() {
@@ -38,7 +38,7 @@ export default async function Login() {
               orientation="horizontal"
               className="dark: h-px w-full bg-slate-200 dark:bg-gray-500"
             />
-            <span className="text-xs text-slate-500 lg:text-sm dark:text-gray-500">
+            <span className="text-xs text-slate-500 dark:text-gray-500 lg:text-sm">
               Or
             </span>
             <Separator
@@ -74,7 +74,7 @@ export default async function Login() {
             <Button
               disabled
               variant="default"
-              className="mt-4 w-full text-xs font-medium tracking-wide active:hover:bg-blue-400  lg:text-sm dark:bg-blue-900"
+              className="mt-4 w-full text-xs font-medium tracking-wide active:hover:bg-blue-400  dark:bg-blue-900 lg:text-sm"
             >
               Submit
             </Button>

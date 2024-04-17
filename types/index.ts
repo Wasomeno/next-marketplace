@@ -1,8 +1,15 @@
-export type BaseDataFilters = {
-  search?: string
-  sort?: Record<string, "desc" | "asc">
-  pageSize?: number
-  page?: number
+export type TBaseDataFilter = {
+  search: string
+  sort: Record<string, "asc" | "desc">
+  pageSize: string
+  page: string
+}
+
+export type TBaseDataFilterParams = {
+  search: string
+  sort: string
+  pageSize: string
+  page: string
 }
 
 export type OrderStatus =

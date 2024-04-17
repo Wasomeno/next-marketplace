@@ -1,7 +1,7 @@
 import React from "react"
+import { BannerTable } from "@/modules/admin/banner-page/components/banner-table"
 
 import { prisma } from "@/lib/prisma"
-import { BannerTable } from "@/components/admin/banner/banner-table"
 
 export default async function BannersPage() {
   const banners = await prisma.banner.findMany()

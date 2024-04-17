@@ -1,10 +1,10 @@
-import { CheckoutPaymentModal } from "@/components/user/checkout/checkout-payment-modal"
-import { CheckoutSelectedCartItems } from "@/components/user/checkout/checkout-selected-cart-items"
-import { CheckoutSummary } from "@/components/user/checkout/checkout-summary"
-import { getUserAddress } from "@/app/actions/user/user-details"
+import { getUserAddress } from "@/actions/user/user-details"
+import { CheckoutItems } from "@/modules/user/checkout-page/components/checkout-items"
+import { CheckoutPaymentModal } from "@/modules/user/checkout-page/components/checkout-payment-modal"
+import { CheckoutSummary } from "@/modules/user/checkout-page/components/checkout-summary"
 
 export const metadata = {
-  title: "Checkout | Next Marketplace",
+  title: "Checkout",
 }
 
 export default async function CheckoutPage() {
@@ -36,7 +36,7 @@ export default async function CheckoutPage() {
               </div>
             </div>
           </div>
-          <CheckoutSelectedCartItems />
+          <CheckoutItems />
         </div>
         <CheckoutSummary />
       </div>

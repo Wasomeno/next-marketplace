@@ -1,9 +1,8 @@
-import Link from "next/link";
-import { ReactNode } from "react";
-import { BiArrowBack } from "react-icons/bi";
-
-import { UserMainNavigation } from "@/components/user/navigation/user-main-navigation";
-import { UserSettingsTabs } from "@/components/user/navigation/user-settings-tabs";
+import { ReactNode } from "react"
+import Link from "next/link"
+import { UserMainNavigation } from "@/modules/user/common/components/navigation/user-main-navigation/user-main-navigation"
+import { UserSettingTabs } from "@/modules/user/common/components/navigation/user-setting-tabs"
+import { BiArrowBack } from "react-icons/bi"
 
 interface UserSettingsLayout {
   children: ReactNode
@@ -11,7 +10,7 @@ interface UserSettingsLayout {
 
 export default async function UserSettingsLayout(props: UserSettingsLayout) {
   return (
-    <div className="flex flex-1 flex-col gap-4 bg-white lg:gap-6  dark:bg-neutral-950">
+    <div className="flex flex-1 flex-col gap-4 bg-white dark:bg-neutral-950  lg:gap-6">
       <UserMainNavigation />
       <div className="flex flex-1 flex-col px-5 pb-2.5 lg:px-8">
         <div className="mb-4 flex items-center gap-2">
@@ -23,7 +22,7 @@ export default async function UserSettingsLayout(props: UserSettingsLayout) {
           </Link>
           <h1 className="text-base font-medium lg:text-xl">Settings</h1>
         </div>
-        <UserSettingsTabs />
+        <UserSettingTabs />
         {props.children}
       </div>
     </div>

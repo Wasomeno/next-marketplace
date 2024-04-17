@@ -1,12 +1,21 @@
 import "./globals.css"
 import "react-toastify/dist/ReactToastify.css"
 
+import { Metadata } from "next"
+
 import { ReactQueryProvider } from "@/lib/react-query-provider"
 import ClientSessionProvider from "@/components/session-provider"
 import { ThemeClientProvider } from "@/components/theme-client-provider"
 import ToastifyContainer from "@/components/toastify-client-container"
 
-export default function RootLayout({
+export const metadata: Metadata = {
+  title: {
+    default: "Next Marketplace",
+    template: "%s | Next Marketplace",
+  },
+}
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode

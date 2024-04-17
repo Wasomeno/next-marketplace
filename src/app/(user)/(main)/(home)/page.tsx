@@ -1,13 +1,13 @@
 import { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
+import ProductCard from "@/modules/user/common/components/product-card"
+import { HomeBannerSlider } from "@/modules/user/home-page/components/home-banner-slider"
 
 import { prisma } from "@/lib/prisma"
-import { HomeBannerSlider } from "@/components/user/home-banner-slider"
-import ProductCard from "@/components/user/product-card"
 
 export const metadata: Metadata = {
-  title: "Next Martketplace | Shopping Made Easy with Next Marketplace",
+  title: "Shopping Made Easy with Next Marketplace",
   description: "The best place to shop for your daily needs",
 }
 
@@ -26,7 +26,7 @@ export default async function Home() {
   })
 
   return (
-    <div className="relative flex flex-col items-center justify-start gap-6 bg-white px-4 lg:px-8 dark:bg-neutral-950">
+    <div className="relative flex flex-col items-center justify-start gap-6 bg-white px-4 dark:bg-neutral-950 lg:px-8">
       <HomeBannerSlider />
       <div className="w-full lg:w-11/12">
         <div className="w-full lg:w-3/6">

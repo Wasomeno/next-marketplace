@@ -1,7 +1,6 @@
 "use client"
 
 import React from "react"
-import { GetServerSidePropsContext } from "next"
 import Image from "next/image"
 import clsx from "clsx"
 import { useDropzone } from "react-dropzone"
@@ -71,7 +70,7 @@ export const ImageUploader = ({
         <div
           {...getRootProps({
             className:
-              "flex items-center flex-col gap-2 cursor-pointer rounded-md bg-white dark:bg-neutral-800 dark:border-neutral-600 h-32 justify-center border-dashed border border-gray-300",
+              "flex items-center hover:bg-gray-100 transition-all duration-300 flex-col gap-2 cursor-pointer rounded-md bg-white dark:bg-neutral-800 dark:border-neutral-600 h-32 justify-center border-dashed border border-gray-300",
           })}
         >
           <Input {...getInputProps()} />
