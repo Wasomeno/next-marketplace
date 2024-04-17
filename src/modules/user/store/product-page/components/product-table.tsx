@@ -162,7 +162,9 @@ export const ProductTable: React.FC<{ userEmail: string }> = ({
     <>
       <DataTable
         data={
-          (products.isLoading ? Array(5).fill({}) : products) as StoreProduct[]
+          (products.isLoading
+            ? Array(5).fill({})
+            : products.data) as StoreProduct[]
         }
         columns={products.isLoading ? placeholderColumns : columns}
         pagination={
