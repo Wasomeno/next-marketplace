@@ -1,7 +1,7 @@
 import React from "react"
+import { WishListItemCardSkeleton } from "@/modules/user/wishlist-page/components/wishlist-item-card"
 
 import { Button } from "@/components/ui/button"
-import { WishListItemCardSkeleton } from "@/components/user/wishlist/wishlist-item-card"
 
 export default function WishlistLoading() {
   return (

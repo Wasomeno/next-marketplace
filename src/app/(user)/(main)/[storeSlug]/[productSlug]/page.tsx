@@ -1,15 +1,17 @@
 import { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
+import { isProductInWishlist } from "@/actions/user/wishlist"
+import {
+  AddToCartForm,
+  ProductImages,
+  ProductReviews,
+  WishListButton,
+} from "@/modules/user/product-page/components"
 import invariant from "tiny-invariant"
 
 import { prisma } from "@/lib/prisma"
 import { Separator } from "@/components/ui/separator"
-import { AddToCartForm } from "@/components/user/product-details/add-to-cart-form"
-import { ProductImages } from "@/components/user/product-details/product-images"
-import { ProductReviews } from "@/components/user/product-details/product-reviews"
-import { WishListButton } from "@/components/user/product-details/wishlist-button"
-import { isProductInWishlist } from "@/app/actions/user/wishlist"
 
 type Props = {
   params: { productSlug: string }

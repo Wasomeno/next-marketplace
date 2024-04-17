@@ -1,10 +1,9 @@
 import { Metadata } from "next"
-
-import { WishlistItems } from "@/components/user/wishlist/wishlist-items"
-import { getWishlist } from "@/app/actions/user/wishlist"
+import { getWishlist } from "@/actions/user/wishlist"
+import { WishlistItems } from "@/modules/user/wishlist-page/components/wishlist-items"
 
 export const metadata: Metadata = {
-  title: "Wishlist | Next Marketplace",
+  title: "Wishlist",
 }
 
 export default async function WishlistPage() {

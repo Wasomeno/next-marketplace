@@ -1,4 +1,7 @@
 import Link from "next/link"
+import { setMainAddress } from "@/actions/user/settings"
+import { AddAddressModal } from "@/modules/user/setting-page/components/add-address-modal"
+import { AddressCard } from "@/modules/user/setting-page/components/address-card"
 import clsx from "clsx"
 import { getServerSession } from "next-auth"
 import { BiPlus } from "react-icons/bi"
@@ -8,9 +11,6 @@ import invariant from "tiny-invariant"
 import { authOptions } from "@/config/next-auth"
 import { prisma } from "@/lib/prisma"
 import { buttonVariants } from "@/components/ui/button"
-import { AddAddressModal } from "@/components/user/settings/add-address-modal"
-import { AddressCard } from "@/components/user/settings/address-card"
-import { setMainAddress } from "@/app/actions/user/settings"
 
 type Props = {
   params: Record<string, string>

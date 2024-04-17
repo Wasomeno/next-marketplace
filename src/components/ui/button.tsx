@@ -8,13 +8,13 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-gray-100",
-        defaultOutline: "border border-gray-200",
-        danger: "bg-red-700 dark:bg-red-800",
-        warning: "bg-yellow-600",
-        success: "bg-green-700 dark:bg-green-800",
-        dangerOutline: "border border-red-700",
-        successOutline: "border border-green-700",
+        default: "bg-gray-100 hover:bg-gray-200",
+        defaultOutline: "border border-gray-200 hover:bg-gray-200",
+        danger: "bg-red-700 dark:bg-red-800 hover:bg-red-600",
+        warning: "bg-yellow-600 hover:bg-yellow-500",
+        success: "bg-green-700 dark:bg-green-800 hover:bg-green-600",
+        dangerOutline: "border border-red-700 hover:bg-red-600",
+        successOutline: "border border-green-700 hover:bg-green-600",
       },
       size: {
         default: "h-10 py-2 px-4",

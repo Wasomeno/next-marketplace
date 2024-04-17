@@ -1,10 +1,9 @@
 import { Suspense } from "react"
-
 import {
   StoreDetails,
   StoreDetailsSkeleton,
-} from "@/components/user/store/store-details"
-import { StoreProducts } from "@/components/user/store/store-products"
+} from "@/modules/user/store-page/components/store-details"
+import { StoreProducts } from "@/modules/user/store-page/components/store-products"
 
 export default async function StorePage({
   params,

@@ -1,8 +1,8 @@
 import Image from "next/image"
+import { StoreProfileImageUpload } from "@/modules/user/store/profile-page/components/store-profile-image-upload"
 import { getServerSession } from "next-auth"
 
 import { prisma } from "@/lib/prisma"
-import { StoreProfileImageUpload } from "@/components/user/store/store-profile-image-upload"
 
 export default async function StoreDetailsPage() {
   const session = await getServerSession()

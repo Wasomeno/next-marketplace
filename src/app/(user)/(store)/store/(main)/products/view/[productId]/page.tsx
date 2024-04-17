@@ -1,10 +1,9 @@
 import { Metadata } from "next"
+import { getProduct } from "@/actions/product"
+import { ProductImages } from "@/modules/user/product-page/components/product-images"
+import { ProductSalesMonthlyChart } from "@/modules/user/store/product-page/components/store-product-sales-charts/monthly"
 import { BiCheck } from "react-icons/bi"
 import invariant from "tiny-invariant"
-
-import { ProductImages } from "@/components/user/product-details/product-images"
-import { ProductSalesMonthlyChart } from "@/components/user/store/store-product-sales-charts/monthly"
-import { getProduct } from "@/app/actions/product"
 
 type ProductPageProps = {
   params: { productId: string }
@@ -16,12 +15,14 @@ export async function generateMetadata({
 }: ProductPageProps): Promise<Metadata> {
   const product = await getProduct(parseInt(params.productId))
   return {
-    title: `${product?.name} | Product Details`,
+    title: `${product?.name} | Store Product Page`,
     description: `Details about product ${product?.name}`,
   }
 }
 
-export default async function AdminProductPage({ params }: ProductPageProps) {
+export default async function UserStoreProductViewPage({
+  params,
+}: ProductPageProps) {
   const product = await getProduct(parseInt(params.productId))
   const imageUrls = product?.images.map((image) => image.url)
 

@@ -19,6 +19,9 @@ type LinkActionProps = {
 
 type ActionProps = ButtonActionProps | LinkActionProps
 
+const LinkStyle =
+  "flex h-7 w-7 items-center transition-all duration-300 hover:bg-gray-200 justify-center rounded-md bg-gray-100 p-1.5 shadow-sm"
+const ButtonStyle = "h-7 w-7 rounded-md bg-gray-100 p-1.5 shadow-sm"
 export function TableActions({
   viewAction,
   editAction,
@@ -36,19 +39,13 @@ export function TableActions({
 const ViewAction: React.FC<ActionProps> = (props) => {
   if (!props.asLink) {
     return (
-      <Button
-        {...props}
-        className="h-7 w-7 rounded-md bg-gray-100 p-1.5 shadow-sm"
-      >
+      <Button {...props} className={ButtonStyle}>
         <BsEye />
       </Button>
     )
   } else {
     return (
-      <Link
-        {...props}
-        className="flex h-7 w-7 items-center justify-center rounded-md bg-gray-100 p-1.5 shadow-sm"
-      >
+      <Link {...props} className={LinkStyle}>
         <BsEye />
       </Link>
     )
@@ -57,19 +54,13 @@ const ViewAction: React.FC<ActionProps> = (props) => {
 const EditAction: React.FC<ActionProps> = ({ ...props }) => {
   if (!props.asLink) {
     return (
-      <Button
-        {...props}
-        className=" w-7rounded-md h-7 bg-gray-100 p-1.5 shadow-sm"
-      >
+      <Button {...props} className={ButtonStyle}>
         <BiPencil />
       </Button>
     )
   } else {
     return (
-      <Link
-        {...props}
-        className="flex h-7 w-7 items-center justify-center rounded-md bg-gray-100 p-1.5 shadow-sm"
-      >
+      <Link {...props} className={LinkStyle}>
         <BiPencil />
       </Link>
     )
@@ -78,19 +69,13 @@ const EditAction: React.FC<ActionProps> = ({ ...props }) => {
 const DeleteAction: React.FC<ActionProps> = ({ ...props }) => {
   if (!props.asLink) {
     return (
-      <Button
-        {...props}
-        className=" w-7rounded-md h-7 bg-gray-100 p-1.5 shadow-sm"
-      >
+      <Button {...props} className={ButtonStyle}>
         <BiTrash />
       </Button>
     )
   } else {
     return (
-      <Link
-        {...props}
-        className="flex h-7 w-7 items-center justify-center rounded-md bg-gray-100 p-1.5 shadow-sm"
-      >
+      <Link {...props} className={LinkStyle}>
         <BiTrash />
       </Link>
     )

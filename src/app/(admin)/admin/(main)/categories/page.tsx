@@ -1,9 +1,8 @@
 import { Metadata } from "next"
-
-import { CategoryTable } from "@/components/admin/category/category-table"
+import { CategoryTable } from "@/modules/admin/category-page/components/category-table"
 
 export const metadata: Metadata = {
-  title: "Categories | Next Marketplace Admin",
+  title: "Categories",
 }
 
 export default function CategoriesPages() {

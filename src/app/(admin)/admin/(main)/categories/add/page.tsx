@@ -1,7 +1,12 @@
 "use client"
 
 import { useTransition } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
+import { addCategory } from "@/actions/categories"
+import {
+  CategoryFormData,
+  CategorySchema,
+} from "@/modules/admin/category-page/components/add-category-modal"
 import { useUploadThing } from "@/utils/uploadthing"
 import { useImageFiles } from "@/utils/useImageFiles"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -12,16 +17,11 @@ import { Button } from "@/components/ui/button"
 import { Fieldset } from "@/components/ui/fieldset"
 import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
-import {
-  CategoryFormData,
-  CategorySchema,
-} from "@/components/admin/category/modals/add-category-modal"
 import { ImageUploader } from "@/components/image-uploader"
-import { addCategory } from "@/app/actions/admin/categories"
 
 export default function AddCategoryPage() {
   const [isLoading, startTransition] = useTransition()
-  const { files, addFiles, clearFiles, removeFile } = useImageFiles()
+  const { files, addFiles, removeFile } = useImageFiles()
 
   const uploadthing = useUploadThing("imageUploader")
 
@@ -31,9 +31,6 @@ export default function AddCategoryPage() {
     })
 
   const router = useRouter()
-  const searchParams = useSearchParams()
-
-  const isOpen = searchParams.get("add") !== null
 
   function generateSlug() {
     return getValues("name")?.toLowerCase().replaceAll(" ", "-")

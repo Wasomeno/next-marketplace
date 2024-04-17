@@ -1,8 +1,7 @@
 import { Metadata } from "next"
 import Image from "next/image"
+import { getCategory } from "@/actions/categories"
 import invariant from "tiny-invariant"
-
-import { getCategory } from "@/app/actions/categories"
 
 export async function generateMetadata({
   params,

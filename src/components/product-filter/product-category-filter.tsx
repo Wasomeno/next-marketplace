@@ -2,9 +2,9 @@
 
 import { useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { getCategories } from "@/actions/categories"
+import { categoryQueryKeys } from "@/modules/user/common/queryKeys/categoryQueryKeys"
 import { useQuery } from "@tanstack/react-query"
-
-import { getCategories } from "@/app/actions/categories"
 
 import { Skeleton } from "../skeleton"
 import { CheckBox } from "../ui/checkbox"
@@ -20,7 +20,7 @@ export function ProductCategoryFilter() {
   const router = useRouter()
 
   const { data: categories, isLoading } = useQuery({
-    queryKey: ["categories"],
+    queryKey: categoryQueryKeys.all(),
     queryFn: () => getCategories(),
   })
 
