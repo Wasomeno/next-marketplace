@@ -4,10 +4,8 @@ import { getStoreSales, getStoreTransactionCount } from "@/actions/store/store"
 import { AnalyticCard } from "@/modules/user/store/dashboard-page/components/analytic-card"
 import RecentTransactionList from "@/modules/user/store/dashboard-page/components/recent-transaction-list"
 import { StoreSalesChart } from "@/modules/user/store/dashboard-page/components/store-sales-chart"
-import { AiFillDollarCircle } from "react-icons/ai"
 import { FaFileInvoiceDollar } from "react-icons/fa6"
 import { LiaMoneyBillSolid } from "react-icons/lia"
-import { MdEmojiPeople } from "react-icons/md"
 
 export const metadata: Metadata = {
   title: "Store Dashboard",
@@ -19,7 +17,7 @@ export default async function UserStorePage() {
     getStoreSales(),
   ])
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 lg:gap-6">
       <div className="space-y-2">
         <h1 className="text-lg font-medium lg:text-2xl">Dashboard</h1>
         <p className="text-gray-500">Monitor your store performance</p>
@@ -39,15 +37,7 @@ export default async function UserStorePage() {
           }
           data={transactionCount}
         />
-        <AnalyticCard
-          title="Product Views"
-          icon={
-            <AiFillDollarCircle className=" h-8 w-8 text-green-700 lg:h-10 lg:w-10" />
-          }
-          data="10.000"
-        />
       </div>
-
       <StoreSalesChart />
       <div className="space-y-2">
         <h2 className="text-base font-medium lg:text-lg">

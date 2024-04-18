@@ -136,7 +136,7 @@ export async function getStoreSales() {
   return sales
 }
 
-export async function getStoreMonthlySales() {
+export async function getStoreYearlySales(year: number) {
   const session = await getServerSession()
 
   if (!session?.user.email) {
@@ -146,7 +146,53 @@ export async function getStoreMonthlySales() {
   const sales = []
 
   for (let i = 0; i < 12; i++) {
-    const time = moment().set("month", i)
+    const time = moment().set("year", year).set("month", i)
+
+    const store = await prisma.store.findUnique({
+      where: {
+        owner_email: session.user.email,
+      },
+      select: {
+        _count: {
+          select: {
+            invoices: {
+              where: {
+                created_at: {
+                  gte: time.startOf("month").toDate(),
+                  lte: time.endOf("month").toDate(),
+                },
+              },
+            },
+          },
+        },
+      },
+    })
+
+    if (!store?._count) {
+      throw new Error("Error Getting Store Sales")
+    }
+
+    sales.push({ month: time.format("MMM"), sales: store._count.invoices })
+  }
+
+  return sales
+}
+
+export async function getStoreMonthlySales(month: number) {
+  const session = await getServerSession()
+
+  if (!session?.user.email) {
+    throw new Error("User Session Invalid")
+  }
+
+  const sales = []
+
+  const monthTime = moment().set("month", month)
+
+  const daysInMonth = monthTime.daysInMonth()
+
+  for (let i = 1; i <= daysInMonth; i++) {
+    const time = monthTime.set("date", i)
 
     const store = await prisma.store.findUnique({
       where: {
@@ -157,7 +203,7 @@ export async function getStoreMonthlySales() {
           where: {
             created_at: {
               gte: time.startOf("day").toDate(),
-              lte: time.endOf("month").toDate(),
+              lte: time.endOf("day").toDate(),
             },
           },
           include: { order: true },
@@ -169,7 +215,7 @@ export async function getStoreMonthlySales() {
       throw new Error("Error Getting Store Sales")
     }
 
-    sales.push({ month: time.format("MMM"), sales: store.invoices.length ?? 0 })
+    sales.push({ date: time.format("D"), sales: store.invoices.length ?? 0 })
   }
 
   return sales
