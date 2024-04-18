@@ -2,11 +2,14 @@
 
 import { useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
-import { getStoreMonthlySales } from "@/actions/store/store"
+import {
+  getStoreMonthlySales,
+  getStoreYearlySales,
+} from "@/actions/store/store"
 import { useSearchParamsValues } from "@/utils"
 import { useQuery } from "@tanstack/react-query"
+import clsx from "clsx"
 import moment from "moment"
-import { HiEllipsisHorizontal } from "react-icons/hi2"
 import {
   Area,
   AreaChart,
@@ -28,6 +31,15 @@ function getMonthOptions() {
   return monthOptions
 }
 
+function getYearOptions() {
+  const yearOptions: Option[] = []
+  for (let i = 0; i <= 10; i++) {
+    const time = moment().add("year", i)
+    yearOptions.push({ label: time.format("YYYY"), value: time.format("YYYY") })
+  }
+  return yearOptions
+}
+
 export const StoreSalesChart = () => {
   const [chartMode, setChartMode] = useState<"month" | "year">("month")
 
@@ -35,11 +47,29 @@ export const StoreSalesChart = () => {
     month: string
     year: string
   }>()
+
   const pathname = usePathname()
   const router = useRouter()
-  const sales = useQuery({
-    queryKey: ["sales", searchParamValues],
-    queryFn: () => getStoreMonthlySales(),
+  const currentTime = moment()
+
+  const yearlySales = useQuery({
+    queryKey: ["yearlySales", searchParamValues],
+    queryFn: () =>
+      getStoreYearlySales(
+        searchParamValues.year
+          ? Number(searchParamValues.year)
+          : currentTime.get("year")
+      ),
+  })
+
+  const monthlySales = useQuery({
+    queryKey: ["montlySales", searchParamValues],
+    queryFn: () =>
+      getStoreMonthlySales(
+        searchParamValues.month
+          ? Number(searchParamValues.month)
+          : currentTime.get("month")
+      ),
   })
 
   function onMonthSelect(month: string) {
@@ -54,11 +84,36 @@ export const StoreSalesChart = () => {
     router.replace(`${pathname}?${searchParams.toString()}`)
   }
 
+  function onYearSelect(year: string) {
+    const searchParams = new URLSearchParams(searchParamValues)
+    searchParams.set("year", year)
+    router.replace(`${pathname}?${searchParams.toString()}`)
+  }
+
+  function onYearDeselect() {
+    const searchParams = new URLSearchParams(searchParamValues)
+    searchParams.delete("year")
+    router.replace(`${pathname}?${searchParams.toString()}`)
+  }
+
+  console.log(yearlySales.data)
   return (
-    <div className="w-full space-y-2 lg:w-1/2">
-      <div className="flex items-center justify-between">
+    <div className="w-full space-y-2">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-base font-medium lg:text-lg">Sales Report</h2>
         <div className="flex gap-2">
+          {chartMode === "year" && (
+            <Dropdown
+              placeholder="Select year"
+              isMulti={false}
+              options={getYearOptions()}
+              selectedOption={getYearOptions().find(
+                (option) => option.value.toString() === searchParamValues.year
+              )}
+              onOptionClick={(option) => onYearSelect(option.value as string)}
+              deselectOption={onYearDeselect}
+            />
+          )}
           {chartMode === "month" && (
             <Dropdown
               placeholder="Select Month"
@@ -71,32 +126,76 @@ export const StoreSalesChart = () => {
               deselectOption={onMonthDeselect}
             />
           )}
-          {chartMode === "year" && (
-            <Dropdown placeholder="Select Year" isMulti={false} />
-          )}
-          <Button size="sm" className="bg-transparent hover:bg-gray-100">
-            <HiEllipsisHorizontal size={20} />
+          <Button
+            size="sm"
+            onClick={() => setChartMode("year")}
+            className={clsx(
+              "bg-transparent hover:bg-gray-100",
+              chartMode === "year" && "bg-black text-white"
+            )}
+          >
+            Year
+          </Button>
+          <Button
+            size="sm"
+            onClick={() => setChartMode("month")}
+            className={clsx(
+              "bg-transparent hover:bg-gray-100",
+              chartMode === "month" && "bg-black text-white"
+            )}
+          >
+            Month
           </Button>
         </div>
       </div>
       <ResponsiveContainer width="100%" height={300}>
-        <AreaChart
-          data={sales.data?.map((sale) => ({
-            name: sale.month,
-            uv: sale.sales,
-          }))}
-          margin={{
-            top: 10,
-            right: 0,
-            left: 0,
-            bottom: 0,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <Tooltip />
-          <Area type="monotone" dataKey="uv" stroke="#8884d8" fill="#8884d8" />
-        </AreaChart>
+        {chartMode === "year" ? (
+          <AreaChart
+            data={yearlySales.data?.map((sale) => ({
+              name: sale.month,
+              uv: sale.sales,
+            }))}
+            margin={{
+              top: 10,
+              right: 0,
+              left: 0,
+              bottom: 0,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <Tooltip />
+            <Area
+              type="monotone"
+              dataKey="uv"
+              stroke="#8884d8"
+              fill="#8884d8"
+            />
+          </AreaChart>
+        ) : (
+          <AreaChart
+            data={monthlySales.data?.map((sale) => ({
+              name: sale.date,
+              uv: sale.sales,
+            }))}
+            margin={{
+              top: 10,
+              right: 0,
+              left: 0,
+              bottom: 0,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <Tooltip />
+            <Area
+              type="monotone"
+              dataKey="uv"
+              stroke="#8884d8"
+              fill="#8884d8"
+            />
+          </AreaChart>
+        )}
       </ResponsiveContainer>
     </div>
   )
