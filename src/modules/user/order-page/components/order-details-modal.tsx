@@ -1,19 +1,21 @@
 "use client"
 
-import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
-import { FaSpinner } from "react-icons/fa";
+import Image from "next/image"
+import { useRouter, useSearchParams } from "next/navigation"
+import { getUserInvoice } from "@/actions/user/invoice"
+import { Prisma } from "@prisma/client"
+import { Separator } from "@radix-ui/react-separator"
+import { useQuery } from "@tanstack/react-query"
+import moment from "moment"
+import { ImSpinner8 } from "react-icons/im"
 
-import { getUserInvoice } from "@/actions/user/invoice";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogOverlay,
-  DialogPortal
-} from "@/components/ui/dialog";
-import { Prisma } from "@prisma/client";
-import { useQuery } from "@tanstack/react-query";
+  DialogPortal,
+} from "@/components/ui/dialog"
 
 export function UserViewOrderModal() {
   const router = useRouter()
@@ -51,59 +53,80 @@ export function UserViewOrderModal() {
         >
           <DialogHeader title="Order Details" />
           {invoice.isLoading ? (
-            <div className="flex flex-1 items-center justify-center">
-              <FaSpinner className="animate-spin fill-blue-500" size={30} />
+            <div className="flex h-full items-center justify-center">
+              <ImSpinner8 size={30} className="animate-spin text-blue-500" />
             </div>
           ) : (
-            <>
-              <div className="px-4">
-                <span className="rounded-lg bg-blue-200 px-3 py-2 text-xs font-medium dark:bg-blue-900 lg:text-sm">
-                  {invoice.data?.status}
-                </span>
-                <div className="my-4 flex items-center justify-between text-sm">
-                  <span className="font-medium">Invoice Id</span>
-                  <span>{invoice.data?.id}</span>
+            <div className="flex h-full w-full flex-col justify-between px-6 pb-4 pt-2">
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <h2 className=" text-gray-500">
+                      Invoice Id:{" "}
+                      <span className="font-medium text-black">
+                        {invoice.data?.id}
+                      </span>
+                    </h2>
+                    <span className="text-sm">{invoice.data?.status}</span>
+                  </div>
+                  <div className="">
+                    <h3 className="text-sm text-gray-500">
+                      Ordered at:{" "}
+                      <span className="text-black">
+                        {moment(invoice.data?.created_at).format("LLLL")}
+                      </span>
+                    </h3>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="font-medium">Transaction Date</span>
-                  <span>{date.toDateString()}</span>
-                </div>
-              </div>
-              <div className="mt-6 px-4">
-                <span className="text-sm font-semibold lg:text-base">
-                  Products
-                </span>
-                <div className="mt-s flex flex-col gap-2.5">
-                  {invoice.data?.products.map((orderProduct) => (
-                    <div
-                      key={orderProduct.id}
-                      className="flex items-center gap-4 border-t p-4 dark:border-t-neutral-700"
-                    >
-                      <div className="flex w-full flex-wrap items-end justify-between gap-2">
-                        <div className="flex w-full gap-2 lg:w-4/6 lg:gap-4">
-                          <div className="relative h-20 w-28 rounded-md bg-slate-300 dark:bg-neutral-400 lg:h-20 lg:w-24">
-                            <Image
-                              src={orderProduct.product.featured_image_url}
-                              alt="product-image"
-                              fill
-                            />
-                          </div>
-                          <div className="flex w-4/6 flex-col gap-1 lg:w-3/6">
-                            <span className="text-sm font-medium">
-                              {orderProduct.product.name}
-                            </span>
-                            <span className="text-sm">
-                              Rp{" "}
-                              {orderProduct.product.price.toLocaleString("id")}
-                            </span>
-                          </div>
+                <Separator
+                  orientation="horizontal"
+                  className="h-px w-full bg-gray-200"
+                />
+                <div className="space-y-2 overflow-y-scroll">
+                  {invoice.data?.products.map((product) => (
+                    <div className="flex  justify-between">
+                      <div className="flex gap-4">
+                        <div className="relative h-24 w-24 overflow-hidden rounded-lg border">
+                          <Image
+                            src={product.product.featured_image_url}
+                            fill
+                            alt={product.product.name}
+                          />
                         </div>
+                        <div>
+                          <span className="text-sm">
+                            {product.product.name}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-end gap-2">
+                        <h5 className="text-sm">
+                          Rp. {product.product.price.toLocaleString("id")}
+                        </h5>
+                        <h5 className="text-sm text-gray-500">
+                          Amount: {product.amount}
+                        </h5>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
-            </>
+              <div className="space-y-4">
+                <Separator
+                  orientation="horizontal"
+                  className="h-px w-full bg-gray-200"
+                />
+                <div className="flex gap-6">
+                  <div className="w-1/2">
+                    <h3 className="font-medium">Payment</h3>
+                  </div>
+                  <div className="w-1/2 space-y-2">
+                    <h3 className="font-medium">Delivery</h3>
+                    <span className="text-sm">{invoice.data?.address}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           )}
         </DialogContent>
       </DialogPortal>
