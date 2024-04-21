@@ -1,15 +1,14 @@
 "use client"
 
-import { getStoreProductsCount } from "@/actions/store/store"
-import { productQueryKeys } from "@/modules/user/common/queryKeys/productQueryKeys"
-import { useSearchParamsValues } from "@/utils"
-import { useQuery } from "@tanstack/react-query"
+import { getStoreProductsCount } from "@/actions/store/store";
+import { Skeleton } from "@/components/skeleton";
+import { productQueryKeys } from "@/modules/user/common/queryKeys/productQueryKeys";
+import { useSearchParamsValues } from "@/utils";
+import { useQuery } from "@tanstack/react-query";
 
-import { Skeleton } from "@/components/skeleton"
+import { TBaseDataFilterParams } from "../../../../../../types";
 
-import { TBaseDataFilterParams } from "../../../../../../types"
-
-export const ProductCount = () => {
+export function ProductCount() {
   const searchParamsValues = useSearchParamsValues<
     TBaseDataFilterParams & {
       status: string
@@ -31,4 +30,8 @@ export const ProductCount = () => {
       {productCount.data} Products
     </span>
   )
+}
+
+export function ProductCountSkeleton() {
+  return <Skeleton className="h-[18px] w-20" />
 }
