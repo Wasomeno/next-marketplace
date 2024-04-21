@@ -47,11 +47,8 @@ export async function getProductWeeklyStats(
   return stats
 }
 
-export async function getProductMonthlyStats(
-  productId: number,
-  month: string | number
-) {
-  const monthMoment = moment().month(month)
+export async function getProductMonthlySales(productId: number, month: number) {
+  const monthMoment = moment().set("month", month)
 
   const amountOfDays = monthMoment.daysInMonth()
   const salesData = []
@@ -62,16 +59,8 @@ export async function getProductMonthlyStats(
         product_id: productId,
         invoice: {
           created_at: {
-            gte: moment()
-              .month(month as number)
-              .date(i)
-              .startOf("day")
-              .toDate(),
-            lte: moment()
-              .month(month as number)
-              .date(i)
-              .endOf("day")
-              .toDate(),
+            gte: monthMoment.set("date", i).startOf("day").toDate(),
+            lte: monthMoment.set("date", i).endOf("day").toDate(),
           },
         },
       },
@@ -80,4 +69,27 @@ export async function getProductMonthlyStats(
   }
 
   return salesData
+}
+
+export async function getProductYearlySales(productId: number, year: number) {
+  const time = moment().set("year", year)
+
+  const sales = []
+
+  for (let i = 0; i < 12; i++) {
+    const daySales = await prisma.orderProduct.findMany({
+      where: {
+        product_id: productId,
+        invoice: {
+          created_at: {
+            gte: time.set("month", i).startOf("month").toDate(),
+            lte: time.set("month", i).endOf("month").toDate(),
+          },
+        },
+      },
+    })
+    sales.push({ month: time.format("MMM"), sales: daySales.length })
+  }
+
+  return sales
 }
