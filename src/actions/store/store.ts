@@ -1,13 +1,13 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
-import { Store } from "@prisma/client"
-import moment from "moment"
-import { getServerSession } from "next-auth"
+import moment from "moment";
+import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 
-import { prisma } from "@/lib/prisma"
+import { prisma } from "@/lib/prisma";
+import { Prisma, Store } from "@prisma/client";
 
-import { TBaseDataFilter } from "../../../types"
+import { TBaseDataFilter } from "../../../types";
 
 type GetStoreProductsProps = TBaseDataFilter & {
   userEmail?: string
@@ -15,6 +15,10 @@ type GetStoreProductsProps = TBaseDataFilter & {
   categoryIds?: number[]
   status?: string
 }
+
+export type StoreProduct = Prisma.ProductGetPayload<{
+  include: { images: true; categories: true; reviews: true; store: true }
+}>
 
 type CreateStoreParams = Omit<Store, "id">
 type UpdateStoreParams = Store
@@ -28,7 +32,9 @@ export async function getStore(slug?: string) {
   return store
 }
 
-export async function getStoreProducts(props: GetStoreProductsProps) {
+export async function getStoreProducts(
+  props: GetStoreProductsProps
+): Promise<StoreProduct[]> {
   const store = await prisma.store.findUnique({
     where: !props.slug
       ? { owner_email: props.userEmail }
@@ -50,7 +56,7 @@ export async function getStoreProducts(props: GetStoreProductsProps) {
     },
   })
 
-  return store?.products
+  return store?.products ? store.products : []
 }
 
 export async function getStoreProductsCount(
