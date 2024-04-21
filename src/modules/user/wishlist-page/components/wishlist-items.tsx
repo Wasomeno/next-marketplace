@@ -1,14 +1,15 @@
 "use client"
 
-import { useState } from "react"
-import { addWishlistsToCart } from "@/actions/user/wishlist"
-import { Prisma } from "@prisma/client"
-import { RxCrossCircled } from "react-icons/rx"
-import { toast } from "react-toastify"
+import { useState } from "react";
+import { BiHeart } from "react-icons/bi";
+import { toast } from "react-toastify";
 
-import { Button } from "@/components/ui/button"
+import { addWishlistsToCart } from "@/actions/user/wishlist";
+import { NoData } from "@/components/no-data";
+import { Button } from "@/components/ui/button";
+import { Prisma } from "@prisma/client";
 
-import { WishlistItemCard } from "./wishlist-item-card"
+import { WishlistItemCard } from "./wishlist-item-card";
 
 type WishlistItemsSectionProps = {
   items:
@@ -20,6 +21,11 @@ type WishlistItemsSectionProps = {
 
 export function WishlistItems({ items }: WishlistItemsSectionProps) {
   const [selectedItems, setSelectedItems] = useState<number[]>([])
+
+  const subtotal = items
+    ?.filter((item) => selectedItems.includes(item.product_id))
+    .reduce((accumulator, current) => (accumulator += current.product.price), 0)
+
   return (
     <div className="flex flex-1 flex-col justify-between  lg:flex-row ">
       <div className="w-full px-4 lg:w-7/12 lg:px-8">
@@ -29,13 +35,25 @@ export function WishlistItems({ items }: WishlistItemsSectionProps) {
               <WishlistItemCard
                 key={item.id}
                 item={item}
-                setSelectedItems={setSelectedItems}
+                onItemSelect={(item) =>
+                  setSelectedItems((selectedItems) => {
+                    if (selectedItems.includes(item.product_id)) {
+                      return selectedItems.filter(
+                        (selectedItem) => selectedItem !== item.product_id
+                      )
+                    } else {
+                      return [...selectedItems, item.product_id]
+                    }
+                  })
+                }
               />
             ))
           ) : (
-            <div className="flex h-96 flex-col items-center justify-center gap-2.5 opacity-50">
-              <span className="text-sm lg:text-base">No items in Wishlist</span>
-              <RxCrossCircled size="20" />
+            <div className="flex h-96 flex-col items-center justify-center">
+              <NoData
+                text="No Items in Wishlist"
+                icon={<BiHeart size={26} />}
+              />
             </div>
           )}
         </div>
@@ -50,7 +68,9 @@ export function WishlistItems({ items }: WishlistItemsSectionProps) {
               <span className="text-xs text-slate-500 lg:text-base">
                 Subtotal
               </span>
-              <span className="text-sm lg:text-lg">Rp 0</span>
+              <span className="text-sm lg:text-lg">
+                Rp {subtotal?.toLocaleString("id")}
+              </span>
             </div>
           </div>
           <Button
