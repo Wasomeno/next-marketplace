@@ -1,40 +1,28 @@
 "use client"
 
-import { Dispatch, SetStateAction, useTransition } from "react"
-import Image from "next/image"
-import { removeProductFromWishlist } from "@/actions/user/wishlist"
-import { Prisma } from "@prisma/client"
-import { BiTrash } from "react-icons/bi"
-import { toast } from "react-toastify"
+import Image from "next/image";
+import { Dispatch, SetStateAction, useTransition } from "react";
+import { BiTrash } from "react-icons/bi";
+import { toast } from "react-toastify";
 
-import { Button } from "@/components/ui/button"
-import { CheckBox } from "@/components/ui/checkbox"
-import { Skeleton } from "@/components/skeleton"
+import { removeProductFromWishlist } from "@/actions/user/wishlist";
+import { Skeleton } from "@/components/skeleton";
+import { Button } from "@/components/ui/button";
+import { CheckBox } from "@/components/ui/checkbox";
+import { Prisma } from "@prisma/client";
 
 type WishListItemCardProps = {
-  setSelectedItems: Dispatch<SetStateAction<number[]>>
   item: Prisma.WishlistItemGetPayload<{
     include: { product: { include: { images: true } } }
   }>
+  onItemSelect: (item: WishListItemCardProps["item"]) => void
 }
 
 export function WishlistItemCard({
-  setSelectedItems,
+  onItemSelect,
   item,
 }: WishListItemCardProps) {
   const [isPending, startTransition] = useTransition()
-
-  function selectItem() {
-    setSelectedItems((selectedItems) => {
-      if (selectedItems.includes(item.product_id)) {
-        return selectedItems.filter(
-          (selectedItem) => selectedItem !== item.product_id
-        )
-      } else {
-        return [...selectedItems, item.product_id]
-      }
-    })
-  }
 
   function deleteItem() {
     startTransition(async () => {
@@ -45,7 +33,7 @@ export function WishlistItemCard({
 
   return (
     <div className="flex items-center gap-4 border-t p-4 dark:border-t-gray-800">
-      <CheckBox onCheckedChange={selectItem} />
+      <CheckBox onCheckedChange={() => onItemSelect(item)} />
       <div className="flex w-full items-end justify-between">
         <div className="flex w-full gap-4">
           <div className="relative h-20 w-20 overflow-hidden rounded-md bg-slate-200 lg:h-28 lg:w-28">
