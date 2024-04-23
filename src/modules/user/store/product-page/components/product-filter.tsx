@@ -5,9 +5,13 @@ import { getCategories } from "@/actions/categories"
 import { categoryQueryKeys } from "@/modules/user/common/queryKeys/categoryQueryKeys"
 import { useQuery } from "@tanstack/react-query"
 
-import { DataFilter, DataFilterOption } from "@/components/data-filter"
+import {
+  DataFilter,
+  DataFilterOption,
+  DataFilterProps,
+} from "@/components/data-filter"
 
-export const ProductFilter = () => {
+export const ProductFilter = (props: Pick<DataFilterProps, "disabled">) => {
   const { data } = useQuery({
     queryKey: categoryQueryKeys.all(),
     queryFn: () => getCategories(),
@@ -47,6 +51,7 @@ export const ProductFilter = () => {
 
   return (
     <DataFilter
+      {...props}
       filterOptions={productFilterOptions}
       placeholder="Select Filter"
     />

@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
+import { DropdownMenuTriggerProps } from "@radix-ui/react-dropdown-menu"
 import clsx from "clsx"
 import { AnimatePresence, motion } from "framer-motion"
 import { FaCircleXmark } from "react-icons/fa6"
@@ -26,7 +27,7 @@ export type OptionWithChild = Option & {
   children: Option[]
 }
 
-interface BaseDropdownProps {
+interface BaseDropdownProps extends DropdownMenuTriggerProps {
   options?: Option[] | null | undefined
   placeholder?: string
   onOptionClick?: (option: Option) => void
@@ -64,7 +65,10 @@ export const Dropdown = (props: DropdownProps) => {
       >
         {props.isMulti && (
           <>
-            <DropdownTrigger className="z-5 absolute h-full w-full" />
+            <DropdownTrigger
+              className="z-5 absolute h-full w-full"
+              disabled={props.disabled}
+            />
             <div className="z-10 flex flex-1">
               {props?.selectedOptions !== undefined &&
                 props.selectedOptions.length > 0 && (

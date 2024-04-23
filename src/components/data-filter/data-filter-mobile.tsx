@@ -192,11 +192,11 @@ export const DataFilterMobile = ({
                               : selectFilter(option, childOption)
                           }
                           key={childOption.value}
-                          variant="default"
+                          variant="defaultOutline"
                           size="sm"
                           className={clsx(
                             getIsFilterActive(option, childOption) &&
-                              "bg-blue-400 text-white"
+                              "bg-gray-100"
                           )}
                         >
                           {childOption.label}

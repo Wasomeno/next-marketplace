@@ -39,7 +39,7 @@ export function ConfirmationDialog({
                 <Button
                   size="sm"
                   onClick={onConfirm}
-                  className="w-32 rounded-lg border py-2.5 text-xs font-medium"
+                  className="w-32 rounded-lg py-2.5 text-xs font-medium"
                 >
                   Confirm
                 </Button>

@@ -61,8 +61,8 @@ export const ProductYearlySalesChart = () => {
 
   return (
     <div className="space-y-2">
-      <div className="flex justify-between">
-        <h2 className="text-lg font-medium">Yearly Sales</h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-sm font-medium lg:text-lg">Yearly Sales</h2>
         <Dropdown
           placeholder="Select Year"
           isMulti={false}

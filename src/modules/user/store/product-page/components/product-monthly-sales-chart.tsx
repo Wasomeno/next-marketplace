@@ -62,8 +62,8 @@ export const ProductMonthlySalesChart = () => {
 
   return (
     <div className="space-y-2">
-      <div className="flex justify-between">
-        <h2 className="text-lg font-medium">Monthly Sales</h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-sm font-medium lg:text-lg">Monthly Sales</h2>
         <Dropdown
           placeholder="Select Month"
           isMulti={false}

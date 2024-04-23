@@ -55,7 +55,7 @@ export const TableSearchInput = ({
         onChange={search}
         className={twMerge(
           clsx(
-            "h-auto w-full appearance-none border-none p-0 text-xs focus:border-0 focus-visible:ring-0 dark:bg-neutral-900 lg:text-base",
+            "h-auto w-full appearance-none border-none p-0 text-xs focus:border-0 focus-visible:ring-0 dark:bg-neutral-900 lg:text-sm",
             className
           )
         )}
