@@ -20,7 +20,7 @@ import { ImageUploader } from "@/components/image-uploader"
 import { Option } from "@/components/multi-select-dropdown"
 import { Skeleton } from "@/components/skeleton"
 
-import { ProductFormData, ProductSchema } from "./store-product-create-form"
+import { ProductFormData, ProductSchema } from "./create-product-modal"
 
 type Props = {
   product: Prisma.ProductGetPayload<{
