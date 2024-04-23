@@ -87,7 +87,7 @@ export const productTableColumns: ColumnDef<
   {
     header: "Status",
     cell: ({ row }) => (
-      <span className="rounded-lg bg-gray-100 p-2 font-medium">
+      <span className="rounded-lg bg-gray-100 p-2 text-xs font-medium">
         {`${row.original.status[0].toUpperCase()}${row.original.status.slice(
           1
         )}`}
