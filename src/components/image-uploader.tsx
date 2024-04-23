@@ -85,7 +85,7 @@ export const ImageUploader = ({
         <div className="flex flex-col gap-2">
           <div
             className={clsx(
-              "flex items-center gap-2",
+              "flex flex-wrap items-center gap-2",
               !isMultiple && "justify-center"
             )}
           >
