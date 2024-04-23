@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import clsx from "clsx"
 import { AnimatePresence } from "framer-motion"
 import { HiArrowsUpDown } from "react-icons/hi2"
 
@@ -68,7 +69,7 @@ export const DataSorterMobile = (props: TableDataSorterProps) => {
                 {props.sortOptions.map((option) => (
                   <Button
                     key={option.value}
-                    variant="default"
+                    variant="defaultOutline"
                     onClick={() => {
                       if (option.value === activeSort?.value) {
                         deselectOption()
@@ -76,11 +77,11 @@ export const DataSorterMobile = (props: TableDataSorterProps) => {
                       }
                       selectOption(option)
                     }}
-                    className={
-                      option.value === activeSort?.value
-                        ? "bg-blue-100 hover:bg-blue-100"
-                        : "hover:bg-blue-100"
-                    }
+                    className={clsx(
+                      "shadow-sm",
+                      option.value === activeSort?.value &&
+                        "bg-gray-100 lg:hover:bg-gray-100"
+                    )}
                   >
                     {option.label}
                   </Button>
