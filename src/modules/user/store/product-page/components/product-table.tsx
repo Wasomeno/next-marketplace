@@ -1,32 +1,32 @@
 "use client"
 
-import { usePathname, useRouter } from "next/navigation";
-import React, { useState } from "react";
-import { BsPlus, BsTrash3 } from "react-icons/bs";
-import { toast } from "react-toastify";
+import React, { useState } from "react"
+import { usePathname, useRouter } from "next/navigation"
+import { deleteProduct } from "@/actions/store/products"
+import { getStoreProducts, StoreProduct } from "@/actions/store/store"
+import { productQueryKeys } from "@/modules/user/common/queryKeys/productQueryKeys"
+import { getParsedSortParams, useSearchParamsValues } from "@/utils"
+import { Prisma } from "@prisma/client"
+import { useQuery } from "@tanstack/react-query"
+import { ColumnDef } from "@tanstack/react-table"
+import { BsPlus, BsTrash3 } from "react-icons/bs"
+import { toast } from "react-toastify"
 
-import { deleteProduct } from "@/actions/store/products";
-import { getStoreProducts, StoreProduct } from "@/actions/store/store";
-import { ConfirmationDialog } from "@/components/confirmation-dialog";
-import { Button } from "@/components/ui/button";
-import { CheckBox } from "@/components/ui/checkbox";
-import { queryClient } from "@/lib/react-query-client";
-import { productQueryKeys } from "@/modules/user/common/queryKeys/productQueryKeys";
-import { getParsedSortParams, useSearchParamsValues } from "@/utils";
-import { Prisma } from "@prisma/client";
-import { useQuery } from "@tanstack/react-query";
-import { ColumnDef } from "@tanstack/react-table";
+import { queryClient } from "@/lib/react-query-client"
+import { Button } from "@/components/ui/button"
+import { CheckBox } from "@/components/ui/checkbox"
+import { ConfirmationDialog } from "@/components/confirmation-dialog"
 
-import { TBaseDataFilterParams } from "../../../../../../types";
+import { TBaseDataFilterParams } from "../../../../../../types"
 import {
   DataTable,
-  useSelectedData
-} from "../../../../../components/data-table";
-import { ProductFilter } from "./product-filter";
+  useSelectedData,
+} from "../../../../../components/data-table"
+import { ProductFilter } from "./product-filter"
 import {
   productTableColumns,
-  productTablePlaceholderColumns
-} from "./product-table-columns";
+  productTablePlaceholderColumns,
+} from "./product-table-columns"
 
 const pageSize = 3
 
@@ -84,14 +84,6 @@ export const ProductTable: React.FC<{ userEmail: string }> = ({
     deselectAllData,
   } = useSelectedData()
 
-  const initial = queryClient.getQueryData<StoreProduct[]>([
-    productQueryKeys.userStore(userEmail),
-    searchParamsValues.status,
-
-    searchParamsValues.sort,
-    searchParamsValues.categories,
-  ])
-
   const products = useQuery<StoreProduct[]>({
     queryKey: [
       productQueryKeys.userStore(userEmail),
@@ -110,7 +102,6 @@ export const ProductTable: React.FC<{ userEmail: string }> = ({
           ?.split(" ")
           ?.map((categoryId) => parseInt(categoryId)),
       }),
-    initialData: initial,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   })
@@ -170,12 +161,15 @@ export const ProductTable: React.FC<{ userEmail: string }> = ({
     searchParamsValues?.id !== undefined &&
     searchParamsValues.delete !== undefined
 
-  const isLoading = products.isFetching || products.isLoading
   return (
     <>
       <DataTable
-        data={(isLoading ? Array(5).fill({}) : products.data) as StoreProduct[]}
-        columns={isLoading ? placeholderColumns : columns}
+        data={
+          (products.isLoading
+            ? Array(5).fill({})
+            : products.data) as StoreProduct[]
+        }
+        columns={products.isLoading ? placeholderColumns : columns}
         pagination={
           products.data?.length ? (
             <DataTable.Pagination
@@ -189,35 +183,36 @@ export const ProductTable: React.FC<{ userEmail: string }> = ({
         dataSorter={
           <DataTable.Sorter
             sortOptions={productSortOptions}
-            disabled={isLoading}
+            disabled={products.isLoading}
           />
         }
         dataFilter={<ProductFilter />}
         searchInput={
           <DataTable.SearchInput
-            disabled={isLoading}
+            disabled={products.isLoading}
             placeholder="Search by product name"
           />
         }
         addTrigger={
           <Button
-            variant="success"
+            variant="defaultOutline"
             size="sm"
-            onClick={() => router.push("/store/products/create")}
-            className="h-8 w-8 hover:scale-[105%] lg:h-9 lg:w-9"
+            onClick={() => router.replace(`${pathname}?create=true`)}
+            className="xs:h-8 xs:w-8 gap-1 shadow-sm"
           >
-            <BsPlus className="text-slate-50" />
+            <span className="hidden text-xs lg:inline">Create</span> <BsPlus />
           </Button>
         }
         deleteTrigger={
           <Button
-            variant="danger"
+            variant="defaultOutline"
             size="sm"
             disabled={!selectedData.length}
             onClick={() => setIsDeleteModalOpen(true)}
-            className="h-8 w-8 hover:scale-[105%] lg:h-9 lg:w-9"
+            className="xs:h-8 xs:w-8 shadow-sm disabled:hover:bg-white"
           >
-            <BsTrash3 className="text-slate-50" />
+            <span className="hidden text-xs lg:inline">Remove</span>{" "}
+            <BsTrash3 />
           </Button>
         }
       />
@@ -260,28 +255,28 @@ export function ProductTableSkeleton() {
       dataSorter={
         <DataTable.Sorter sortOptions={productSortOptions} disabled />
       }
-      dataFilter={<ProductFilter />}
+      dataFilter={<ProductFilter disabled />}
       searchInput={
         <DataTable.SearchInput disabled placeholder="Search by product name" />
       }
       addTrigger={
         <Button
-          variant="success"
+          variant="defaultOutline"
           size="sm"
           className="h-8 w-8 hover:scale-[105%] lg:h-9 lg:w-9"
           disabled
         >
-          <BsPlus className="text-slate-50" />
+          <BsPlus />
         </Button>
       }
       deleteTrigger={
         <Button
-          variant="danger"
+          variant="defaultOutline"
           size="sm"
           disabled
           className="h-8 w-8 hover:scale-[105%] lg:h-9 lg:w-9"
         >
-          <BsTrash3 className="text-slate-50" />
+          <BsTrash3 />
         </Button>
       }
     />
