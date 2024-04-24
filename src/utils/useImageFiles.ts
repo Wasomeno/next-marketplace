@@ -6,6 +6,7 @@ import { FileImage } from "@/components/image-uploader"
 
 export function useImageFiles(images?: { name: string; url: string }[]) {
   const [files, setFiles] = useState<Array<FileImage>>([])
+  const [isLoading, setIsLoading] = useState(false)
 
   function addFiles(files: Array<FileImage>) {
     setFiles((current) => [...current, ...files])
@@ -21,6 +22,7 @@ export function useImageFiles(images?: { name: string; url: string }[]) {
 
   useEffect(() => {
     if (images) {
+      setIsLoading(true)
       Promise.all(
         images.map((image) =>
           fetch(image.url)
@@ -34,9 +36,12 @@ export function useImageFiles(images?: { name: string; url: string }[]) {
               })
             })
         )
-      ).then((result) => setFiles(result))
+      ).then((result) => {
+        setFiles(result)
+        setIsLoading(false)
+      })
     }
-  }, [])
+  }, [images?.length])
 
-  return { files, addFiles, clearFiles, removeFile }
+  return { files, addFiles, clearFiles, removeFile, isLoading }
 }
