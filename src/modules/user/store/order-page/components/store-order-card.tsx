@@ -102,7 +102,7 @@ export const StoreOrderCard = ({
             </p>
           </div>
         </div>
-        <div className="flex items-center justify-between pt-0">
+        <div className="flex items-center justify-end gap-4">
           <span className="text-sm font-medium">Total</span>
           <span>Rp. {invoice.total.toLocaleString("id")}</span>
         </div>
