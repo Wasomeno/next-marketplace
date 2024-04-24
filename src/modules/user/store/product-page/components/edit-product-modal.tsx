@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect, useState, useTransition } from "react"
-import { useParams, usePathname, useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { getCategories } from "@/actions/categories"
 import { getProduct } from "@/actions/product"
 import { updateProduct } from "@/actions/store/products"
@@ -52,12 +52,7 @@ export const EditProductModal = () => {
     enabled: isOpen,
   })
 
-  const [selectedCategories, setSelectedCategories] = useState<Option[]>(
-    product.data?.categories.map((category) => ({
-      label: category.name,
-      value: category.id,
-    })) ?? []
-  )
+  const [selectedCategories, setSelectedCategories] = useState<Option[]>([])
 
   const [isLoading, startTransition] = useTransition()
 
@@ -122,9 +117,17 @@ export const EditProductModal = () => {
   }
 
   useEffect(() => {
-    reset({
-      ...product.data,
-    })
+    if (product.data) {
+      reset({
+        ...product.data,
+      })
+      setSelectedCategories(
+        product.data.categories.map((category) => ({
+          label: category.name,
+          value: category.id,
+        }))
+      )
+    }
   }, [product.isLoading])
 
   return (
@@ -196,12 +199,12 @@ export const EditProductModal = () => {
                 variant="danger"
                 size="sm"
                 className="w-full text-white lg:w-32"
-                onClick={() => router.replace(pathname)}
+                onClick={closeModal}
               >
                 Cancel
               </Button>
               <Button
-                disabled={!formState.isValid}
+                disabled={!formState.isValid || isLoading}
                 variant="default"
                 size="sm"
                 className="w-full lg:w-32"
