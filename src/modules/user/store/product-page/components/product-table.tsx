@@ -84,13 +84,14 @@ export const ProductTable: React.FC<{ userEmail: string }> = ({
     deselectAllData,
   } = useSelectedData()
 
-  const products = useQuery<StoreProduct[]>({
+  const products = useQuery({
     queryKey: [
       productQueryKeys.userStore(userEmail),
       searchParamsValues.status,
       searchParamsValues.sort,
       searchParamsValues.categories,
       searchParamsValues.search,
+      searchParamsValues.page,
     ],
     queryFn: () =>
       getStoreProducts({
@@ -143,6 +144,12 @@ export const ProductTable: React.FC<{ userEmail: string }> = ({
   const router = useRouter()
   const pathname = usePathname()
 
+  function openCreateProductModal() {
+    const urlSearchParams = new URLSearchParams(searchParamsValues)
+    urlSearchParams.set("create", "true")
+    router.replace(`${pathname}?${urlSearchParams.toString()}`)
+  }
+
   async function deleteProducts() {
     await toast.promise(deleteProduct(selectedData), {
       success: `Successfully deleted ${selectedData.length} products`,
@@ -167,13 +174,13 @@ export const ProductTable: React.FC<{ userEmail: string }> = ({
         data={
           (products.isLoading
             ? Array(5).fill({})
-            : products.data) as StoreProduct[]
+            : products.data?.products) as StoreProduct[]
         }
         columns={products.isLoading ? placeholderColumns : columns}
         pagination={
-          products.data?.length ? (
+          products.data?.products.length ? (
             <DataTable.Pagination
-              dataLength={products.data.length ?? 0}
+              dataLength={products.data.amount}
               pageSize={pageSize}
             />
           ) : (
@@ -197,7 +204,7 @@ export const ProductTable: React.FC<{ userEmail: string }> = ({
           <Button
             variant="defaultOutline"
             size="sm"
-            onClick={() => router.replace(`${pathname}?create=true`)}
+            onClick={openCreateProductModal}
             className="xs:h-8 xs:w-8 gap-1 shadow-sm"
           >
             <span className="hidden text-xs lg:inline">Create</span> <BsPlus />
@@ -227,7 +234,7 @@ export const ProductTable: React.FC<{ userEmail: string }> = ({
       <ConfirmationDialog
         open={isSingleDelete}
         title={"Delete Product"}
-        body={`Are you sure want to delete ${products?.data?.find((product) => product.id.toString() === (searchParamsValues?.id as string))?.name} ? This action can't be undone`}
+        body={`Are you sure want to delete ${products?.data?.products.find((product) => product.id.toString() === (searchParamsValues?.id as string))?.name} ? This action can't be undone`}
         onOpenChange={() => {
           const searchParams = new URLSearchParams(searchParamsValues)
           searchParams.delete("id")
