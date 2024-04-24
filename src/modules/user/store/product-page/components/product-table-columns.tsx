@@ -1,4 +1,5 @@
 import Image from "next/image"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { Prisma } from "@prisma/client"
 import * as HoverCard from "@radix-ui/react-hover-card"
 import { ColumnDef } from "@tanstack/react-table"
@@ -103,6 +104,25 @@ export const productTableColumns: ColumnDef<
     id: "action",
     header: "Actions",
     cell: ({ row }) => {
+      const router = useRouter()
+      const pathname = usePathname()
+      const searchParams = useSearchParams()
+      const urlSearchParams = new URLSearchParams(searchParams)
+
+      function openEditProductModal() {
+        urlSearchParams.set("edit", "true")
+        urlSearchParams.set("id", row.original.id.toString())
+
+        return router.replace(`${pathname}?${urlSearchParams.toString()}`)
+      }
+
+      function openDeleteProductModal() {
+        urlSearchParams.set("delete", "true")
+        urlSearchParams.set("id", row.original.id.toString())
+
+        return router.replace(`${pathname}?${urlSearchParams.toString()}`)
+      }
+
       return (
         <TableActions
           viewAction={
@@ -112,15 +132,12 @@ export const productTableColumns: ColumnDef<
             />
           }
           editAction={
-            <TableActions.Edit
-              href={`/store/products/edit/${row.original.id}`}
-              asLink
-            />
+            <TableActions.Edit onClick={openEditProductModal} asLink={false} />
           }
           deleteAction={
             <TableActions.Delete
-              href={`/store/products?delete=true&id=${row.original.id}`}
-              asLink
+              onClick={openDeleteProductModal}
+              asLink={false}
             />
           }
         />

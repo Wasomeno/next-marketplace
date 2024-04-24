@@ -20,7 +20,7 @@ export function StoreProducts() {
   const params = useParams()
 
   const searchParamsValues = useSearchParamsValues<TBaseDataFilterParams>()
-  const { data: products, isLoading } = useQuery({
+  const products = useQuery({
     queryKey: ["storeProducts", params?.storeSlug, searchParamsValues],
     queryFn: () =>
       getStoreProducts({
@@ -39,9 +39,9 @@ export function StoreProducts() {
         <DataSorter sortOptions={sortOptions} />
       </div>
       <div className="grid grid-cols-10 gap-2.5 lg:grid-cols-12 lg:gap-4">
-        {isLoading && productSkeletons}
-        {!isLoading &&
-          products?.map((product) => (
+        {products.isLoading && productSkeletons}
+        {!products.isLoading &&
+          products?.data?.products.map((product) => (
             <ProductCard
               key={product.id}
               href={`/${params?.storeSlug}/${product.slug}`}

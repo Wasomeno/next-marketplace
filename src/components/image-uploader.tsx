@@ -120,7 +120,7 @@ export const ImageUploader = ({
               <div
                 {...getRootProps({
                   className:
-                    "flex h-28 w-28 flex-col gap-2 items-center justify-center rounded-md border border-dashed border-gray-300 bg-gray-50",
+                    "flex h-28 cursor-pointer w-28 flex-col gap-2 items-center justify-center rounded-md border border-dashed border-gray-300 bg-gray-50",
                 })}
               >
                 <Input {...getInputProps()} />

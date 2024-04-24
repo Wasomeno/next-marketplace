@@ -1,5 +1,6 @@
 import { Metadata } from "next"
 import { CreateProductModal } from "@/modules/user/store/product-page/components/create-product-modal"
+import { EditProductModal } from "@/modules/user/store/product-page/components/edit-product-modal"
 import { ProductCount } from "@/modules/user/store/product-page/components/product-count"
 import { ProductTable } from "@/modules/user/store/product-page/components/product-table"
 import { getServerSession } from "next-auth"
@@ -22,6 +23,7 @@ export default async function UserStoreProductsPage() {
       </div>
       <ProductTable userEmail={session.user.email} />
       <CreateProductModal />
+      <EditProductModal />
     </div>
   )
 }
