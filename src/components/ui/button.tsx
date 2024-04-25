@@ -4,7 +4,7 @@ import clsx from "clsx"
 import { twMerge } from "tailwind-merge"
 
 const buttonVariants = cva(
-  "flex text-xs lg:textsm gap-2 font-medium transition duration-300 disabled:opacity-50 items-center rounded-md justify-center",
+  "flex text-xs lg:text-sm gap-2 font-medium transition duration-300 disabled:opacity-50 items-center rounded-md justify-center",
   {
     variants: {
       variant: {
