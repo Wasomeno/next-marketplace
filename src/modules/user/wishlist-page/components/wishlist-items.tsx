@@ -53,7 +53,7 @@ export function WishlistItems({ items }: WishlistItemsSectionProps) {
   return (
     <div className="flex flex-1 flex-col justify-between  lg:flex-row ">
       <div className="w-full px-4 lg:w-7/12 lg:px-8">
-        <div className="mt-2">
+        <div className="flex w-full flex-col gap-4">
           {items?.length ? (
             items?.map((item) => (
               <WishlistItemCard
