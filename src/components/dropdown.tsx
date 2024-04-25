@@ -58,7 +58,7 @@ export const Dropdown = (props: DropdownProps) => {
       <div
         className={clsx(
           twMerge(
-            "relative flex min-h-10 w-48 items-center rounded-md border bg-white outline-0 disabled:opacity-50 dark:border-neutral-600 dark:bg-neutral-900",
+            "relative flex h-8 w-48 items-center rounded-md border bg-white outline-0 disabled:opacity-50 dark:border-neutral-600 dark:bg-neutral-900 lg:min-h-10",
             props.className
           )
         )}
@@ -105,7 +105,7 @@ export const Dropdown = (props: DropdownProps) => {
                     className="w-full p-2"
                     onClick={() => setIsOpen(!isOpen)}
                   >
-                    <span className="w-full text-sm text-gray-400">
+                    <span className="w-full text-xs text-gray-400 lg:text-sm">
                       {props.placeholder ?? "Select Option"}
                     </span>
                   </div>
@@ -127,7 +127,7 @@ export const Dropdown = (props: DropdownProps) => {
         {!props.isMulti && (
           <>
             <DropdownTrigger asChild>
-              <div className="flex w-full items-center py-2 pl-3 text-sm">
+              <div className="flex w-full items-center py-2 pl-3 text-xs lg:text-sm">
                 {props?.selectedOption !== undefined &&
                   props.selectedOption.label}
                 {!props?.selectedOption && (
