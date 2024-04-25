@@ -4,14 +4,17 @@ import { prisma } from "@/lib/prisma"
 
 async function productSearch(query: string) {
   const products = await prisma.product.findMany({
-    where: { name: { contains: query } },
+    where: { name: { contains: query, mode: "insensitive" } },
+    include: {
+      store: true,
+    },
   })
   return products
 }
 
 async function storeSearch(query: string) {
   const stores = await prisma.store.findMany({
-    where: { name: { contains: query } },
+    where: { name: { contains: query, mode: "insensitive" } },
   })
   return stores
 }

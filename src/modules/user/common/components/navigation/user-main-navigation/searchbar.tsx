@@ -8,9 +8,11 @@ import { useQuery } from "@tanstack/react-query"
 import { AnimatePresence, motion } from "framer-motion"
 import { BiSearch } from "react-icons/bi"
 import { HiXMark } from "react-icons/hi2"
-import { PiSpinner } from "react-icons/pi"
+import { ImSpinner8 } from "react-icons/im"
+import { LiaStackExchange } from "react-icons/lia"
 
 import { Input } from "@/components/ui/input"
+import { NoData } from "@/components/no-data"
 
 export function SearchBar() {
   const [isModalActive, setIsModalActive] = useState(false)
@@ -78,19 +80,22 @@ export function SearchBar() {
             >
               {isLoading && (
                 <div className="flex h-full w-full items-center justify-center">
-                  <PiSpinner className="animate-spin text-blue-500" size={30} />
+                  <ImSpinner8
+                    className="animate-spin text-blue-500"
+                    size={30}
+                  />
                 </div>
               )}
 
               {!isLoading && data?.products && data?.stores ? (
-                <div className="space-y-4">
+                <div className="h-full w-full space-y-4">
                   {data.products.length > 0 && (
                     <div className="space-y-2">
                       <span className="text-sm font-medium">Products</span>
                       <div className="flex flex-col gap-2">
                         {data.products.map((product) => (
                           <Link
-                            href={`/${product.slug}`}
+                            href={`/${product.store.slug}/${product.slug}`}
                             key={product.id}
                             className="text-sm"
                           >
@@ -114,6 +119,15 @@ export function SearchBar() {
                           </Link>
                         ))}
                       </div>
+                    </div>
+                  )}
+
+                  {data.stores.length === 0 && data.products.length === 0 && (
+                    <div className="flex h-full w-full flex-col items-center justify-center gap-2">
+                      <NoData
+                        icon={<LiaStackExchange size={20} />}
+                        text="Not found"
+                      />
                     </div>
                   )}
                 </div>
