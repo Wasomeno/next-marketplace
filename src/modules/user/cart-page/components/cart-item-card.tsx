@@ -1,21 +1,22 @@
 "use client"
 
-import { useTransition } from "react"
+import { MouseEvent, MouseEventHandler } from "react"
 import Image from "next/image"
 import { removeFromCart, updateCartItem } from "@/actions/user/cart"
-import { Checkbox } from "@radix-ui/react-checkbox"
+import { useMutation } from "@tanstack/react-query"
+import clsx from "clsx"
 import { BiTrash } from "react-icons/bi"
+import { ImSpinner8 } from "react-icons/im"
 import { toast } from "react-toastify"
+import { twMerge } from "tailwind-merge"
 
 import { Button } from "@/components/ui/button"
-import { CheckBox } from "@/components/ui/checkbox"
-import { Skeleton } from "@/components/skeleton"
 import { CartItem } from "@/app/(user)/(main)/cart/page"
 
-interface CartItemCardProps {
+type CartItemCardProps = {
   isSelected: boolean
   item: CartItem
-  onClick: () => void
+  onClick: MouseEventHandler<HTMLDivElement>
 }
 
 export const CartItemCard = ({
@@ -23,96 +24,79 @@ export const CartItemCard = ({
   isSelected,
   onClick,
 }: CartItemCardProps) => {
-  const [isPending, startTransition] = useTransition()
-
-  function increment() {
+  async function increment(event: MouseEvent) {
+    event.stopPropagation()
     item.amount >= item.product.stock
       ? toast.error("Amount can't be more than the stock")
-      : startTransition(async () => {
-          await updateCartItem(item.id, item.amount + 1)
-        })
+      : await updateCartItem(item.id, item.amount + 1)
   }
 
-  function decrement() {
+  async function decrement(event: MouseEvent) {
+    event.stopPropagation()
     item.amount <= 1
       ? toast.error("Amount can't be lower than 1")
-      : startTransition(async () => {
-          await updateCartItem(item.id, item.amount - 1)
-        })
+      : await updateCartItem(item.id, item.amount - 1)
   }
 
+  const removeItem = useMutation({
+    mutationFn: async (event: MouseEvent) => {
+      event.stopPropagation()
+      await removeFromCart(item.id)
+    },
+    onSuccess: () => toast.success(`Removed ${item.product.name} from cart`),
+    onError: () => toast.error(`Error when removing item`),
+  })
+
   return (
-    <div className="flex items-center gap-4 border-t p-4 dark:border-t-gray-800">
-      <CheckBox onCheckedChange={onClick} checked={isSelected} />
-      <div className="flex w-full flex-wrap items-end justify-between gap-2">
-        <div className="flex w-full gap-2 lg:w-4/6 lg:gap-4">
-          <div className="relative h-20 w-20 overflow-hidden rounded-md bg-slate-200 lg:h-28 lg:w-28">
+    <div
+      onClick={onClick}
+      className={twMerge(
+        clsx(
+          "flex cursor-pointer items-center gap-4 rounded-lg rounded-t-none border border-x-transparent border-b-transparent p-4 transition-all duration-200 dark:border-t-gray-800",
+          isSelected &&
+            "rounded-t-lg border-blue-400 border-x-blue-400 border-b-blue-400 shadow-md"
+        )
+      )}
+    >
+      <div className="flex w-full items-end justify-between gap-2">
+        <div className="flex w-full gap-4">
+          <div className="relative h-20 w-20 overflow-hidden rounded-lg border bg-slate-200 shadow-sm lg:h-28 lg:w-28">
             <Image
               src={item.product.featured_image_url}
               alt="product-image"
               fill
             />
           </div>
-          <div className="flex w-4/6 flex-col gap-1 lg:w-3/6">
-            <span className="text-sm tracking-wide lg:text-base">
-              Rp {item.product.price.toLocaleString("id")}
-            </span>
-            <span className="text-xs tracking-wide text-slate-500 lg:text-base">
-              {item.product.name}
-            </span>
+          <div className="flex flex-1 flex-wrap justify-between gap-2">
+            <div className="flex w-full flex-col gap-1 lg:w-fit">
+              <span className="text-xs tracking-wide  lg:text-base">
+                {item.product.name}
+              </span>
+              <span className="text-sm tracking-wide text-gray-500 lg:text-base">
+                Rp {item.product.price.toLocaleString("id")}
+              </span>
+            </div>
+            <div className="flex w-full items-center justify-end gap-2 lg:w-fit">
+              <div className="bg-slate-white flex h-8 w-20 items-center justify-center gap-4 rounded-lg border border-gray-200 px-3 text-sm font-medium shadow-sm dark:border-gray-700">
+                <button onClick={decrement}>-</button>
+                <span className="text-xs lg:text-sm">{item.amount}</span>
+                <button onClick={increment}>+</button>
+              </div>
+              <Button
+                variant="defaultOutline"
+                size="sm"
+                className="h-8 w-8 p-2 shadow-sm"
+                disabled={removeItem.isPending}
+                onClick={removeItem.mutate}
+              >
+                {removeItem.isPending ? (
+                  <ImSpinner8 className="animate-spin" size={14} />
+                ) : (
+                  <BiTrash size={14} />
+                )}
+              </Button>
+            </div>
           </div>
-        </div>
-        <div className="flex w-full items-center justify-end gap-4 lg:w-auto">
-          <div className="bg-slate-white flex h-7 w-20 items-center justify-center gap-4 rounded-lg border border-slate-300 px-3 text-sm font-medium dark:border-gray-700 lg:h-10 lg:w-20">
-            <button onClick={decrement}>-</button>
-            <span className="text-xs lg:text-sm">{item.amount}</span>
-            <button onClick={increment}>+</button>
-          </div>
-          <Button
-            variant="danger"
-            size="sm"
-            className="h-7 w-7 p-2 text-white dark:bg-red-800 lg:h-8 lg:w-8"
-            onClick={() =>
-              startTransition(async () => {
-                await removeFromCart(item.id)
-                toast.success(`Removed ${item.product.name} from cart`)
-              })
-            }
-          >
-            <BiTrash size="14" />
-          </Button>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-export const CartItemCardSkeleton = () => {
-  return (
-    <div className="flex items-center gap-4 border-t p-4 dark:border-t-gray-700">
-      <Checkbox disabled />
-      <div className="flex w-full flex-wrap items-center justify-between gap-2">
-        <div className="flex w-full gap-2 lg:w-4/6 lg:gap-4">
-          <Skeleton className="relative h-20 w-28 lg:h-32 lg:w-36 " />
-          <div className="flex w-4/6 flex-col gap-1 lg:w-3/6">
-            <Skeleton className="h-[14px] w-40  lg:h-[18px] " />
-            <Skeleton className="h-[12px] w-32  lg:h-[18px] " />
-          </div>
-        </div>
-        <div className="flex w-full items-center justify-end gap-4 lg:w-auto">
-          <div className="flex h-7 w-20 items-center justify-center gap-4 rounded-lg border border-slate-300 bg-gray-200 px-3 text-sm font-medium dark:border-gray-700 lg:h-10 lg:w-20">
-            <button disabled>-</button>
-            <Skeleton className="h-[12px] lg:h-[14px]" />
-            <button disabled>+</button>
-          </div>
-          <Button
-            disabled
-            variant="danger"
-            size="sm"
-            className="h-7 w-7 p-2 text-white opacity-50 dark:bg-red-800 lg:h-8 lg:w-8"
-          >
-            <BiTrash size="14" />
-          </Button>
         </div>
       </div>
     </div>
