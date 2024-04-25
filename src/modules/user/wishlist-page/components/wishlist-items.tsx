@@ -1,15 +1,17 @@
 "use client"
 
-import { useState } from "react";
-import { BiHeart } from "react-icons/bi";
-import { toast } from "react-toastify";
+import { useState } from "react"
+import { addWishlistsToCart } from "@/actions/user/wishlist"
+import { Prisma } from "@prisma/client"
+import { useMutation } from "@tanstack/react-query"
+import { BiHeart } from "react-icons/bi"
+import { ImSpinner8 } from "react-icons/im"
+import { toast } from "react-toastify"
 
-import { addWishlistsToCart } from "@/actions/user/wishlist";
-import { NoData } from "@/components/no-data";
-import { Button } from "@/components/ui/button";
-import { Prisma } from "@prisma/client";
+import { Button } from "@/components/ui/button"
+import { NoData } from "@/components/no-data"
 
-import { WishlistItemCard } from "./wishlist-item-card";
+import { WishlistItemCard } from "./wishlist-item-card"
 
 type WishlistItemsSectionProps = {
   items:
@@ -26,6 +28,28 @@ export function WishlistItems({ items }: WishlistItemsSectionProps) {
     ?.filter((item) => selectedItems.includes(item.product_id))
     .reduce((accumulator, current) => (accumulator += current.product.price), 0)
 
+  function selectItem(
+    item: Prisma.WishlistItemGetPayload<{
+      include: { product: { include: { images: true } } }
+    }>
+  ) {
+    setSelectedItems((selectedItems) => {
+      if (selectedItems.includes(item.product_id)) {
+        return selectedItems.filter(
+          (selectedItem) => selectedItem !== item.product_id
+        )
+      } else {
+        return [...selectedItems, item.product_id]
+      }
+    })
+  }
+
+  const addWishlistoCart = useMutation({
+    mutationFn: () => addWishlistsToCart(selectedItems),
+    onSuccess: () => toast.success("Added all selected items to cart"),
+    onError: () => toast.error("Error when adding wishlist items to cart"),
+  })
+
   return (
     <div className="flex flex-1 flex-col justify-between  lg:flex-row ">
       <div className="w-full px-4 lg:w-7/12 lg:px-8">
@@ -35,17 +59,8 @@ export function WishlistItems({ items }: WishlistItemsSectionProps) {
               <WishlistItemCard
                 key={item.id}
                 item={item}
-                onItemSelect={(item) =>
-                  setSelectedItems((selectedItems) => {
-                    if (selectedItems.includes(item.product_id)) {
-                      return selectedItems.filter(
-                        (selectedItem) => selectedItem !== item.product_id
-                      )
-                    } else {
-                      return [...selectedItems, item.product_id]
-                    }
-                  })
-                }
+                isSelected={selectedItems.includes(item.product_id)}
+                onClick={() => selectItem(item)}
               />
             ))
           ) : (
@@ -74,14 +89,14 @@ export function WishlistItems({ items }: WishlistItemsSectionProps) {
             </div>
           </div>
           <Button
-            disabled={!selectedItems.length}
+            disabled={!selectedItems.length || addWishlistoCart.isPending}
             variant="default"
-            className="my-1 w-full rounded-lg bg-blue-400 py-3 text-xs font-medium text-slate-50 dark:bg-blue-900 lg:text-sm"
-            onClick={async () => {
-              await addWishlistsToCart(selectedItems)
-              toast.success("Added all selected items to cart")
-            }}
+            className="my-1 w-full py-3 text-xs disabled:hover:bg-gray-100 lg:text-sm"
+            onClick={() => addWishlistoCart.mutate()}
           >
+            {addWishlistoCart.isPending && (
+              <ImSpinner8 className="animate-spin" size={16} />
+            )}
             Add all to Cart
           </Button>
         </div>
