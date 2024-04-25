@@ -57,11 +57,11 @@ export function UserViewOrderModal() {
               <ImSpinner8 size={30} className="animate-spin text-blue-500" />
             </div>
           ) : (
-            <div className="flex h-full w-full flex-col justify-between px-6 pb-4 pt-2">
+            <div className="flex h-full w-full flex-col justify-between px-4 pb-4 pt-2 lg:px-6">
               <div className="space-y-4">
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <h2 className=" text-gray-500">
+                    <h2 className=" text-sm text-gray-500 lg:text-base">
                       Invoice Id:{" "}
                       <span className="font-medium text-black">
                         {invoice.data?.id}
@@ -70,7 +70,7 @@ export function UserViewOrderModal() {
                     <span className="text-sm">{invoice.data?.status}</span>
                   </div>
                   <div className="">
-                    <h3 className="text-sm text-gray-500">
+                    <h3 className="text-xs text-gray-500 lg:text-sm">
                       Ordered at:{" "}
                       <span className="text-black">
                         {moment(invoice.data?.created_at).format("LLLL")}
@@ -84,28 +84,26 @@ export function UserViewOrderModal() {
                 />
                 <div className="space-y-2 overflow-y-scroll">
                   {invoice.data?.products.map((product) => (
-                    <div className="flex  justify-between">
-                      <div className="flex gap-4">
-                        <div className="relative h-24 w-24 overflow-hidden rounded-lg border">
-                          <Image
-                            src={product.product.featured_image_url}
-                            fill
-                            alt={product.product.name}
-                          />
-                        </div>
-                        <div>
-                          <span className="text-sm">
-                            {product.product.name}
-                          </span>
-                        </div>
+                    <div className="flex gap-4">
+                      <div className="relative h-20 w-20 overflow-hidden rounded-lg border lg:h-24 lg:w-24">
+                        <Image
+                          src={product.product.featured_image_url}
+                          fill
+                          alt={product.product.name}
+                        />
                       </div>
-                      <div className="flex flex-col items-end gap-2">
-                        <h5 className="text-sm">
-                          Rp. {product.product.price.toLocaleString("id")}
-                        </h5>
-                        <h5 className="text-sm text-gray-500">
-                          Amount: {product.amount}
-                        </h5>
+                      <div className="flex flex-wrap justify-between lg:w-full">
+                        <span className="w-full text-sm">
+                          {product.product.name}
+                        </span>
+                        <div className="flex w-full flex-col gap-2 lg:w-fit lg:items-end">
+                          <h5 className="text-sm">
+                            Rp. {product.product.price.toLocaleString("id")}
+                          </h5>
+                          <h5 className="text-sm text-gray-500">
+                            Amount: {product.amount}
+                          </h5>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -118,11 +116,17 @@ export function UserViewOrderModal() {
                 />
                 <div className="flex gap-6">
                   <div className="w-1/2">
-                    <h3 className="font-medium">Payment</h3>
+                    <h3 className="text-sm font-medium lg:text-base">
+                      Payment
+                    </h3>
                   </div>
                   <div className="w-1/2 space-y-2">
-                    <h3 className="font-medium">Delivery</h3>
-                    <span className="text-sm">{invoice.data?.address}</span>
+                    <h3 className="text-sm font-medium lg:text-base">
+                      Delivery
+                    </h3>
+                    <span className="text-xs lg:text-sm">
+                      {invoice.data?.address}
+                    </span>
                   </div>
                 </div>
               </div>
