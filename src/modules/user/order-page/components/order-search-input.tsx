@@ -41,7 +41,7 @@ export const OrderSearchInput = () => {
       </div>
       <Input
         type="text"
-        className="h-auto w-32 border-none p-0 focus-visible:ring-0 dark:bg-slate-950 lg:w-96"
+        className="h-auto w-32 border-none p-0 text-xs focus-visible:ring-0 dark:bg-slate-950 lg:w-96 lg:text-sm"
         placeholder="Search orders"
         onChange={onChange}
       />
