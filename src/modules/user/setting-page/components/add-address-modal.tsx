@@ -1,11 +1,12 @@
 "use client"
 
-import { useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { addAddress } from "@/actions/user/settings"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import axios from "axios"
 import { useForm } from "react-hook-form"
+import { BiPlus } from "react-icons/bi"
+import { ImSpinner8 } from "react-icons/im"
 import { toast } from "react-toastify"
 import { z } from "zod"
 
@@ -16,6 +17,7 @@ import {
   DialogHeader,
   DialogOverlay,
   DialogPortal,
+  DialogTrigger,
 } from "@/components/ui/dialog"
 import { Fieldset } from "@/components/ui/fieldset"
 import { Input } from "@/components/ui/input"
@@ -29,6 +31,9 @@ const addressSchema = z.object({
   street: z.string(),
   postCode: z.string(),
   recipient: z.string(),
+  district: z.string(),
+  city: z.string(),
+  province: z.string(),
 })
 
 type Address = z.infer<typeof addressSchema>
@@ -48,11 +53,7 @@ const districtOptions: Option[] = [
 ]
 
 export function AddAddressModal() {
-  const [province, setProvince] = useState<Option>()
-  const [city, setCity] = useState<Option>()
-  const [district, setDistrict] = useState<Option>()
-
-  const { data: cityOptions } = useQuery({
+  const cities = useQuery<Option[]>({
     queryFn: () =>
       axios.get("/cities.json").then((response) =>
         response.data.map((city: any) => ({
@@ -63,48 +64,66 @@ export function AddAddressModal() {
     queryKey: ["cities"],
   })
 
-  console.log(cityOptions)
-
-  const path = usePathname()
+  const pathname = usePathname()
   const searchParams = useSearchParams()
   const router = useRouter()
 
   const form = useForm<Address>()
 
-  const onSubmit = form.handleSubmit(async (input) => {
-    await toast.promise(
+  const selectedProvince = form.watch("province")
+  const selectedCity = form.watch("city")
+  const selectedDistrict = form.watch("district")
+
+  const isOpen = searchParams.get("add") !== null
+
+  function onOpenChange(isOpen: boolean) {
+    const urlSearchParams = new URLSearchParams(searchParams)
+
+    if (isOpen) {
+      urlSearchParams.set("add", "true")
+      router.replace(`${pathname}?${urlSearchParams.toString()}`)
+      return
+    }
+
+    urlSearchParams.delete("add")
+    router.replace(`${pathname}?${urlSearchParams.toString()}`)
+  }
+
+  const addAddressMutation = useMutation({
+    mutationFn: form.handleSubmit(async (input) => {
       addAddress({
         title: input.title,
         phoneNumber: input.phoneNumber,
         recipient: input.recipient,
         street: input.street,
-        city: city?.label as string,
-        province: province?.label as string,
-        subdistrict: district?.label as string,
+        city: input.city,
+        province: input.province,
+        subdistrict: input.district,
         additionalNotes: input.notes,
         postNumber: input.postCode,
         isMainAddress: false,
       }),
-      {
-        pending: "Adding address",
-        error: "Error when adding address",
-        success: "Succesfully add new address",
-      }
-    )
-
-    router.replace(path)
+        router.replace(`${pathname}`)
+    }),
+    onSuccess: () => toast.success("Succesfully add new address"),
+    onError: () => toast.error("Error when adding new address"),
   })
 
   return (
-    <Dialog open onOpenChange={() => router.replace(path)}>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogTrigger asChild>
+        <Button size="sm">
+          <BiPlus /> Create
+        </Button>
+      </DialogTrigger>
       <DialogPortal>
         <DialogOverlay />
-        <DialogContent
-          open={searchParams.get("add") !== undefined}
-          className="h-[36rem] w-[30rem]"
-        >
+        <DialogContent open={isOpen} className="h-[36rem] w-full lg:w-[30rem]">
           <DialogHeader title="Add Address" />
-          <form className="flex flex-col gap-2 p-4" onSubmit={onSubmit}>
+          <form
+            className="flex flex-col gap-2 p-4"
+            onSubmit={addAddressMutation.mutate}
+          >
             <Fieldset label="Title">
               <Input
                 type="text"
@@ -129,17 +148,25 @@ export function AddAddressModal() {
             <Fieldset label="Province">
               <Dropdown
                 options={provinceOptions}
-                selectedOption={province}
-                onOptionClick={(option) => setProvince(option)}
+                selectedOption={provinceOptions.find(
+                  (option) => option.label === selectedProvince
+                )}
+                onOptionClick={(option) =>
+                  form.setValue("province", option.label)
+                }
+                deselectOption={() => form.setValue("province", "")}
                 isMulti={false}
                 placeholder="Select Province"
               />
             </Fieldset>
             <Fieldset label="City">
               <Dropdown
-                options={cityOptions}
-                selectedOption={city}
-                onOptionClick={(option) => setCity(option)}
+                options={cities.data}
+                selectedOption={cities.data?.find(
+                  (option) => option.label === selectedCity
+                )}
+                onOptionClick={(option) => form.setValue("city", option.label)}
+                deselectOption={() => form.setValue("city", "")}
                 isMulti={false}
                 placeholder="Select City"
               />
@@ -147,8 +174,13 @@ export function AddAddressModal() {
             <Fieldset label="District">
               <Dropdown
                 options={districtOptions}
-                selectedOption={district}
-                onOptionClick={(option) => setDistrict(option)}
+                selectedOption={districtOptions.find(
+                  (option) => option.label === selectedDistrict
+                )}
+                onOptionClick={(option) =>
+                  form.setValue("district", option.label)
+                }
+                deselectOption={() => form.setValue("district", "")}
                 isMulti={false}
                 placeholder="Select District"
               />
@@ -170,10 +202,32 @@ export function AddAddressModal() {
             <Fieldset label="Notes">
               <TextArea
                 placeholder="Additional notes"
+                className="h-36"
                 {...form.register("notes")}
               />
             </Fieldset>
-            <Button variant="default">Submit</Button>
+            <div className="flex flex-wrap items-center justify-end gap-2">
+              <Button
+                type="button"
+                variant="danger"
+                size="sm"
+                className="w-full text-white lg:w-32 lg:text-xs"
+                onClick={() => onOpenChange(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="default"
+                size="sm"
+                className="w-full lg:w-32 lg:text-xs"
+                disabled={addAddressMutation.isPending}
+              >
+                {addAddressMutation.isPending && (
+                  <ImSpinner8 size={14} className="animate-spin" />
+                )}
+                Submit
+              </Button>
+            </div>
           </form>
         </DialogContent>
       </DialogPortal>

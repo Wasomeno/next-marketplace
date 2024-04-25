@@ -1,18 +1,35 @@
 "use client"
 
 import React from "react"
-import { setMainAddress } from "@/actions/user/settings"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { UserAddress } from "@prisma/client"
+import clsx from "clsx"
 
 export const AddressCard = ({ address }: { address: UserAddress }) => {
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
+  function openSetMainAddresConfirmationModal() {
+    const urlSearchParams = new URLSearchParams(searchParams)
+    urlSearchParams.set("mainAddressConfirm", "true")
+    urlSearchParams.set("id", address.id)
+    router.replace(`${pathname}?${urlSearchParams.toString()}`)
+  }
+
   return (
     <div
       key={address.id}
-      onClick={() => setMainAddress(address.id)}
-      className="w-ful relative rounded-md border  border-gray-200 shadow-sm lg:w-72"
+      onClick={() =>
+        !address.isMainAddress && openSetMainAddresConfirmationModal()
+      }
+      className={clsx(
+        "relative w-full rounded-md border  border-gray-200 shadow-sm lg:w-72",
+        !address.isMainAddress && "cursor-pointer"
+      )}
     >
-      <div className="border-b border-gray-200 px-4 py-3 font-medium">
-        {address.title}
+      <div className="border-b border-gray-200 px-4 py-2">
+        <span className="text-sm font-medium">{address.title}</span>
       </div>
       <div className="flex flex-col gap-2 px-4 py-2">
         <span className="text-sm">{address.recipient}</span>
@@ -26,7 +43,7 @@ export const AddressCard = ({ address }: { address: UserAddress }) => {
       </div>
 
       {address.isMainAddress && (
-        <div className="absolute bottom-2 right-2 w-16 rounded-full border border-blue-100 bg-blue-200 py-1 text-center text-xs">
+        <div className="absolute bottom-2 right-2 w-16 rounded-full bg-gray-100 py-1 text-center text-xs font-medium shadow-sm">
           Main
         </div>
       )}

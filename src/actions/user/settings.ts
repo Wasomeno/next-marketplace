@@ -22,11 +22,25 @@ export async function addAddress(
 }
 
 export async function setMainAddress(id: string) {
+  const currentMainAddress = await prisma.userAddress.findMany({
+    where: { isMainAddress: true },
+  })
+
+  await Promise.all(
+    currentMainAddress.map((address) =>
+      prisma.userAddress.update({
+        where: { id: address.id },
+        data: { isMainAddress: false },
+      })
+    )
+  )
+
   await prisma.userAddress.update({
     where: { id: id },
     data: {
       isMainAddress: true,
     },
   })
+
   revalidatePath("/settings/address")
 }

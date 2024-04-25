@@ -1,4 +1,4 @@
-import React from "react"
+import React, { ReactNode } from "react"
 import { AnimatePresence } from "framer-motion"
 
 import { Button } from "./ui/button"
@@ -10,7 +10,7 @@ type ConfirmationDialogProps = {
   onOpenChange: () => void
   onConfirm: () => void
   onCancel: () => void
-  body: string
+  body: ReactNode
 }
 
 export function ConfirmationDialog({

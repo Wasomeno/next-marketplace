@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { AnimatePresence, motion } from "framer-motion"
 import { Session } from "next-auth"
 import { signOut } from "next-auth/react"
@@ -16,6 +16,7 @@ import { ThemeSwitcher } from "@/components/theme-switcher"
 export function UserMobileMenu({ session }: { session: Session }) {
   const [showMenu, setShowMenu] = useState(false)
   const router = useRouter()
+  const pathname = usePathname()
 
   return (
     <div className="relative flex items-center md:hidden">
@@ -95,6 +96,20 @@ export function UserMobileMenu({ session }: { session: Session }) {
                   </span>
                   <span className="text-sm">Settings</span>
                 </button>
+                {pathname.includes("settings") && (
+                  <button
+                    onClick={() => {
+                      router.push("/")
+                      setShowMenu(false)
+                    }}
+                    className="flex items-center gap-4 rounded-md px-2.5 py-2 transition duration-200 hover:bg-slate-200"
+                  >
+                    <span>
+                      <VscSignOut size="16" />
+                    </span>
+                    <span className="text-sm">Back to Main Page</span>
+                  </button>
+                )}
               </div>
               <div className="px-4 py-2">
                 <ThemeSwitcher />
