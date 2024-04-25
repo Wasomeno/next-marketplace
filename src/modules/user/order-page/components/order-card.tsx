@@ -30,12 +30,12 @@ export const OrderCard = ({ invoice }: OrderCardProps) => {
   function rateProduct() {}
 
   return (
-    <div className="flex flex-col gap-2 rounded-md border bg-slate-50 bg-opacity-50 px-4 py-2.5 shadow-sm dark:border-gray-800 dark:bg-slate-950 dark:bg-opacity-50 dark:shadow-gray-800 ">
+    <div className="flex flex-col gap-2 rounded-md border bg-opacity-50 px-4 py-2.5 shadow-sm dark:border-gray-800 dark:bg-slate-950 dark:bg-opacity-50 dark:shadow-gray-800 ">
       <div className="flex items-center justify-between lg:h-10">
+        <div className="text-xs">{date.toDateString()}</div>
         <span className="rounded-md bg-blue-200 p-1.5 text-xs font-medium tracking-wide dark:bg-blue-900">
           {invoice.status}
         </span>
-        <div className="text-xs">{date.toDateString()}</div>
       </div>
       <div className="flex flex-wrap items-center gap-2 lg:gap-10">
         <div className="flex w-full items-center gap-4 border-r-slate-200 dark:border-r-gray-800  lg:w-4/6 lg:border-r">
@@ -72,36 +72,14 @@ export const OrderCard = ({ invoice }: OrderCardProps) => {
             + {invoice.products.length - 1} other products
           </span>
         )}
-        <Button
-          onClick={viewOrderDetails}
-          className={twMerge(
-            clsx(
-              buttonVariants({
-                variant: "defaultOutline",
-                size: "sm",
-              }),
-              "border border-blue-400 bg-white text-blue-400 hover:bg-blue-400 hover:text-white lg:text-xs"
-            )
-          )}
-        >
+        <Button onClick={viewOrderDetails} size="sm" className="lg:text-xs">
           View Order Details
         </Button>
-        {invoice.status === "Done" && !invoice.products[0].isReviewed ? (
-          <Button
-            onClick={rateProduct}
-            className={twMerge(
-              clsx(
-                buttonVariants({
-                  variant: "default",
-                  size: "sm",
-                }),
-                "bg-white text-white hover:bg-blue-500 lg:text-xs"
-              )
-            )}
-          >
+        {invoice.status === "Done" && !invoice.products[0].isReviewed && (
+          <Button onClick={rateProduct} size="sm" className="lg:text-xs">
             Rate Product
           </Button>
-        ) : null}
+        )}
       </div>
     </div>
   )
