@@ -11,7 +11,7 @@ export default async function WishlistPage() {
   return (
     <div className="flex flex-1 flex-col">
       <div className="mb-4 px-4 lg:px-8">
-        <h1 className="mb-2 text-base font-medium lg:text-xl">Wishlist</h1>
+        <h1 className="text-base font-medium lg:text-xl">Wishlist</h1>
         <span className="font-sans text-xs font-medium text-slate-400 lg:text-sm">
           {wishlist.count} items
         </span>
