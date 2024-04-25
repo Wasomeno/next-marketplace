@@ -36,7 +36,7 @@ export const StoreOrderCard = ({
         <div className="flex flex-wrap gap-4 pb-0 lg:gap-10">
           <div className="space-y-2">
             <div className="flex w-72 gap-3">
-              <div className="relative h-28 w-28 overflow-hidden rounded-md border border-gray-200 shadow-sm">
+              <div className="relative h-20 w-20 overflow-hidden rounded-md border border-gray-200 shadow-sm lg:h-28 lg:w-28">
                 <Image
                   src={invoice.products[0].product.featured_image_url}
                   alt="product-image"
@@ -58,7 +58,7 @@ export const StoreOrderCard = ({
                 .slice(1, invoice.products.length)
                 .map((product) => (
                   <div key={product.id} className="flex w-72 gap-3">
-                    <div className="relative h-28 w-28 overflow-hidden rounded-md border border-gray-200 shadow-sm">
+                    <div className="relative h-20 w-20 overflow-hidden rounded-md border border-gray-200 shadow-sm lg:h-28 lg:w-28">
                       <Image
                         src={product.product.featured_image_url}
                         alt="product-image"
