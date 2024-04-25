@@ -3,7 +3,9 @@
 import { useState } from "react"
 import { addWishlistsToCart } from "@/actions/user/wishlist"
 import { Prisma } from "@prisma/client"
+import { useMutation } from "@tanstack/react-query"
 import { BiHeart } from "react-icons/bi"
+import { ImSpinner8 } from "react-icons/im"
 import { toast } from "react-toastify"
 
 import { Button } from "@/components/ui/button"
@@ -41,6 +43,12 @@ export function WishlistItems({ items }: WishlistItemsSectionProps) {
       }
     })
   }
+
+  const addWishlistoCart = useMutation({
+    mutationFn: () => addWishlistsToCart(selectedItems),
+    onSuccess: () => toast.success("Added all selected items to cart"),
+    onError: () => toast.error("Error when adding wishlist items to cart"),
+  })
 
   return (
     <div className="flex flex-1 flex-col justify-between  lg:flex-row ">
@@ -81,14 +89,14 @@ export function WishlistItems({ items }: WishlistItemsSectionProps) {
             </div>
           </div>
           <Button
-            disabled={!selectedItems.length}
+            disabled={!selectedItems.length || addWishlistoCart.isPending}
             variant="default"
-            className="my-1 w-full rounded-lg bg-blue-400 py-3 text-xs font-medium text-slate-50 dark:bg-blue-900 lg:text-sm"
-            onClick={async () => {
-              await addWishlistsToCart(selectedItems)
-              toast.success("Added all selected items to cart")
-            }}
+            className="my-1 w-full py-3 text-xs disabled:hover:bg-gray-100 lg:text-sm"
+            onClick={() => addWishlistoCart.mutate()}
           >
+            {addWishlistoCart.isPending && (
+              <ImSpinner8 className="animate-spin" size={16} />
+            )}
             Add all to Cart
           </Button>
         </div>
