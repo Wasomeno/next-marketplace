@@ -1,15 +1,15 @@
 "use client"
 
-import { useState } from "react";
-import { BiHeart } from "react-icons/bi";
-import { toast } from "react-toastify";
+import { useState } from "react"
+import { addWishlistsToCart } from "@/actions/user/wishlist"
+import { Prisma } from "@prisma/client"
+import { BiHeart } from "react-icons/bi"
+import { toast } from "react-toastify"
 
-import { addWishlistsToCart } from "@/actions/user/wishlist";
-import { NoData } from "@/components/no-data";
-import { Button } from "@/components/ui/button";
-import { Prisma } from "@prisma/client";
+import { Button } from "@/components/ui/button"
+import { NoData } from "@/components/no-data"
 
-import { WishlistItemCard } from "./wishlist-item-card";
+import { WishlistItemCard } from "./wishlist-item-card"
 
 type WishlistItemsSectionProps = {
   items:
@@ -26,6 +26,22 @@ export function WishlistItems({ items }: WishlistItemsSectionProps) {
     ?.filter((item) => selectedItems.includes(item.product_id))
     .reduce((accumulator, current) => (accumulator += current.product.price), 0)
 
+  function selectItem(
+    item: Prisma.WishlistItemGetPayload<{
+      include: { product: { include: { images: true } } }
+    }>
+  ) {
+    setSelectedItems((selectedItems) => {
+      if (selectedItems.includes(item.product_id)) {
+        return selectedItems.filter(
+          (selectedItem) => selectedItem !== item.product_id
+        )
+      } else {
+        return [...selectedItems, item.product_id]
+      }
+    })
+  }
+
   return (
     <div className="flex flex-1 flex-col justify-between  lg:flex-row ">
       <div className="w-full px-4 lg:w-7/12 lg:px-8">
@@ -35,17 +51,8 @@ export function WishlistItems({ items }: WishlistItemsSectionProps) {
               <WishlistItemCard
                 key={item.id}
                 item={item}
-                onItemSelect={(item) =>
-                  setSelectedItems((selectedItems) => {
-                    if (selectedItems.includes(item.product_id)) {
-                      return selectedItems.filter(
-                        (selectedItem) => selectedItem !== item.product_id
-                      )
-                    } else {
-                      return [...selectedItems, item.product_id]
-                    }
-                  })
-                }
+                isSelected={selectedItems.includes(item.product_id)}
+                onClick={() => selectItem(item)}
               />
             ))
           ) : (
