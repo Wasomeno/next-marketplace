@@ -1,10 +1,10 @@
-import React, { HTMLAttributes, ReactElement } from "react"
+import React, { HTMLAttributes, ReactElement, ReactNode } from "react"
 import clsx from "clsx"
 import { Controller, FieldError } from "react-hook-form"
 import { twMerge } from "tailwind-merge"
 
 interface FieldsetProps extends HTMLAttributes<HTMLDivElement> {
-  children: ReactElement
+  children: ReactNode
   error?: FieldError
   label: string
 }
