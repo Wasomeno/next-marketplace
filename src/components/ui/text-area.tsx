@@ -12,7 +12,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
         <textarea
           className={twMerge(
             clsx(
-              "border-input ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+              "placeholder:text-muted-foreground flex h-10 w-full rounded-md border px-3 py-2 text-sm focus:border-gray-400 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
               className
             )
           )}
