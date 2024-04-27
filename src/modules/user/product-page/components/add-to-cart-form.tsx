@@ -1,10 +1,12 @@
 "use client"
 
-import { useState, useTransition } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { addToCart } from "@/actions/user/cart"
 import { Product } from "@prisma/client"
+import { useMutation } from "@tanstack/react-query"
 import { useSession } from "next-auth/react"
+import { ImSpinner8 } from "react-icons/im"
 import { toast } from "react-toastify"
 
 import { Button } from "@/components/ui/button"
@@ -15,11 +17,9 @@ type AddToCartFormProps = {
 
 export const AddToCartForm = ({ product }: AddToCartFormProps) => {
   const [amount, setAmount] = useState<number>(1)
-  const [isPending, startTransition] = useTransition()
   const router = useRouter()
 
-  const { data: session } = useSession()
-  const userEmail = session?.user?.email
+  const { status: sessionStatus } = useSession()
 
   function increment() {
     if (amount >= 5) return
@@ -30,6 +30,13 @@ export const AddToCartForm = ({ product }: AddToCartFormProps) => {
     if (amount <= 1) return
     setAmount((currentAmount) => currentAmount - 1)
   }
+
+  const addToCartMutation = useMutation({
+    mutationFn: () => addToCart(product.id, amount),
+    onSuccess: () => toast.success(`Added ${product.name} to your cart`),
+    onError: () =>
+      toast.success(`Error when adding ${product.name} to your cart`),
+  })
 
   return (
     <div className="sticky bottom-0 m-0 h-fit w-screen border-t border-slate-200 bg-white p-2 shadow-[0_3px_10px_rgb(0,0,0,0.1)] dark:border-t-gray-800 lg:top-20 lg:mr-20 lg:w-80 lg:rounded-lg lg:border lg:border-slate-200 lg:p-4 lg:shadow-sm lg:dark:border-gray-800">
@@ -65,16 +72,16 @@ export const AddToCartForm = ({ product }: AddToCartFormProps) => {
       <div className="flex w-full gap-2 lg:flex-col lg:gap-0">
         <Button
           variant="default"
+          disabled={addToCartMutation.isPending}
           onClick={() =>
-            userEmail
-              ? startTransition(async () => {
-                  await addToCart(product.id, amount)
-                  toast.success("Added to cart")
-                })
-              : router.push("/login")
+            sessionStatus === "unauthenticated"
+              ? router.push("/login")
+              : addToCartMutation.mutate()
           }
-          className="my my-2 h-8 w-full rounded-lg  bg-blue-400 text-xs font-medium text-slate-50 hover:bg-blue-500 dark:bg-blue-900 lg:h-10 lg:text-sm"
         >
+          {addToCartMutation.isPending && (
+            <ImSpinner8 className="animate-spin" />
+          )}
           Add to Cart
         </Button>
       </div>
