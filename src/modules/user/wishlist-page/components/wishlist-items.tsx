@@ -74,16 +74,16 @@ export function WishlistItems({ items }: WishlistItemsSectionProps) {
         </div>
       </div>
       <div className="sticky bottom-0 w-full bg-white dark:bg-neutral-950 lg:w-2/6 lg:px-8">
-        <div className="flex flex-col justify-between border-t border-gray-200 p-2.5 shadow-[0_3px_10px_rgb(0,0,0,0.1)] dark:border-gray-800 lg:h-72 lg:rounded-lg lg:border lg:border-gray-200 lg:p-4 lg:shadow-none">
-          <div className="">
-            <span className="hidden text-xs font-medium lg:inline lg:text-base">
+        <div className="flex flex-col justify-between border-t border-gray-200 p-2.5 shadow-[0_3px_10px_rgb(0,0,0,0.1)] dark:border-gray-800 lg:rounded-lg lg:border lg:border-gray-200 lg:p-4 lg:shadow-sm">
+          <div className="mb-4 space-y-2">
+            <h5 className="hidden text-xs font-medium lg:inline lg:text-base">
               Selected Items Summary
-            </span>
-            <div className="my-2 flex justify-between">
-              <span className="text-xs text-slate-500 lg:text-base">
+            </h5>
+            <div className="flex justify-between">
+              <span className="text-xs text-slate-500 lg:text-sm">
                 Subtotal
               </span>
-              <span className="text-sm lg:text-lg">
+              <span className="text-sm lg:text-base">
                 Rp {subtotal?.toLocaleString("id")}
               </span>
             </div>
@@ -91,7 +91,7 @@ export function WishlistItems({ items }: WishlistItemsSectionProps) {
           <Button
             disabled={!selectedItems.length || addWishlistoCart.isPending}
             variant="default"
-            className="my-1 w-full py-3 text-xs disabled:hover:bg-gray-100 lg:text-sm"
+            className="w-full disabled:hover:bg-gray-100 lg:text-xs"
             onClick={() => addWishlistoCart.mutate()}
           >
             {addWishlistoCart.isPending && (
