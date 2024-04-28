@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import { Prisma } from "@prisma/client"
 
-type CheckoutItem = Prisma.CartItemGetPayload<{
+export type CheckoutItem = Prisma.CartItemGetPayload<{
   include: { product: { include: { images: true } } }
 }>
 
@@ -13,9 +13,9 @@ export function CheckoutItems() {
     useState<Array<CheckoutItem>>()
 
   useEffect(() => {
-    if (window !== undefined) {
+    if (typeof localStorage !== "undefined") {
       setSelectedCartItems(
-        JSON.parse(window.localStorage.getItem("selectedCartItems") as string)
+        JSON.parse(localStorage.getItem("selectedCartItems") as string)
       )
     }
   }, [])
