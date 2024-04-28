@@ -49,7 +49,7 @@ export function UserViewOrderModal() {
         <DialogOverlay />
         <DialogContent
           open={isOpen}
-          className="flex w-full flex-col gap-4 lg:h-4/6 lg:w-3/6"
+          className="flex w-full flex-1 flex-col gap-4 lg:h-4/6 lg:w-3/6"
         >
           <DialogHeader title="Order Details" />
           {invoice.isLoading ? (
@@ -57,8 +57,8 @@ export function UserViewOrderModal() {
               <ImSpinner8 size={30} className="animate-spin text-blue-500" />
             </div>
           ) : (
-            <div className="flex h-full w-full flex-col justify-between px-4 pb-4 pt-2 lg:px-6">
-              <div className="space-y-4">
+            <div className="flex h-full flex-1 flex-col justify-between px-4 pb-4 pt-2 lg:px-6">
+              <div className="flex flex-1 flex-col gap-4">
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <h2 className=" text-sm text-gray-500 lg:text-base">
@@ -82,9 +82,9 @@ export function UserViewOrderModal() {
                   orientation="horizontal"
                   className="h-px w-full bg-gray-200"
                 />
-                <div className="space-y-2 overflow-y-scroll">
+                <div className="flex flex-col space-y-2 overflow-y-scroll">
                   {invoice.data?.products.map((product) => (
-                    <div className="flex gap-4">
+                    <div className="flex flex-1 gap-4">
                       <div className="relative h-20 w-20 overflow-hidden rounded-lg border lg:h-24 lg:w-24">
                         <Image
                           src={product.product.featured_image_url}
@@ -92,8 +92,8 @@ export function UserViewOrderModal() {
                           alt={product.product.name}
                         />
                       </div>
-                      <div className="flex flex-wrap justify-between lg:w-full">
-                        <span className="w-full text-sm">
+                      <div className="flex flex-1 flex-col justify-between lg:flex-row">
+                        <span className="inline w-full text-sm lg:w-fit">
                           {product.product.name}
                         </span>
                         <div className="flex w-full flex-col gap-2 lg:w-fit lg:items-end">
