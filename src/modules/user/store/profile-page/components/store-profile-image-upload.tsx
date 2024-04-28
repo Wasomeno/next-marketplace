@@ -7,8 +7,9 @@ import {
   updateStoreProfileImage,
 } from "@/actions/store/store"
 import { useUploadThing } from "@/utils/uploadthing"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import clsx from "clsx"
+import { ImSpinner8 } from "react-icons/im"
 import FileResizer from "react-image-file-resizer"
 import { toast } from "react-toastify"
 
@@ -25,6 +26,24 @@ export const StoreProfileImageUpload = () => {
     queryFn: () => getStoreProfileImage(),
     refetchOnMount: false,
     refetchOnWindowFocus: false,
+  })
+
+  const saveImageMutation = useMutation({
+    mutationFn: async () => {
+      const uploadedImages = await startUpload([image] as File[])
+      if (!uploadedImages) {
+        toast.error("Error when updating store profile image")
+      } else {
+        await updateStoreProfileImage(
+          uploadedImages[0].url,
+          uploadedImages[0].name
+        )
+      }
+      refetch()
+      setImage(null)
+    },
+    onSuccess: () => toast.success("Successfully updated store profile image"),
+    onError: () => toast.success("Error when updating store profile image"),
   })
 
   function selectImage(props: ChangeEvent<HTMLInputElement>) {
@@ -62,34 +81,10 @@ export const StoreProfileImageUpload = () => {
     setImage(null)
   }
 
-  async function saveImage() {
-    toast.promise(
-      async () => {
-        const uploadedImages = await startUpload([image] as File[])
-        if (!uploadedImages) {
-          toast.error("Error when updating store profile image")
-        } else {
-          await updateStoreProfileImage(
-            uploadedImages[0].url,
-            uploadedImages[0].name
-          )
-        }
-        refetch()
-        setImage(null)
-      },
-
-      {
-        pending: "Updating Store Profile Image",
-        error: "Error when updating store profile image",
-        success: "Succesfully updated store profile image",
-      }
-    )
-  }
-
   return (
-    <div className="flex w-52 flex-col items-center gap-2 lg:w-64 lg:items-start">
+    <div className="flex flex-col items-center gap-4 lg:items-start">
       <Skeleton
-        className={clsx("h-52 w-52 border border-gray-200 lg:h-64 lg:w-64")}
+        className={clsx("h-52 w-52 border border-gray-200 lg:h-60 lg:w-60")}
       >
         {!isFetching && (
           <Image
@@ -118,13 +113,22 @@ export const StoreProfileImageUpload = () => {
       {image && (
         <div className="flex w-full flex-1 items-center gap-2">
           <Button
+            size="sm"
+            variant="defaultOutline"
+            className="flex-1 lg:text-xs"
             onClick={resetImage}
-            variant="danger"
-            className="flex-1 text-white"
           >
             Cancel
           </Button>
-          <Button onClick={saveImage} className="flex-1">
+          <Button
+            size="sm"
+            className="flex-1 lg:text-xs"
+            onClick={() => saveImageMutation.mutate()}
+            disabled={saveImageMutation.isPending}
+          >
+            {saveImageMutation.isPending && (
+              <ImSpinner8 className="animate-spin" />
+            )}
             Save
           </Button>
         </div>
