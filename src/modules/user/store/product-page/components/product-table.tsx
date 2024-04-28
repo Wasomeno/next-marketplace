@@ -12,7 +12,6 @@ import { ColumnDef } from "@tanstack/react-table"
 import { BsPlus, BsTrash3 } from "react-icons/bs"
 import { toast } from "react-toastify"
 
-import { queryClient } from "@/lib/react-query-client"
 import { Button } from "@/components/ui/button"
 import { CheckBox } from "@/components/ui/checkbox"
 import { ConfirmationDialog } from "@/components/confirmation-dialog"
@@ -205,7 +204,7 @@ export const ProductTable: React.FC<{ userEmail: string }> = ({
             variant="defaultOutline"
             size="sm"
             onClick={openCreateProductModal}
-            className="xs:h-8 xs:w-8 gap-1 shadow-sm"
+            className="h-8 w-8 gap-1 px-0 shadow-sm lg:h-9 lg:w-auto lg:px-2.5"
           >
             <span className="hidden text-xs lg:inline">Create</span> <BsPlus />
           </Button>
@@ -216,7 +215,7 @@ export const ProductTable: React.FC<{ userEmail: string }> = ({
             size="sm"
             disabled={!selectedData.length}
             onClick={() => setIsDeleteModalOpen(true)}
-            className="xs:h-8 xs:w-8 shadow-sm disabled:hover:bg-white"
+            className="h-8 w-8 px-0 shadow-sm disabled:hover:bg-white lg:h-9 lg:w-auto lg:px-2.5"
           >
             <span className="hidden text-xs lg:inline">Remove</span>{" "}
             <BsTrash3 />
@@ -270,20 +269,20 @@ export function ProductTableSkeleton() {
         <Button
           variant="defaultOutline"
           size="sm"
-          className="h-8 w-8 hover:scale-[105%] lg:h-9 lg:w-9"
+          className="h-8 w-8 gap-1 px-0 shadow-sm lg:h-9 lg:w-auto lg:px-2.5"
           disabled
         >
-          <BsPlus />
+          <span className="hidden text-xs lg:inline">Create</span> <BsPlus />
         </Button>
       }
       deleteTrigger={
         <Button
           variant="defaultOutline"
           size="sm"
+          className="h-8 w-8 px-0 shadow-sm lg:h-9 lg:w-auto lg:px-2.5"
           disabled
-          className="h-8 w-8 hover:scale-[105%] lg:h-9 lg:w-9"
         >
-          <BsTrash3 />
+          <span className="hidden text-xs lg:inline">Remove</span> <BsTrash3 />
         </Button>
       }
     />
