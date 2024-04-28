@@ -23,16 +23,6 @@ export default async function CategoryPage({
 
   invariant(category, "Category Invalid")
 
-  fetch("https://api.rajaongkir.com/starter/province?id=12", {
-    method: "GET",
-    headers: {
-      key: "e936e01df5dd09b75d17752ff1fcb2df",
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-  })
-    .then((response) => response.json())
-    .then((result) => console.log(result))
-
   return (
     <div className="flex w-full flex-1 flex-col gap-4 p-6">
       <div className="mb-0 flex items-center justify-between lg:mb-4">
