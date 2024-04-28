@@ -21,7 +21,10 @@ export type StoreProduct = Prisma.ProductGetPayload<{
 }>
 
 type CreateStoreParams = Omit<Store, "id">
-type UpdateStoreParams = Store
+type UpdateStoreParams = Omit<
+  Store,
+  "owner_email" | "profile_image" | "created_at"
+>
 
 export async function getStore(slug?: string) {
   const session = await getServerSession()
@@ -85,6 +88,21 @@ export async function getStoreProductsCount(
 export async function createStore(store: CreateStoreParams) {
   try {
     await prisma.store.create({
+      data: { ...store },
+    })
+  } catch (error) {
+    throw error
+  }
+
+  revalidatePath("/")
+}
+
+export async function updateStore(store: UpdateStoreParams) {
+  try {
+    await prisma.store.update({
+      where: {
+        id: store.id,
+      },
       data: { ...store },
     })
   } catch (error) {
