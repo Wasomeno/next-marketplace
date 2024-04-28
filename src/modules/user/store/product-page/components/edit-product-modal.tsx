@@ -1,19 +1,19 @@
 "use client"
 
-import React, { useEffect, useState, useTransition } from "react"
+import React, { useEffect } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { getCategories } from "@/actions/categories"
 import { getProduct } from "@/actions/product"
 import { updateProduct } from "@/actions/store/products"
+import { categoryQueryKeys } from "@/modules/user/common/queryKeys/categoryQueryKeys"
 import { useSearchParamsValues } from "@/utils"
 import { useUploadThing } from "@/utils/uploadthing"
 import { useImageFiles } from "@/utils/useImageFiles"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { ImSpinner8 } from "react-icons/im"
 import { toast } from "react-toastify"
-import invariant from "tiny-invariant"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -26,7 +26,7 @@ import {
 import { Fieldset } from "@/components/ui/fieldset"
 import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
-import { Dropdown, Option } from "@/components/dropdown"
+import { Dropdown } from "@/components/dropdown"
 import { ImageUploader } from "@/components/image-uploader"
 import { Skeleton } from "@/components/skeleton"
 
@@ -47,14 +47,10 @@ export const EditProductModal = () => {
   })
 
   const categories = useQuery({
-    queryKey: ["categories"],
+    queryKey: categoryQueryKeys.all(),
     queryFn: () => getCategories(),
     enabled: isOpen,
   })
-
-  const [selectedCategories, setSelectedCategories] = useState<Option[]>([])
-
-  const [isLoading, startTransition] = useTransition()
 
   const {
     files,
@@ -67,11 +63,9 @@ export const EditProductModal = () => {
 
   const pathname = usePathname()
 
-  const { register, reset, formState, handleSubmit } = useForm<ProductFormData>(
-    {
-      resolver: zodResolver(ProductSchema),
-    }
-  )
+  const form = useForm<ProductFormData>({
+    resolver: zodResolver(ProductSchema),
+  })
 
   const { startUpload } = useUploadThing("imageUploader")
 
@@ -80,6 +74,8 @@ export const EditProductModal = () => {
     value: category.id,
   }))
 
+  const selectedCategories = form.watch("categoryIds", [])
+
   function closeModal() {
     const urlSearchParams = new URLSearchParams(searchParamsValues)
     urlSearchParams.delete("edit")
@@ -87,46 +83,45 @@ export const EditProductModal = () => {
     router.replace(`${pathname}?${urlSearchParams.toString()}`)
   }
 
-  async function onSubmit(inputs: ProductFormData) {
-    startTransition(async () => {
-      try {
-        const uploadedImages = await startUpload(files)
+  const updateProductMutation = useMutation({
+    mutationFn: async (formData: ProductFormData) => {
+      const uploadedImages = await startUpload(files)
 
-        invariant(uploadedImages)
-
-        await updateProduct({
-          ...inputs,
-          id: parseInt(searchParamsValues.id),
-          categoryIds: selectedCategories.map(
-            (category) => category.value as number
-          ),
-          images: uploadedImages?.map((image) => ({
-            name: image.name,
-            url: image.url,
-          })) as { name: string; url: string }[],
-          status: "published",
-          featured_image_url: uploadedImages[0]?.url,
-        })
-
-        toast.success("Successfully Updated Product")
-        router.push("/store/products")
-      } catch (error) {
-        toast.error(`Error when updating Product`)
+      if (!uploadedImages || !uploadedImages.length) {
+        throw new Error("Error When Uploading Product Imagess")
       }
-    })
-  }
+
+      await updateProduct({
+        ...formData,
+        id: parseInt(searchParamsValues.id),
+        categoryIds: formData.categoryIds,
+        images: uploadedImages?.map((image) => ({
+          name: image.name,
+          url: image.url,
+        })),
+        status: "published",
+        featured_image_url: uploadedImages[0]?.url,
+      })
+    },
+    onSuccess: () => {
+      const urlSearchParams = new URLSearchParams(searchParamsValues)
+      urlSearchParams.delete("edit")
+      urlSearchParams.delete("id")
+
+      router.replace(`${pathname}?${urlSearchParams.toString()}`)
+      toast.success("Successfully Updated Product")
+    },
+    onError: (error) => {
+      toast.error(error.message ?? "Error updating product")
+    },
+  })
 
   useEffect(() => {
     if (product.data) {
-      reset({
+      form.reset({
         ...product.data,
+        categoryIds: product.data.categories.map((category) => category.id),
       })
-      setSelectedCategories(
-        product.data.categories.map((category) => ({
-          label: category.name,
-          value: category.id,
-        }))
-      )
     }
   }, [product.isLoading])
 
@@ -137,7 +132,9 @@ export const EditProductModal = () => {
         <DialogContent open={isOpen} className="h-[36rem] lg:w-[30rem]">
           <DialogHeader title="Edit Store Product" />
           <form
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit((formData) =>
+              updateProductMutation.mutate(formData)
+            )}
             className="flex w-full flex-col gap-4 p-4"
           >
             {product.isLoading || isFileLoading ? (
@@ -154,44 +151,78 @@ export const EditProductModal = () => {
             )}
 
             <Fieldset label="Name" className="flex flex-col gap-2 ">
-              <Input className="w-full" {...register("name")} />
+              <Input className="w-full" {...form.register("name")} />
+              {form.formState.errors.name && (
+                <span className="text-xs text-red-600">
+                  {form.formState.errors.name.message}
+                </span>
+              )}
             </Fieldset>
             <Fieldset label="Categories" className="flex flex-col gap-2 ">
               <Dropdown
                 options={categoryOptions}
-                selectedOptions={selectedCategories}
+                selectedOptions={categoryOptions?.filter((option) =>
+                  selectedCategories?.includes(option.value)
+                )}
                 onOptionClick={(option) =>
-                  setSelectedCategories((categories) => [...categories, option])
+                  form.setValue("categoryIds", [
+                    ...selectedCategories,
+                    Number(option.value),
+                  ])
                 }
-                deselectOption={(option) => {
-                  setSelectedCategories((categories) =>
-                    categories.filter(
-                      (category) => category.value !== option.value
+                deselectOption={(option) =>
+                  form.setValue(
+                    "categoryIds",
+                    selectedCategories.filter(
+                      (categoryId) => option.value !== categoryId
                     )
                   )
-                }}
+                }
                 isMulti
               />
+              {form.formState.errors.categoryIds && (
+                <span className="text-xs text-red-600">
+                  {form.formState.errors.categoryIds.message}
+                </span>
+              )}
             </Fieldset>
             <Fieldset label="Price" className="flex flex-col gap-2 ">
               <Input
                 type="number"
                 className="w-full"
-                {...register("price", { valueAsNumber: true })}
+                {...form.register("price", { valueAsNumber: true })}
               />
+              {form.formState.errors.price && (
+                <span className="text-xs text-red-600">
+                  {form.formState.errors.price.message}
+                </span>
+              )}
             </Fieldset>
             <Fieldset label="Stock" className="flex flex-col gap-2 ">
               <Input
                 type="number"
                 className="w-full"
-                {...register("stock", { valueAsNumber: true })}
+                {...form.register("stock", { valueAsNumber: true })}
               />
+              {form.formState.errors.stock && (
+                <span className="text-xs text-red-600">
+                  {form.formState.errors.stock.message}
+                </span>
+              )}
             </Fieldset>
             <Fieldset
               label="Description"
               className="col-span-2 flex flex-col gap-2 "
             >
-              <TextArea className="h-36 w-full" {...register("description")} />
+              <TextArea
+                className="h-36 w-full"
+                {...form.register("description")}
+              />
+              {form.formState.errors.description && (
+                <span className="text-xs text-red-600">
+                  {form.formState.errors.description.message}
+                </span>
+              )}
             </Fieldset>
             <div className="flex flex-wrap-reverse items-center justify-end gap-2">
               <Button
@@ -204,12 +235,14 @@ export const EditProductModal = () => {
                 Cancel
               </Button>
               <Button
-                disabled={!formState.isValid || isLoading}
+                disabled={updateProductMutation.isPending}
                 variant="default"
                 size="sm"
                 className="w-full lg:w-32"
               >
-                {isLoading && <ImSpinner8 size={14} className="animate-spin" />}
+                {updateProductMutation.isPending && (
+                  <ImSpinner8 className="animate-spin" />
+                )}
                 Submit
               </Button>
             </div>
