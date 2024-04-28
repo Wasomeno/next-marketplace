@@ -91,27 +91,26 @@ export function WishlistItemCard({
 
 export function WishListItemCardSkeleton() {
   return (
-    <div className="flex items-center gap-4 border-t p-4">
-      <CheckBox disabled />
-      <div className="flex w-full items-end justify-between">
+    <div className="flex cursor-pointer items-center gap-4 rounded-lg rounded-t-none border border-x-transparent border-b-transparent p-4 transition-all duration-200 dark:border-t-gray-800">
+      <div className="flex w-full items-end justify-between gap-2">
         <div className="flex w-full gap-4">
-          <div className="w-[60px] lg:w-[120px]">
-            <Skeleton className="h-16 w-full lg:h-32" />
+          <Skeleton className="h-20 w-20 lg:h-28 lg:w-28" />
+          <div className="flex flex-1 flex-wrap justify-between gap-2">
+            <div className="flex w-full flex-col gap-1 lg:w-fit">
+              <Skeleton className="h-6 w-32 lg:h-8" />
+              <Skeleton className="h-7 w-32 lg:h-8" />
+            </div>
+            <div className="flex w-full items-center justify-end gap-2 lg:w-fit lg:gap-4">
+              <Button
+                variant="defaultOutline"
+                size="sm"
+                className="h-8 w-8 p-2 shadow-sm"
+                disabled
+              >
+                <BiTrash size={14} />
+              </Button>
+            </div>
           </div>
-          <div className="flex w-4/6 flex-col gap-1 lg:w-3/6">
-            <Skeleton className="h-[0.75rem] w-32 lg:h-[1rem]" />
-            <Skeleton className="h-[0.75rem] w-40 lg:h-[1rem]" />
-          </div>
-        </div>
-        <div>
-          <Button
-            disabled
-            variant="danger"
-            size="sm"
-            className="h-7 w-7 p-2 text-white lg:h-8 lg:w-8"
-          >
-            <BiTrash size="14" />
-          </Button>
         </div>
       </div>
     </div>
