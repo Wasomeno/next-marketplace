@@ -33,14 +33,14 @@ export const ProductYearlySalesChart = () => {
 
   const params = useParams<{ productId: string }>()
 
-  const month = moment().get("month")
+  const year = moment().get("year")
 
   const sales = useQuery({
     queryKey: ["yearlySales", params.productId, searchParamValues.year],
     queryFn: () =>
       getProductYearlySales(
         Number(params.productId),
-        searchParamValues.year ? Number(searchParamValues.year) : month
+        searchParamValues.year ? Number(searchParamValues.year) : year
       ),
   })
 
