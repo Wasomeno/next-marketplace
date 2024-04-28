@@ -56,10 +56,10 @@ export async function StoreButton() {
     <Fragment>
       <Link
         href="/store/home"
-        className={clsx(linkStyle, "items-cent hidden gap-2 lg:flex ")}
+        className={clsx(linkStyle, "hidden items-center gap-2 lg:flex")}
       >
         <BiStore size={20} />
-        {store.name}
+        Your Store
       </Link>
       <Link href="/store/home" className="inline-block lg:hidden">
         <BiStore size={20} />
