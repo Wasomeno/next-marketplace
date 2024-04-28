@@ -1,10 +1,7 @@
 "use client"
 
 import React from "react"
-import {
-  getStoreProductReviews,
-  getStoreProductReviewsCount,
-} from "@/actions/store/review"
+import { getStoreProductReviews } from "@/actions/store/review"
 import { getParsedSortParams, useSearchParamsValues } from "@/utils"
 import { Prisma } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
@@ -95,7 +92,7 @@ export const StoreProductReviewsTable = () => {
       }
       dataSorter={<DataTable.Sorter sortOptions={reviewsSortOptions} />}
       pagination={
-        reviews ? (
+        reviews?.length ? (
           <DataTable.Pagination
             dataLength={reviews.length as number}
             pageSize={Number(pageSize)}
