@@ -1,53 +1,52 @@
 import { Button } from "@/components/ui/button"
-import { BackButton } from "@/components/back-button"
+import { Skeleton } from "@/components/skeleton"
 
 export default function CheckoutLoadingPage() {
   return (
-    <div className="flex flex-1 flex-col">
-      <div className="mb-2 lg:mb-6 lg:px-8">
-        <div className="flex items-center gap-2">
-          <BackButton />
-          <h1 className="text-base font-medium lg:text-xl">Checkout</h1>
-        </div>
+    <div className="flex flex-1 flex-col gap-4">
+      <div className="px-4 lg:px-8">
+        <h1 className="text-base font-medium lg:text-xl">Checkout</h1>
       </div>
       <div className="flex flex-1 flex-col justify-between gap-4 lg:flex-row">
-        <div className="w-full lg:w-4/6">
-          <div className="mb-4 flex flex-col gap-1 px-4 lg:px-8">
-            <h5 className="text-sm font-medium lg:text-base">
-              Shipping Address
-            </h5>
-            <div className="h-[14px] w-48 rounded-lg bg-slate-300 dark:bg-neutral-400 lg:h-[16px]" />
-          </div>
-          <div className="flex flex-1 flex-col gap-2 px-4 lg:px-8">
-            <div className="flex items-center gap-4 border-t p-4 dark:border-t-neutral-700">
-              <div className="flex w-full flex-wrap items-end justify-between gap-2">
-                <div className="flex w-full gap-2 lg:w-4/6 lg:gap-4">
-                  <div className="relative h-12 w-16 rounded-md bg-slate-300 dark:bg-neutral-400 lg:h-20 lg:w-24" />
-                  <div className="flex w-4/6 flex-col gap-1 lg:w-3/6">
-                    <div className="h-[14px] w-40 rounded-lg bg-slate-300 text-xs font-medium dark:bg-neutral-400 lg:h-[16px] lg:text-sm" />
-                    <div className="h-[14px] w-40 rounded-lg bg-slate-300 text-xs font-medium dark:bg-neutral-400 lg:h-[16px] lg:text-sm" />
-                  </div>
-                </div>
-              </div>
+        <div className="w-full space-y-4 px-4 lg:w-4/6 lg:px-8">
+          <div className="space-y-2 rounded-lg border p-4 shadow-sm lg:space-y-3">
+            <h2 className="text-sm font-medium lg:text-base">Your Address</h2>
+            <Skeleton className="h-5 w-72 lg:h-6" />
+            <div className="flex justify-end lg:justify-start">
+              <Button disabled size="sm" className="h-8 w-24 lg:text-xs">
+                Change
+              </Button>
             </div>
           </div>
+          <div className="flex flex-1 flex-col gap-4">
+            {Array(5)
+              .fill("")
+              .map(() => (
+                <div className="flex flex-1 gap-4">
+                  <Skeleton className=" h-20 w-20 lg:h-24 lg:w-24" />
+                  <div className="flex flex-1 flex-col justify-between lg:flex-row">
+                    <Skeleton className="h-5 w-full lg:h-6 lg:w-32" />
+                    <div className="flex w-full flex-col gap-2 lg:w-fit lg:items-end">
+                      <Skeleton className="h-5 w-32 lg:h-6" />
+                      <Skeleton className="h-5 w-32 lg:h-6" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+          </div>
         </div>
-        <div className="sticky bottom-0 w-full lg:w-2/6 lg:px-8">
-          <div className="border-t border-slate-200 p-2.5 shadow-[0_3px_10px_rgb(0,0,0,0.1)] dark:border-t-gray-800 lg:rounded-md lg:border lg:border-slate-300 lg:p-4 lg:shadow-none lg:dark:border-gray-800">
-            <span className="hidden text-xs lg:inline lg:text-lg">
+        <div className="sticky bottom-0 w-full bg-white lg:w-2/6 lg:px-8">
+          <div className="border-t border-gray-200 p-2.5 shadow-[0_3px_10px_rgb(0,0,0,0.1)] dark:border-t-gray-800 lg:rounded-md  lg:border lg:p-4 lg:shadow-none lg:dark:border-gray-800">
+            <span className="hidden text-xs font-medium lg:inline lg:text-base">
               Order Summary
             </span>
             <div className="my-2 flex items-center justify-between">
-              <span className="text-xs text-slate-500 lg:text-base">
+              <span className="text-sm text-slate-500 lg:text-base">
                 Subtotal
               </span>
-              <div className="h-[14px] w-52 rounded-lg bg-slate-300 dark:bg-neutral-400 lg:h-[18px]" />
+              <Skeleton className="h-5 w-32 lg:h-6" />
             </div>
-            <Button
-              disabled
-              variant="default"
-              className="my-1 w-full rounded-lg bg-blue-400 py-3  text-xs font-medium text-white dark:bg-blue-900 lg:text-sm"
-            >
+            <Button disabled className="w-full lg:text-xs">
               Checkout
             </Button>
           </div>
