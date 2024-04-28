@@ -2,6 +2,9 @@ import { getUserAddress } from "@/actions/user/user-details"
 import { CheckoutItems } from "@/modules/user/checkout-page/components/checkout-items"
 import { CheckoutPaymentModal } from "@/modules/user/checkout-page/components/checkout-payment-modal"
 import { CheckoutSummary } from "@/modules/user/checkout-page/components/checkout-summary"
+import invariant from "tiny-invariant"
+
+import { Button } from "@/components/ui/button"
 
 export const metadata = {
   title: "Checkout",
@@ -9,31 +12,27 @@ export const metadata = {
 
 export default async function CheckoutPage() {
   const address = await getUserAddress()
+
+  invariant(address)
+
   return (
-    <div className="flex flex-1 flex-col">
-      <div className="mb-4 px-4 lg:px-8">
+    <div className="flex flex-1 flex-col gap-4">
+      <div className="px-4 lg:px-8">
         <h1 className="text-base font-medium lg:text-xl">Checkout</h1>
       </div>
       <div className="flex flex-1 flex-col justify-between gap-4 lg:flex-row">
-        <div className="w-full lg:w-4/6">
-          <div className="mb-4 flex flex-col gap-1 px-4 lg:px-8">
-            <h5 className="text-xs font-medium lg:text-base">
-              Shipping Address
-            </h5>
-            <div className="w-ful relative rounded-md border  border-gray-200 shadow-sm lg:w-72">
-              <div className="flex flex-col gap-2 px-4 py-2">
-                <span className="text-sm">{address?.recipient}</span>
-                <span className="text-sm">
-                  {address?.province}, {address?.city}, {address?.subdistrict}
-                </span>
-                <span className="text-sm">
-                  {address?.street}, {address?.postNumber}
-                </span>
-                <span className="text-sm">{address?.phoneNumber}</span>
-              </div>
-              <div className="absolute bottom-2 right-2 w-16 rounded-full border border-blue-100 bg-blue-200 py-1 text-center text-xs">
-                Main
-              </div>
+        <div className="w-full space-y-4 px-4 lg:w-4/6 lg:px-8">
+          <div className="space-y-2 rounded-lg border p-4 shadow-sm lg:space-y-3">
+            <h2 className="text-sm font-medium lg:text-base">Your Address</h2>
+            <p className="text-xs lg:text-sm">
+              {`${address.street}, ${address.subdistrict}, ${address.city},
+              ${address.province}, ${address.postNumber} (${address.recipient})`}
+            </p>
+            <div className="flex justify-end lg:justify-start">
+              {/* TODO: Add function for changing the address */}
+              <Button size="sm" className="h-8 w-24 lg:text-xs">
+                Change
+              </Button>
             </div>
           </div>
           <CheckoutItems />
