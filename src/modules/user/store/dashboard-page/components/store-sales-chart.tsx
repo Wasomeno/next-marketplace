@@ -96,12 +96,11 @@ export const StoreSalesChart = () => {
     router.replace(`${pathname}?${searchParams.toString()}`)
   }
 
-  console.log(yearlySales.data)
   return (
     <div className="w-full space-y-2">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-base font-medium lg:text-lg">Sales Report</h2>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
           {chartMode === "year" && (
             <Dropdown
               placeholder="Select year"
@@ -130,8 +129,9 @@ export const StoreSalesChart = () => {
             size="sm"
             onClick={() => setChartMode("year")}
             className={clsx(
-              "bg-transparent hover:bg-gray-100",
-              chartMode === "year" && "bg-black text-white"
+              "lg:text-xs",
+              chartMode === "year" &&
+                "bg-gray-900 text-white  lg:hover:bg-gray-800"
             )}
           >
             Year
@@ -140,15 +140,16 @@ export const StoreSalesChart = () => {
             size="sm"
             onClick={() => setChartMode("month")}
             className={clsx(
-              "bg-transparent hover:bg-gray-100",
-              chartMode === "month" && "bg-black text-white"
+              "lg:text-xs",
+              chartMode === "month" &&
+                "bg-gray-900 text-white  lg:hover:bg-gray-800"
             )}
           >
             Month
           </Button>
         </div>
       </div>
-      <ResponsiveContainer width="100%" height={300}>
+      <ResponsiveContainer width="100%" height={200}>
         {chartMode === "year" ? (
           <AreaChart
             data={yearlySales.data?.map((sale) => ({
