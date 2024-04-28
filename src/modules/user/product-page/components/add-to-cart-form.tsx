@@ -73,6 +73,7 @@ export const AddToCartForm = ({ product }: AddToCartFormProps) => {
         <Button
           variant="default"
           disabled={addToCartMutation.isPending}
+          className="w-full"
           onClick={() =>
             sessionStatus === "unauthenticated"
               ? router.push("/login")
