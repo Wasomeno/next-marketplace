@@ -20,10 +20,6 @@ export const OrderStatusFilter = () => {
   const status = searchParams.get("status")
   const activeFilter = statusOptions.find((option) => option.value === status)
 
-  const [selectedStatus, setSelectedStatus] = useState<Option>(
-    activeFilter ?? statusOptions[0]
-  )
-
   const router = useRouter()
 
   function selectStatus(status: Option) {
@@ -34,15 +30,14 @@ export const OrderStatusFilter = () => {
       newSearchParams.set("status", status.value.toString())
       router.replace(`${location.pathname}?${newSearchParams.toString()}`)
     }
-    setSelectedStatus(status)
   }
 
   return (
     <Dropdown
       isMulti={false}
       options={statusOptions}
-      selectedOption={selectedStatus}
-      placeholder="Select order status"
+      selectedOption={activeFilter}
+      placeholder="Select status"
       onOptionClick={selectStatus}
     />
   )
