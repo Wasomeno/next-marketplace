@@ -30,7 +30,7 @@ export const StoreMobileNavigation = () => {
       />
       <StoreSideNavigationLink
         text="Details"
-        href="/store/details"
+        href="/store/profile"
         icon={<HiOutlineChatBubbleLeftEllipsis size={20} />}
       />
       <StoreSideNavigationLink
