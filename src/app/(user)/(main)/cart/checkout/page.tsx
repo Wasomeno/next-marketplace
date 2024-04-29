@@ -1,19 +1,21 @@
 import { getUserAddress } from "@/actions/user/user-details"
+import { CheckoutChangeAddressModal } from "@/modules/user/checkout-page/components/checkout-change-address-modal"
 import { CheckoutItems } from "@/modules/user/checkout-page/components/checkout-items"
 import { CheckoutPaymentModal } from "@/modules/user/checkout-page/components/checkout-payment-modal"
 import { CheckoutSummary } from "@/modules/user/checkout-page/components/checkout-summary"
+import { getServerSession } from "next-auth"
 import invariant from "tiny-invariant"
-
-import { Button } from "@/components/ui/button"
 
 export const metadata = {
   title: "Checkout",
 }
 
 export default async function CheckoutPage() {
+  const session = await getServerSession()
   const address = await getUserAddress()
 
   invariant(address)
+  invariant(session?.user.email)
 
   return (
     <div className="flex flex-1 flex-col gap-4">
@@ -29,10 +31,7 @@ export default async function CheckoutPage() {
               ${address.province}, ${address.postNumber} (${address.recipient})`}
             </p>
             <div className="flex justify-end lg:justify-start">
-              {/* TODO: Add function for changing the address */}
-              <Button size="sm" className="h-8 w-24 lg:text-xs">
-                Change
-              </Button>
+              <CheckoutChangeAddressModal userEmail={session.user.email} />
             </div>
           </div>
           <CheckoutItems />

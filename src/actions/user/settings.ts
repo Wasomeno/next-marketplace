@@ -7,6 +7,14 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/config/next-auth"
 import { prisma } from "@/lib/prisma"
 
+export async function getUserAddresses(userEmail: string) {
+  const addresses = await prisma.userAddress.findMany({
+    where: { userEmail },
+  })
+
+  return addresses
+}
+
 export async function addAddress(
   address: Omit<UserAddress, "userEmail" | "id">
 ) {
@@ -42,5 +50,5 @@ export async function setMainAddress(id: string) {
     },
   })
 
-  revalidatePath("/settings/address")
+  revalidatePath("/")
 }
