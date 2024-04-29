@@ -5,6 +5,8 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { UserAddress } from "@prisma/client"
 import clsx from "clsx"
 
+import { Skeleton } from "@/components/skeleton"
+
 export const AddressCard = ({ address }: { address: UserAddress }) => {
   const router = useRouter()
   const pathname = usePathname()
@@ -47,6 +49,22 @@ export const AddressCard = ({ address }: { address: UserAddress }) => {
           Main
         </div>
       )}
+    </div>
+  )
+}
+
+export const AddressCardSkeleton = () => {
+  return (
+    <div className="relative w-full rounded-md border  border-gray-200 shadow-sm lg:w-72">
+      <div className="border-b border-gray-200 px-4 py-2">
+        <Skeleton className="h-5 w-32" />
+      </div>
+      <div className="flex flex-col gap-2 px-4 py-2">
+        <Skeleton className="h-5 w-40 " />
+        <Skeleton className="h-5 w-32 " />
+        <Skeleton className="h-5 w-24 " />
+        <Skeleton className="h-5 w-24 " />
+      </div>
     </div>
   )
 }
