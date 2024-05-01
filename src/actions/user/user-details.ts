@@ -16,10 +16,10 @@ export async function getUserStore() {
 
 export async function getUserAddress() {
   const session = await getServerSession(authOptions)
-  const userDetails = await prisma.user.findUnique({
-    where: { email: session?.user?.email as string },
-    select: { addresses: { where: { isMainAddress: true } } },
+
+  const addresses = await prisma.userAddress.findMany({
+    where: { userEmail: session?.user.email as string, isMainAddress: true },
   })
 
-  return userDetails?.addresses[0]
+  return addresses[0]
 }
