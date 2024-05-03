@@ -5,7 +5,7 @@ import { FiMapPin } from "react-icons/fi"
 import { Skeleton } from "@/components/skeleton"
 
 export async function StoreDetails({ slug }: { slug?: string }) {
-  const store = await getStore(slug)
+  const store = await getStore({ slug })
   return (
     <div className="flex items-center rounded-lg border border-gray-200 p-4">
       <div className="flex items-center gap-4">

@@ -16,14 +16,16 @@ import { toast } from "react-toastify"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/skeleton"
 
-export const StoreProfileImageUpload = () => {
+export const StoreProfileImageUpload: React.FC<{ storeId: number }> = ({
+  storeId,
+}) => {
   const [image, setImage] = useState<(File & { preview: string }) | null>()
 
   const { startUpload } = useUploadThing("imageUploader")
 
   const { data, isFetching, refetch } = useQuery({
     queryKey: ["storeProfileImage"],
-    queryFn: () => getStoreProfileImage(),
+    queryFn: () => getStoreProfileImage(storeId),
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   })
@@ -34,10 +36,11 @@ export const StoreProfileImageUpload = () => {
       if (!uploadedImages) {
         toast.error("Error when updating store profile image")
       } else {
-        await updateStoreProfileImage(
-          uploadedImages[0].url,
-          uploadedImages[0].name
-        )
+        await updateStoreProfileImage({
+          storeId,
+          url: uploadedImages[0].url,
+          name: uploadedImages[0].name,
+        })
       }
       refetch()
       setImage(null)

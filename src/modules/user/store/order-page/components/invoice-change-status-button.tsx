@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { updateInvoiceStatus } from "@/actions/store/invoice"
+import { changeOrderStatus } from "@/actions/user/order"
 import { useSearchParamsValues } from "@/utils"
 import { useMutation } from "@tanstack/react-query"
 import { BiChevronRight } from "react-icons/bi"
@@ -15,19 +15,19 @@ import { Button } from "@/components/ui/button"
 
 import { OrderStatus, TBaseDataFilterParams } from "../../../../../../types"
 
-export const InvoiceChangeStatusButton = ({
-  invoiceId,
+export const OrderChangeStatusButton = ({
+  orderId,
   status,
 }: {
-  invoiceId: string
+  orderId: string
   status: OrderStatus
 }) => {
   const searchParamsValues = useSearchParamsValues<TBaseDataFilterParams>()
 
   const changeStatus = useMutation({
     mutationFn: async (status: OrderStatus) => {
-      await updateInvoiceStatus({
-        invoiceId,
+      await changeOrderStatus({
+        orderId,
         status,
       })
       queryClient.invalidateQueries({
@@ -35,10 +35,10 @@ export const InvoiceChangeStatusButton = ({
       })
     },
     onError: () => {
-      toast.error("Error When Updating Invoice Status")
+      toast.error("Error When Updating Order Status")
     },
     onSuccess: () => {
-      toast.success(`Invoice Status Updated to ${status}`)
+      toast.success(`Order Status Updated`)
     },
   })
 

@@ -1,10 +1,10 @@
+import { redirect } from "next/navigation"
 import { getUserAddress } from "@/actions/user/user-details"
 import { CheckoutChangeAddressModal } from "@/modules/user/checkout-page/components/checkout-change-address-modal"
 import { CheckoutItems } from "@/modules/user/checkout-page/components/checkout-items"
 import { CheckoutPaymentModal } from "@/modules/user/checkout-page/components/checkout-payment-modal"
 import { CheckoutSummary } from "@/modules/user/checkout-page/components/checkout-summary"
 import { getServerSession } from "next-auth"
-import invariant from "tiny-invariant"
 
 export const metadata = {
   title: "Checkout",
@@ -14,8 +14,9 @@ export default async function CheckoutPage() {
   const session = await getServerSession()
   const address = await getUserAddress()
 
-  invariant(address)
-  invariant(session?.user.email)
+  if (!session?.user.email || !address) {
+    redirect("/")
+  }
 
   return (
     <div className="flex flex-1 flex-col gap-4">
@@ -39,7 +40,8 @@ export default async function CheckoutPage() {
         <CheckoutSummary />
       </div>
       <CheckoutPaymentModal
-        address={`${address?.recipient} ${address?.province} ${address?.city} ${address?.subdistrict} ${address?.street} ${address?.postNumber} ${address?.phoneNumber}`}
+        addressId={address.id}
+        userEmail={session.user.email}
       />
     </div>
   )

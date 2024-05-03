@@ -15,8 +15,8 @@ export async function getProductDailyStats(
     include: {
       _count: {
         select: {
-          order_products: {
-            where: { invoice: { created_at: { lt: new Date() } } },
+          orders: {
+            where: { order: { created_at: { lt: new Date() } } },
           },
         },
       },
@@ -36,8 +36,8 @@ export async function getProductWeeklyStats(
     include: {
       _count: {
         select: {
-          order_products: {
-            where: { invoice: { created_at: { lt: new Date() } } },
+          orders: {
+            where: { order: { created_at: { lt: new Date() } } },
           },
         },
       },
@@ -57,7 +57,7 @@ export async function getProductMonthlySales(productId: number, month: number) {
     const daySales = await prisma.orderProduct.findMany({
       where: {
         product_id: productId,
-        invoice: {
+        order: {
           created_at: {
             gte: monthMoment.set("date", i).startOf("day").toDate(),
             lte: monthMoment.set("date", i).endOf("day").toDate(),
@@ -80,7 +80,7 @@ export async function getProductYearlySales(productId: number, year: number) {
     const daySales = await prisma.orderProduct.findMany({
       where: {
         product_id: productId,
-        invoice: {
+        order: {
           created_at: {
             gte: time.set("month", i).startOf("month").toDate(),
             lte: time.set("month", i).endOf("month").toDate(),

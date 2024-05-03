@@ -50,7 +50,10 @@ const paymentMethods: PaymentMethod[] = [
   },
 ]
 
-export function CheckoutPaymentModal({ address }: { address: string }) {
+export const CheckoutPaymentModal: React.FC<{
+  userEmail: string
+  addressId: string
+}> = ({ userEmail, addressId }) => {
   const [selectedMethod, setSelectedMethod] = useState(0)
   const [status, setStatus] = useState<PaymentStatus>("idle")
 
@@ -91,7 +94,8 @@ export function CheckoutPaymentModal({ address }: { address: string }) {
       await checkout({
         total,
         cartItems: selectedCartItems,
-        address,
+        addressId,
+        userEmail,
       })
     },
     onMutate: () => setStatus("loading"),

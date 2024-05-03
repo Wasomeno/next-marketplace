@@ -10,6 +10,7 @@ import { Option } from "@/components/dropdown"
 
 import { TBaseDataFilterParams } from "../../../../../types"
 import ProductCard from "../../common/components/product-card"
+import { storeQueryKeys } from "../../common/queryKeys/storeQueryKeys"
 
 const sortOptions: Option[] = [
   { label: "Latest to Oldest", value: "id.desc" },
@@ -21,17 +22,22 @@ export function StoreProducts() {
 
   const searchParamsValues = useSearchParamsValues<TBaseDataFilterParams>()
   const products = useQuery({
-    queryKey: ["storeProducts", params?.storeSlug, searchParamsValues],
+    queryKey: storeQueryKeys.products({
+      storeSlug: params.storeSlug as string,
+      ...searchParamsValues,
+    }),
     queryFn: () =>
       getStoreProducts({
         ...searchParamsValues,
         sort: getParsedSortParams(searchParamsValues.sort),
         slug: params?.storeSlug as string,
+        pageSize: "10",
       }),
   })
 
   const productSkeletons = Array(6).fill(<ProductCard.Skeleton />)
 
+  console.log(products.data)
   return (
     <>
       <div className="flex items-center justify-between">

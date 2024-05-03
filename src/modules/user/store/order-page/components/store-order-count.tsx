@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { getStoreInvoicesCount } from "@/actions/store/invoice"
+import { getStoreOrderCount } from "@/actions/user/order"
 import { useSearchParamsValues } from "@/utils"
 import { useQuery } from "@tanstack/react-query"
 
@@ -9,13 +9,14 @@ import { Skeleton } from "@/components/skeleton"
 
 import { TBaseDataFilterParams } from "../../../../../../types"
 
-export const StoreOrderCount = () => {
+export const StoreOrderCount: React.FC<{ storeId: number }> = ({ storeId }) => {
   const searchParamsValues = useSearchParamsValues<TBaseDataFilterParams>()
 
   const invoiceCount = useQuery({
     queryKey: ["storeInvoicesCount", searchParamsValues],
     queryFn: () =>
-      getStoreInvoicesCount({
+      getStoreOrderCount({
+        storeId,
         search: searchParamsValues?.search,
       }),
   })

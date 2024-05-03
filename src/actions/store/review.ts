@@ -1,31 +1,27 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { getServerSession } from "next-auth"
-import invariant from "tiny-invariant"
 
-import { authOptions } from "@/config/next-auth"
 import { prisma } from "@/lib/prisma"
 
 import { TBaseDataFilter } from "../../../types"
-import { getStore } from "./store"
 
-type GetStoreProductReviewsProps = TBaseDataFilter
+type GetStoreProductReviewsProps = TBaseDataFilter & {
+  storeId: number
+}
 
 export async function getStoreProductReviews(
-  props?: GetStoreProductReviewsProps
+  params: GetStoreProductReviewsProps
 ) {
-  const store = await getStore()
-
-  const page = Number(props?.page)
-  const pageSize = Number(props?.pageSize)
+  const page = Number(params?.page)
+  const pageSize = Number(params?.pageSize)
 
   const reviews = await prisma.productReview.findMany({
-    orderBy: props?.sort,
-    skip: (props?.page ? page - 1 : 0) * (pageSize ?? 5),
+    orderBy: params?.sort,
+    skip: (params?.page ? page - 1 : 0) * (pageSize ?? 5),
     take: pageSize ?? 5,
     where: {
-      product: { store_id: store?.id, name: { contains: props?.search } },
+      product: { store_id: params.storeId, name: { contains: params?.search } },
     },
     include: { product: true, user: true },
   })
@@ -34,38 +30,27 @@ export async function getStoreProductReviews(
 }
 
 export async function getStoreProductReviewsCount(
-  props: Pick<TBaseDataFilter, "search">
+  params: Pick<TBaseDataFilter, "search"> & { storeId: number }
 ) {
-  const store = await getStore()
-
   const reviewsCount = await prisma.productReview.count({
     where: {
-      product: { store_id: store?.id, name: { contains: props?.search } },
+      product: { store_id: params.storeId, name: { contains: params?.search } },
     },
   })
 
   return reviewsCount
 }
 
-async function changeOrderProductReviewStatus(orderProductId: number) {
-  try {
-    await prisma.orderProduct.update({
-      where: { id: orderProductId },
-      data: {
-        isReviewed: true,
-      },
-    })
-  } catch (error) {
-    throw error
-  }
-}
-
-async function addProductReview({
+export async function createProductReview({
+  orderProductId,
   productId,
   rating,
   review,
   userEmail,
+  title,
 }: {
+  title: string
+  orderProductId: number
   productId: number
   rating: number
   review: string
@@ -73,46 +58,28 @@ async function addProductReview({
 }) {
   try {
     await prisma.product.update({
-      where: { id: productId },
+      where: {
+        id: productId,
+      },
       data: {
         reviews: {
           create: {
             rating,
+            title,
             review,
             user: { connect: { email: userEmail } },
           },
         },
       },
     })
+
+    await prisma.orderProduct.update({
+      where: { id: orderProductId },
+      data: { isReviewed: true },
+    })
+
+    revalidatePath("/orders")
   } catch (error) {
     throw error
   }
-}
-
-export async function addReview({
-  orderProductId,
-  productId,
-  rating,
-  review,
-}: {
-  orderProductId: number
-  productId: number
-  rating: number
-  review: string
-}) {
-  const session = await getServerSession(authOptions)
-
-  invariant(session)
-
-  await Promise.all([
-    addProductReview({
-      productId,
-      rating,
-      review,
-      userEmail: session.user.email as string,
-    }),
-    changeOrderProductReviewStatus(orderProductId),
-  ])
-
-  revalidatePath("/orders")
 }

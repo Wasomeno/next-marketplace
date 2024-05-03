@@ -31,9 +31,4 @@ export const productQueryKeys = {
     categoryId?: string,
     filters?: TBaseDataFilterParams
   ) => ["products", "store", storeSlug, categoryId, filters],
-  userStore: (
-    email: string,
-    categoryId?: string,
-    filters?: TBaseDataFilterParams
-  ) => ["products", "store", email, categoryId, filters],
 }

@@ -1,20 +1,15 @@
 "use client"
 
 import React from "react"
-import {
-  getStoreInvoices,
-  getStoreInvoicesCount,
-} from "@/actions/store/invoice"
+import { getStoreOrders } from "@/actions/user/order"
 import { getParsedSortParams, useSearchParamsValues } from "@/utils"
 import { useQuery } from "@tanstack/react-query"
 import { BsBoxSeam } from "react-icons/bs"
-import { HiXMark } from "react-icons/hi2"
 
 import { DataSorter } from "@/components/data-sorter"
 import { Option } from "@/components/dropdown"
 import { NoData } from "@/components/no-data"
 import { Pagination } from "@/components/pagination"
-import { Skeleton } from "@/components/skeleton"
 import { TableSearchInput } from "@/components/table-search-input"
 
 import { TBaseDataFilterParams } from "../../../../../../types"
@@ -31,13 +26,14 @@ const sortOptions: Option[] = [
   },
 ]
 
-export const StoreOrderList = () => {
+export const StoreOrderList: React.FC<{ storeId: number }> = ({ storeId }) => {
   const searchParamsValues = useSearchParamsValues<TBaseDataFilterParams>()
 
-  const invoices = useQuery({
+  const orders = useQuery({
     queryKey: ["storeOrders", searchParamsValues],
     queryFn: () =>
-      getStoreInvoices({
+      getStoreOrders({
+        storeId,
         sort: getParsedSortParams(searchParamsValues?.sort),
         search: searchParamsValues?.search,
         page: searchParamsValues?.page,
@@ -51,22 +47,22 @@ export const StoreOrderList = () => {
         <TableSearchInput placeholder="Search for order" />
         <DataSorter sortOptions={sortOptions} />
       </div>
-      {invoices.isLoading &&
+      {orders.isLoading &&
         Array(5)
           .fill("")
           .map((_, index) => <StoreOrderCardSkeleton key={index} />)}
 
-      {!invoices.isLoading &&
-        (invoices?.data?.length as number) > 0 &&
-        invoices.data?.map((invoice) => (
-          <StoreOrderCard key={invoice.id} invoice={invoice} />
+      {!orders.isLoading &&
+        (orders?.data?.length as number) > 0 &&
+        orders.data?.map((order) => (
+          <StoreOrderCard key={order.id} order={order} />
         ))}
 
-      {!invoices.isLoading && (invoices.data?.length as number) === 0 && (
+      {!orders.isLoading && (orders.data?.length as number) === 0 && (
         <NoData text="No Orders" icon={<BsBoxSeam size={24} />} />
       )}
-      {!invoices.isLoading && (invoices.data?.length as number) > 0 && (
-        <Pagination dataLength={invoices.data?.length as number} pageSize={5} />
+      {!orders.isLoading && (orders.data?.length as number) > 0 && (
+        <Pagination dataLength={orders.data?.length as number} pageSize={5} />
       )}
     </>
   )

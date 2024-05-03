@@ -32,7 +32,7 @@ export async function StoreButton() {
       <>
         <Link
           href="/store/create?step=name"
-          className={clsx(linkStyle, " hidden items-center gap-2 lg:flex")}
+          className={clsx(linkStyle, "hidden items-center gap-2 lg:flex")}
         >
           <div className="relative">
             <div className="absolute -right-[4px] -top-[4px] flex h-3 w-3 items-center justify-center rounded-full bg-blue-400 text-white shadow-sm">
@@ -45,7 +45,14 @@ export async function StoreButton() {
         <Link
           href="/store/create?step=name"
           className="relative inline-block lg:hidden"
-        ></Link>
+        >
+          <div className="relative">
+            <div className="absolute -right-[4px] -top-[4px] flex h-3 w-3 items-center justify-center rounded-full bg-blue-400 text-white shadow-sm">
+              <HiPlus size={10} />
+            </div>
+            <BiStore size={20} />
+          </div>
+        </Link>
       </>
     )
   }

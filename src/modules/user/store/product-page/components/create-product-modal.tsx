@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { getCategories } from "@/actions/categories"
 import { addProduct } from "@/actions/store/products"
 import { categoryQueryKeys } from "@/modules/user/common/queryKeys/categoryQueryKeys"
+import { storeQueryKeys } from "@/modules/user/common/queryKeys/storeQueryKeys"
 import { useSearchParamsValues } from "@/utils"
 import { useUploadThing } from "@/utils/uploadthing"
 import { useImageFiles } from "@/utils/useImageFiles"
@@ -15,6 +16,7 @@ import { ImSpinner8 } from "react-icons/im"
 import { toast } from "react-toastify"
 import * as z from "zod"
 
+import { queryClient } from "@/lib/react-query-client"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -28,6 +30,8 @@ import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
 import { Dropdown } from "@/components/dropdown"
 import { ImageUploader } from "@/components/image-uploader"
+
+import { TBaseDataFilter, TBaseDataFilterParams } from "../../../../../../types"
 
 export const ProductSchema = z.object({
   name: z
@@ -54,13 +58,17 @@ export const ProductSchema = z.object({
 
 export type ProductFormData = z.infer<typeof ProductSchema>
 
-export const CreateProductModal = () => {
+export const CreateProductModal: React.FC<{ storeId: number }> = ({
+  storeId,
+}) => {
   const router = useRouter()
   const pathname = usePathname()
-  const searchParamsValues = useSearchParamsValues<{ create: string }>()
+  const searchParamsValues = useSearchParamsValues<
+    TBaseDataFilterParams & { status: string; create: string }
+  >()
   const isOpen = searchParamsValues.create !== undefined
 
-  const { files, addFiles, removeFile } = useImageFiles()
+  const { files, addFiles, removeFile, clearFiles } = useImageFiles()
 
   const categories = useQuery({
     queryKey: categoryQueryKeys.all(),
@@ -98,17 +106,43 @@ export const CreateProductModal = () => {
       })
     },
     onSuccess: () => {
-      const urlSearchParams = new URLSearchParams(searchParamsValues)
-      urlSearchParams.delete("create")
-      router.replace(`${pathname}?${urlSearchParams.toString()}`)
+      queryClient.invalidateQueries({
+        queryKey: storeQueryKeys.products({ storeId, ...searchParamsValues }),
+      })
+      queryClient.invalidateQueries({
+        queryKey: storeQueryKeys.productCount({
+          storeId,
+          search: searchParamsValues.search,
+        }),
+      })
+      onOpenChange(false)
       toast.success("Succesfully created new product")
     },
     onError: (error) =>
       toast.error(error.message ?? "Error when creating new product"),
   })
 
+  function onOpenChange(isOpen: boolean) {
+    const urlSearchParams = new URLSearchParams(searchParamsValues)
+    if (isOpen) {
+      urlSearchParams.set("create", "true")
+      router.replace(`${pathname}?${urlSearchParams.toString()}`, {
+        scroll: false,
+      })
+    } else {
+      form.reset()
+      clearFiles()
+
+      urlSearchParams.delete("create")
+
+      router.replace(`${pathname}?${urlSearchParams.toString()}`, {
+        scroll: false,
+      })
+    }
+  }
+
   return (
-    <Dialog open={isOpen} onOpenChange={() => router.replace(pathname)}>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogPortal>
         <DialogOverlay />
         <DialogContent open={isOpen} className="h-[36rem] lg:w-[30rem]">
@@ -215,9 +249,9 @@ export const CreateProductModal = () => {
             <div className="flex flex-wrap-reverse items-center justify-end gap-2">
               <Button
                 type="button"
-                variant="danger"
+                variant="defaultOutline"
                 size="sm"
-                className="w-full text-white lg:w-32"
+                className="w-full lg:w-32"
                 onClick={() => router.replace(pathname)}
               >
                 Cancel

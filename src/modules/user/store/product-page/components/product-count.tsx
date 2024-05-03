@@ -1,7 +1,7 @@
 "use client"
 
 import { getStoreProductsCount } from "@/actions/store/store"
-import { productQueryKeys } from "@/modules/user/common/queryKeys/productQueryKeys"
+import { storeQueryKeys } from "@/modules/user/common/queryKeys/storeQueryKeys"
 import { useSearchParamsValues } from "@/utils"
 import { useQuery } from "@tanstack/react-query"
 
@@ -9,7 +9,7 @@ import { Skeleton } from "@/components/skeleton"
 
 import { TBaseDataFilterParams } from "../../../../../../types"
 
-export function ProductCount() {
+export const ProductCount: React.FC<{ storeId: number }> = ({ storeId }) => {
   const searchParamsValues = useSearchParamsValues<
     TBaseDataFilterParams & {
       status: string
@@ -19,8 +19,12 @@ export function ProductCount() {
     }
   >()
   const productCount = useQuery({
-    queryKey: [productQueryKeys.count(), searchParamsValues.search],
-    queryFn: () => getStoreProductsCount({ search: searchParamsValues.search }),
+    queryKey: storeQueryKeys.productCount({
+      storeId,
+      search: searchParamsValues.search,
+    }),
+    queryFn: () =>
+      getStoreProductsCount({ storeId, search: searchParamsValues.search }),
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   })

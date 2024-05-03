@@ -4,7 +4,7 @@ import React, { useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { deleteProduct } from "@/actions/store/products"
 import { getStoreProducts, StoreProduct } from "@/actions/store/store"
-import { productQueryKeys } from "@/modules/user/common/queryKeys/productQueryKeys"
+import { storeQueryKeys } from "@/modules/user/common/queryKeys/storeQueryKeys"
 import { getParsedSortParams, useSearchParamsValues } from "@/utils"
 import { Prisma } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
@@ -61,9 +61,7 @@ const placeholderColumns: ColumnDef<
   ...productTablePlaceholderColumns,
 ]
 
-export const ProductTable: React.FC<{ userEmail: string }> = ({
-  userEmail,
-}) => {
+export const ProductTable: React.FC<{ storeId: number }> = ({ storeId }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
   const searchParamsValues = useSearchParamsValues<
@@ -84,18 +82,11 @@ export const ProductTable: React.FC<{ userEmail: string }> = ({
   } = useSelectedData()
 
   const products = useQuery({
-    queryKey: [
-      productQueryKeys.userStore(userEmail),
-      searchParamsValues.status,
-      searchParamsValues.sort,
-      searchParamsValues.categories,
-      searchParamsValues.search,
-      searchParamsValues.page,
-    ],
+    queryKey: storeQueryKeys.products({ storeId, ...searchParamsValues }),
     queryFn: () =>
       getStoreProducts({
         ...searchParamsValues,
-        userEmail,
+        storeId,
         sort: getParsedSortParams(searchParamsValues.sort),
         pageSize: pageSize.toString(),
         categoryIds: searchParamsValues?.categories

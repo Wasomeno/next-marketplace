@@ -8,13 +8,18 @@ import { Skeleton } from "@/components/skeleton"
 
 import { TBaseDataFilterParams } from "../../../../../../types"
 
-export const StoreReviewCount = () => {
+export const StoreReviewCount: React.FC<{ storeId: number }> = ({
+  storeId,
+}) => {
   const searchParamsValues = useSearchParamsValues<TBaseDataFilterParams>()
 
   const reviewCount = useQuery({
     queryKey: ["storeProductReviewsCount", searchParamsValues?.search],
     queryFn: () =>
-      getStoreProductReviewsCount({ search: searchParamsValues?.search }),
+      getStoreProductReviewsCount({
+        storeId,
+        search: searchParamsValues?.search,
+      }),
   })
 
   return reviewCount.isLoading ? (
