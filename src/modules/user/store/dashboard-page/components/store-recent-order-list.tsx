@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { getStoreInvoices } from "@/actions/store/invoice"
+import { getStoreOrders } from "@/actions/user/order"
 import { useQuery } from "@tanstack/react-query"
 import moment from "moment"
 import { IoList } from "react-icons/io5"
@@ -9,10 +9,12 @@ import { IoList } from "react-icons/io5"
 import { NoData } from "@/components/no-data"
 import { Skeleton } from "@/components/skeleton"
 
-const RecentTransactionList = () => {
+export const StoreRecentOrderList: React.FC<{ storeId: number }> = ({
+  storeId,
+}) => {
   const transactions = useQuery({
     queryKey: ["transactions"],
-    queryFn: () => getStoreInvoices(),
+    queryFn: () => getStoreOrders({ storeId }),
   })
 
   const skeletons = Array(5)
@@ -62,5 +64,3 @@ const RecentTransactionList = () => {
     </ol>
   )
 }
-
-export default RecentTransactionList

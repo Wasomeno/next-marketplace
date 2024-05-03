@@ -1,8 +1,9 @@
 import React from "react"
 import { Metadata } from "next"
-import { getStoreSales, getStoreTransactionCount } from "@/actions/store/store"
+import { redirect } from "next/navigation"
+import { getUserStore } from "@/actions/user/user-details"
 import { AnalyticCard } from "@/modules/user/store/dashboard-page/components/analytic-card"
-import RecentTransactionList from "@/modules/user/store/dashboard-page/components/recent-transaction-list"
+import { StoreRecentOrderList } from "@/modules/user/store/dashboard-page/components/store-recent-order-list"
 import { StoreSalesChart } from "@/modules/user/store/dashboard-page/components/store-sales-chart"
 import { FaFileInvoiceDollar } from "react-icons/fa6"
 import { LiaMoneyBillSolid } from "react-icons/lia"
@@ -12,10 +13,12 @@ export const metadata: Metadata = {
 }
 
 export default async function UserStorePage() {
-  const [transactionCount, sales] = await Promise.all([
-    getStoreTransactionCount(),
-    getStoreSales(),
-  ])
+  const store = await getUserStore()
+
+  if (!store) {
+    redirect("/")
+  }
+
   return (
     <div className="flex flex-col gap-4 lg:gap-6">
       <div className="space-y-2">
@@ -28,14 +31,14 @@ export default async function UserStorePage() {
           icon={
             <LiaMoneyBillSolid className=" h-8 w-8 text-green-700 lg:h-10 lg:w-10" />
           }
-          data={`Rp. ${sales.toLocaleString("id")}`}
+          data={`Rp. 10000`}
         />
         <AnalyticCard
           title="Orders"
           icon={
             <FaFileInvoiceDollar className="h-8 w-8 text-blue-700 lg:h-10 lg:w-10" />
           }
-          data={transactionCount}
+          data={10}
         />
       </div>
       <StoreSalesChart />
@@ -43,7 +46,7 @@ export default async function UserStorePage() {
         <h2 className="text-base font-medium lg:text-lg">
           Recent Transactions
         </h2>
-        <RecentTransactionList />
+        <StoreRecentOrderList storeId={store.id} />
       </div>
     </div>
   )

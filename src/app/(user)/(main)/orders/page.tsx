@@ -1,21 +1,19 @@
-import { Suspense } from "react"
 import { Metadata } from "next"
-import { getUserInvoices } from "@/actions/user/invoice"
+import { redirect } from "next/navigation"
+import { getCachedSession } from "@/actions/store/user"
+import { getUserOrders } from "@/actions/user/order"
 import { OrderCard } from "@/modules/user/order-page/components/order-card"
-import { UserViewOrderModal } from "@/modules/user/order-page/components/order-details-modal"
 import { OrderSearchInput } from "@/modules/user/order-page/components/order-search-input"
 import { OrderStatusDropdown } from "@/modules/user/order-page/components/order-status-dropdown"
-import { RateProductModal } from "@/modules/user/order-page/components/rate-product-modal"
-import { RxCrossCircled, RxMagnifyingGlass } from "react-icons/rx"
-
-import { Input } from "@/components/ui/input"
+import { UserViewOrderModal } from "@/modules/user/order-page/components/user-view-order-modal"
+import { BsKanban } from "react-icons/bs"
+import { RxCrossCircled } from "react-icons/rx"
 
 type Props = {
   searchParams: {
     status: string
     page: string
     rate: string
-    invoice: string
     search: string
   }
 }
@@ -25,10 +23,18 @@ export const metadata: Metadata = {
 }
 
 export default async function OrdersPage({ searchParams }: Props) {
-  const invoices = await getUserInvoices({
+  const session = await getCachedSession()
+
+  if (!session?.user.email) {
+    redirect("/login")
+  }
+
+  const orders = await getUserOrders({
+    userEmail: session.user.email,
     status: searchParams.status,
     search: searchParams.search,
   })
+
   return (
     <div className="flex flex-1 flex-col px-5 lg:px-8">
       <div className="mb-4 mt-2">
@@ -40,13 +46,14 @@ export default async function OrdersPage({ searchParams }: Props) {
           <OrderStatusDropdown />
         </div>
         <div className="flex flex-1 flex-col gap-2">
-          {invoices.length > 0 &&
-            invoices.map((invoice) => (
-              <Suspense key={invoice.id} fallback={<>Hello</>}>
-                <OrderCard invoice={invoice} />
-              </Suspense>
+          {orders.length > 0 &&
+            orders.map((order) => (
+              <OrderCard
+                userEmail={session.user.email as string}
+                order={order}
+              />
             ))}
-          {invoices.length === 0 && (
+          {orders.length === 0 && (
             <div className="flex flex-1 flex-col items-center justify-center gap-2.5 opacity-50">
               <span className="text-sm">No Transactions</span>
               <RxCrossCircled size="25" />
@@ -54,16 +61,7 @@ export default async function OrdersPage({ searchParams }: Props) {
           )}
         </div>
       </div>
-      {searchParams.invoice && (
-        <Suspense fallback={<>Hello</>}>
-          <UserViewOrderModal />
-        </Suspense>
-      )}
-      {searchParams.rate && (
-        <Suspense fallback={<>Hello</>}>
-          <RateProductModal />
-        </Suspense>
-      )}
+      <UserViewOrderModal />
     </div>
   )
 }

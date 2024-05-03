@@ -227,9 +227,9 @@ export const EditProductModal = () => {
             <div className="flex flex-wrap-reverse items-center justify-end gap-2">
               <Button
                 type="button"
-                variant="danger"
+                variant="defaultOutline"
                 size="sm"
-                className="w-full text-white lg:w-32"
+                className="w-full lg:w-32"
                 onClick={closeModal}
               >
                 Cancel

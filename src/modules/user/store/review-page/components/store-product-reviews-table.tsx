@@ -2,6 +2,7 @@
 
 import React from "react"
 import { getStoreProductReviews } from "@/actions/store/review"
+import { storeQueryKeys } from "@/modules/user/common/queryKeys/storeQueryKeys"
 import { getParsedSortParams, useSearchParamsValues } from "@/utils"
 import { Prisma } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
@@ -26,14 +27,17 @@ const reviewsSortOptions: Option[] = [
   { label: "Old to Recent", value: "created_at.asc" },
 ]
 
-export const StoreProductReviewsTable = () => {
+export const StoreProductReviewsTable: React.FC<{ storeId: number }> = ({
+  storeId,
+}) => {
   const searchParamsValues = useSearchParamsValues<TBaseDataFilterParams>()
 
   const { data: reviews, isLoading: isReviewsLoading } = useQuery({
-    queryKey: ["storeProductReviews", searchParamsValues],
+    queryKey: storeQueryKeys.reviews({ storeId }),
     queryFn: () =>
       getStoreProductReviews({
         ...searchParamsValues,
+        storeId,
         sort: getParsedSortParams(searchParamsValues.sort),
         pageSize,
       }),
@@ -47,7 +51,7 @@ export const StoreProductReviewsTable = () => {
     },
     { header: "User", accessorFn: ({ user }) => user.email },
     {
-      header: "Reviewed At",
+      header: "Created at",
       accessorFn: ({ created_at }) => moment(created_at).format("LLLL"),
     },
     {
@@ -72,7 +76,7 @@ export const StoreProductReviewsTable = () => {
       cell: () => <Skeleton className="h-8 w-20 " />,
     },
     {
-      header: "Reviewed At",
+      header: "Created at",
       cell: () => <Skeleton className="h-8 w-20 " />,
     },
     {

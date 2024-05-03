@@ -9,17 +9,18 @@ import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/skeleton"
 
 import { OrderStatus } from "../../../../../../types"
-import { InvoiceChangeStatusButton } from "./invoice-change-status-button"
+import { OrderChangeStatusButton } from "./invoice-change-status-button"
 
 export const StoreOrderCard = ({
-  invoice,
+  order,
 }: {
-  invoice: Prisma.InvoiceGetPayload<{
+  order: Prisma.OrderGetPayload<{
     include: {
       products: {
         include: { product: { include: { images: true } } }
       }
       _count: { select: { products: true } }
+      address: true
     }
   }>
 }) => {
@@ -27,9 +28,11 @@ export const StoreOrderCard = ({
   return (
     <div className="space-y-2 rounded-lg shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]">
       <div className="flex flex-wrap items-center justify-between border-b  border-b-gray-200 bg-gray-50 px-4 py-2">
-        <span className="text-sm font-medium">{invoice.id}</span>
         <span className="text-sm font-medium text-gray-400">
-          {moment(invoice.created_at).format("LLLL")}
+          Order Id: {order.id}
+        </span>
+        <span className="text-sm font-medium text-gray-400">
+          {moment(order.created_at).format("LLLL")}
         </span>
       </div>
       <div className="space-y-2 p-4">
@@ -38,50 +41,50 @@ export const StoreOrderCard = ({
             <div className="flex w-72 gap-3">
               <div className="relative h-20 w-20 overflow-hidden rounded-md border border-gray-200 shadow-sm lg:h-28 lg:w-28">
                 <Image
-                  src={invoice.products[0].product.featured_image_url}
+                  src={order.products[0].product.featured_image_url}
                   alt="product-image"
                   fill
                 />
               </div>
               <div className="space-y-2">
                 <h5 className="text-sm font-medium">
-                  {invoice.products[0].product.name}
+                  {order.products[0].product.name}
                 </h5>
                 <span className="text-sm text-gray-500">
-                  {invoice.products[0].amount} x Rp{" "}
-                  {invoice.products[0].product.price.toLocaleString("id")}
+                  {order.products[0].amount} x Rp{" "}
+                  {order.products[0].product.price.toLocaleString("id")}
                 </span>
               </div>
             </div>
             {isShowOtherProducts &&
-              invoice.products
-                .slice(1, invoice.products.length)
-                .map((product) => (
-                  <div key={product.id} className="flex w-72 gap-3">
-                    <div className="relative h-20 w-20 overflow-hidden rounded-md border border-gray-200 shadow-sm lg:h-28 lg:w-28">
-                      <Image
-                        src={product.product.featured_image_url}
-                        alt="product-image"
-                        fill
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <h5 className="text-sm font-medium">
-                        {product.product.name}
-                      </h5>
-                      <span className="text-sm text-gray-500">
-                        {product.amount} x Rp{" "}
-                        {product.product.price.toLocaleString("id")}
-                      </span>
-                    </div>
+              order.products.slice(1, order.products.length).map((product) => (
+                <div key={product.id} className="flex w-72 gap-3">
+                  <div className="relative h-20 w-20 overflow-hidden rounded-md border border-gray-200 shadow-sm lg:h-28 lg:w-28">
+                    <Image
+                      src={product.product.featured_image_url}
+                      alt="product-image"
+                      fill
+                    />
                   </div>
-                ))}
-            {invoice.products.length > 1 && (
+                  <div className="space-y-2">
+                    <h5 className="text-sm font-medium">
+                      {product.product.name}
+                    </h5>
+                    <span className="text-sm text-gray-500">
+                      {product.amount} x Rp{" "}
+                      {product.product.price.toLocaleString("id")}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            {order.products.length > 1 && (
               <button
                 onClick={() => setIsShowOtherProducts(!isShowOtherProducts)}
-                className="text-sm font-medium text-blue-400"
+                className="text-sm"
               >
-                Show {invoice.products.length - 1} other products
+                {!isShowOtherProducts &&
+                  `Show ${order.products.length - 1} other products`}
+                {isShowOtherProducts && `Hide  other products`}
               </button>
             )}
           </div>
@@ -95,21 +98,22 @@ export const StoreOrderCard = ({
             orientation="horizontal"
             className="h-px w-full bg-gray-200 lg:hidden"
           />
-          <div className="w-48 space-y-2">
+          <div className="w-48">
             <h5 className="text-sm font-medium">Address</h5>
-            <p className="whitespace-pre-line text-sm text-gray-500">
-              {invoice.address}
+            <p className="text-sm text-gray-500">
+              {`${order.address.street}, ${order.address.subdistrict}, ${order.address.city},
+              ${order.address.province}, ${order.address.postNumber} (${order.address.recipient})`}
             </p>
           </div>
         </div>
         <div className="flex items-center justify-end gap-4">
           <span className="text-sm font-medium">Total</span>
-          <span>Rp. {invoice.total.toLocaleString("id")}</span>
+          <span>Rp. {order.total.toLocaleString("id")}</span>
         </div>
         <div className="flex justify-end">
-          <InvoiceChangeStatusButton
-            invoiceId={invoice.id}
-            status={invoice?.status as OrderStatus}
+          <OrderChangeStatusButton
+            orderId={order.id}
+            status={order.status as OrderStatus}
           />
         </div>
       </div>

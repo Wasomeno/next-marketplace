@@ -9,8 +9,8 @@ import { prisma } from "@/lib/prisma"
 
 import { TBaseDataFilter } from "../../../types"
 
-type GetStoreProductsProps = TBaseDataFilter & {
-  userEmail?: string
+type GetStoreProductsParams = TBaseDataFilter & {
+  storeId?: number
   slug?: string
   categoryIds?: number[]
   status?: string
@@ -26,20 +26,30 @@ type UpdateStoreParams = Omit<
   "owner_email" | "profile_image" | "created_at"
 >
 
-export async function getStore(slug?: string) {
-  const session = await getServerSession()
+export async function getStore({
+  userEmail,
+  slug,
+  storeId,
+}: {
+  storeId?: number
+  userEmail?: string
+  slug?: string
+}) {
   const store = await prisma.store.findUnique({
-    where: !slug ? { owner_email: session?.user.email ?? "" } : { slug: slug },
+    where:
+      !slug && !storeId
+        ? { owner_email: userEmail }
+        : !storeId && !userEmail
+          ? { slug: slug }
+          : { id: storeId },
   })
 
   return store
 }
 
-export async function getStoreProducts(props: GetStoreProductsProps) {
+export async function getStoreProducts(props: GetStoreProductsParams) {
   const store = await prisma.store.findUnique({
-    where: !props.slug
-      ? { owner_email: props.userEmail }
-      : { slug: props.slug },
+    where: !props.slug ? { id: props.storeId } : { slug: props.slug },
     include: {
       _count: {
         select: {
@@ -75,11 +85,10 @@ export async function getStoreProducts(props: GetStoreProductsProps) {
 }
 
 export async function getStoreProductsCount(
-  props: Pick<TBaseDataFilter, "search">
+  props: Pick<TBaseDataFilter, "search"> & { storeId: number }
 ) {
-  const store = await getStore()
   const productsCount = await prisma.product.count({
-    where: { store_id: store?.id, name: { contains: props.search } },
+    where: { store_id: props.storeId, name: { contains: props.search } },
   })
 
   return productsCount
@@ -112,13 +121,21 @@ export async function updateStore(store: UpdateStoreParams) {
   revalidatePath("/")
 }
 
-export async function getStoreProfileImage() {
-  const store = await getStore()
+export async function getStoreProfileImage(storeId: number) {
+  const store = await getStore({ storeId })
   return store?.profile_image
 }
 
-export async function updateStoreProfileImage(url: string, name: string) {
-  const store = await getStore()
+export async function updateStoreProfileImage({
+  url,
+  name,
+  storeId,
+}: {
+  url: string
+  name: string
+  storeId: number
+}) {
+  const store = await getStore({ storeId })
 
   await prisma.store.update({
     where: { id: store?.id },
@@ -126,7 +143,7 @@ export async function updateStoreProfileImage(url: string, name: string) {
   })
 }
 
-export async function getStoreTransactionCount() {
+export async function getStoreOrderCount() {
   const session = await getServerSession()
 
   if (!session?.user.email) {
@@ -137,10 +154,10 @@ export async function getStoreTransactionCount() {
     where: {
       owner_email: session.user.email,
     },
-    select: { _count: { select: { invoices: true } } },
+    select: { _count: { select: { orders: true } } },
   })
 
-  return store?._count.invoices ?? 0
+  return store?._count.orders ?? 0
 }
 
 export async function getStoreSales() {
@@ -154,18 +171,18 @@ export async function getStoreSales() {
     where: {
       owner_email: session.user.email,
     },
-    select: { invoices: { include: { order: true } } },
+    select: { orders: true },
   })
 
-  if (!store?.invoices) {
+  if (!store?.orders) {
     throw new Error("Error Getting Store Sales")
   }
 
   let sales = 0
 
-  if (store.invoices.length > 0) {
-    sales = store?.invoices
-      .map((invoice) => invoice.order.total)
+  if (store.orders.length > 0) {
+    sales = store?.orders
+      .map((order) => order.total)
       .reduce((accumulator, orderTotal) => accumulator + orderTotal, 0)
   }
 
@@ -191,7 +208,7 @@ export async function getStoreYearlySales(year: number) {
       select: {
         _count: {
           select: {
-            invoices: {
+            orders: {
               where: {
                 created_at: {
                   gte: time.startOf("month").toDate(),
@@ -208,7 +225,7 @@ export async function getStoreYearlySales(year: number) {
       throw new Error("Error Getting Store Sales")
     }
 
-    sales.push({ month: time.format("MMM"), sales: store._count.invoices })
+    sales.push({ month: time.format("MMM"), sales: store._count.orders })
   }
 
   return sales
@@ -235,23 +252,22 @@ export async function getStoreMonthlySales(month: number) {
         owner_email: session.user.email,
       },
       select: {
-        invoices: {
+        orders: {
           where: {
             created_at: {
               gte: time.startOf("day").toDate(),
               lte: time.endOf("day").toDate(),
             },
           },
-          include: { order: true },
         },
       },
     })
 
-    if (!store?.invoices) {
+    if (!store?.orders) {
       throw new Error("Error Getting Store Sales")
     }
 
-    sales.push({ date: time.format("D"), sales: store.invoices.length ?? 0 })
+    sales.push({ date: time.format("D"), sales: store.orders.length ?? 0 })
   }
 
   return sales

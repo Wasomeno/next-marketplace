@@ -3,19 +3,20 @@
 import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Prisma } from "@prisma/client"
-import clsx from "clsx"
-import { twMerge } from "tailwind-merge"
 
-import { Button, buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/skeleton"
 
+import { CreateReviewModal } from "./create-review-modal"
+
 type OrderCardProps = {
-  invoice: Prisma.InvoiceGetPayload<{
+  order: Prisma.OrderGetPayload<{
     include: { products: { include: { product: true } } }
   }>
+  userEmail: string
 }
 
-export const OrderCard = ({ invoice }: OrderCardProps) => {
+export const OrderCard = ({ order, userEmail }: OrderCardProps) => {
   const searchParamsValues = useSearchParams()
   const router = useRouter()
 
@@ -23,36 +24,32 @@ export const OrderCard = ({ invoice }: OrderCardProps) => {
 
   function viewOrderDetails() {
     const searchParams = new URLSearchParams(searchParamsValues.toString())
-    searchParams.set("invoice", invoice.id)
+    searchParams.set("orderId", order.id)
     router.replace(`/orders?${searchParams.toString()}`)
   }
-
-  function rateProduct() {}
 
   return (
     <div className="flex flex-col gap-2 rounded-md border bg-opacity-50 px-4 py-2.5 shadow-sm dark:border-gray-800 dark:bg-slate-950 dark:bg-opacity-50 dark:shadow-gray-800 ">
       <div className="flex items-center justify-between lg:h-10">
         <div className="text-xs">{date.toDateString()}</div>
         <span className="rounded-md bg-blue-200 p-1.5 text-xs font-medium tracking-wide dark:bg-blue-900">
-          {invoice.status}
+          {order.status}
         </span>
       </div>
       <div className="flex flex-wrap items-center gap-2 lg:gap-10">
         <div className="flex w-full items-center gap-4 border-r-slate-200 dark:border-r-gray-800  lg:w-4/6 lg:border-r">
           <div className="relative h-16 w-16 overflow-hidden rounded-md border dark:border-gray-800 lg:h-20 lg:w-20">
             <Image
-              src={invoice.products[0].product.featured_image_url}
+              src={order.products[0].product.featured_image_url}
               alt="product-image"
               fill
             />
           </div>
           <div className="space-y-2">
-            <div className="text-sm font-medium">
-              {invoice.products[0].product.name}
-            </div>
-            <div className="text-sm font-medium opacity-50">
-              {invoice.products[0].amount} x Rp{" "}
-              {invoice.products[0].product.price.toLocaleString("id")}
+            <div className="text-sm">{order.products[0].product.name}</div>
+            <div className="text-sm">
+              {order.products[0].amount} x Rp{" "}
+              {order.products[0].product.price.toLocaleString("id")}
             </div>
           </div>
         </div>
@@ -60,25 +57,26 @@ export const OrderCard = ({ invoice }: OrderCardProps) => {
           <div className="text-xs font-medium lg:text-sm">Total</div>
           <div className="text-xs lg:text-base">
             Rp.{" "}
-            {invoice.products
+            {order.products
               .reduce((total, product) => total + product.total, 0)
               .toLocaleString("id")}
           </div>
         </div>
       </div>
       <div className="flex items-center justify-end gap-2">
-        {invoice.products.length > 1 && (
-          <span className="text-sm font-medium text-gray-500">
-            + {invoice.products.length - 1} other products
+        {order.products.length > 1 && (
+          <span className="text-xs font-medium text-gray-400">
+            + {order.products.length - 1} other products
           </span>
         )}
         <Button onClick={viewOrderDetails} size="sm" className="lg:text-xs">
           View Order Details
         </Button>
-        {invoice.status === "Done" && !invoice.products[0].isReviewed && (
-          <Button onClick={rateProduct} size="sm" className="lg:text-xs">
-            Rate Product
-          </Button>
+        {order.status === "Done" && (
+          <CreateReviewModal
+            userEmail={userEmail}
+            orderProducts={order.products}
+          />
         )}
       </div>
     </div>

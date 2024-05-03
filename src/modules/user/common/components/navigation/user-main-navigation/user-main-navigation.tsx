@@ -16,13 +16,13 @@ export function UserMainNavigation({ back }: { back?: boolean }) {
         {back && <BackButton size={20} />}
         <Link
           href="/"
-          className="relative  hidden h-12 w-12 justify-center lg:flex lg:h-16 lg:w-16"
+          className="relative hidden h-12 w-12 justify-center lg:flex lg:h-16 lg:w-16"
         >
           <Image src="/next_marketplace.webp" alt="next-logo" fill />
         </Link>
         <SearchBar />
       </div>
-      <div className="flex w-4/6 items-center justify-end gap-6 px-2 lg:w-2/6">
+      <div className="flex w-4/6 items-center justify-end gap-4 px-2 lg:w-2/6 lg:gap-6">
         <div className="flex items-center gap-4">
           <CartButton />
           <Separator

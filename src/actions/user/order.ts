@@ -2,9 +2,10 @@
 
 import { revalidatePath } from "next/cache"
 import { Prisma } from "@prisma/client"
-import { getServerSession } from "next-auth"
 
 import { prisma } from "@/lib/prisma"
+
+import { TBaseDataFilter } from "../../../types"
 
 export type TOrderStatus =
   | "Payment Confirmed"
@@ -14,80 +15,127 @@ export type TOrderStatus =
   | "Done"
 
 type TCheckout = {
+  userEmail: string
   cartItems: Prisma.CartItemGetPayload<{
     include: { product: { include: { images: true } } }
   }>[]
   total: number
-  address: string
+  addressId: string
 }
 
-export async function checkout({ cartItems, address }: TCheckout) {
-  const session = await getServerSession()
+type GetStoreOrdersParams = TBaseDataFilter & {
+  storeId: number
+}
+type GetUserOrdersParams = TBaseDataFilter & {
+  status?: string
+  userEmail: string
+}
 
-  const storeIds = cartItems.reduce(
-    (currentIds, item) =>
-      currentIds.includes(item.product.store_id)
-        ? currentIds
-        : [...currentIds, item.product.store_id],
-    [] as number[]
-  )
+type GetOrderParams = TBaseDataFilter & {
+  status?: string
+  orderId: string
+}
 
-  const productsBasedOnStore: Record<string, typeof cartItems> =
-    storeIds.reduce(
-      (currentProducts, storeId) => ({
-        ...currentProducts,
-        [storeId]: cartItems.filter(
-          (cartItem) => cartItem.product.store_id === storeId
-        ),
-      }),
-      {}
-    )
+export async function getStoreOrders(params: GetStoreOrdersParams) {
+  const orders = await prisma.order.findMany({
+    where: { store_id: params.storeId },
+    include: {
+      products: { include: { product: { include: { images: true } } } },
+      _count: { select: { products: true } },
+      address: true,
+    },
+  })
+
+  return orders
+}
+
+export async function getUserOrders(params: GetUserOrdersParams) {
+  const orders = await prisma.order.findMany({
+    where: { user_email: params.userEmail },
+    include: { products: { include: { product: true } } },
+  })
+
+  return orders
+}
+
+export async function getOrder(params: GetOrderParams) {
+  const orders = await prisma.order.findUnique({
+    where: { id: params.orderId },
+    include: {
+      products: { include: { product: { include: { images: true } } } },
+      address: true,
+    },
+  })
+
+  return orders
+}
+
+export async function getStoreOrderCount(params: GetStoreOrdersParams) {
+  const orders = await prisma.order.findMany({
+    where: { store_id: params.storeId },
+  })
+
+  return orders.length
+}
+
+export async function checkout({ userEmail, cartItems, addressId }: TCheckout) {
+  const itemStoreIds = new Set(cartItems.map((item) => item.product.store_id))
 
   try {
-    const date = new Date()
+    for (const storeId of itemStoreIds.values()) {
+      const itemsBasedOnStoreId = cartItems.filter(
+        (item) => item.product.store_id === storeId
+      )
 
-    await prisma.order.create({
-      data: {
-        total: cartItems.reduce(
-          (total, cartItem) => total + cartItem.amount * cartItem.product.price,
-          0
-        ),
-        user_email: session?.user.email as string,
-        invoices: {
-          create: storeIds.map((storeId) => ({
-            id: `INV/${date.getFullYear()}/${date.getTime()}/${storeId}`,
-            store: { connect: { id: storeId } },
-            products: {
-              createMany: {
-                data: productsBasedOnStore[storeId].map((product) => ({
-                  product_id: product.product_id,
-                  total: product.product.price * product.amount,
-                  amount: product.amount,
-                })),
-              },
+      const total = itemsBasedOnStoreId.reduce(
+        (accumulator, currentItem) =>
+          (accumulator += currentItem.amount * currentItem.product.price),
+        0
+      )
+
+      await prisma.order.create({
+        data: {
+          total,
+          products: {
+            createMany: {
+              data: itemsBasedOnStoreId.map((item) => ({
+                amount: item.amount,
+                product_id: item.product_id,
+                total: item.amount * item.product.price,
+              })),
             },
-            address,
-            created_at: new Date(),
-            status: "Payment Confirmed",
-            total: productsBasedOnStore[storeId].reduce(
-              (total, orderProduct) =>
-                total + orderProduct.amount * orderProduct.product.price,
-              0
-            ),
-          })),
+          },
+          address_id: addressId,
+          store_id: storeId,
+          user_email: userEmail,
         },
-      },
-    })
+      })
+    }
 
-    await prisma.cartItem.deleteMany({
+    await prisma.cart.delete({
       where: {
-        id: {
-          in: cartItems.map((cartItem) => cartItem.id),
-        },
+        user_email: userEmail,
       },
     })
   } catch (error) {
     throw error
   }
   revalidatePath("/")
+}
+
+export async function changeOrderStatus({
+  status,
+  orderId,
+}: {
+  status: TOrderStatus
+  orderId: string
+}) {
+  try {
+    await prisma.order.update({
+      where: { id: orderId },
+      data: { status },
+    })
+  } catch (error) {
+    throw error
+  }
 }

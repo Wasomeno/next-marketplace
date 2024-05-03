@@ -18,8 +18,8 @@ model Store {
   owner_email   String    @unique
   slug          String    @unique
   products      Product[]
+  orders        Order[]
   owner         User      @relation(fields: [owner_email], references: [email])
-  invoices      Invoice[]
 
   @@index([owner_email])
 }
@@ -39,7 +39,7 @@ model Product {
   cart_items         CartItem[]
   wishlist_items     WishlistItem[]
   images             ProductImage[]
-  order_products     OrderProduct[]
+  orders             OrderProduct[]
   categories         Category[]
   store              Store           @relation(fields: [store_id], references: [id])
 
@@ -59,14 +59,15 @@ model ProductImage {
 model ProductReview {
   id         Int      @id @default(autoincrement())
   product_id Int
-  user_id    String
   created_at DateTime @default(now())
   rating     Int
   review     String?
+  title      String
+  user_email String
   product    Product  @relation(fields: [product_id], references: [id], onDelete: Cascade)
-  user       User     @relation(fields: [user_id], references: [id])
+  user       User     @relation(fields: [user_email], references: [email])
 
-  @@index([user_id])
+  @@index([user_email])
   @@index([product_id])
 }
 
@@ -133,44 +134,35 @@ model CategoryImage {
 }
 
 model Order {
-  id         String    @id @default(cuid())
+  id         String         @id @default(cuid())
+  store_id   Int
   total      Int
-  created_at DateTime  @default(now())
+  created_at DateTime       @default(now())
   user_email String
-  user       User      @relation(fields: [user_email], references: [email])
-  invoices   Invoice[]
+  address_id String
+  status     String         @default("Payment Confirmed")
+  user       User           @relation(fields: [user_email], references: [email])
+  store      Store          @relation(fields: [store_id], references: [id])
+  address    UserAddress    @relation(fields: [address_id], references: [id])
+  products   OrderProduct[]
 
   @@index([user_email])
-}
-
-model Invoice {
-  id         String         @id @unique
-  store_id   Int
-  order_id   String
-  created_at DateTime       @default(now())
-  status     String
-  total      Int
-  address    String         @default("")
-  store      Store          @relation(fields: [store_id], references: [id])
-  products   OrderProduct[]
-  order      Order          @relation(fields: [order_id], references: [id], onDelete: Cascade)
-
   @@index([store_id])
-  @@index([order_id])
+  @@index([address_id])
 }
 
 model OrderProduct {
   id         Int     @id @default(autoincrement())
-  invoice_id String
+  order_id   String
+  product_id Int
   amount     Int
   total      Int
-  product_id Int
   isReviewed Boolean @default(false)
   product    Product @relation(fields: [product_id], references: [id])
-  invoice    Invoice @relation(fields: [invoice_id], references: [id], onDelete: Cascade)
+  order      Order   @relation(fields: [order_id], references: [id])
 
   @@index([product_id])
-  @@index([invoice_id])
+  @@index([order_id])
 }
 
 model Admin {
@@ -194,7 +186,9 @@ model Account {
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@unique([provider, providerAccountId])
   @@index([userId])
+  @@map("accounts")
 }
 
 model Session {
@@ -239,8 +233,17 @@ model UserAddress {
   recipient       String
   isMainAddress   Boolean @default(false)
   user            User    @relation(fields: [userEmail], references: [email])
+  orders          Order[]
 
   @@index([userEmail])
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
 }
 
 model CategoryToProduct {
@@ -250,4 +253,13 @@ model CategoryToProduct {
   @@unique([A, B], map: "_CategoryToProduct_AB_unique")
   @@index([B], map: "_CategoryToProduct_B_index")
   @@map("_CategoryToProduct")
+}
+
+model OrderToProduct {
+  A String
+  B Int
+
+  @@unique([A, B], map: "_OrderToProduct_AB_unique")
+  @@index([B], map: "_OrderToProduct_B_index")
+  @@map("_OrderToProduct")
 }

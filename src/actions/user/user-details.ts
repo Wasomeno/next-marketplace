@@ -5,8 +5,10 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/config/next-auth"
 import { prisma } from "@/lib/prisma"
 
+import { getCachedSession } from "../store/user"
+
 export async function getUserStore() {
-  const session = await getServerSession(authOptions)
+  const session = await getCachedSession()
   const store = await prisma.store.findUnique({
     where: { owner_email: session?.user?.email as string },
   })
