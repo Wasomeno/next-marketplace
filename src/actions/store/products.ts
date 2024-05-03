@@ -12,6 +12,7 @@ type UpdateProductParams = Omit<
   Product,
   "status" | "store_id" | "sold" | "slug"
 > & {
+  storeId: number
   status: "draft" | "published"
   images: { name: string; url: string }[]
   categoryIds: number[]
@@ -21,6 +22,7 @@ type AddProductProps = Omit<
   Product,
   "status" | "id" | "store_id" | "sold" | "slug"
 > & {
+  storeId: number
   status: "draft" | "published"
   images: { name: string; url: string }[]
   categoryIds: number[]
@@ -29,15 +31,15 @@ type AddProductProps = Omit<
 export async function addProduct({
   categoryIds,
   images,
+  storeId,
   ...product
 }: AddProductProps) {
-  const userStore = await getUserStore()
   try {
     await prisma.product.create({
       data: {
         ...product,
         slug: generateSlug(product.name),
-        store_id: userStore?.id as number,
+        store_id: storeId,
         images: { createMany: { data: images } },
         categories: { connect: categoryIds.map((id) => ({ id: id })) },
       },
@@ -48,8 +50,10 @@ export async function addProduct({
   }
 }
 
-export async function updateProduct(product: UpdateProductParams) {
-  const userStore = await getUserStore()
+export async function updateProduct({
+  storeId,
+  ...product
+}: UpdateProductParams) {
   const currentProduct = await getProduct(product.id)
   try {
     await prisma.product.update({
@@ -61,7 +65,7 @@ export async function updateProduct(product: UpdateProductParams) {
         stock: product.stock,
         slug: generateSlug(product.name),
         featured_image_url: product.featured_image_url,
-        store_id: userStore?.id,
+        store_id: storeId,
         categories: {
           connect: product.categoryIds.map((id) => ({ id: id })),
           disconnect: currentProduct?.categories.filter(

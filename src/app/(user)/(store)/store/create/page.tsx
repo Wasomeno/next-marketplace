@@ -1,6 +1,7 @@
 import React from "react"
 import { Metadata } from "next"
 import { redirect } from "next/navigation"
+import { getCachedSession } from "@/actions/store/user"
 import { getUserStore } from "@/actions/user/user-details"
 import { CreateStoreForm } from "@/modules/user/store/create-store-page/components/create-store-form"
 
@@ -9,7 +10,13 @@ export const metadata: Metadata = {
 }
 
 export default async function UserCreateStorePage() {
-  const store = await getUserStore()
+  const session = await getCachedSession()
+
+  if (!session?.user.email) {
+    redirect("/login")
+  }
+
+  const store = await getUserStore({ userEmail: session.user.email })
 
   if (store) {
     redirect("/")

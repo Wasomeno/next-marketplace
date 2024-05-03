@@ -32,7 +32,9 @@ import { Skeleton } from "@/components/skeleton"
 
 import { ProductFormData, ProductSchema } from "./create-product-modal"
 
-export const EditProductModal = () => {
+export const EditProductModal: React.FC<{ storeId: number }> = ({
+  storeId,
+}) => {
   const searchParamsValues = useSearchParamsValues<{
     edit: string
     id: string
@@ -93,6 +95,7 @@ export const EditProductModal = () => {
 
       await updateProduct({
         ...formData,
+        storeId,
         id: parseInt(searchParamsValues.id),
         categoryIds: formData.categoryIds,
         images: uploadedImages?.map((image) => ({

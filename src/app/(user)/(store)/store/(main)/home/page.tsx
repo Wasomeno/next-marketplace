@@ -1,6 +1,7 @@
 import React from "react"
 import { Metadata } from "next"
 import { redirect } from "next/navigation"
+import { getCachedSession } from "@/actions/store/user"
 import { getUserStore } from "@/actions/user/user-details"
 import { AnalyticCard } from "@/modules/user/store/dashboard-page/components/analytic-card"
 import { StoreRecentOrderList } from "@/modules/user/store/dashboard-page/components/store-recent-order-list"
@@ -13,7 +14,13 @@ export const metadata: Metadata = {
 }
 
 export default async function UserStorePage() {
-  const store = await getUserStore()
+  const session = await getCachedSession()
+
+  if (!session?.user.email) {
+    redirect("/login")
+  }
+
+  const store = await getUserStore({ userEmail: session.user.email })
 
   if (!store) {
     redirect("/")

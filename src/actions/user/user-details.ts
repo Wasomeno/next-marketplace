@@ -7,10 +7,9 @@ import { prisma } from "@/lib/prisma"
 
 import { getCachedSession } from "../store/user"
 
-export async function getUserStore() {
-  const session = await getCachedSession()
+export async function getUserStore({ userEmail }: { userEmail: string }) {
   const store = await prisma.store.findUnique({
-    where: { owner_email: session?.user?.email as string },
+    where: { owner_email: userEmail },
   })
 
   return store

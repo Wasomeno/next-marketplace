@@ -1,5 +1,6 @@
 import { Metadata } from "next"
 import { redirect } from "next/navigation"
+import { getCachedSession } from "@/actions/store/user"
 import { getUserStore } from "@/actions/user/user-details"
 import { CreateProductModal } from "@/modules/user/store/product-page/components/create-product-modal"
 import { EditProductModal } from "@/modules/user/store/product-page/components/edit-product-modal"
@@ -11,7 +12,13 @@ export const metadata: Metadata = {
 }
 
 export default async function UserStoreProductsPage() {
-  const store = await getUserStore()
+  const session = await getCachedSession()
+
+  if (!session?.user.email) {
+    redirect("/login")
+  }
+
+  const store = await getUserStore({ userEmail: session.user.email })
 
   if (!store) {
     redirect("/")
@@ -25,7 +32,7 @@ export default async function UserStoreProductsPage() {
       </div>
       <ProductTable storeId={store.id} />
       <CreateProductModal storeId={store.id} />
-      <EditProductModal />
+      <EditProductModal storeId={store.id} />
     </div>
   )
 }

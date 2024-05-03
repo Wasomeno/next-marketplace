@@ -96,6 +96,7 @@ export const CreateProductModal: React.FC<{ storeId: number }> = ({
       }
       addProduct({
         ...formData,
+        storeId,
         images: uploadedFiles.map((file) => ({
           name: file.name,
           url: file.url,
