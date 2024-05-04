@@ -26,7 +26,7 @@ export function AdminMainMenu() {
           <DropdownContent asChild side="bottom" align="end" sideOffset={2.5}>
             <motion.div
               initial={{ height: "50px", opacity: 0 }}
-              animate={{ height: "150px", opacity: 1 }}
+              animate={{ height: "120px", opacity: 1 }}
               exit={{ height: "50px", opacity: 0 }}
               transition={{ duration: 0.1 }}
               className="z-30 w-64 rounded-md border border-slate-300 bg-white duration-200 dark:border-neutral-600 dark:bg-neutral-900"
