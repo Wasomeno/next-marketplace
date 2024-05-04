@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react"
+import { DialogClose } from "@radix-ui/react-dialog"
 import { AnimatePresence } from "framer-motion"
 
 import { Button } from "./ui/button"
@@ -7,9 +8,9 @@ import { Dialog, DialogContent, DialogOverlay, DialogPortal } from "./ui/dialog"
 type ConfirmationDialogProps = {
   title: string
   open: boolean
-  onOpenChange: () => void
+  onOpenChange: (isOpen: boolean) => void
   onConfirm: () => void
-  onCancel: () => void
+  onCancel?: () => void
   body: ReactNode
 }
 
@@ -43,14 +44,15 @@ export function ConfirmationDialog({
                 >
                   Confirm
                 </Button>
-                <Button
-                  variant="danger"
-                  size="sm"
-                  onClick={onCancel}
-                  className="w-32 rounded-lg border py-2.5 text-xs font-medium text-white"
-                >
-                  Cancel
-                </Button>
+                <DialogClose asChild>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    className="w-32 rounded-lg border py-2.5 text-xs font-medium text-white"
+                  >
+                    Cancel
+                  </Button>
+                </DialogClose>
               </div>
             </DialogContent>
           </DialogPortal>

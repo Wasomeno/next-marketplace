@@ -8,6 +8,8 @@ import { GiCookingPot, GiPoloShirt } from "react-icons/gi"
 import { Skeleton } from "@/components/skeleton"
 import { TableActions } from "@/components/table-actions"
 
+import { StoreProductSingleDeleteModal } from "./store-product-single-delete-modal"
+
 function getCategoryIcons(name: string) {
   switch (name) {
     case "Clothing":
@@ -116,13 +118,6 @@ export const productTableColumns: ColumnDef<
         return router.replace(`${pathname}?${urlSearchParams.toString()}`)
       }
 
-      function openDeleteProductModal() {
-        urlSearchParams.set("delete", "true")
-        urlSearchParams.set("id", row.original.id.toString())
-
-        return router.replace(`${pathname}?${urlSearchParams.toString()}`)
-      }
-
       return (
         <TableActions
           viewAction={
@@ -135,10 +130,7 @@ export const productTableColumns: ColumnDef<
             <TableActions.Edit onClick={openEditProductModal} asLink={false} />
           }
           deleteAction={
-            <TableActions.Delete
-              onClick={openDeleteProductModal}
-              asLink={false}
-            />
+            <StoreProductSingleDeleteModal product={row.original} />
           }
         />
       )

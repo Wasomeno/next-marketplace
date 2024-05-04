@@ -104,10 +104,21 @@ export async function updateProduct({
   }
 }
 
-export async function deleteProduct(productIds: number[]) {
+export async function deleteMultipleProduct(productIds: number[]) {
   try {
     await prisma.product.deleteMany({
       where: { id: { in: productIds } },
+    })
+    revalidatePath("/")
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function deleteSingleProduct(productId: number) {
+  try {
+    await prisma.product.delete({
+      where: { id: productId },
     })
     revalidatePath("/")
   } catch (error) {

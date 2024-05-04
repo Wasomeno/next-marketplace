@@ -6,15 +6,18 @@ import { getCategories } from "@/actions/categories"
 import { getProduct } from "@/actions/product"
 import { updateProduct } from "@/actions/store/products"
 import { categoryQueryKeys } from "@/modules/user/common/queryKeys/categoryQueryKeys"
+import { storeQueryKeys } from "@/modules/user/common/queryKeys/storeQueryKeys"
 import { useSearchParamsValues } from "@/utils"
 import { useUploadThing } from "@/utils/uploadthing"
 import { useImageFiles } from "@/utils/useImageFiles"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery } from "@tanstack/react-query"
+import { AnimatePresence } from "framer-motion"
 import { useForm } from "react-hook-form"
 import { ImSpinner8 } from "react-icons/im"
 import { toast } from "react-toastify"
 
+import { queryClient } from "@/lib/react-query-client"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -111,6 +114,14 @@ export const EditProductModal: React.FC<{ storeId: number }> = ({
       urlSearchParams.delete("edit")
       urlSearchParams.delete("id")
 
+      queryClient.invalidateQueries({
+        queryKey: storeQueryKeys.products({ storeId }),
+      })
+
+      queryClient.invalidateQueries({
+        queryKey: ["product", searchParamsValues.id],
+      })
+
       router.replace(`${pathname}?${urlSearchParams.toString()}`)
       toast.success("Successfully Updated Product")
     },
@@ -130,128 +141,132 @@ export const EditProductModal: React.FC<{ storeId: number }> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={closeModal}>
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent open={isOpen} className="h-[36rem] lg:w-[30rem]">
-          <DialogHeader title="Edit Store Product" />
-          <form
-            onSubmit={form.handleSubmit((formData) =>
-              updateProductMutation.mutate(formData)
-            )}
-            className="flex w-full flex-col gap-4 p-4"
-          >
-            {product.isLoading || isFileLoading ? (
-              <div className="flex items-center gap-2">
-                {Array(3).fill(<Skeleton className="h-28 w-28" />)}
-              </div>
-            ) : (
-              <ImageUploader
-                files={files}
-                selectFiles={addFiles}
-                deselectFile={removeFile}
-                isMultiple
-              />
-            )}
+      <AnimatePresence>
+        {isOpen && (
+          <DialogPortal forceMount>
+            <DialogOverlay />
+            <DialogContent open={isOpen} className="h-[36rem] lg:w-[30rem]">
+              <DialogHeader title="Edit Store Product" />
+              <form
+                onSubmit={form.handleSubmit((formData) =>
+                  updateProductMutation.mutate(formData)
+                )}
+                className="flex w-full flex-col gap-4 p-4"
+              >
+                {product.isLoading || isFileLoading ? (
+                  <div className="flex items-center gap-2">
+                    {Array(3).fill(<Skeleton className="h-28 w-28" />)}
+                  </div>
+                ) : (
+                  <ImageUploader
+                    files={files}
+                    selectFiles={addFiles}
+                    deselectFile={removeFile}
+                    isMultiple
+                  />
+                )}
 
-            <Fieldset label="Name" className="flex flex-col gap-2 ">
-              <Input className="w-full" {...form.register("name")} />
-              {form.formState.errors.name && (
-                <span className="text-xs text-red-600">
-                  {form.formState.errors.name.message}
-                </span>
-              )}
-            </Fieldset>
-            <Fieldset label="Categories" className="flex flex-col gap-2 ">
-              <Dropdown
-                options={categoryOptions}
-                selectedOptions={categoryOptions?.filter((option) =>
-                  selectedCategories?.includes(option.value)
-                )}
-                onOptionClick={(option) =>
-                  form.setValue("categoryIds", [
-                    ...selectedCategories,
-                    Number(option.value),
-                  ])
-                }
-                deselectOption={(option) =>
-                  form.setValue(
-                    "categoryIds",
-                    selectedCategories.filter(
-                      (categoryId) => option.value !== categoryId
-                    )
-                  )
-                }
-                isMulti
-              />
-              {form.formState.errors.categoryIds && (
-                <span className="text-xs text-red-600">
-                  {form.formState.errors.categoryIds.message}
-                </span>
-              )}
-            </Fieldset>
-            <Fieldset label="Price" className="flex flex-col gap-2 ">
-              <Input
-                type="number"
-                className="w-full"
-                {...form.register("price", { valueAsNumber: true })}
-              />
-              {form.formState.errors.price && (
-                <span className="text-xs text-red-600">
-                  {form.formState.errors.price.message}
-                </span>
-              )}
-            </Fieldset>
-            <Fieldset label="Stock" className="flex flex-col gap-2 ">
-              <Input
-                type="number"
-                className="w-full"
-                {...form.register("stock", { valueAsNumber: true })}
-              />
-              {form.formState.errors.stock && (
-                <span className="text-xs text-red-600">
-                  {form.formState.errors.stock.message}
-                </span>
-              )}
-            </Fieldset>
-            <Fieldset
-              label="Description"
-              className="col-span-2 flex flex-col gap-2 "
-            >
-              <TextArea
-                className="h-36 w-full"
-                {...form.register("description")}
-              />
-              {form.formState.errors.description && (
-                <span className="text-xs text-red-600">
-                  {form.formState.errors.description.message}
-                </span>
-              )}
-            </Fieldset>
-            <div className="flex flex-wrap-reverse items-center justify-end gap-2">
-              <Button
-                type="button"
-                variant="defaultOutline"
-                size="sm"
-                className="w-full lg:w-32"
-                onClick={closeModal}
-              >
-                Cancel
-              </Button>
-              <Button
-                disabled={updateProductMutation.isPending}
-                variant="default"
-                size="sm"
-                className="w-full lg:w-32"
-              >
-                {updateProductMutation.isPending && (
-                  <ImSpinner8 className="animate-spin" />
-                )}
-                Submit
-              </Button>
-            </div>
-          </form>
-        </DialogContent>
-      </DialogPortal>
+                <Fieldset label="Name" className="flex flex-col gap-2 ">
+                  <Input className="w-full" {...form.register("name")} />
+                  {form.formState.errors.name && (
+                    <span className="text-xs text-red-600">
+                      {form.formState.errors.name.message}
+                    </span>
+                  )}
+                </Fieldset>
+                <Fieldset label="Categories" className="flex flex-col gap-2 ">
+                  <Dropdown
+                    options={categoryOptions}
+                    selectedOptions={categoryOptions?.filter((option) =>
+                      selectedCategories?.includes(option.value)
+                    )}
+                    onOptionClick={(option) =>
+                      form.setValue("categoryIds", [
+                        ...selectedCategories,
+                        Number(option.value),
+                      ])
+                    }
+                    deselectOption={(option) =>
+                      form.setValue(
+                        "categoryIds",
+                        selectedCategories.filter(
+                          (categoryId) => option.value !== categoryId
+                        )
+                      )
+                    }
+                    isMulti
+                  />
+                  {form.formState.errors.categoryIds && (
+                    <span className="text-xs text-red-600">
+                      {form.formState.errors.categoryIds.message}
+                    </span>
+                  )}
+                </Fieldset>
+                <Fieldset label="Price" className="flex flex-col gap-2 ">
+                  <Input
+                    type="number"
+                    className="w-full"
+                    {...form.register("price", { valueAsNumber: true })}
+                  />
+                  {form.formState.errors.price && (
+                    <span className="text-xs text-red-600">
+                      {form.formState.errors.price.message}
+                    </span>
+                  )}
+                </Fieldset>
+                <Fieldset label="Stock" className="flex flex-col gap-2 ">
+                  <Input
+                    type="number"
+                    className="w-full"
+                    {...form.register("stock", { valueAsNumber: true })}
+                  />
+                  {form.formState.errors.stock && (
+                    <span className="text-xs text-red-600">
+                      {form.formState.errors.stock.message}
+                    </span>
+                  )}
+                </Fieldset>
+                <Fieldset
+                  label="Description"
+                  className="col-span-2 flex flex-col gap-2 "
+                >
+                  <TextArea
+                    className="h-36 w-full"
+                    {...form.register("description")}
+                  />
+                  {form.formState.errors.description && (
+                    <span className="text-xs text-red-600">
+                      {form.formState.errors.description.message}
+                    </span>
+                  )}
+                </Fieldset>
+                <div className="flex flex-wrap-reverse items-center justify-end gap-2">
+                  <Button
+                    type="button"
+                    variant="defaultOutline"
+                    size="sm"
+                    className="w-full lg:w-32"
+                    onClick={closeModal}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    disabled={updateProductMutation.isPending}
+                    variant="default"
+                    size="sm"
+                    className="w-full lg:w-32"
+                  >
+                    {updateProductMutation.isPending && (
+                      <ImSpinner8 className="animate-spin" />
+                    )}
+                    Submit
+                  </Button>
+                </div>
+              </form>
+            </DialogContent>
+          </DialogPortal>
+        )}
+      </AnimatePresence>
     </Dialog>
   )
 }
