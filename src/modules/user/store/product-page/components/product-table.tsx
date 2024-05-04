@@ -137,7 +137,9 @@ export const ProductTable: React.FC<{ storeId: number }> = ({ storeId }) => {
   function openCreateProductModal() {
     const urlSearchParams = new URLSearchParams(searchParamsValues)
     urlSearchParams.set("create", "true")
-    router.replace(`${pathname}?${urlSearchParams.toString()}`)
+    router.replace(`${pathname}?${urlSearchParams.toString()}`, {
+      scroll: false,
+    })
   }
 
   async function deleteProducts() {
