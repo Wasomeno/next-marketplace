@@ -37,7 +37,6 @@ export function StoreProducts() {
 
   const productSkeletons = Array(6).fill(<ProductCard.Skeleton />)
 
-  console.log(products.data)
   return (
     <>
       <div className="flex items-center justify-between">
