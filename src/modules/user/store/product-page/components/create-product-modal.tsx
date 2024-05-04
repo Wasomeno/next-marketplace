@@ -94,7 +94,7 @@ export const CreateProductModal: React.FC<{ storeId: number }> = ({
       if (!uploadedFiles || !uploadedFiles.length) {
         throw new Error("Error When Uploading Product Imagess")
       }
-      addProduct({
+      await addProduct({
         ...formData,
         storeId,
         images: uploadedFiles.map((file) => ({
@@ -108,13 +108,10 @@ export const CreateProductModal: React.FC<{ storeId: number }> = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: storeQueryKeys.products({ storeId, ...searchParamsValues }),
+        queryKey: storeQueryKeys.products({ storeId }),
       })
       queryClient.invalidateQueries({
-        queryKey: storeQueryKeys.productCount({
-          storeId,
-          search: searchParamsValues.search,
-        }),
+        queryKey: storeQueryKeys.productCount({ storeId }),
       })
       onOpenChange(false)
       toast.success("Succesfully created new product")
