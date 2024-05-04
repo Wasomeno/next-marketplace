@@ -97,7 +97,7 @@ export const StoreSalesChart = () => {
   }
 
   return (
-    <div className="w-full space-y-2">
+    <div className="w-full space-y-2 rounded-lg border p-4 shadow-sm lg:px-6 lg:py-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-base font-medium lg:text-lg">Sales Report</h2>
         <div className="flex items-center gap-2">
