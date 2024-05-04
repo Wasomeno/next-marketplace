@@ -1,29 +1,46 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation } from "@tanstack/react-query"
 import { AnimatePresence, motion } from "framer-motion"
 import { signIn } from "next-auth/react"
 import { useForm } from "react-hook-form"
+import { ImSpinner8 } from "react-icons/im"
 import { toast } from "react-toastify"
 import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { PageTransitionWrapper } from "@/components/page-transition-wrapper"
-import { ThemeSwitcher } from "@/components/theme-switcher"
 
 const AdminLoginSchema = z.object({
-  username: z.string().min(5).max(25),
-  password: z.string().min(6).max(25),
+  username: z
+    .string()
+    .min(5, "Username must have at least 5 characters")
+    .max(25, "Username can't be more than 5 characters"),
+  password: z
+    .string()
+    .min(6, "Password must have at least 6 characters")
+    .max(25, "Password can't be more than 5 characters"),
 })
 
 type AdminLoginFormData = z.infer<typeof AdminLoginSchema>
 
 export default function AdminLoginPage() {
-  const { register, handleSubmit, getValues, formState } =
-    useForm<AdminLoginFormData>({
-      resolver: zodResolver(AdminLoginSchema),
-    })
+  const { register, handleSubmit, formState } = useForm<AdminLoginFormData>({
+    resolver: zodResolver(AdminLoginSchema),
+  })
+
+  const signInMutation = useMutation({
+    mutationFn: async (formData: AdminLoginFormData) => {
+      await signIn("credentials", {
+        username: formData.username,
+        password: formData.password,
+        callbackUrl: "/admin",
+      })
+    },
+    onSuccess: () => toast.success("Sign in success"),
+  })
 
   return (
     <PageTransitionWrapper className="flex flex-1 flex-col items-center justify-center">
@@ -33,23 +50,9 @@ export default function AdminLoginPage() {
           <h1 className="font-sans text-2xl font-semibold lg:text-3xl">
             Sign In
           </h1>
-          <ThemeSwitcher />
         </div>
         <form
-          onSubmit={handleSubmit(() =>
-            toast.promise(
-              signIn("credentials", {
-                username: getValues("username"),
-                password: getValues("password"),
-                callbackUrl: "/admin",
-              }),
-              {
-                pending: "Signing in...",
-                error: "Error",
-                success: "Sign in Success",
-              }
-            )
-          )}
+          onSubmit={handleSubmit((formData) => signInMutation.mutate(formData))}
           className="flex flex-col gap-3"
         >
           <div className="space-y-2">
@@ -66,7 +69,7 @@ export default function AdminLoginPage() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="text-xs text-red-600 dark:text-red-800 lg:text-sm"
+                  className="text-xs text-red-600 dark:text-red-800"
                 >
                   {formState.errors.username?.message}
                 </motion.span>
@@ -87,7 +90,7 @@ export default function AdminLoginPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="text-xs text-red-600 dark:text-red-800 lg:text-sm"
+                className="text-xs text-red-600 dark:text-red-800"
               >
                 {formState.errors.password?.message}
               </motion.span>
@@ -95,8 +98,12 @@ export default function AdminLoginPage() {
           </div>
           <Button
             variant="default"
-            className="bg-blue-500 font-medium text-white dark:bg-blue-800"
+            className="bg-gray-200 shadow-sm lg:hover:bg-gray-300"
+            disabled={signInMutation.isPending}
           >
+            {signInMutation.isPending && (
+              <ImSpinner8 className="animate-spin" />
+            )}
             Sign in
           </Button>
         </form>
