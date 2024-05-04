@@ -3,17 +3,12 @@ import { TBaseDataFilterParams } from "../../../../../types"
 export const storeQueryKeys = {
   products: (
     params: { storeId?: number; storeSlug?: string } & TBaseDataFilterParams
-  ) => [
-    params.storeId ?? params.storeSlug,
-    params.page,
-    params.pageSize,
-    params.search,
-    params.sort,
-  ],
+  ) => ["storeProducts", { ...params }],
   productCount: (
     params: { storeId: number } & Pick<TBaseDataFilterParams, "search">
-  ) => [params.storeId, params.search],
+  ) => ["storeProducts", "count", { ...params }],
   reviews: (params: { storeId: number } & TBaseDataFilterParams) => [
+    "storeProductReviews",
     params.storeId,
     params.page,
     params.search,
@@ -21,5 +16,5 @@ export const storeQueryKeys = {
   ],
   reviewCount: (
     params: { storeId: number } & Pick<TBaseDataFilterParams, "search">
-  ) => [params.storeId, params.search],
+  ) => ["storeProductReviewCount", params.storeId, params.search],
 }
