@@ -33,7 +33,7 @@ export const StoreProductReviewsTable: React.FC<{ storeId: number }> = ({
   const searchParamsValues = useSearchParamsValues<TBaseDataFilterParams>()
 
   const { data: reviews, isLoading: isReviewsLoading } = useQuery({
-    queryKey: storeQueryKeys.reviews({ storeId }),
+    queryKey: storeQueryKeys.reviews({ ...searchParamsValues, storeId }),
     queryFn: () =>
       getStoreProductReviews({
         ...searchParamsValues,
