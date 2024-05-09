@@ -115,20 +115,20 @@ model WishlistItem {
 }
 
 model Category {
-  id          Int             @id @default(autoincrement())
+  id          Int            @id @default(autoincrement())
   name        String
   description String
-  slug        String          @unique
+  slug        String         @unique
   products    Product[]
-  images      CategoryImage[]
+  image       CategoryImage?
 }
 
 model CategoryImage {
   id          Int      @id @default(autoincrement())
   name        String
-  category_id Int
+  category_id Int      @unique
   url         String
-  category    Category @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  category    Category @relation(fields: [category_id], references: [id])
 
   @@index([category_id])
 }
@@ -139,8 +139,8 @@ model Order {
   total      Int
   created_at DateTime       @default(now())
   user_email String
-  address_id String
   status     String         @default("Payment Confirmed")
+  address_id String
   user       User           @relation(fields: [user_email], references: [email])
   store      Store          @relation(fields: [store_id], references: [id])
   address    UserAddress    @relation(fields: [address_id], references: [id])

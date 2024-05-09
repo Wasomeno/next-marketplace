@@ -9,7 +9,7 @@ import { categoryQueryKeys } from "@/modules/user/common/queryKeys/categoryQuery
 import { storeQueryKeys } from "@/modules/user/common/queryKeys/storeQueryKeys"
 import { useSearchParamsValues } from "@/utils"
 import { useUploadThing } from "@/utils/uploadthing"
-import { useImageFiles } from "@/utils/useImageFiles"
+import { useFetchMultipleImages } from "@/utils/useImageFiles"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { AnimatePresence } from "framer-motion"
@@ -31,7 +31,6 @@ import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
 import { Dropdown } from "@/components/dropdown"
 import { ImageUploader } from "@/components/image-uploader"
-import { Skeleton } from "@/components/skeleton"
 
 import { ProductFormData, ProductSchema } from "./create-product-modal"
 
@@ -57,16 +56,11 @@ export const EditProductModal: React.FC<{ storeId: number }> = ({
     enabled: isOpen,
   })
 
-  const {
-    files,
-    addFiles,
-    removeFile,
-    isLoading: isFileLoading,
-  } = useImageFiles(product.isLoading ? [] : product.data?.images)
-
   const router = useRouter()
 
   const pathname = usePathname()
+
+  const images = useFetchMultipleImages(product.data?.images ?? [])
 
   const form = useForm<ProductFormData>({
     resolver: zodResolver(ProductSchema),
@@ -90,7 +84,7 @@ export const EditProductModal: React.FC<{ storeId: number }> = ({
 
   const updateProductMutation = useMutation({
     mutationFn: async (formData: ProductFormData) => {
-      const uploadedImages = await startUpload(files)
+      const uploadedImages = await startUpload(formData.images)
 
       if (!uploadedImages || !uploadedImages.length) {
         throw new Error("Error When Uploading Product Imagess")
@@ -134,6 +128,7 @@ export const EditProductModal: React.FC<{ storeId: number }> = ({
     if (product.data) {
       form.reset({
         ...product.data,
+        images: images?.data,
         categoryIds: product.data.categories.map((category) => category.id),
       })
     }
@@ -153,28 +148,24 @@ export const EditProductModal: React.FC<{ storeId: number }> = ({
                 )}
                 className="flex w-full flex-col gap-4 p-4"
               >
-                {product.isLoading || isFileLoading ? (
-                  <div className="flex items-center gap-2">
-                    {Array(3).fill(<Skeleton className="h-28 w-28" />)}
-                  </div>
-                ) : (
+                <Fieldset label="Images" className="flex flex-col gap-2 ">
                   <ImageUploader
-                    files={files}
-                    selectFiles={addFiles}
-                    deselectFile={removeFile}
-                    isMultiple
+                    mode="multiple"
+                    onImagesChange={(images) => form.setValue("images", images)}
                   />
-                )}
-
-                <Fieldset label="Name" className="flex flex-col gap-2 ">
-                  <Input className="w-full" {...form.register("name")} />
-                  {form.formState.errors.name && (
-                    <span className="text-xs text-red-600">
-                      {form.formState.errors.name.message}
-                    </span>
-                  )}
                 </Fieldset>
-                <Fieldset label="Categories" className="flex flex-col gap-2 ">
+                <Fieldset
+                  label="Name"
+                  className="flex flex-col gap-2 "
+                  error={form.formState.errors.name}
+                >
+                  <Input className="w-full" {...form.register("name")} />
+                </Fieldset>
+                <Fieldset
+                  label="Categories"
+                  className="flex flex-col gap-2 "
+                  error={form.formState.errors.categoryIds}
+                >
                   <Dropdown
                     options={categoryOptions}
                     selectedOptions={categoryOptions?.filter((option) =>
@@ -196,49 +187,38 @@ export const EditProductModal: React.FC<{ storeId: number }> = ({
                     }
                     isMulti
                   />
-                  {form.formState.errors.categoryIds && (
-                    <span className="text-xs text-red-600">
-                      {form.formState.errors.categoryIds.message}
-                    </span>
-                  )}
                 </Fieldset>
-                <Fieldset label="Price" className="flex flex-col gap-2 ">
+                <Fieldset
+                  label="Price"
+                  className="flex flex-col gap-2 "
+                  error={form.formState.errors.price}
+                >
                   <Input
                     type="number"
                     className="w-full"
                     {...form.register("price", { valueAsNumber: true })}
                   />
-                  {form.formState.errors.price && (
-                    <span className="text-xs text-red-600">
-                      {form.formState.errors.price.message}
-                    </span>
-                  )}
                 </Fieldset>
-                <Fieldset label="Stock" className="flex flex-col gap-2 ">
+                <Fieldset
+                  label="Stock"
+                  className="flex flex-col gap-2 "
+                  error={form.formState.errors.stock}
+                >
                   <Input
                     type="number"
                     className="w-full"
                     {...form.register("stock", { valueAsNumber: true })}
                   />
-                  {form.formState.errors.stock && (
-                    <span className="text-xs text-red-600">
-                      {form.formState.errors.stock.message}
-                    </span>
-                  )}
                 </Fieldset>
                 <Fieldset
                   label="Description"
                   className="col-span-2 flex flex-col gap-2 "
+                  error={form.formState.errors.description}
                 >
                   <TextArea
                     className="h-36 w-full"
                     {...form.register("description")}
                   />
-                  {form.formState.errors.description && (
-                    <span className="text-xs text-red-600">
-                      {form.formState.errors.description.message}
-                    </span>
-                  )}
                 </Fieldset>
                 <div className="flex flex-wrap-reverse items-center justify-end gap-2">
                   <Button

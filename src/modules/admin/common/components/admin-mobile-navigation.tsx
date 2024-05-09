@@ -4,12 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import clsx from "clsx"
 import { IconType } from "react-icons"
-import {
-  MdGridView,
-  MdOutlineRequestQuote,
-  MdOutlineTableChart,
-  MdSpaceDashboard,
-} from "react-icons/md"
+import { MdGridView, MdSpaceDashboard } from "react-icons/md"
 import { twMerge } from "tailwind-merge"
 
 interface NavigationLinkProps {
@@ -29,19 +24,8 @@ export const AdminMobileNavigation = () => {
       <NavigationLink path={path} href="/admin/categories" Icon={MdGridView}>
         Categories
       </NavigationLink>
-      <NavigationLink
-        path={path}
-        href="/admin/products"
-        Icon={MdOutlineTableChart}
-      >
-        Products
-      </NavigationLink>
-      <NavigationLink
-        path={path}
-        href="/admin/orders"
-        Icon={MdOutlineRequestQuote}
-      >
-        Orders
+      <NavigationLink path={path} href="/admin/banners" Icon={MdGridView}>
+        Promo Banners
       </NavigationLink>
     </div>
   )

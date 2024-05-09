@@ -1,16 +1,19 @@
 "use client"
 
+import { useEffect } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { addCategory } from "@/actions/categories"
-import { categoryQueryKeys } from "@/modules/user/common/queryKeys/categoryQueryKeys"
+import { getBanner, updateBanner } from "@/actions/admin/banner"
+import { bannersQuery } from "@/modules/user/common/queryOptions/bannerQueryOptions"
 import { useUploadThing } from "@/utils/uploadthing"
+import { useFetchSingleImage } from "@/utils/useImageFiles"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { data } from "autoprefixer"
 import { AnimatePresence } from "framer-motion"
 import { useForm } from "react-hook-form"
 import { ImSpinner8 } from "react-icons/im"
 import { toast } from "react-toastify"
-import * as z from "zod"
+import { ClientUploadedFileData } from "uploadthing/types"
 
 import { queryClient } from "@/lib/react-query-client"
 import { Button } from "@/components/ui/button"
@@ -23,45 +26,45 @@ import {
 } from "@/components/ui/dialog"
 import { Fieldset } from "@/components/ui/fieldset"
 import { Input } from "@/components/ui/input"
-import { TextArea } from "@/components/ui/text-area"
 import { ImageUploader } from "@/components/image-uploader"
 
-export const createCategoryFormDataSchema = z.object({
-  image: z.instanceof(File, { message: "Category must have at least 1 image" }),
-  name: z.string().min(5, "Name must have at least 5 characters").max(100),
-  description: z
-    .string()
-    .min(20, "Description must have at least 20 characters")
-    .max(200),
-})
+import {
+  CreateBannerFormData,
+  createBannerFormDataSchema,
+} from "./create-banner-modal"
 
-export type CreateCategoryFormData = z.infer<
-  typeof createCategoryFormDataSchema
->
-
-export function AddCategoryModal() {
-  const uploadthing = useUploadThing("imageUploader")
-
-  const form = useForm<CreateCategoryFormData>({
-    resolver: zodResolver(createCategoryFormDataSchema),
-  })
-
+export function EditBannerModal() {
   const pathname = usePathname()
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  const isOpen = searchParams.get("add") !== null
+  const bannerId = searchParams.get("id") !== null
 
-  function generateSlug() {
-    return form.getValues("name")?.toLowerCase().replaceAll(" ", "-")
-  }
+  const banner = useQuery({
+    queryKey: ["banner", bannerId],
+    queryFn: () => getBanner({ id: Number(bannerId) }),
+  })
+
+  const images = useFetchSingleImage({
+    name: banner.data?.name as string,
+    url: banner.data?.url as string,
+  })
+
+  const uploadthing = useUploadThing("imageUploader")
+
+  const form = useForm<CreateBannerFormData>({
+    resolver: zodResolver(createBannerFormDataSchema),
+  })
+
+  const isOpen = searchParams.get("edit") !== null
 
   function onOpenChange(isOpen: boolean) {
     const urlSearchParams = new URLSearchParams(searchParams)
     if (isOpen) {
-      urlSearchParams.set("add", "true")
+      urlSearchParams.set("edit", "true")
     } else {
-      urlSearchParams.delete("add")
+      urlSearchParams.delete("edit")
+      urlSearchParams.delete("id")
     }
 
     router.replace(`${pathname}?${urlSearchParams.toString()}`, {
@@ -69,29 +72,37 @@ export function AddCategoryModal() {
     })
   }
 
-  const createCategoryMutation = useMutation({
-    mutationFn: async (formData: CreateCategoryFormData) => {
-      const imageResults = await uploadthing.startUpload([formData.image])
-
-      if (!imageResults?.length) {
-        throw new Error("Error when uploading image")
+  const updateBannerMutation = useMutation({
+    mutationFn: async (formData: CreateBannerFormData) => {
+      let imageResults: ClientUploadedFileData<null>[] | undefined = []
+      if (formData.image.name !== banner.data?.name) {
+        imageResults = await uploadthing.startUpload([formData.image])
+        if (!imageResults?.length) {
+          throw new Error("Error when uploading image")
+        }
       }
-
-      await addCategory({
-        ...formData,
-        image: imageResults[0],
-        slug: generateSlug(),
+      await updateBanner({
+        id: Number(bannerId),
+        name: formData.name,
+        url: imageResults[0]?.url ?? banner.data?.url,
       })
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: categoryQueryKeys.all(),
-      })
       onOpenChange(false)
-      toast.success("Succesfully created new category")
+      queryClient.invalidateQueries(bannersQuery())
+      toast.success("Succesfully updated banner")
     },
-    onError: () => toast.error("Error when creating new category"),
+    onError: ({ message }) =>
+      toast.error(message ?? "Error when updating banner"),
   })
+
+  useEffect(() => {
+    if (!banner.isLoading && banner.data) {
+      form.reset({
+        name: banner.data.name,
+      })
+    }
+  }, [banner.isLoading])
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -99,11 +110,11 @@ export function AddCategoryModal() {
         {isOpen && (
           <DialogPortal forceMount>
             <DialogOverlay />
-            <DialogContent open={isOpen} className="lg:h-5/6 lg:w-2/6">
-              <DialogHeader title="Add Category" />
+            <DialogContent open={isOpen} className="lg:h-4/6 lg:w-3/6">
+              <DialogHeader title="Edit Banner" />
               <form
                 onSubmit={form.handleSubmit((formData) =>
-                  createCategoryMutation.mutate(formData)
+                  updateBannerMutation.mutate(formData)
                 )}
                 className="flex flex-1 flex-col gap-4 px-6 py-4"
               >
@@ -111,8 +122,9 @@ export function AddCategoryModal() {
                   <Fieldset label="Image">
                     <ImageUploader
                       mode="single"
+                      image={images.data}
                       onImageChange={(image) => {
-                        if (image !== undefined) {
+                        if (image) {
                           form.setValue("image", image, {
                             shouldValidate: true,
                           })
@@ -124,28 +136,15 @@ export function AddCategoryModal() {
                   </Fieldset>
                   <Fieldset label="Name" error={form.formState.errors.name}>
                     <Input
-                      id="categoryName"
+                      id="bannerName"
                       type="text"
-                      placeholder="Input category name"
+                      placeholder="Input banner name"
                       className="dark:border-neutral-600 dark:bg-neutral-800"
                       {...form.register("name")}
                     />
                   </Fieldset>
-
-                  <Fieldset
-                    label="Description"
-                    error={form.formState.errors.description}
-                  >
-                    <TextArea
-                      id="categoryDescription"
-                      placeholder="Input category description"
-                      className="h-40 dark:border-neutral-600 dark:bg-neutral-800"
-                      {...form.register("description")}
-                    />
-                  </Fieldset>
                 </div>
-
-                <div className="flex flex-wrap items-center justify-end gap-4">
+                <div className="flex flex-wrap items-center justify-end gap-2">
                   <Button
                     type="button"
                     variant="defaultOutline"
@@ -158,9 +157,9 @@ export function AddCategoryModal() {
                   <Button
                     size="sm"
                     className="w-32 lg:text-xs"
-                    disabled={createCategoryMutation.isPending}
+                    disabled={updateBannerMutation.isPending}
                   >
-                    {createCategoryMutation.isPending && (
+                    {updateBannerMutation.isPending && (
                       <ImSpinner8 className="animate-spin" />
                     )}
                     Submit

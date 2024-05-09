@@ -7,3 +7,12 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.data-table__container::-webkit-scrollbar {
+  display: none;
+}
+
+.data-table__container {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

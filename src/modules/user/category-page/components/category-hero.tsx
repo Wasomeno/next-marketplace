@@ -10,15 +10,15 @@ export const CategoryHero = async ({
 }) => {
   const category = await prisma.category.findUnique({
     where: { slug: categorySlug },
-    include: { images: true },
+    include: { image: true },
   })
 
   return (
     <div className="flex h-36 w-full items-center gap-6 bg-gradient-to-r from-blue-300 to-sky-100 px-6 dark:bg-neutral-900 lg:h-72 lg:px-16 ">
       <div className="relative h-24 w-24 overflow-hidden  rounded-full  shadow-md lg:h-36 lg:w-36">
         <Image
-          src={category?.images[0].url as string}
-          alt={category?.images[0].name as string}
+          src={category?.image?.url as string}
+          alt={category?.image?.name as string}
           fill
         />
       </div>

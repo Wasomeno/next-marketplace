@@ -6,7 +6,6 @@ import { Product } from "@prisma/client"
 import { prisma } from "@/lib/prisma"
 
 import { getProduct } from "../product"
-import { getUserStore } from "../user/user-details"
 
 type UpdateProductParams = Omit<
   Product,

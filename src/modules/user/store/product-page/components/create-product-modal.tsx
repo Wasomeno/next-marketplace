@@ -5,10 +5,9 @@ import { usePathname, useRouter } from "next/navigation"
 import { getCategories } from "@/actions/categories"
 import { addProduct } from "@/actions/store/products"
 import { categoryQueryKeys } from "@/modules/user/common/queryKeys/categoryQueryKeys"
-import { storeQueryKeys } from "@/modules/user/common/queryKeys/storeQueryKeys"
+import { storeProductsQuery } from "@/modules/user/common/queryOptions/storeQueryOptions"
 import { useSearchParamsValues } from "@/utils"
 import { useUploadThing } from "@/utils/uploadthing"
-import { useImageFiles } from "@/utils/useImageFiles"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { AnimatePresence } from "framer-motion"
@@ -32,9 +31,13 @@ import { TextArea } from "@/components/ui/text-area"
 import { Dropdown } from "@/components/dropdown"
 import { ImageUploader } from "@/components/image-uploader"
 
-import { TBaseDataFilter, TBaseDataFilterParams } from "../../../../../../types"
+import { TBaseDataFilterParams } from "../../../../../../types"
 
 export const ProductSchema = z.object({
+  images: z
+    .array(z.instanceof(File))
+    .min(1, "Product must have at least 1 image")
+    .default([]),
   name: z
     .string()
     .min(5, "Name must have at least 5 characters")
@@ -69,8 +72,6 @@ export const CreateProductModal: React.FC<{ storeId: number }> = ({
   >()
   const isOpen = searchParamsValues.create !== undefined
 
-  const { files, addFiles, removeFile, clearFiles } = useImageFiles()
-
   const categories = useQuery({
     queryKey: categoryQueryKeys.all(),
     queryFn: () => getCategories(),
@@ -91,7 +92,7 @@ export const CreateProductModal: React.FC<{ storeId: number }> = ({
 
   const createProductMutation = useMutation({
     mutationFn: async (formData: ProductFormData) => {
-      const uploadedFiles = await startUpload(files)
+      const uploadedFiles = await startUpload(formData.images)
       if (!uploadedFiles || !uploadedFiles.length) {
         throw new Error("Error When Uploading Product Imagess")
       }
@@ -108,9 +109,7 @@ export const CreateProductModal: React.FC<{ storeId: number }> = ({
       })
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: storeQueryKeys.products({ storeId }),
-      })
+      queryClient.invalidateQueries(storeProductsQuery({ storeId }))
       onOpenChange(false)
       toast.success("Succesfully created new product")
     },
@@ -127,7 +126,6 @@ export const CreateProductModal: React.FC<{ storeId: number }> = ({
       })
     } else {
       form.reset()
-      clearFiles()
 
       urlSearchParams.delete("create")
 
@@ -151,29 +149,34 @@ export const CreateProductModal: React.FC<{ storeId: number }> = ({
                 )}
                 className="flex w-full flex-col gap-4 p-4"
               >
-                <Fieldset label="Images" className="flex flex-col gap-2 ">
+                <Fieldset
+                  label="Images"
+                  className="flex flex-col gap-2 "
+                  error={form.formState.errors.images}
+                >
                   <ImageUploader
-                    files={files}
-                    selectFiles={addFiles}
-                    deselectFile={(fileIndex) => {
-                      removeFile(fileIndex)
-                    }}
-                    isMultiple
+                    mode="multiple"
+                    onImagesChange={(images) =>
+                      form.setValue("images", images, { shouldValidate: true })
+                    }
                   />
                 </Fieldset>
-                <Fieldset label="Name" className="flex flex-col gap-2 ">
+                <Fieldset
+                  label="Name"
+                  className="flex flex-col gap-2 "
+                  error={form.formState.errors.name}
+                >
                   <Input
                     placeholder="Input your product name"
                     className="w-full"
                     {...form.register("name")}
                   />
-                  {form.formState.errors.name && (
-                    <span className="text-xs text-red-600">
-                      {form.formState.errors.name.message}
-                    </span>
-                  )}
                 </Fieldset>
-                <Fieldset label="Categories" className="flex flex-col gap-2 ">
+                <Fieldset
+                  label="Categories"
+                  className="flex flex-col gap-2 "
+                  error={form.formState.errors.categoryIds}
+                >
                   <Dropdown
                     options={categoryOptions}
                     isLoading={categories.isLoading}
@@ -197,52 +200,41 @@ export const CreateProductModal: React.FC<{ storeId: number }> = ({
                     }
                     isMulti
                   />
-                  {form.formState.errors.categoryIds && (
-                    <span className="text-xs text-red-600">
-                      {form.formState.errors.categoryIds.message}
-                    </span>
-                  )}
                 </Fieldset>
-                <Fieldset label="Price" className="flex flex-col gap-2 ">
+                <Fieldset
+                  label="Price"
+                  className="flex flex-col gap-2 "
+                  error={form.formState.errors.price}
+                >
                   <Input
                     type="number"
                     placeholder="Input your product price"
                     className="w-full"
                     {...form.register("price", { valueAsNumber: true })}
                   />
-                  {form.formState.errors.price && (
-                    <span className="text-xs text-red-600">
-                      {form.formState.errors.price.message}
-                    </span>
-                  )}
                 </Fieldset>
-                <Fieldset label="Stock" className="flex flex-col gap-2 ">
+                <Fieldset
+                  label="Stock"
+                  className="flex flex-col gap-2 "
+                  error={form.formState.errors.stock}
+                >
                   <Input
                     type="number"
                     placeholder="Input your product stock"
                     className="w-full"
                     {...form.register("stock", { valueAsNumber: true })}
                   />
-                  {form.formState.errors.stock && (
-                    <span className="text-xs text-red-600">
-                      {form.formState.errors.stock.message}
-                    </span>
-                  )}
                 </Fieldset>
                 <Fieldset
                   label="Description"
                   className="col-span-2 flex flex-col gap-2 "
+                  error={form.formState.errors.description}
                 >
                   <TextArea
                     className="h-36 w-full"
                     placeholder="Input your product description"
                     {...form.register("description")}
                   />
-                  {form.formState.errors.description && (
-                    <span className="text-xs text-red-600">
-                      {form.formState.errors.description.message}
-                    </span>
-                  )}
                 </Fieldset>
                 <div className="flex flex-wrap-reverse items-center justify-end gap-2">
                   <Button

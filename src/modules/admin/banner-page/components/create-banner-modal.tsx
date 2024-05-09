@@ -1,8 +1,8 @@
 "use client"
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { addCategory } from "@/actions/categories"
-import { categoryQueryKeys } from "@/modules/user/common/queryKeys/categoryQueryKeys"
+import { createBanner } from "@/actions/admin/banner"
+import { bannersQuery } from "@/modules/user/common/queryOptions/bannerQueryOptions"
 import { useUploadThing } from "@/utils/uploadthing"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
@@ -23,38 +23,28 @@ import {
 } from "@/components/ui/dialog"
 import { Fieldset } from "@/components/ui/fieldset"
 import { Input } from "@/components/ui/input"
-import { TextArea } from "@/components/ui/text-area"
 import { ImageUploader } from "@/components/image-uploader"
 
-export const createCategoryFormDataSchema = z.object({
-  image: z.instanceof(File, { message: "Category must have at least 1 image" }),
+export const createBannerFormDataSchema = z.object({
+  image: z.instanceof(File, { message: "Banner must have at least an image" }),
   name: z.string().min(5, "Name must have at least 5 characters").max(100),
-  description: z
-    .string()
-    .min(20, "Description must have at least 20 characters")
-    .max(200),
 })
 
-export type CreateCategoryFormData = z.infer<
-  typeof createCategoryFormDataSchema
->
+export type CreateBannerFormData = z.infer<typeof createBannerFormDataSchema>
 
-export function AddCategoryModal() {
+export function CreateBannerModal() {
   const uploadthing = useUploadThing("imageUploader")
 
-  const form = useForm<CreateCategoryFormData>({
-    resolver: zodResolver(createCategoryFormDataSchema),
-  })
+  const { register, handleSubmit, formState, setValue, resetField } =
+    useForm<CreateBannerFormData>({
+      resolver: zodResolver(createBannerFormDataSchema),
+    })
 
   const pathname = usePathname()
   const router = useRouter()
   const searchParams = useSearchParams()
 
   const isOpen = searchParams.get("add") !== null
-
-  function generateSlug() {
-    return form.getValues("name")?.toLowerCase().replaceAll(" ", "-")
-  }
 
   function onOpenChange(isOpen: boolean) {
     const urlSearchParams = new URLSearchParams(searchParams)
@@ -69,28 +59,24 @@ export function AddCategoryModal() {
     })
   }
 
-  const createCategoryMutation = useMutation({
-    mutationFn: async (formData: CreateCategoryFormData) => {
+  const createBannerMutation = useMutation({
+    mutationFn: async (formData: CreateBannerFormData) => {
       const imageResults = await uploadthing.startUpload([formData.image])
-
       if (!imageResults?.length) {
         throw new Error("Error when uploading image")
       }
-
-      await addCategory({
-        ...formData,
-        image: imageResults[0],
-        slug: generateSlug(),
+      await createBanner({
+        name: formData.name,
+        url: imageResults[0].url,
       })
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: categoryQueryKeys.all(),
-      })
+      queryClient.invalidateQueries(bannersQuery())
       onOpenChange(false)
-      toast.success("Succesfully created new category")
+      toast.success("Succesfully created new banner")
     },
-    onError: () => toast.error("Error when creating new category"),
+    onError: ({ message }) =>
+      toast.error(message ?? "Error when creating new banner"),
   })
 
   return (
@@ -99,53 +85,38 @@ export function AddCategoryModal() {
         {isOpen && (
           <DialogPortal forceMount>
             <DialogOverlay />
-            <DialogContent open={isOpen} className="lg:h-5/6 lg:w-2/6">
-              <DialogHeader title="Add Category" />
+            <DialogContent open={isOpen} className="lg:h-4/6 lg:w-3/6">
+              <DialogHeader title="Create Banner" />
               <form
-                onSubmit={form.handleSubmit((formData) =>
-                  createCategoryMutation.mutate(formData)
+                onSubmit={handleSubmit((formData) =>
+                  createBannerMutation.mutate(formData)
                 )}
                 className="flex flex-1 flex-col gap-4 px-6 py-4"
               >
                 <div className="flex flex-1 flex-col gap-4">
-                  <Fieldset label="Image">
+                  <Fieldset label="Image" error={formState.errors.image}>
                     <ImageUploader
                       mode="single"
                       onImageChange={(image) => {
-                        if (image !== undefined) {
-                          form.setValue("image", image, {
-                            shouldValidate: true,
-                          })
+                        if (image) {
+                          setValue("image", image, { shouldValidate: true })
                         } else {
-                          form.resetField("image")
+                          resetField("image")
                         }
                       }}
                     />
                   </Fieldset>
-                  <Fieldset label="Name" error={form.formState.errors.name}>
+                  <Fieldset label="Name" error={formState.errors.name}>
                     <Input
-                      id="categoryName"
+                      id="bannerName"
                       type="text"
-                      placeholder="Input category name"
+                      placeholder="Input banner name"
                       className="dark:border-neutral-600 dark:bg-neutral-800"
-                      {...form.register("name")}
-                    />
-                  </Fieldset>
-
-                  <Fieldset
-                    label="Description"
-                    error={form.formState.errors.description}
-                  >
-                    <TextArea
-                      id="categoryDescription"
-                      placeholder="Input category description"
-                      className="h-40 dark:border-neutral-600 dark:bg-neutral-800"
-                      {...form.register("description")}
+                      {...register("name")}
                     />
                   </Fieldset>
                 </div>
-
-                <div className="flex flex-wrap items-center justify-end gap-4">
+                <div className="flex flex-wrap items-center justify-end gap-2">
                   <Button
                     type="button"
                     variant="defaultOutline"
@@ -158,9 +129,9 @@ export function AddCategoryModal() {
                   <Button
                     size="sm"
                     className="w-32 lg:text-xs"
-                    disabled={createCategoryMutation.isPending}
+                    disabled={createBannerMutation.isPending}
                   >
-                    {createCategoryMutation.isPending && (
+                    {createBannerMutation.isPending && (
                       <ImSpinner8 className="animate-spin" />
                     )}
                     Submit
