@@ -27,6 +27,7 @@ export function UserViewOrderModal() {
   const order = useQuery({
     queryKey: ["order", orderId],
     queryFn: async () => await getOrder({ orderId: orderId as string }),
+    enabled: isOpen,
   })
 
   function onOpenChange(isOpen: boolean) {
