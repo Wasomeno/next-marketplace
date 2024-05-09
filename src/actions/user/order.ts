@@ -51,7 +51,7 @@ export async function getStoreOrders(params: GetStoreOrdersParams) {
 
 export async function getUserOrders(params: GetUserOrdersParams) {
   const orders = await prisma.order.findMany({
-    where: { user_email: params.userEmail },
+    where: { user_email: params.userEmail, status: params.status },
     include: { products: { include: { product: true } } },
   })
 
