@@ -1,123 +1,210 @@
 "use client"
 
-import { useTransition } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useEffect } from "react"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { getCategory, updateCategory } from "@/actions/categories"
 import { categoryQueryKeys } from "@/modules/user/common/queryKeys/categoryQueryKeys"
+import { useUploadThing } from "@/utils/uploadthing"
+import { useFetchSingleImage } from "@/utils/useImageFiles"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { AnimatePresence } from "framer-motion"
 import { useForm } from "react-hook-form"
-import { FaSpinner } from "react-icons/fa"
+import { ImSpinner8 } from "react-icons/im"
 import { toast } from "react-toastify"
-import * as z from "zod"
+import { ClientUploadedFileData } from "uploadthing/types"
 
+import { queryClient } from "@/lib/react-query-client"
 import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+} from "@/components/ui/dialog"
 import { Fieldset } from "@/components/ui/fieldset"
 import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
+import { ImageUploader } from "@/components/image-uploader"
+import { Skeleton } from "@/components/skeleton"
 
-import { CategoryFormData, CategorySchema } from "./add-category-modal"
+import {
+  CreateCategoryFormData,
+  createCategoryFormDataSchema,
+} from "./add-category-modal"
 
 export function EditCategoryModal() {
-  const [isLoading, startTransition] = useTransition()
+  const pathname = usePathname()
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  const categoryId = parseInt(searchParams.get("id") ?? "0")
-  const open = searchParams.get("edit") !== null
+  const uploadthing = useUploadThing("imageUploader")
 
-  const categoryDetails = useQuery({
+  const categoryId = parseInt(searchParams.get("id") ?? "0")
+  const isOpen = searchParams.get("edit") !== null
+
+  const category = useQuery({
     queryKey: categoryQueryKeys.single(categoryId),
     queryFn: async () => await getCategory(categoryId),
   })
 
-  const { register, getValues, handleSubmit, formState } = useForm<
-    z.infer<typeof CategorySchema>
-  >({
-    resolver: zodResolver(CategorySchema),
-    values: {
-      name: categoryDetails.data?.name as string,
-      description: categoryDetails.data?.description as string,
-    },
+  const image = useFetchSingleImage({
+    name: category.data?.image?.name as string,
+    url: category.data?.image?.url as string,
   })
 
-  function onSubmit(inputs: CategoryFormData) {
-    startTransition(async () => {
-      await toast.promise(
-        updateCategory({
-          ...inputs,
-          id: categoryId,
-          slug: generateSlug(),
-          images: [],
-        }),
-        {
-          error: "Error",
-          success: "Update Success",
-          pending: "Updating " + getValues("name"),
-        }
-      )
+  const form = useForm<CreateCategoryFormData>({
+    resolver: zodResolver(createCategoryFormDataSchema),
+  })
 
-      router.push("/admin/categories")
+  function generateSlug() {
+    return form.getValues("name")?.toLowerCase().replaceAll(" ", "-")
+  }
+
+  function onOpenChange(isOpen: boolean) {
+    const urlSearchParams = new URLSearchParams(searchParams)
+    if (isOpen) {
+      urlSearchParams.set("edit", "true")
+    } else {
+      urlSearchParams.delete("edit")
+      urlSearchParams.delete("id")
+    }
+
+    router.replace(`${pathname}?${urlSearchParams.toString()}`, {
+      scroll: false,
     })
   }
 
-  function generateSlug() {
-    return getValues("name")?.toLowerCase().replaceAll(" ", "-")
-  }
+  const editCategoryMutation = useMutation({
+    mutationFn: async (formData: CreateCategoryFormData) => {
+      let imageResults: ClientUploadedFileData<null>[] | undefined = []
+
+      if (image.data?.name !== category.data?.image?.name)
+        imageResults = await uploadthing.startUpload([formData.image])
+      if (!imageResults?.length) {
+        throw new Error("Error when uploading image")
+      }
+
+      await updateCategory({
+        ...formData,
+        id: categoryId,
+        slug: generateSlug(),
+        image: imageResults[0],
+      })
+    },
+    onSuccess() {
+      queryClient.invalidateQueries({
+        queryKey: categoryQueryKeys.all(),
+      })
+      queryClient.invalidateQueries({
+        queryKey: categoryQueryKeys.single(categoryId),
+      })
+      onOpenChange(false)
+      toast.success("Succesfully updated category")
+    },
+    onError() {
+      toast.error("Error when updating category")
+    },
+  })
+
+  console.log(image.data)
+
+  useEffect(() => {
+    if (category.data !== undefined && image.data !== undefined) {
+      form.reset({ ...category.data, image: image.data })
+    }
+  }, [category.isLoading, image.isLoading])
 
   return (
-    <Dialog open={open} onOpenChange={() => router.push("/admin/categories")}>
-      <DialogContent
-        open={open}
-        className="flex flex-1 flex-col bg-slate-50 lg:h-5/6 lg:w-3/6"
-      >
-        <DialogHeader title="Edit Category" />
-        {categoryDetails.isLoading ? (
-          <div className="flex flex-1 items-center justify-center">
-            <FaSpinner className="animate-spin fill-blue-500" size={30} />
-          </div>
-        ) : (
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-1 flex-col justify-between px-6 py-4"
-          >
-            <div className="flex flex-col gap-4">
-              <Fieldset label="Name" error={formState.errors.name}>
-                <Input
-                  id="categoryName"
-                  type="text"
-                  placeholder="Input category name here"
-                  className="dark:border-neutral-600 dark:bg-neutral-800"
-                  {...register("name")}
-                />
-              </Fieldset>
-
-              <Fieldset
-                label="Description"
-                error={formState.errors.description}
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <AnimatePresence>
+        {isOpen && (
+          <DialogPortal forceMount>
+            <DialogOverlay />
+            <DialogContent
+              open={isOpen}
+              className="flex flex-1 flex-col lg:h-5/6 lg:w-2/6"
+            >
+              <DialogHeader title="Edit Category" />
+              <form
+                onSubmit={form.handleSubmit((formData) =>
+                  editCategoryMutation.mutate(formData)
+                )}
+                className="flex flex-1 flex-col justify-between px-6 py-4"
               >
-                <TextArea
-                  id="categoryDescription"
-                  placeholder="Input category description here"
-                  className="h-40 dark:border-neutral-600 dark:bg-neutral-800"
-                  {...register("description")}
-                />
-              </Fieldset>
-            </div>
+                <div className="flex flex-col gap-4">
+                  <Fieldset label="Image">
+                    {category.isLoading || image.isLoading ? (
+                      <div className="flex items-center justify-center ">
+                        <Skeleton className="h-36 w-36 lg:h-48 lg:w-48" />
+                      </div>
+                    ) : (
+                      <ImageUploader
+                        mode="single"
+                        image={image.data}
+                        onImageChange={(image) => {
+                          if (image) {
+                            form.setValue("image", image, {
+                              shouldValidate: true,
+                            })
+                          } else {
+                            form.resetField("image")
+                          }
+                        }}
+                      />
+                    )}
+                  </Fieldset>
 
-            <div className="flex items-center justify-center gap-6">
-              <Button
-                disabled={!formState.isValid || isLoading}
-                variant="success"
-                className="w-40 text-slate-50"
-              >
-                Submit
-              </Button>
-            </div>
-          </form>
+                  <Fieldset label="Name" error={form.formState.errors.name}>
+                    <Input
+                      id="categoryName"
+                      type="text"
+                      placeholder="Input category name here"
+                      className="dark:border-neutral-600 dark:bg-neutral-800"
+                      {...form.register("name")}
+                    />
+                  </Fieldset>
+
+                  <Fieldset
+                    label="Description"
+                    error={form.formState.errors.description}
+                  >
+                    <TextArea
+                      id="categoryDescription"
+                      placeholder="Input category description here"
+                      className="h-40 dark:border-neutral-600 dark:bg-neutral-800"
+                      {...form.register("description")}
+                    />
+                  </Fieldset>
+                </div>
+
+                <div className="flex items-center justify-end gap-2">
+                  <Button
+                    type="button"
+                    variant="defaultOutline"
+                    size="sm"
+                    className="w-32 lg:text-xs"
+                    onClick={() => onOpenChange(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    size="sm"
+                    className="w-32 lg:text-xs"
+                    disabled={editCategoryMutation.isPending}
+                  >
+                    {editCategoryMutation.isPending && (
+                      <ImSpinner8 className="animate-spin" />
+                    )}
+                    Submit
+                  </Button>
+                </div>
+              </form>
+            </DialogContent>
+          </DialogPortal>
         )}
-      </DialogContent>
+      </AnimatePresence>
     </Dialog>
   )
 }

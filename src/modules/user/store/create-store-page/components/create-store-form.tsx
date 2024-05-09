@@ -4,13 +4,11 @@ import React, { useState } from "react"
 import Link from "next/link"
 import { createStore } from "@/actions/store/store"
 import { useUploadThing } from "@/utils/uploadthing"
-import { useImageFiles } from "@/utils/useImageFiles"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import Lottie from "lottie-react"
 import { useSession } from "next-auth/react"
 import { useForm } from "react-hook-form"
-import { FaSpinner } from "react-icons/fa"
 import { HiArrowRight } from "react-icons/hi2"
 import { ImSpinner8 } from "react-icons/im"
 import { z } from "zod"
@@ -23,6 +21,7 @@ import { ImageUploader } from "@/components/image-uploader"
 import checkMarkSuccess from "@/components/lottie/files/checkmark_success.json"
 
 const createStoreSchema = z.object({
+  image: z.instanceof(File, { message: "Store must have an image" }),
   name: z.string().min(5, "Store name must have at least 5 characters"),
   description: z
     .string()
@@ -36,8 +35,6 @@ type CreateStoreSteps = "name" | "details"
 
 export function CreateStoreForm() {
   const [step, setStep] = useState<CreateStoreSteps>("name")
-
-  const { files, addFiles, removeFile } = useImageFiles()
 
   const session = useSession()
 
@@ -56,7 +53,7 @@ export function CreateStoreForm() {
 
   const createStoreMutation = useMutation({
     mutationFn: async (formData: CreateStoreFormData) => {
-      const images = await uploadthing.startUpload(files)
+      const images = await uploadthing.startUpload([formData.image])
       if (!images) {
         throw new Error("Error when uploading image")
       }
@@ -105,15 +102,19 @@ export function CreateStoreForm() {
       {step === "details" && !createStoreMutation.isPending && (
         <div className="flex flex-col gap-4">
           <h2 className="text-2xl font-medium">Your Store Details</h2>
-          <Fieldset label="Profile Image">
+          <Fieldset label="Profile Image" error={form.formState.errors.image}>
             <ImageUploader
-              files={files}
-              selectFiles={addFiles}
-              deselectFile={removeFile}
-              isMultiple={false}
+              mode="single"
+              onImageChange={(image) => {
+                if (image) {
+                  form.setValue("image", image)
+                } else {
+                  form.resetField("image")
+                }
+              }}
             />
           </Fieldset>
-          <Fieldset label="Location">
+          <Fieldset label="Location" error={form.formState.errors.location}>
             <Input
               placeholder="Your store location"
               {...form.register("location")}
@@ -124,7 +125,10 @@ export function CreateStoreForm() {
               </span>
             )}
           </Fieldset>
-          <Fieldset label="Description">
+          <Fieldset
+            label="Description"
+            error={form.formState.errors.description}
+          >
             <TextArea
               placeholder="Your store description"
               className="h-40"

@@ -1,8 +1,6 @@
 "use client"
 
-import { useSearchParams } from "next/navigation"
-
-import { TBaseDataFilter } from "../../types"
+import { useSearchParams } from "next/navigation";
 
 export function useSearchParamsValues<T>() {
   const searchParams = useSearchParams()

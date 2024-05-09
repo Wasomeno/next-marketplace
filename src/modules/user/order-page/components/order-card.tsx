@@ -3,6 +3,7 @@
 import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Prisma } from "@prisma/client"
+import moment from "moment"
 
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/skeleton"
@@ -20,7 +21,7 @@ export const OrderCard = ({ order, userEmail }: OrderCardProps) => {
   const searchParamsValues = useSearchParams()
   const router = useRouter()
 
-  const date = new Date()
+  const time = moment(order.created_at).format("LLLL")
 
   function viewOrderDetails() {
     const searchParams = new URLSearchParams(searchParamsValues.toString())
@@ -31,7 +32,7 @@ export const OrderCard = ({ order, userEmail }: OrderCardProps) => {
   return (
     <div className="flex flex-col gap-2 rounded-md border bg-opacity-50 px-4 py-2.5 shadow-sm dark:border-gray-800 dark:bg-slate-950 dark:bg-opacity-50 dark:shadow-gray-800 ">
       <div className="flex items-center justify-between lg:h-10">
-        <div className="text-xs">{date.toDateString()}</div>
+        <div className="text-xs">{time}</div>
         <span className="rounded-md bg-blue-200 p-1.5 text-xs font-medium tracking-wide dark:bg-blue-900">
           {order.status}
         </span>

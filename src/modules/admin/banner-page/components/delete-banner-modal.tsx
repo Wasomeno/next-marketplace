@@ -1,7 +1,7 @@
 import React from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { deleteCategories } from "@/actions/categories"
-import { categoryQueryKeys } from "@/modules/user/common/queryKeys/categoryQueryKeys"
+import { deleteMultipleBanners } from "@/actions/admin/banner"
+import { bannersQuery } from "@/modules/user/common/queryOptions/bannerQueryOptions"
 import { useMutation } from "@tanstack/react-query"
 import { BsTrash3 } from "react-icons/bs"
 import { toast } from "react-toastify"
@@ -10,13 +10,13 @@ import { queryClient } from "@/lib/react-query-client"
 import { Button } from "@/components/ui/button"
 import { ConfirmationDialog } from "@/components/confirmation-dialog"
 
-interface DeleteCategoriesModalProps {
-  selectedCategories: Array<number>
+interface DeleteBannersModalProps {
+  selectedBanners: Array<number>
 }
 
-export function DeleteCategoriesModal({
-  selectedCategories,
-}: DeleteCategoriesModalProps) {
+export function DeleteBannerModal({
+  selectedBanners,
+}: DeleteBannersModalProps) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -25,35 +25,32 @@ export function DeleteCategoriesModal({
 
   const open = searchParams.get("delete") !== null
   const deleteCategoriesMutation = useMutation({
-    mutationFn: async () =>
-      await deleteCategories({ categoryIds: selectedCategories }),
-
+    mutationFn: async () => deleteMultipleBanners({ ids: selectedBanners }),
     onSuccess() {
-      queryClient.invalidateQueries({
-        queryKey: categoryQueryKeys.all(),
-      })
-      closeDeleteCategoryModal()
-      toast.success("Succesfully deleted Categories")
+      queryClient.invalidateQueries(bannersQuery())
+      closeDeleteBannerModal()
+      toast.success("Succesfully deleted Banners")
     },
     onError() {
-      toast.error("Error when deleting categories")
+      toast.error("Error when deleting banners")
     },
   })
 
-  function openDeleteCategoryModal() {
+  function openDeleteBannerModal() {
     urlSearchParams.set("delete", "true")
     router.replace(`${pathname}?${urlSearchParams.toString()}`)
   }
-  function closeDeleteCategoryModal() {
+
+  function closeDeleteBannerModal() {
     urlSearchParams.delete("delete")
     router.replace(`${pathname}?${urlSearchParams.toString()}`)
   }
 
   function onOpenChange(isOpen: boolean) {
     if (isOpen) {
-      openDeleteCategoryModal()
+      openDeleteBannerModal()
     } else {
-      closeDeleteCategoryModal()
+      closeDeleteBannerModal()
     }
   }
 
@@ -62,16 +59,16 @@ export function DeleteCategoriesModal({
       <Button
         variant="defaultOutline"
         size="sm"
-        disabled={selectedCategories.length < 1}
-        onClick={openDeleteCategoryModal}
+        disabled={selectedBanners.length < 1}
+        onClick={openDeleteBannerModal}
         className="h-8 w-8 shadow-sm  lg:h-9 lg:w-9"
       >
         <BsTrash3 />
       </Button>
       <ConfirmationDialog
         open={open}
-        title="Delete Category"
-        body={`Confirm delete ${selectedCategories.length} category?`}
+        title="Delete Banner"
+        body={`Confirm delete ${selectedBanners.length} banners?`}
         onOpenChange={onOpenChange}
         onConfirm={deleteCategoriesMutation.mutate}
       />

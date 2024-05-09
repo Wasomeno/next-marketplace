@@ -1,13 +1,13 @@
 "use client"
 
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { getCategories } from "@/actions/categories"
 import { categoryQueryKeys } from "@/modules/user/common/queryKeys/categoryQueryKeys"
 import { getParsedSortParams, useSearchParamsValues } from "@/utils"
 import { Prisma } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
 import { ColumnDef } from "@tanstack/react-table"
-import { BsPlus, BsTrash3 } from "react-icons/bs"
+import { BsPlus } from "react-icons/bs"
 
 import { Button } from "@/components/ui/button"
 import { CheckBox } from "@/components/ui/checkbox"
@@ -39,15 +39,18 @@ export const CategoryTable = () => {
     selectAllData,
   } = useSelectedData()
 
+  const pathname = usePathname()
   const searchParamsValues = useSearchParamsValues<TBaseDataFilterParams>()
 
-  const { data: categories, isLoading } = useQuery({
+  const categories = useQuery({
     queryKey: categoryQueryKeys.all(searchParamsValues),
     queryFn: () =>
       getCategories({
         ...searchParamsValues,
         sort: getParsedSortParams(searchParamsValues.sort),
       }),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   })
 
   const columns: ColumnDef<
@@ -59,7 +62,10 @@ export const CategoryTable = () => {
       id: "select",
       header: ({ table }) => (
         <CheckBox
-          checked={table.getCoreRowModel().rows.length === selectedData?.length}
+          checked={
+            table.getCoreRowModel().rows.length === selectedData.length &&
+            selectedData.length > 0
+          }
           onCheckedChange={() => {
             table.getCoreRowModel().rows.length === selectedData?.length
               ? deselectAllData()
@@ -118,8 +124,8 @@ export const CategoryTable = () => {
           }
           editAction={
             <TableActions.Edit
-              asLink
-              href={`/admin/categories/${row.original.id}/edit`}
+              onClick={() => openEditCategoryModal(row.original.id.toString())}
+              asLink={false}
             />
           }
         />
@@ -139,15 +145,15 @@ export const CategoryTable = () => {
     },
     {
       header: "Id",
-      cell: () => <Skeleton className="h-[20px] w-24" />,
+      cell: () => <Skeleton className="h-6 w-24" />,
     },
     {
       header: "Name",
-      cell: () => <Skeleton className="h-[20px] w-44" />,
+      cell: () => <Skeleton className="h-6 w-44" />,
     },
     {
       header: "Product Amount",
-      cell: () => <Skeleton className="h-[20px] w-28" />,
+      cell: () => <Skeleton className="h-6 w-28" />,
     },
     {
       header: "Actions",
@@ -162,37 +168,44 @@ export const CategoryTable = () => {
 
   const placeholderData = Array(5).fill("")
 
+  function openAddCategoryModal() {
+    const urlSearchParams = new URLSearchParams(searchParamsValues)
+    urlSearchParams.set("add", "true")
+    router.replace(`${pathname}?${urlSearchParams.toString()}`, {
+      scroll: false,
+    })
+  }
+
+  function openEditCategoryModal(categoryId: string) {
+    const urlSearchParams = new URLSearchParams(searchParamsValues)
+    urlSearchParams.set("edit", "true")
+    urlSearchParams.set("id", categoryId)
+    router.replace(`${pathname}?${urlSearchParams.toString()}`, {
+      scroll: false,
+    })
+  }
+
   return (
-    <>
-      <DataTable
-        data={categories ?? placeholderData}
-        columns={isLoading ? placeHolderColumns : columns}
-        dataSorter={<DataTable.Sorter sortOptions={categorySortOptions} />}
-        addTrigger={
-          <Button
-            variant="success"
-            size="sm"
-            onClick={() => {
-              router.push("/admin/categories/add")
-            }}
-            className="h-8 w-8 hover:scale-[105%] lg:h-9 lg:w-9"
-          >
-            <BsPlus className="text-slate-50" />
-          </Button>
-        }
-        deleteTrigger={
-          <Button
-            variant="danger"
-            size="sm"
-            disabled={selectedData.length < 1}
-            onClick={() => router.push("/admin/categories?delete=true")}
-            className="h-8 w-8 hover:scale-[105%] lg:h-9 lg:w-9"
-          >
-            <BsTrash3 className="text-slate-50" />
-          </Button>
-        }
-      />
-      <DeleteCategoriesModal selectedCategories={selectedData} />
-    </>
+    <DataTable
+      data={categories.data ?? placeholderData}
+      columns={categories.isLoading ? placeHolderColumns : columns}
+      searchInput={
+        <DataTable.SearchInput placeholder="Search by category name" />
+      }
+      dataSorter={<DataTable.Sorter sortOptions={categorySortOptions} />}
+      addTrigger={
+        <Button
+          variant="defaultOutline"
+          size="sm"
+          onClick={openAddCategoryModal}
+          className="h-8 w-8 shadow-sm lg:h-9 lg:w-9"
+        >
+          <BsPlus />
+        </Button>
+      }
+      deleteTrigger={
+        <DeleteCategoriesModal selectedCategories={selectedData} />
+      }
+    />
   )
 }

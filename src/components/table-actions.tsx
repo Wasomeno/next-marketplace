@@ -1,9 +1,10 @@
-import React, { HTMLAttributes, ReactElement } from "react"
+import React, { ReactElement } from "react"
 import Link, { LinkProps } from "next/link"
 import { BiPencil, BiTrash } from "react-icons/bi"
 import { BsEye } from "react-icons/bs"
+import { twMerge } from "tailwind-merge"
 
-import { Button, ButtonProps } from "./ui/button"
+import { Button, ButtonProps, buttonVariants } from "./ui/button"
 
 type TableActionsProps = {
   viewAction?: ReactElement
@@ -19,9 +20,16 @@ type LinkActionProps = {
 
 type ActionProps = ButtonActionProps | LinkActionProps
 
-const LinkStyle =
-  "flex h-7 w-7 items-center transition-all duration-300 hover:bg-gray-200 justify-center rounded-md bg-gray-100 p-1.5 shadow-sm"
-const ButtonStyle = "h-7 w-7 rounded-md bg-gray-100 p-1.5 shadow-sm"
+const linkStyle = twMerge(
+  buttonVariants({
+    size: "sm",
+    variant: "defaultOutline",
+    className: "h-7 w-7 shadow-sm p-0 px-0 py-0",
+  })
+)
+
+const buttonStyle = "h-7 w-7 shadow-sm p-0 px-0 py-0"
+
 export function TableActions({
   viewAction,
   editAction,
@@ -39,13 +47,13 @@ export function TableActions({
 const ViewAction: React.FC<ActionProps> = (props) => {
   if (!props.asLink) {
     return (
-      <Button {...props} className={ButtonStyle}>
+      <Button {...props} variant="defaultOutline" className={buttonStyle}>
         <BsEye />
       </Button>
     )
   } else {
     return (
-      <Link {...props} className={LinkStyle}>
+      <Link {...props} className={linkStyle}>
         <BsEye />
       </Link>
     )
@@ -54,13 +62,13 @@ const ViewAction: React.FC<ActionProps> = (props) => {
 const EditAction: React.FC<ActionProps> = ({ ...props }) => {
   if (!props.asLink) {
     return (
-      <Button {...props} className={ButtonStyle}>
+      <Button {...props} variant="defaultOutline" className={buttonStyle}>
         <BiPencil />
       </Button>
     )
   } else {
     return (
-      <Link {...props} className={LinkStyle}>
+      <Link {...props} className={linkStyle}>
         <BiPencil />
       </Link>
     )
@@ -69,13 +77,13 @@ const EditAction: React.FC<ActionProps> = ({ ...props }) => {
 const DeleteAction: React.FC<ActionProps> = ({ ...props }) => {
   if (!props.asLink) {
     return (
-      <Button {...props} className={ButtonStyle}>
+      <Button {...props} variant="defaultOutline" className={buttonStyle}>
         <BiTrash />
       </Button>
     )
   } else {
     return (
-      <Link {...props} className={LinkStyle}>
+      <Link {...props} className={linkStyle}>
         <BiTrash />
       </Link>
     )

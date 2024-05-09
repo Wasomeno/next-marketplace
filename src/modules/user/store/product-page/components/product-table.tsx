@@ -4,6 +4,7 @@ import React from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { getStoreProducts, StoreProduct } from "@/actions/store/store"
 import { storeQueryKeys } from "@/modules/user/common/queryKeys/storeQueryKeys"
+import { storeProductsQuery } from "@/modules/user/common/queryOptions/storeQueryOptions"
 import { getParsedSortParams, useSearchParamsValues } from "@/utils"
 import { Prisma } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
@@ -77,21 +78,17 @@ export const ProductTable: React.FC<{ storeId: number }> = ({ storeId }) => {
     deselectAllData,
   } = useSelectedData()
 
-  const products = useQuery({
-    queryKey: storeQueryKeys.products({ storeId, ...searchParamsValues }),
-    queryFn: () =>
-      getStoreProducts({
-        ...searchParamsValues,
-        storeId,
-        sort: getParsedSortParams(searchParamsValues.sort),
-        pageSize: pageSize.toString(),
-        categoryIds: searchParamsValues?.categories
-          ?.split(" ")
-          ?.map((categoryId) => parseInt(categoryId)),
-      }),
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-  })
+  const products = useQuery(
+    storeProductsQuery({
+      ...searchParamsValues,
+      storeId,
+      categoryIds: searchParamsValues.categories
+        ?.split(" ")
+        .map((categoryId) => Number(categoryId)),
+      pageSize: "3",
+      sort: getParsedSortParams(searchParamsValues.sort),
+    })
+  )
 
   const columns: ColumnDef<StoreProduct>[] = [
     {

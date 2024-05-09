@@ -14,7 +14,7 @@ type AddCategoryParams = {
   description: string
   slug: string
 
-  images: { name: string; url: string }[]
+  image: { name: string; url: string }
 }
 
 type UpdateCategoryParams = {
@@ -22,14 +22,14 @@ type UpdateCategoryParams = {
   name: string
   description: string
   slug: string
-  images: { name: string; url: string }[]
+  image: { name: string; url: string }
 }
 
 export async function addCategory({
   name,
   description,
   slug,
-  images,
+  image,
 }: AddCategoryParams) {
   try {
     await prisma.category.create({
@@ -37,14 +37,11 @@ export async function addCategory({
         name,
         description,
         slug,
-        images: {
-          createMany: {
-            data: images.map((image) => ({ name: image.name, url: image.url })),
-          },
+        image: {
+          create: image,
         },
       },
     })
-    revalidatePath("/admin/categories")
   } catch (error) {
     throw error
   }
@@ -55,13 +52,13 @@ export async function updateCategory({
   name,
   description,
   slug,
+  image,
 }: UpdateCategoryParams) {
   try {
     await prisma.category.update({
       where: { id },
-      data: { name, description, slug },
+      data: { name, description, slug, image: { update: { data: image } } },
     })
-    revalidatePath("/admin/categories")
   } catch (error) {
     throw error
   }
@@ -80,28 +77,20 @@ export async function deleteCategories({
   }
 }
 
-export async function getCategories(props?: GetCategoriesProps): Promise<
-  Prisma.CategoryGetPayload<{
-    include: { _count: { select: { products: true } }; images: true }
-  }>[]
-> {
+export async function getCategories(props?: GetCategoriesProps) {
   const categories = await prisma.category.findMany({
     orderBy: props?.sort,
-    where: { name: { contains: props?.search } },
-    include: { _count: { select: { products: true } }, images: true },
+    where: { name: { contains: props?.search, mode: "insensitive" } },
+    include: { _count: { select: { products: true } }, image: true },
   })
 
   return categories
 }
 
-export async function getCategory(
-  categoryId: number
-): Promise<Prisma.CategoryGetPayload<{
-  include: { images: true }
-}> | null> {
+export async function getCategory(categoryId: number) {
   const category = await prisma.category.findUnique({
     where: { id: categoryId },
-    include: { images: true },
+    include: { image: true },
   })
 
   return category

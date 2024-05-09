@@ -2,6 +2,7 @@ import { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import { HiChevronRight } from "react-icons/hi2"
+import invariant from "tiny-invariant"
 
 import { prisma } from "@/lib/prisma"
 
@@ -11,8 +12,10 @@ export const metadata: Metadata = {
 
 export default async function CategoriesPage() {
   const categories = await prisma.category.findMany({
-    include: { images: true },
+    include: { image: true },
   })
+
+  invariant(categories)
 
   return (
     <div className="flex flex-1 flex-col items-center">
@@ -38,7 +41,7 @@ export default async function CategoriesPage() {
             <div className="relative h-5/6 w-full">
               <Image
                 fill
-                src={category.images[0].url}
+                src={category.image?.url ?? ""}
                 className="rounded-md"
                 alt="category-image"
               />

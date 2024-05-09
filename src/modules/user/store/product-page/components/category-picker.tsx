@@ -1,4 +1,3 @@
-import { memo } from "react"
 import { getCategories } from "@/actions/categories"
 import { categoryQueryKeys } from "@/modules/user/common/queryKeys/categoryQueryKeys"
 import * as ScrollArea from "@radix-ui/react-scroll-area"

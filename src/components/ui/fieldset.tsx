@@ -1,11 +1,12 @@
 import React, { HTMLAttributes, ReactElement, ReactNode } from "react"
 import clsx from "clsx"
-import { Controller, FieldError } from "react-hook-form"
+import { AnimatePresence, motion } from "framer-motion"
+import { FieldError, Merge } from "react-hook-form"
 import { twMerge } from "tailwind-merge"
 
 interface FieldsetProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode
-  error?: FieldError
+  error?: Merge<FieldError, (FieldError | undefined)[]>
   label: string
 }
 
@@ -22,11 +23,18 @@ export const Fieldset: React.FC<FieldsetProps> = ({
         {label}
       </label>
       {children}
-      {error?.message && (
-        <span className={"text-sm font-medium text-red-500"}>
-          {error.message}
-        </span>
-      )}
+      <AnimatePresence>
+        {error?.message && (
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="text-xs text-red-600 dark:text-red-800"
+          >
+            {error.message}
+          </motion.span>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

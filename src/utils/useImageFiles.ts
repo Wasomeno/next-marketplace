@@ -1,30 +1,35 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { queryOptions, useQueries, useQuery } from "@tanstack/react-query"
 
 import { FileImage } from "@/components/image-uploader"
 
-export function useImageFiles(images?: { name: string; url: string }[]) {
-  const [files, setFiles] = useState<Array<FileImage>>([])
-  const [isLoading, setIsLoading] = useState(false)
+const singleImageQuery = (image: { name: string; url: string } | undefined) =>
+  queryOptions<FileImage | undefined>({
+    queryKey: ["fetchedImage", image?.url],
+    queryFn: async () => {
+      return await fetch((image as { name: string; url: string }).url)
+        .then((image) => image.blob())
+        .then((blobImage) => {
+          const imageFile = new File([blobImage], image?.name as string, {
+            type: blobImage.type,
+          })
+          return Object.assign(imageFile, {
+            preview: URL.createObjectURL(imageFile),
+          })
+        })
+    },
+    enabled: image !== undefined,
+  })
 
-  function addFiles(files: Array<FileImage>) {
-    setFiles((current) => [...current, ...files])
-  }
-
-  function removeFile(fileIndex: number) {
-    setFiles((current) => current.filter((_, index) => index !== fileIndex))
-  }
-
-  function clearFiles() {
-    setFiles([])
-  }
-
-  useEffect(() => {
-    if (images) {
-      setIsLoading(true)
-      Promise.all(
-        images.map((image) =>
+const mutlipleImageQuery = (
+  images: { name: string; url: string }[] | undefined
+) =>
+  queryOptions<FileImage[] | undefined>({
+    queryKey: ["fetchedImages", images?.length],
+    queryFn: async () => {
+      return await Promise.all(
+        (images as { name: string; url: string }[]).map((image) =>
           fetch(image.url)
             .then((image) => image.blob())
             .then((blobImage) => {
@@ -36,12 +41,19 @@ export function useImageFiles(images?: { name: string; url: string }[]) {
               })
             })
         )
-      ).then((result) => {
-        setFiles(result)
-        setIsLoading(false)
-      })
-    }
-  }, [images?.length])
+      )
+    },
+    enabled: images !== undefined,
+  })
 
-  return { files, addFiles, clearFiles, removeFile, isLoading }
+export function useFetchMultipleImages(
+  images: { url: string; name: string }[]
+) {
+  return useQuery(mutlipleImageQuery(images))
+}
+
+export function useFetchSingleImage(
+  image: { url: string; name: string } | undefined
+) {
+  return useQuery(singleImageQuery(image))
 }

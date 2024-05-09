@@ -8,6 +8,7 @@ import {
   ProductReviews,
   WishListButton,
 } from "@/modules/user/product-page/components"
+import { FiMapPin } from "react-icons/fi"
 import invariant from "tiny-invariant"
 
 import { prisma } from "@/lib/prisma"
@@ -88,17 +89,22 @@ export default async function ProductPage(props: {
               href={`/${product.store.slug}`}
               className="my-4 flex h-10 items-center gap-4"
             >
-              <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gray-100 text-lg shadow-sm">
+              <div className="relative h-14 w-14 overflow-hidden rounded-full bg-gray-100 shadow-sm">
                 <Image
                   src={product.store.profile_image}
-                  fill
                   alt="store-profile-image"
+                  className="object-cover"
+                  fill
                 />
               </div>
-              <div className="space-y-1">
+              <div className="flex flex-col gap-1">
                 <span className="text-sm font-medium">
                   {product.store.name}
                 </span>
+                <div className="flex items-center gap-1 text-gray-500">
+                  <FiMapPin className="h-3.5 w-3.5" />
+                  <span className="text-sm">{product.store.location}</span>
+                </div>
               </div>
             </Link>
           </div>

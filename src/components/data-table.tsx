@@ -54,7 +54,7 @@ export function DataTable<T extends Record<string, unknown>>({
   })
 
   return (
-    <div className="flex w-full flex-1 flex-col">
+    <div className="flex w-full flex-1 flex-col ">
       <div className="mb-2 flex  justify-between gap-2.5">
         <div className="flex w-full items-center gap-2">
           {searchInput}
@@ -66,7 +66,7 @@ export function DataTable<T extends Record<string, unknown>>({
           {addTrigger}
         </div>
       </div>
-      <div className="flex-1 overflow-x-scroll rounded-lg border border-gray-200 bg-white shadow-sm dark:border-neutral-600 dark:bg-neutral-800">
+      <div className="data-table__container flex-1 overflow-x-scroll rounded-lg border border-gray-200 bg-white shadow-sm dark:border-neutral-600 dark:bg-neutral-800">
         <ReactTable className="w-full border-collapse text-left text-sm text-gray-500 dark:bg-neutral-800">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

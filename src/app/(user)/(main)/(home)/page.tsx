@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   const categories = await prisma.category.findMany({
-    include: { images: { select: { url: true } } },
+    include: { image: { select: { url: true } } },
   })
 
   const products = await prisma.product.findMany({
@@ -42,7 +42,7 @@ export default async function Home() {
               >
                 <div className="relative h-[72px] w-[72px] overflow-hidden rounded-md lg:h-24 lg:w-24">
                   <Image
-                    src={category.images[0].url}
+                    src={category.image?.url ?? ""}
                     alt="category-image"
                     fill
                     quality={30}
