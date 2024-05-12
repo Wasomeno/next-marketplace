@@ -17,26 +17,33 @@ export type Option = {
 }
 
 type Props = {
-  onSelect: (option: Option) => void
+  onOptionsChange: (options: Option[]) => void
   options: Option[]
   placeholder?: string
 }
 
 export const MultiSelectDropdown = ({
-  onSelect,
+  onOptionsChange,
   options,
   placeholder,
 }: Props) => {
   const [selectedOptions, setSelectedOptions] = useState<Array<Option>>([])
   const [isOptionsOpen, setIsOptionsOpen] = useState(false)
 
-  function selectOption() {}
+  function selectOption(option: Option) {
+    const newSelectedOptions = [...selectedOptions, option]
+    setSelectedOptions(newSelectedOptions)
+    onOptionsChange(newSelectedOptions)
+  }
 
   function deselectOption(option: Option, event: MouseEvent) {
+    // TODO: FIND A WAY TO TRIGGER EVENT PROPAGATION
     event.stopPropagation()
-    setSelectedOptions((current) =>
-      current.filter((currentOption) => currentOption.value !== option.value)
+    const newSelectedOptions = selectedOptions.filter(
+      (currentOption) => currentOption.value !== option.value
     )
+    setSelectedOptions(newSelectedOptions)
+    onOptionsChange(newSelectedOptions)
   }
 
   return (
@@ -92,9 +99,7 @@ export const MultiSelectDropdown = ({
                 options.map((option) => (
                   <DropdownItem key={option.value} asChild>
                     <button
-                      onClick={() =>
-                        setSelectedOptions((current) => [...current, option])
-                      }
+                      onClick={() => selectOption(option)}
                       className="w-full px-3 py-2 text-start text-sm outline-0 ring-0 transition  duration-200 hover:bg-gray-100 disabled:opacity-50 dark:hover:bg-neutral-800"
                     >
                       {option.label}
