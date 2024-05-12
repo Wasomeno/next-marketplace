@@ -14,7 +14,7 @@ import { ConfirmationDialog } from "@/components/confirmation-dialog"
 export const StoreProductMultipleDeleteModal: React.FC<{
   storeId: number
   selectedIds: number[]
-}> = ({ selectedIds, storeId }) => {
+}> = ({ selectedIds }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   const deleteProductsMutation = useMutation({
@@ -24,7 +24,7 @@ export const StoreProductMultipleDeleteModal: React.FC<{
     onSuccess: () => {
       setIsOpen(false)
       queryClient.invalidateQueries({
-        queryKey: storeQueryKeys.products({ storeId }),
+        queryKey: storeQueryKeys.products().baseKey,
       })
       toast.success("Successfully deleted products")
     },

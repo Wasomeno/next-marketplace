@@ -30,7 +30,7 @@ export function DeleteCategoriesModal({
 
     onSuccess() {
       queryClient.invalidateQueries({
-        queryKey: categoryQueryKeys.all(),
+        queryKey: categoryQueryKeys.all().baseKey,
       })
       closeDeleteCategoryModal()
       toast.success("Succesfully deleted Categories")

@@ -12,7 +12,7 @@ import { CreateReviewModal } from "./create-review-modal"
 
 type OrderCardProps = {
   order: Prisma.OrderGetPayload<{
-    include: { products: { include: { product: true } } }
+    include: { products: { include: { product: true } }; status: true }
   }>
   userEmail: string
 }
@@ -34,7 +34,7 @@ export const OrderCard = ({ order, userEmail }: OrderCardProps) => {
       <div className="flex items-center justify-between lg:h-10">
         <div className="text-xs">{time}</div>
         <span className="rounded-md bg-blue-200 p-1.5 text-xs font-medium tracking-wide dark:bg-blue-900">
-          {order.status}
+          {order.status.name}
         </span>
       </div>
       <div className="flex flex-wrap items-center gap-2 lg:gap-10">
@@ -73,7 +73,7 @@ export const OrderCard = ({ order, userEmail }: OrderCardProps) => {
         <Button onClick={viewOrderDetails} size="sm" className="lg:text-xs">
           View Order Details
         </Button>
-        {order.status === "Done" && (
+        {order.status_id === 5 && (
           <CreateReviewModal
             userEmail={userEmail}
             orderProducts={order.products}

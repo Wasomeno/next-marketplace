@@ -31,6 +31,8 @@ import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
 import { Dropdown } from "@/components/dropdown"
 import { ImageUploader } from "@/components/image-uploader"
+import { MultiSelectDropdown } from "@/components/multi-select-dropdown"
+import { Skeleton } from "@/components/skeleton"
 
 import { ProductFormData, ProductSchema } from "./create-product-modal"
 
@@ -51,7 +53,7 @@ export const EditProductModal: React.FC<{ storeId: number }> = ({
   })
 
   const categories = useQuery({
-    queryKey: categoryQueryKeys.all(),
+    queryKey: categoryQueryKeys.all().baseKey,
     queryFn: () => getCategories(),
     enabled: isOpen,
   })
@@ -68,12 +70,11 @@ export const EditProductModal: React.FC<{ storeId: number }> = ({
 
   const { startUpload } = useUploadThing("imageUploader")
 
-  const categoryOptions = categories.data?.map((category) => ({
-    label: category.name,
-    value: category.id,
-  }))
-
-  const selectedCategories = form.watch("categoryIds", [])
+  const categoryOptions =
+    categories.data?.map((category) => ({
+      label: category.name,
+      value: category.id,
+    })) ?? []
 
   function closeModal() {
     const urlSearchParams = new URLSearchParams(searchParamsValues)
@@ -109,7 +110,7 @@ export const EditProductModal: React.FC<{ storeId: number }> = ({
       urlSearchParams.delete("id")
 
       queryClient.invalidateQueries({
-        queryKey: storeQueryKeys.products({ storeId }),
+        queryKey: storeQueryKeys.products({ storeId }).baseKey,
       })
 
       queryClient.invalidateQueries({
@@ -134,6 +135,8 @@ export const EditProductModal: React.FC<{ storeId: number }> = ({
     }
   }, [product.isLoading])
 
+  console.log(images.data)
+
   return (
     <Dialog open={isOpen} onOpenChange={closeModal}>
       <AnimatePresence>
@@ -146,13 +149,22 @@ export const EditProductModal: React.FC<{ storeId: number }> = ({
                 onSubmit={form.handleSubmit((formData) =>
                   updateProductMutation.mutate(formData)
                 )}
-                className="flex w-full flex-col gap-4 p-4"
+                className="flex w-full flex-col gap-4 px-4 py-4 lg:px-6"
               >
                 <Fieldset label="Images" className="flex flex-col gap-2 ">
-                  <ImageUploader
-                    mode="multiple"
-                    onImagesChange={(images) => form.setValue("images", images)}
-                  />
+                  {images.isLoading ? (
+                    Array(3).fill(
+                      <Skeleton className="h-20 w-20 lg:h-28 lg:w-28" />
+                    )
+                  ) : (
+                    <ImageUploader
+                      mode="multiple"
+                      images={images.data}
+                      onImagesChange={(images) =>
+                        form.setValue("images", images)
+                      }
+                    />
+                  )}
                 </Fieldset>
                 <Fieldset
                   label="Name"
@@ -166,26 +178,9 @@ export const EditProductModal: React.FC<{ storeId: number }> = ({
                   className="flex flex-col gap-2 "
                   error={form.formState.errors.categoryIds}
                 >
-                  <Dropdown
+                  <MultiSelectDropdown
                     options={categoryOptions}
-                    selectedOptions={categoryOptions?.filter((option) =>
-                      selectedCategories?.includes(option.value)
-                    )}
-                    onOptionClick={(option) =>
-                      form.setValue("categoryIds", [
-                        ...selectedCategories,
-                        Number(option.value),
-                      ])
-                    }
-                    deselectOption={(option) =>
-                      form.setValue(
-                        "categoryIds",
-                        selectedCategories.filter(
-                          (categoryId) => option.value !== categoryId
-                        )
-                      )
-                    }
-                    isMulti
+                    onSelect={() => {}}
                   />
                 </Fieldset>
                 <Fieldset

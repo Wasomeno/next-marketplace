@@ -43,7 +43,7 @@ export const CategoryTable = () => {
   const searchParamsValues = useSearchParamsValues<TBaseDataFilterParams>()
 
   const categories = useQuery({
-    queryKey: categoryQueryKeys.all(searchParamsValues),
+    queryKey: categoryQueryKeys.all(searchParamsValues).key,
     queryFn: () =>
       getCategories({
         ...searchParamsValues,

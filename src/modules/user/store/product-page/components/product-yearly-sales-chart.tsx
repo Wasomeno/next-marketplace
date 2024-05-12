@@ -50,13 +50,13 @@ export const ProductYearlySalesChart = () => {
   function onYearSelect(year: string) {
     const searchParams = new URLSearchParams(searchParamValues)
     searchParams.set("year", year)
-    router.replace(`${pathname}?${searchParams.toString()}`)
+    router.replace(`${pathname}?${searchParams.toString()}`, { scroll: false })
   }
 
   function onYearDeselect() {
     const searchParams = new URLSearchParams(searchParamValues)
     searchParams.delete("year")
-    router.replace(`${pathname}?${searchParams.toString()}`)
+    router.replace(`${pathname}?${searchParams.toString()}`, { scroll: false })
   }
 
   return (
@@ -65,13 +65,13 @@ export const ProductYearlySalesChart = () => {
         <h2 className="text-sm font-medium lg:text-lg">Yearly Sales</h2>
         <Dropdown
           placeholder="Select Year"
-          isMulti={false}
           options={getYearOptions()}
           selectedOption={getYearOptions().find(
             (option) => option.value.toString() === searchParamValues.year
           )}
           onOptionClick={(option) => onYearSelect(option.value as string)}
           deselectOption={onYearDeselect}
+          className="w-36 lg:w-48"
         />
       </div>
       <div className="rounded-lg border px-4 py-2">

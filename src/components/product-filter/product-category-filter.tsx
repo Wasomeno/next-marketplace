@@ -20,7 +20,7 @@ export function ProductCategoryFilter() {
   const router = useRouter()
 
   const { data: categories, isLoading } = useQuery({
-    queryKey: categoryQueryKeys.all(),
+    queryKey: categoryQueryKeys.all().baseKey,
     queryFn: () => getCategories(),
   })
 

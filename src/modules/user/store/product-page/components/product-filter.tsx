@@ -12,8 +12,8 @@ import {
 } from "@/components/data-filter"
 
 export const ProductFilter = (props: Pick<DataFilterProps, "disabled">) => {
-  const { data } = useQuery({
-    queryKey: categoryQueryKeys.all(),
+  const categories = useQuery({
+    queryKey: categoryQueryKeys.all().baseKey,
     queryFn: () => getCategories(),
   })
 
@@ -22,21 +22,17 @@ export const ProductFilter = (props: Pick<DataFilterProps, "disabled">) => {
       label: "Categories",
       value: "categories",
       isMultipleValues: true,
-      children: !data
+      children: !categories.data
         ? []
-        : [
-            { label: "All", value: "" },
-            ...data.map((category) => ({
-              label: category.name,
-              value: category.id,
-            })),
-          ],
+        : categories.data.map((category) => ({
+            label: category.name,
+            value: category.id,
+          })),
     },
     {
       label: "Status",
       value: "status",
       children: [
-        { label: "All", value: "" },
         {
           label: "Published",
           value: "published",

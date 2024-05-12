@@ -104,7 +104,6 @@ export const StoreSalesChart = () => {
           {chartMode === "year" && (
             <Dropdown
               placeholder="Select year"
-              isMulti={false}
               options={getYearOptions()}
               selectedOption={getYearOptions().find(
                 (option) => option.value.toString() === searchParamValues.year
@@ -116,7 +115,6 @@ export const StoreSalesChart = () => {
           {chartMode === "month" && (
             <Dropdown
               placeholder="Select Month"
-              isMulti={false}
               options={getMonthOptions()}
               selectedOption={getMonthOptions().find(
                 (option) => option.value.toString() === searchParamValues.month

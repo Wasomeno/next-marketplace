@@ -32,7 +32,7 @@ export const StoreProductReviewsTable: React.FC<{ storeId: number }> = ({
 }) => {
   const searchParamsValues = useSearchParamsValues<TBaseDataFilterParams>()
 
-  const { data: reviews, isLoading: isReviewsLoading } = useQuery({
+  const reviews = useQuery({
     queryKey: storeQueryKeys.reviews({ ...searchParamsValues, storeId }),
     queryFn: () =>
       getStoreProductReviews({
@@ -65,19 +65,19 @@ export const StoreProductReviewsTable: React.FC<{ storeId: number }> = ({
   const placeholderColumns: ColumnDef<ProductReview>[] = [
     {
       header: "Product Name",
-      cell: () => <Skeleton className="h-8 w-20 " />,
+      cell: () => <Skeleton className="h-6 w-20 " />,
     },
     {
       header: "Rating",
-      cell: () => <Skeleton className="h-8 w-20 " />,
+      cell: () => <Skeleton className="h-6 w-20 " />,
     },
     {
       header: "User",
-      cell: () => <Skeleton className="h-8 w-20 " />,
+      cell: () => <Skeleton className="h-6 w-20 " />,
     },
     {
       header: "Created at",
-      cell: () => <Skeleton className="h-8 w-20 " />,
+      cell: () => <Skeleton className="h-6 w-20 " />,
     },
     {
       header: "Actions",
@@ -89,16 +89,24 @@ export const StoreProductReviewsTable: React.FC<{ storeId: number }> = ({
 
   return (
     <DataTable
-      columns={isReviewsLoading ? placeholderColumns : columns}
-      data={(isReviewsLoading ? Array(5).fill({}) : reviews) as ProductReview[]}
+      columns={reviews.isLoading ? placeholderColumns : columns}
+      data={reviews.data ?? Array(5).fill("")}
       searchInput={
-        <DataTable.SearchInput placeholder="Search by product name" />
+        <DataTable.SearchInput
+          placeholder="Search by product name"
+          disabled={reviews.isLoading}
+        />
       }
-      dataSorter={<DataTable.Sorter sortOptions={reviewsSortOptions} />}
+      dataSorter={
+        <DataTable.Sorter
+          sortOptions={reviewsSortOptions}
+          disabled={reviews.isLoading}
+        />
+      }
       pagination={
-        reviews?.length ? (
+        reviews.data?.length ? (
           <DataTable.Pagination
-            dataLength={reviews.length as number}
+            dataLength={reviews.data.length}
             pageSize={Number(pageSize)}
           />
         ) : (

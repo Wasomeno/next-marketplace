@@ -5,8 +5,8 @@ import { DropdownMenuTriggerProps } from "@radix-ui/react-dropdown-menu"
 import clsx from "clsx"
 import { AnimatePresence, motion } from "framer-motion"
 import { FaCircleXmark } from "react-icons/fa6"
-import { HiChevronRight, HiXMark } from "react-icons/hi2"
-import { IoList, IoShirt } from "react-icons/io5"
+import { HiChevronRight } from "react-icons/hi2"
+import { IoList } from "react-icons/io5"
 import { twMerge } from "tailwind-merge"
 
 import { NoData } from "./no-data"
@@ -27,138 +27,67 @@ export type OptionWithChild = Option & {
   children: Option[]
 }
 
-interface BaseDropdownProps extends DropdownMenuTriggerProps {
+interface TDropdownProps extends DropdownMenuTriggerProps {
   options?: Option[] | null | undefined
   placeholder?: string
   onOptionClick?: (option: Option) => void
-  isMulti?: boolean
+  selectedOption?: Option
+  deselectOption?: () => void
   isLoading?: boolean
   className?: string
 }
 
-interface MultipleProps extends BaseDropdownProps {
-  isMulti: true
-  selectedOptions?: Option[]
-  deselectOption?: (option: Option) => void
-}
-
-interface SingleProps extends BaseDropdownProps {
-  isMulti: false
-  selectedOption?: Option
-  deselectOption?: () => void
-}
-
-type DropdownProps = MultipleProps | SingleProps
-
-export const Dropdown = (props: DropdownProps) => {
+export const Dropdown = (props: TDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
     <DropdownRoot open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
       <div
-        className={clsx(
-          twMerge(
-            "relative flex h-8 w-48 items-center rounded-md border bg-white outline-0 disabled:opacity-50 dark:border-neutral-600 dark:bg-neutral-900 lg:min-h-10",
-            props.className
+        className={twMerge(
+          clsx(
+            "relative flex items-center rounded-md border bg-white outline-0  dark:border-neutral-600 dark:bg-neutral-900",
+            props.className,
+            props.disabled
+              ? "cursor-not-allowed opacity-80"
+              : "cursor-pointer opacity-100"
           )
         )}
       >
-        {props.isMulti && (
-          <>
-            <DropdownTrigger
-              className="z-5 absolute h-full w-full"
-              disabled={props.disabled}
-            />
-            <div className="z-10 flex flex-1">
-              {props?.selectedOptions !== undefined &&
-                props.selectedOptions.length > 0 && (
-                  <div
-                    className="flex flex-1 flex-wrap items-center gap-2 p-1.5"
-                    onClick={() => setIsOpen(!isOpen)}
-                  >
-                    {props.selectedOptions.map((selectedOption) => (
-                      <div
-                        key={selectedOption.value}
-                        className="flex w-fit items-center justify-between overflow-hidden rounded-md border border-gray-200"
-                      >
-                        <div className="flex justify-center gap-2 break-keep px-2.5 py-1.5 text-xs font-medium">
-                          <IoShirt /> {selectedOption?.label}
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            props.deselectOption &&
-                            props?.deselectOption(selectedOption)
-                          }
-                          className="z-50 flex h-8 w-8 items-center justify-center border-l transition-all duration-200 hover:bg-gray-100 "
-                        >
-                          <HiXMark />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-              {props.selectedOptions !== undefined &&
-                props.selectedOptions.length < 1 && (
-                  <div
-                    className="w-full p-2"
-                    onClick={() => setIsOpen(!isOpen)}
-                  >
-                    <span className="w-full text-xs text-gray-400 lg:text-sm">
-                      {props.placeholder ?? "Select Option"}
-                    </span>
-                  </div>
-                )}
-            </div>
-            <button
-              type="button"
-              className="flex h-full w-10 items-center justify-center border-l border-gray-200 transition duration-300"
-            >
-              <HiChevronRight
-                className={clsx(
-                  "transition duration-300",
-                  isOpen && "rotate-90"
-                )}
-              />
-            </button>
-          </>
-        )}
-        {!props.isMulti && (
-          <>
-            <DropdownTrigger asChild>
-              <div className="flex w-full items-center py-2 pl-3 text-xs lg:text-sm">
-                {props?.selectedOption !== undefined &&
-                  props.selectedOption.label}
-                {!props?.selectedOption && (
-                  <span className="text-gray-400">
-                    {props.placeholder ?? "Select Option"}
-                  </span>
-                )}
-              </div>
-            </DropdownTrigger>
-            {props.selectedOption !== undefined && props.deselectOption ? (
-              <button
-                type="button"
-                onClick={props?.deselectOption}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-300 transition-all duration-200 hover:text-gray-800"
-              >
-                <FaCircleXmark size={16} />
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setIsOpen(!isOpen)}
-                className={clsx(
-                  "px-3 transition duration-300",
-                  isOpen && "rotate-90"
-                )}
-              >
-                <HiChevronRight size={14} />
-              </button>
+        <DropdownTrigger asChild>
+          <div className="flex w-full items-center py-2 pl-3 text-xs lg:text-sm">
+            {props?.selectedOption !== undefined && props.selectedOption.label}
+            {!props?.selectedOption && (
+              <span className="text-gray-400">
+                {props.placeholder ?? "Select Option"}
+              </span>
             )}
-          </>
-        )}
+          </div>
+        </DropdownTrigger>
+        <button
+          type="button"
+          onClick={props?.deselectOption}
+          className={clsx(
+            "absolute right-2 top-1/2 -translate-y-1/2 text-gray-300 transition-all duration-200 hover:text-gray-800",
+            props.selectedOption !== undefined && props.deselectOption
+              ? "inline"
+              : "hidden"
+          )}
+        >
+          <FaCircleXmark size={16} />
+        </button>
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          className={clsx(
+            "px-3 transition duration-300",
+            props.selectedOption !== undefined && props.deselectOption
+              ? "hidden"
+              : "inline",
+            isOpen && "rotate-90"
+          )}
+        >
+          <HiChevronRight size={14} />
+        </button>
         <AnimatePresence>
           {isOpen && (
             <DropdownContent align="start" sideOffset={5} asChild>
@@ -182,15 +111,6 @@ export const Dropdown = (props: DropdownProps) => {
                     <DropdownItem key={option.value} asChild>
                       <button
                         type="button"
-                        disabled={
-                          (props.isMulti &&
-                            props?.selectedOptions?.some(
-                              (selectedOption) =>
-                                selectedOption.value === option.value
-                            )) ||
-                          (!props.isMulti &&
-                            props.selectedOption?.value === option.value)
-                        }
                         onClick={() =>
                           props.onOptionClick && props.onOptionClick(option)
                         }

@@ -79,13 +79,16 @@ export function AddCategoryModal() {
 
       await addCategory({
         ...formData,
-        image: imageResults[0],
+        image: {
+          name: imageResults[0].name,
+          url: imageResults[0].url,
+        },
         slug: generateSlug(),
       })
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: categoryQueryKeys.all(),
+        queryKey: categoryQueryKeys.all().baseKey,
       })
       onOpenChange(false)
       toast.success("Succesfully created new category")

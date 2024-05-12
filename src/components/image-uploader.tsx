@@ -2,7 +2,6 @@
 
 import React, { useState } from "react"
 import Image from "next/image"
-import { queryOptions, useQuery } from "@tanstack/react-query"
 import clsx from "clsx"
 import { useDropzone } from "react-dropzone"
 import { LuImagePlus } from "react-icons/lu"
@@ -39,42 +38,15 @@ export const ImageUploader = (props: ImageUploaderProps) => {
       "image/*": [".jpeg", ".png"],
     },
     onDrop: (selectedFiles) => {
+      const files = []
       for (const selectedFile of selectedFiles) {
-        FileResizer.imageFileResizer(
-          selectedFile,
-          500,
-          500,
-          "WEBP",
-          100,
-          0,
-          (uri) => {
-            var byteString = atob((uri as string).split(",")[1])
-            var ab = new ArrayBuffer(byteString.length)
-            var ia = new Uint8Array(ab)
+        const imageFile = Object.assign(selectedFile, {
+          preview: URL.createObjectURL(selectedFile),
+        })
 
-            for (var i = 0; i < byteString.length; i++) {
-              ia[i] = byteString.charCodeAt(i)
-            }
-
-            const imageBlob = new Blob([ab], { type: "image/webp" })
-            const imageFile = new File([imageBlob], selectedFile.name)
-            props.mode === "multiple"
-              ? addFiles([
-                  Object.assign(imageFile, {
-                    preview: URL.createObjectURL(imageFile),
-                  }),
-                ])
-              : setFile(
-                  Object.assign(imageFile, {
-                    preview: URL.createObjectURL(imageFile),
-                  })
-                )
-          },
-          "base64",
-          500,
-          500
-        )
+        files.push(imageFile)
       }
+      props.mode === "multiple" ? addFiles(files) : setFile(files[0])
     },
   })
 
@@ -82,9 +54,9 @@ export const ImageUploader = (props: ImageUploaderProps) => {
     if (Array.isArray(imageFiles)) {
       let newFiles = [...imageFiles, ...files]
       setImageFiles(newFiles)
-      props.mode === "multiple" &&
-        props.onImagesChange &&
-        props.onImagesChange(newFiles)
+      props.mode === "multiple" && props.onImagesChange !== undefined
+        ? props.onImagesChange(newFiles)
+        : null
     }
   }
 
@@ -92,24 +64,25 @@ export const ImageUploader = (props: ImageUploaderProps) => {
     if (Array.isArray(imageFiles)) {
       let newFiles = imageFiles.filter((_, index) => index !== fileIndex)
       setImageFiles(newFiles)
-      props.mode === "multiple" &&
-        props.onImagesChange &&
-        props.onImagesChange(newFiles)
+      props.mode === "multiple" && props.onImagesChange !== undefined
+        ? props.onImagesChange(newFiles)
+        : null
     }
   }
 
   function setFile(file: FileImage | undefined) {
     if (!Array.isArray(imageFiles)) {
       setImageFiles(file)
-      props.mode === "single" &&
-        props.onImageChange &&
-        props.onImageChange(file)
+      props.mode === "single" && props.onImageChange
+        ? props.onImageChange(file)
+        : null
     }
   }
 
   return (
     <div className="flex w-full flex-col gap-2">
-      {!imageFiles && (
+      {(Array.isArray(imageFiles) && !imageFiles.length) ||
+      (!Array.isArray(imageFiles) && !imageFiles) ? (
         <div
           {...getRootProps({
             className:
@@ -124,7 +97,7 @@ export const ImageUploader = (props: ImageUploaderProps) => {
               : "Drop your image here"}
           </p>
         </div>
-      )}
+      ) : null}
 
       {props.mode === "multiple" &&
         Array.isArray(imageFiles) &&

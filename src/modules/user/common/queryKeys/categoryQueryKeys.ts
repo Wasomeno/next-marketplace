@@ -1,13 +1,16 @@
 import { TBaseDataFilterParams } from "../../../../../types"
 
 export const categoryQueryKeys = {
-  all: (filters?: TBaseDataFilterParams) => [
-    "categories",
-    filters?.page,
-    filters?.pageSize,
-    filters?.search,
-    filters?.sort,
-  ],
+  all: (filters?: TBaseDataFilterParams) => ({
+    baseKey: ["categories"],
+    key: [
+      "categories",
+      filters?.page,
+      filters?.pageSize,
+      filters?.search,
+      filters?.sort,
+    ],
+  }),
   single: (categoryId: number, filters?: TBaseDataFilterParams) => [
     "categories",
     "single",

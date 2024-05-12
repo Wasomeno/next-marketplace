@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { getCategories } from "@/actions/categories"
 import { addProduct } from "@/actions/store/products"
 import { categoryQueryKeys } from "@/modules/user/common/queryKeys/categoryQueryKeys"
+import { storeQueryKeys } from "@/modules/user/common/queryKeys/storeQueryKeys"
 import { storeProductsQuery } from "@/modules/user/common/queryOptions/storeQueryOptions"
 import { useSearchParamsValues } from "@/utils"
 import { useUploadThing } from "@/utils/uploadthing"
@@ -28,8 +29,8 @@ import {
 import { Fieldset } from "@/components/ui/fieldset"
 import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
-import { Dropdown } from "@/components/dropdown"
 import { ImageUploader } from "@/components/image-uploader"
+import { MultiSelectDropdown } from "@/components/multi-select-dropdown"
 
 import { TBaseDataFilterParams } from "../../../../../../types"
 
@@ -68,12 +69,16 @@ export const CreateProductModal: React.FC<{ storeId: number }> = ({
   const router = useRouter()
   const pathname = usePathname()
   const searchParamsValues = useSearchParamsValues<
-    TBaseDataFilterParams & { status: string; create: string }
+    TBaseDataFilterParams & {
+      status: string
+      create: string
+      categories: string
+    }
   >()
   const isOpen = searchParamsValues.create !== undefined
 
   const categories = useQuery({
-    queryKey: categoryQueryKeys.all(),
+    queryKey: categoryQueryKeys.all().baseKey,
     queryFn: () => getCategories(),
   })
 
@@ -87,8 +92,6 @@ export const CreateProductModal: React.FC<{ storeId: number }> = ({
     label: category.name,
     value: category.id,
   }))
-
-  const selectedCategories = form.watch("categoryIds", [])
 
   const createProductMutation = useMutation({
     mutationFn: async (formData: ProductFormData) => {
@@ -109,14 +112,15 @@ export const CreateProductModal: React.FC<{ storeId: number }> = ({
       })
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(storeProductsQuery({ storeId }))
+      queryClient.invalidateQueries({
+        queryKey: storeQueryKeys.products().baseKey,
+      })
       onOpenChange(false)
       toast.success("Succesfully created new product")
     },
     onError: (error) =>
       toast.error(error.message ?? "Error when creating new product"),
   })
-
   function onOpenChange(isOpen: boolean) {
     const urlSearchParams = new URLSearchParams(searchParamsValues)
     if (isOpen) {
@@ -147,7 +151,7 @@ export const CreateProductModal: React.FC<{ storeId: number }> = ({
                 onSubmit={form.handleSubmit((formData) =>
                   createProductMutation.mutate(formData)
                 )}
-                className="flex w-full flex-col gap-4 p-4"
+                className="flex w-full flex-col gap-4 p-4 px-4 lg:px-6"
               >
                 <Fieldset
                   label="Images"
@@ -177,28 +181,9 @@ export const CreateProductModal: React.FC<{ storeId: number }> = ({
                   className="flex flex-col gap-2 "
                   error={form.formState.errors.categoryIds}
                 >
-                  <Dropdown
-                    options={categoryOptions}
-                    isLoading={categories.isLoading}
-                    selectedOptions={categoryOptions?.filter((option) =>
-                      selectedCategories?.includes(option.value)
-                    )}
-                    className="w-72"
-                    onOptionClick={(option) =>
-                      form.setValue("categoryIds", [
-                        ...selectedCategories,
-                        Number(option.value),
-                      ])
-                    }
-                    deselectOption={(option) =>
-                      form.setValue(
-                        "categoryIds",
-                        selectedCategories.filter(
-                          (categoryId) => option.value !== categoryId
-                        )
-                      )
-                    }
-                    isMulti
+                  <MultiSelectDropdown
+                    options={categoryOptions ?? []}
+                    onSelect={() => {}}
                   />
                 </Fieldset>
                 <Fieldset
@@ -241,7 +226,7 @@ export const CreateProductModal: React.FC<{ storeId: number }> = ({
                     type="button"
                     variant="defaultOutline"
                     size="sm"
-                    className="w-full lg:w-32"
+                    className="w-full lg:w-32 lg:text-xs"
                     onClick={() => router.replace(pathname)}
                   >
                     Cancel
@@ -249,7 +234,7 @@ export const CreateProductModal: React.FC<{ storeId: number }> = ({
                   <Button
                     variant="default"
                     size="sm"
-                    className="w-full lg:w-32"
+                    className="w-full lg:w-32 lg:text-xs"
                     disabled={createProductMutation.isPending}
                   >
                     {createProductMutation.isPending && (

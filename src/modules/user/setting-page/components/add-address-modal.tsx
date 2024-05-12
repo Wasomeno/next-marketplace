@@ -178,7 +178,6 @@ export function AddAddressModal() {
                   })
                 }
                 deselectOption={() => form.setValue("province", "")}
-                isMulti={false}
                 placeholder="Select Province"
               />
             </Fieldset>
@@ -192,7 +191,6 @@ export function AddAddressModal() {
                   form.setValue("city", option.label, { shouldValidate: true })
                 }
                 deselectOption={() => form.setValue("city", "")}
-                isMulti={false}
                 placeholder="Select City"
               />
             </Fieldset>
@@ -208,7 +206,6 @@ export function AddAddressModal() {
                   })
                 }
                 deselectOption={() => form.setValue("district", "")}
-                isMulti={false}
                 placeholder="Select District"
               />
             </Fieldset>

@@ -26,7 +26,6 @@ export async function createBanner(params: CreateBannerParams) {
 }
 
 export async function updateBanner(params: EditBannerParams) {
-  console.log(params)
   try {
     await prisma.banner.update({
       where: {

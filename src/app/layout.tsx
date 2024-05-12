@@ -2,6 +2,7 @@ import "./globals.css"
 import "react-toastify/dist/ReactToastify.css"
 
 import { Metadata } from "next"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 
 import { ReactQueryProvider } from "@/lib/react-query-provider"
 import ClientSessionProvider from "@/components/session-provider"
@@ -38,6 +39,7 @@ export default async function RootLayout({
               bodyClassName="text-sm font-medium flex gap-4 font-sans text-slate-600 dark:text-slate-50 rounded-xl"
             />
           </body>
+          <ReactQueryDevtools />
         </ReactQueryProvider>
       </ClientSessionProvider>
     </html>

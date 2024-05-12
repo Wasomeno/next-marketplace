@@ -37,18 +37,14 @@ export function ConfirmationDialog({
                 <p className="text-sm">{body}</p>
               </div>
               <div className="flex w-full items-center justify-end gap-2">
-                <Button
-                  size="sm"
-                  onClick={onConfirm}
-                  className="w-32 rounded-lg py-2.5 text-xs font-medium"
-                >
+                <Button size="sm" onClick={onConfirm} className="w-32 py-2.5">
                   Confirm
                 </Button>
                 <DialogClose asChild>
                   <Button
-                    variant="danger"
+                    variant="defaultOutline"
                     size="sm"
-                    className="w-32 rounded-lg border py-2.5 text-xs font-medium text-white"
+                    className="w-32 py-2.5"
                   >
                     Cancel
                   </Button>

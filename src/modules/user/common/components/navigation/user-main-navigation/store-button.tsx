@@ -23,7 +23,7 @@ export async function StoreButton() {
     variant: "defaultOutline",
   })
 
-  if (!session) {
+  if (!session || session.user.role === "admin") {
     return
   }
 

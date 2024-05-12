@@ -95,7 +95,7 @@ export function EditCategoryModal() {
     },
     onSuccess() {
       queryClient.invalidateQueries({
-        queryKey: categoryQueryKeys.all(),
+        queryKey: categoryQueryKeys.all().baseKey,
       })
       queryClient.invalidateQueries({
         queryKey: categoryQueryKeys.single(categoryId),
@@ -107,8 +107,6 @@ export function EditCategoryModal() {
       toast.error("Error when updating category")
     },
   })
-
-  console.log(image.data)
 
   useEffect(() => {
     if (category.data !== undefined && image.data !== undefined) {

@@ -7,13 +7,6 @@ import { prisma } from "@/lib/prisma"
 
 import { TBaseDataFilter } from "../../../types"
 
-export type TOrderStatus =
-  | "Payment Confirmed"
-  | "On Shipping"
-  | "On Proccess"
-  | "Arrived"
-  | "Done"
-
 type TCheckout = {
   userEmail: string
   cartItems: Prisma.CartItemGetPayload<{
@@ -25,9 +18,10 @@ type TCheckout = {
 
 type GetStoreOrdersParams = TBaseDataFilter & {
   storeId: number
+  statusIds?: Array<number>
 }
 type GetUserOrdersParams = TBaseDataFilter & {
-  status?: string
+  statusId?: number
   userEmail: string
 }
 
@@ -38,7 +32,12 @@ type GetOrderParams = TBaseDataFilter & {
 
 export async function getStoreOrders(params: GetStoreOrdersParams) {
   const orders = await prisma.order.findMany({
-    where: { store_id: params.storeId },
+    orderBy: params.sort,
+    where: {
+      store_id: params.storeId,
+      id: { contains: params.search, mode: "insensitive" },
+      status_id: { in: params.statusIds },
+    },
     include: {
       products: { include: { product: { include: { images: true } } } },
       _count: { select: { products: true } },
@@ -51,11 +50,16 @@ export async function getStoreOrders(params: GetStoreOrdersParams) {
 
 export async function getUserOrders(params: GetUserOrdersParams) {
   const orders = await prisma.order.findMany({
-    where: { user_email: params.userEmail, status: params.status },
-    include: { products: { include: { product: true } } },
+    where: { user_email: params.userEmail, status_id: params.statusId },
+    include: { products: { include: { product: true } }, status: true },
   })
 
   return orders
+}
+
+export async function getOrderStatuses() {
+  const statuses = await prisma.orderStatus.findMany()
+  return statuses
 }
 
 export async function getOrder(params: GetOrderParams) {
@@ -105,6 +109,7 @@ export async function checkout({ userEmail, cartItems, addressId }: TCheckout) {
               })),
             },
           },
+          status_id: 1,
           address_id: addressId,
           store_id: storeId,
           user_email: userEmail,
@@ -124,16 +129,18 @@ export async function checkout({ userEmail, cartItems, addressId }: TCheckout) {
 }
 
 export async function changeOrderStatus({
-  status,
+  statusId,
   orderId,
 }: {
-  status: TOrderStatus
+  statusId: number
   orderId: string
 }) {
   try {
     await prisma.order.update({
       where: { id: orderId },
-      data: { status },
+      data: {
+        status_id: statusId + 1,
+      },
     })
   } catch (error) {
     throw error

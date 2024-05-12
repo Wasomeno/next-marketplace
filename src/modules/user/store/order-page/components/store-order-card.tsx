@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/skeleton"
 
 import { OrderStatus } from "../../../../../../types"
-import { OrderChangeStatusButton } from "./invoice-change-status-button"
+import { OrderChangeStatusButton } from "./order-change-status-button"
 
 export const StoreOrderCard = ({
   order,
@@ -113,7 +113,7 @@ export const StoreOrderCard = ({
         <div className="flex justify-end">
           <OrderChangeStatusButton
             orderId={order.id}
-            status={order.status as OrderStatus}
+            statusId={order.status_id}
           />
         </div>
       </div>

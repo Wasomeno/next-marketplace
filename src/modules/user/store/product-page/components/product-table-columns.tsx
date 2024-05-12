@@ -63,26 +63,7 @@ export const productTableColumns: ColumnDef<
       )
       return (
         <div className="flex items-center justify-center gap-1.5">
-          {categories?.map((category) => (
-            <HoverCard.Root key={category} openDelay={0.1} closeDelay={0.1}>
-              <HoverCard.Trigger asChild>
-                <div
-                  key={category}
-                  className="flex h-8 w-10 items-center justify-center rounded-lg border border-gray-50 bg-gray-100 p-2 text-gray-500 transition-all duration-200 hover:bg-gray-200 hover:text-black"
-                >
-                  {getCategoryIcons(category)}
-                </div>
-              </HoverCard.Trigger>
-              <HoverCard.Portal>
-                <HoverCard.Content
-                  sideOffset={3}
-                  className="rounded-lg border border-gray-100 bg-white px-4 py-2 text-xs font-medium text-gray-500 shadow-sm"
-                >
-                  {category}
-                </HoverCard.Content>
-              </HoverCard.Portal>
-            </HoverCard.Root>
-          ))}
+          {categories.join(", ")}
         </div>
       )
     },
@@ -146,7 +127,7 @@ export const productTablePlaceholderColumns: ColumnDef<
   {
     header: "Id",
     enableColumnFilter: false,
-    cell: () => <Skeleton className="h-8 w-20 " />,
+    cell: () => <Skeleton className="h-6 w-20 " />,
   },
   {
     header: "Image",
@@ -158,25 +139,25 @@ export const productTablePlaceholderColumns: ColumnDef<
   {
     id: "name",
     header: "Name",
-    cell: () => <Skeleton className="h-8 w-20 " />,
+    cell: () => <Skeleton className="h-6 w-20 " />,
   },
   {
     header: "Category",
     cell: () => {
       return (
         <div className="flex items-center justify-center gap-1.5">
-          <Skeleton className="h-8 w-20 " />
+          <Skeleton className="h-6 w-20 " />
         </div>
       )
     },
   },
   {
     header: "Status",
-    cell: () => <Skeleton className="h-8 w-20 " />,
+    cell: () => <Skeleton className="h-6 w-20 " />,
   },
   {
     header: "Stock",
-    cell: (stock) => <Skeleton className="h-8 w-20 " />,
+    cell: (stock) => <Skeleton className="h-6 w-20 " />,
   },
   {
     id: "action",

@@ -23,9 +23,10 @@ export function StoreProducts() {
   const searchParamsValues = useSearchParamsValues<TBaseDataFilterParams>()
   const products = useQuery({
     queryKey: storeQueryKeys.products({
-      storeSlug: params.storeSlug as string,
       ...searchParamsValues,
-    }),
+      storeSlug: params.storeSlug as string,
+      sort: getParsedSortParams(searchParamsValues.sort),
+    }).key,
     queryFn: () =>
       getStoreProducts({
         ...searchParamsValues,

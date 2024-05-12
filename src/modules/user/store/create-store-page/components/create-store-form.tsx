@@ -58,7 +58,9 @@ export function CreateStoreForm() {
         throw new Error("Error when uploading image")
       }
       await createStore({
-        ...formData,
+        name: formData.name,
+        location: formData.location,
+        description: formData.description,
         slug: formData.name.split(" ").join("-").toLowerCase(),
         profile_image: images[0].url,
         created_at: new Date(),

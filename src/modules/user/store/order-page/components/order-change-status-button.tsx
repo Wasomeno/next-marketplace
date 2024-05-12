@@ -13,22 +13,22 @@ import { toast } from "react-toastify"
 import { queryClient } from "@/lib/react-query-client"
 import { Button } from "@/components/ui/button"
 
-import { OrderStatus, TBaseDataFilterParams } from "../../../../../../types"
+import { TBaseDataFilterParams } from "../../../../../../types"
 
 export const OrderChangeStatusButton = ({
   orderId,
-  status,
+  statusId,
 }: {
   orderId: string
-  status: OrderStatus
+  statusId: number
 }) => {
   const searchParamsValues = useSearchParamsValues<TBaseDataFilterParams>()
 
   const changeStatus = useMutation({
-    mutationFn: async (status: OrderStatus) => {
+    mutationFn: async () => {
       await changeOrderStatus({
         orderId,
-        status,
+        statusId,
       })
       queryClient.invalidateQueries({
         queryKey: ["storeOrders", searchParamsValues],
@@ -42,12 +42,12 @@ export const OrderChangeStatusButton = ({
     },
   })
 
-  switch (status) {
-    case "Payment Confirmed":
+  switch (statusId) {
+    case 1:
       return (
         <Button
           disabled={changeStatus.isPending}
-          onClick={() => changeStatus.mutate("On Proccess")}
+          onClick={() => changeStatus.mutate()}
           className="flex items-center justify-between border-gray-200 shadow-sm"
           variant="defaultOutline"
         >
@@ -57,16 +57,16 @@ export const OrderChangeStatusButton = ({
             ) : (
               <LuPackage size={20} />
             )}
-            <span>Change Status to On Proccess</span>
+            <span>Change Status to Payment Confirmed</span>
           </div>
           <BiChevronRight size={20} />
         </Button>
       )
-    case "On Proccess":
+    case 2:
       return (
         <Button
           disabled={changeStatus.isPending}
-          onClick={() => changeStatus.mutate("On Shipping")}
+          onClick={() => changeStatus.mutate()}
           className="flex items-center justify-between border-gray-200 shadow-sm"
           variant="defaultOutline"
         >
@@ -76,16 +76,16 @@ export const OrderChangeStatusButton = ({
             ) : (
               <LuTruck size={20} />
             )}
-            <span>Change Status to On Shipping</span>
+            <span>Change Status to On Process</span>
           </div>
           <BiChevronRight size={20} />
         </Button>
       )
-    case "On Shipping":
+    case 3:
       return (
         <Button
           disabled={changeStatus.isPending}
-          onClick={() => changeStatus.mutate("Arrived")}
+          onClick={() => changeStatus.mutate()}
           className="flex items-center justify-between border-gray-200 shadow-sm"
           variant="defaultOutline"
         >
@@ -95,16 +95,35 @@ export const OrderChangeStatusButton = ({
             ) : (
               <LuPackageCheck size={20} />
             )}
+            <span>Change Status to On Shipping</span>
+          </div>
+          <BiChevronRight size={20} />
+        </Button>
+      )
+    case 4:
+      return (
+        <Button
+          disabled={changeStatus.isPending}
+          onClick={() => changeStatus.mutate()}
+          className="flex items-center justify-between border-gray-200 shadow-sm"
+          variant="defaultOutline"
+        >
+          <div className="flex items-center gap-2">
+            {changeStatus.isPending ? (
+              <ImSpinner8 className="animate-spin" size={16} />
+            ) : (
+              <IoCheckmark size={20} />
+            )}
             <span>Change Status to Arrived</span>
           </div>
           <BiChevronRight size={20} />
         </Button>
       )
-    case "Arrived":
+    case 5:
       return (
         <Button
           disabled={changeStatus.isPending}
-          onClick={() => changeStatus.mutate("Done")}
+          onClick={() => changeStatus.mutate()}
           className="flex items-center justify-between border-gray-200 shadow-sm"
           variant="defaultOutline"
         >

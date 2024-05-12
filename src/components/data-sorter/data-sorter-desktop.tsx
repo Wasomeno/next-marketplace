@@ -36,13 +36,13 @@ export const DataSorterDesktop = ({
 
   return (
     <Dropdown
+      disabled={disabled}
       options={sortOptions}
       deselectOption={deselectOption}
       selectedOption={selectedSorting}
       onOptionClick={selectOption}
       placeholder="Select Sorting"
-      className="hidden lg:flex"
-      isMulti={false}
+      className="hidden w-48 lg:flex"
     />
   )
 }

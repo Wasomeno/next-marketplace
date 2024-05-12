@@ -48,7 +48,10 @@ export default async function UserStoreProductViewPage({
               <span className="text-sm font-medium text-gray-400">Images</span>
               <div className="flex gap-2">
                 {product?.images.map((image) => (
-                  <div className="relative h-20 w-20 overflow-hidden rounded-lg border">
+                  <div
+                    key={image.id}
+                    className="relative h-20 w-20 overflow-hidden rounded-lg border"
+                  >
                     <Image src={image.url} fill alt="image" />
                   </div>
                 ))}

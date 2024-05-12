@@ -1,9 +1,25 @@
-import { TBaseDataFilterParams } from "../../../../../types"
+import { TBaseDataFilter, TBaseDataFilterParams } from "../../../../../types"
 
 export const storeQueryKeys = {
   products: (
-    params: { storeId?: number; storeSlug?: string } & TBaseDataFilterParams
-  ) => ["storeProducts", { ...params }],
+    params?: {
+      storeId?: number
+      storeSlug?: string
+      categoryIds?: Array<number>
+    } & TBaseDataFilter
+  ) => ({
+    baseKey: ["storeProducts"],
+    key: [
+      "storeProducts",
+      {
+        storeId: params?.storeId,
+        page: params?.page,
+        sort: params?.sort,
+        search: params?.search,
+        categoryIds: params?.categoryIds,
+      },
+    ],
+  }),
   productCount: (
     params: { storeId: number } & Pick<TBaseDataFilterParams, "search">
   ) => ["storeProducts", "count", { ...params }],

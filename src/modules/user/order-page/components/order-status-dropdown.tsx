@@ -40,7 +40,6 @@ export const OrderStatusDropdown = () => {
         (option) => option.value === searchParamValues.status
       )}
       placeholder="Select Status"
-      isMulti={false}
       onOptionClick={selectOption}
       deselectOption={deselectOption}
     />

@@ -6,12 +6,11 @@ import { OrderCard } from "@/modules/user/order-page/components/order-card"
 import { OrderSearchInput } from "@/modules/user/order-page/components/order-search-input"
 import { OrderStatusDropdown } from "@/modules/user/order-page/components/order-status-dropdown"
 import { UserViewOrderModal } from "@/modules/user/order-page/components/user-view-order-modal"
-import { BsKanban } from "react-icons/bs"
 import { RxCrossCircled } from "react-icons/rx"
 
 type Props = {
   searchParams: {
-    status: string
+    statusId: number
     page: string
     rate: string
     search: string
@@ -31,7 +30,7 @@ export default async function OrdersPage({ searchParams }: Props) {
 
   const orders = await getUserOrders({
     userEmail: session.user.email,
-    status: searchParams.status,
+    statusId: searchParams.statusId,
     search: searchParams.search,
   })
 

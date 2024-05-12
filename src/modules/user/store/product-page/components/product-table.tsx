@@ -2,8 +2,7 @@
 
 import React from "react"
 import { usePathname, useRouter } from "next/navigation"
-import { getStoreProducts, StoreProduct } from "@/actions/store/store"
-import { storeQueryKeys } from "@/modules/user/common/queryKeys/storeQueryKeys"
+import { StoreProduct } from "@/actions/store/store"
 import { storeProductsQuery } from "@/modules/user/common/queryOptions/storeQueryOptions"
 import { getParsedSortParams, useSearchParamsValues } from "@/utils"
 import { Prisma } from "@prisma/client"
@@ -159,7 +158,7 @@ export const ProductTable: React.FC<{ storeId: number }> = ({ storeId }) => {
           disabled={products.isLoading}
         />
       }
-      dataFilter={<ProductFilter />}
+      dataFilter={<ProductFilter disabled={products.isLoading} />}
       searchInput={
         <DataTable.SearchInput
           disabled={products.isLoading}

@@ -51,13 +51,13 @@ export const ProductMonthlySalesChart = () => {
   function onMonthSelect(month: string) {
     const searchParams = new URLSearchParams(searchParamValues)
     searchParams.set("month", month)
-    router.replace(`${pathname}?${searchParams.toString()}`)
+    router.replace(`${pathname}?${searchParams.toString()}`, { scroll: false })
   }
 
   function onMonthDeselect() {
     const searchParams = new URLSearchParams(searchParamValues)
     searchParams.delete("month")
-    router.replace(`${pathname}?${searchParams.toString()}`)
+    router.replace(`${pathname}?${searchParams.toString()}`, { scroll: false })
   }
 
   return (
@@ -66,13 +66,13 @@ export const ProductMonthlySalesChart = () => {
         <h2 className="text-sm font-medium lg:text-lg">Monthly Sales</h2>
         <Dropdown
           placeholder="Select Month"
-          isMulti={false}
           options={getMonthOptions()}
           selectedOption={getMonthOptions().find(
             (option) => option.value.toString() === searchParamValues.month
           )}
           onOptionClick={(option) => onMonthSelect(option.value as string)}
           deselectOption={onMonthDeselect}
+          className="w-36 lg:w-48"
         />
       </div>
       <div className="rounded-lg border px-4 py-2">

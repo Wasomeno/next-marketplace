@@ -1,9 +1,9 @@
 "use client"
 
-import { useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 
-import { Dropdown, Option } from "@/components/dropdown"
+import { Dropdown, Option } from "@/components/dropdown";
 
 const statusOptions: Option[] = [
   { label: "All", value: "" },
@@ -34,7 +34,6 @@ export const OrderStatusFilter = () => {
 
   return (
     <Dropdown
-      isMulti={false}
       options={statusOptions}
       selectedOption={activeFilter}
       placeholder="Select status"

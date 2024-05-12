@@ -15,7 +15,7 @@ export function CategoryPicker({
   selectCategory,
 }: CategoryScrollableListProps) {
   const categories = useQuery({
-    queryKey: categoryQueryKeys.all(),
+    queryKey: categoryQueryKeys.all().baseKey,
     queryFn: () => getCategories(),
   })
 
