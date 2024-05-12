@@ -19,20 +19,18 @@ export default function CheckoutLoadingPage() {
             </div>
           </div>
           <div className="flex flex-1 flex-col gap-4">
-            {Array(5)
-              .fill("")
-              .map(() => (
-                <div className="flex flex-1 gap-4">
-                  <Skeleton className=" h-20 w-20 lg:h-24 lg:w-24" />
-                  <div className="flex flex-1 flex-col justify-between lg:flex-row">
-                    <Skeleton className="h-5 w-full lg:h-6 lg:w-32" />
-                    <div className="flex w-full flex-col gap-2 lg:w-fit lg:items-end">
-                      <Skeleton className="h-5 w-32 lg:h-6" />
-                      <Skeleton className="h-5 w-32 lg:h-6" />
-                    </div>
+            {Array(5).fill(
+              <div className="flex flex-1 gap-4">
+                <Skeleton className=" h-20 w-20 lg:h-24 lg:w-24" />
+                <div className="flex flex-1 flex-col justify-between lg:flex-row">
+                  <Skeleton className="h-5 w-full lg:h-6 lg:w-32" />
+                  <div className="flex w-full flex-col gap-2 lg:w-fit lg:items-end">
+                    <Skeleton className="h-5 w-32 lg:h-6" />
+                    <Skeleton className="h-5 w-32 lg:h-6" />
                   </div>
                 </div>
-              ))}
+              </div>
+            )}
           </div>
         </div>
         <div className="sticky bottom-0 w-full bg-white lg:w-2/6 lg:px-8">
