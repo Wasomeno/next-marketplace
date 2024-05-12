@@ -48,6 +48,7 @@ export default async function OrdersPage({ searchParams }: Props) {
           {orders.length > 0 &&
             orders.map((order) => (
               <OrderCard
+                key={order.id}
                 userEmail={session.user.email as string}
                 order={order}
               />
