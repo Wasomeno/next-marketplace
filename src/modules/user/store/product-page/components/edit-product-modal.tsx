@@ -135,8 +135,6 @@ export const EditProductModal: React.FC<{ storeId: number }> = ({
     }
   }, [product.isLoading])
 
-  console.log(images.data)
-
   return (
     <Dialog open={isOpen} onOpenChange={closeModal}>
       <AnimatePresence>
