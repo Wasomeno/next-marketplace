@@ -28,9 +28,7 @@ type SingleProps = {
 }
 
 export const ImageUploader = (props: ImageUploaderProps) => {
-  const [imageFiles, setImageFiles] = useState(
-    props.mode === "multiple" ? props.images : props.image
-  )
+  const [imageFiles, setImageFiles] = useState(getImageStateDefaultValue())
 
   const { getInputProps, getRootProps } = useDropzone({
     multiple: props.mode === "multiple",
@@ -43,12 +41,21 @@ export const ImageUploader = (props: ImageUploaderProps) => {
         const imageFile = Object.assign(selectedFile, {
           preview: URL.createObjectURL(selectedFile),
         })
-
         files.push(imageFile)
       }
       props.mode === "multiple" ? addFiles(files) : setFile(files[0])
     },
   })
+
+  function getImageStateDefaultValue() {
+    return props.mode === "multiple"
+      ? !props.images
+        ? []
+        : props.images
+      : !props.image
+        ? undefined
+        : props.image
+  }
 
   function addFiles(files: Array<FileImage>) {
     if (Array.isArray(imageFiles)) {
