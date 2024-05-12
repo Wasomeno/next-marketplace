@@ -183,7 +183,12 @@ export const CreateProductModal: React.FC<{ storeId: number }> = ({
                 >
                   <MultiSelectDropdown
                     options={categoryOptions ?? []}
-                    onSelect={() => {}}
+                    onOptionsChange={(options) => {
+                      form.setValue(
+                        "categoryIds",
+                        options.map((option) => Number(option.value))
+                      )
+                    }}
                   />
                 </Fieldset>
                 <Fieldset
