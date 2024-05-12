@@ -79,7 +79,7 @@ export function UserViewOrderModal() {
                 />
                 <div className="flex flex-col space-y-2 overflow-y-scroll">
                   {order.data?.products.map((product) => (
-                    <div className="flex flex-1 gap-4">
+                    <div key={product.id} className="flex flex-1 gap-4">
                       <div className="relative h-16 w-16 overflow-hidden rounded-lg border lg:h-24 lg:w-24">
                         <Image
                           src={product.product.featured_image_url}

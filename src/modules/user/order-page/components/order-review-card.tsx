@@ -89,6 +89,7 @@ export const OrderReviewCard: React.FC<{
                   .fill("")
                   .map((_, index) => (
                     <FaStar
+                      key={index}
                       onClick={() => setRating(index)}
                       className={twMerge(
                         clsx(

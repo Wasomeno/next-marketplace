@@ -62,6 +62,7 @@ export const CreateReviewModal: React.FC<{
           <div className="flex flex-1 flex-col gap-2 p-4">
             {orderProducts.map((orderProduct) => (
               <OrderReviewCard
+                key={orderProduct.id}
                 userEmail={userEmail}
                 orderProduct={orderProduct}
               />
