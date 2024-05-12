@@ -23,7 +23,7 @@ export function CheckoutItems() {
   return (
     <div className="flex flex-1 flex-col gap-4">
       {selectedCartItems?.map((selectedCartItem) => (
-        <div className="flex flex-1 gap-4">
+        <div key={selectedCartItem.id} className="flex flex-1 gap-4">
           <div className="relative h-20 w-20 overflow-hidden rounded-lg border lg:h-24 lg:w-24">
             <Image
               src={selectedCartItem.product.featured_image_url}
