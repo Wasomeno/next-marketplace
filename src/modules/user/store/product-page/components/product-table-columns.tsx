@@ -1,24 +1,11 @@
 import Image from "next/image"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { Prisma } from "@prisma/client"
-import * as HoverCard from "@radix-ui/react-hover-card"
 import { ColumnDef } from "@tanstack/react-table"
-import { GiCookingPot, GiPoloShirt } from "react-icons/gi"
 
 import { Skeleton } from "@/components/skeleton"
 import { TableActions } from "@/components/table-actions"
 
 import { StoreProductSingleDeleteModal } from "./store-product-single-delete-modal"
-
-function getCategoryIcons(name: string) {
-  switch (name) {
-    case "Clothing":
-      return <GiPoloShirt size={20} />
-
-    case "Kitchen Ware":
-      return <GiCookingPot size={20} />
-  }
-}
 
 export const productTableColumns: ColumnDef<
   Prisma.ProductGetPayload<{
@@ -82,40 +69,6 @@ export const productTableColumns: ColumnDef<
     accessorKey: "stock",
     header: "Stock",
     cell: (stock) => stock.getValue(),
-  },
-  {
-    id: "action",
-    header: "Actions",
-    cell: ({ row }) => {
-      const router = useRouter()
-      const pathname = usePathname()
-      const searchParams = useSearchParams()
-      const urlSearchParams = new URLSearchParams(searchParams)
-
-      function openEditProductModal() {
-        urlSearchParams.set("edit", "true")
-        urlSearchParams.set("id", row.original.id.toString())
-
-        return router.replace(`${pathname}?${urlSearchParams.toString()}`)
-      }
-
-      return (
-        <TableActions
-          viewAction={
-            <TableActions.View
-              href={`/store/products/view/${row.original.id}`}
-              asLink
-            />
-          }
-          editAction={
-            <TableActions.Edit onClick={openEditProductModal} asLink={false} />
-          }
-          deleteAction={
-            <StoreProductSingleDeleteModal product={row.original} />
-          }
-        />
-      )
-    },
   },
 ]
 

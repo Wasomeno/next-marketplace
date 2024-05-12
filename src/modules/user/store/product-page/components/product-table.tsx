@@ -12,6 +12,7 @@ import { BsPlus, BsTrash3 } from "react-icons/bs"
 
 import { Button } from "@/components/ui/button"
 import { CheckBox } from "@/components/ui/checkbox"
+import { TableActions } from "@/components/table-actions"
 
 import { TBaseDataFilterParams } from "../../../../../../types"
 import {
@@ -24,6 +25,7 @@ import {
   productTablePlaceholderColumns,
 } from "./product-table-columns"
 import { StoreProductMultipleDeleteModal } from "./store-product-multiple-delete-modal"
+import { StoreProductSingleDeleteModal } from "./store-product-single-delete-modal"
 
 const pageSize = 3
 
@@ -121,6 +123,40 @@ export const ProductTable: React.FC<{ storeId: number }> = ({ storeId }) => {
       ),
     },
     ...productTableColumns,
+    {
+      id: "action",
+      header: "Actions",
+      cell: ({ row }) => {
+        const urlSearchParams = new URLSearchParams(searchParamsValues)
+
+        function openEditProductModal() {
+          urlSearchParams.set("edit", "true")
+          urlSearchParams.set("id", row.original.id.toString())
+
+          return router.replace(`${pathname}?${urlSearchParams.toString()}`)
+        }
+
+        return (
+          <TableActions
+            viewAction={
+              <TableActions.View
+                href={`/store/products/view/${row.original.id}`}
+                asLink
+              />
+            }
+            editAction={
+              <TableActions.Edit
+                onClick={openEditProductModal}
+                asLink={false}
+              />
+            }
+            deleteAction={
+              <StoreProductSingleDeleteModal product={row.original} />
+            }
+          />
+        )
+      },
+    },
   ]
 
   const router = useRouter()
