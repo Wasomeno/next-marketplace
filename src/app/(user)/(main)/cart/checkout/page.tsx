@@ -24,7 +24,7 @@ export default async function CheckoutPage() {
   if (!address) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center gap-4">
-        <h5 className="font-medium">You haven't set your address</h5>
+        <h5 className="font-medium">You have not set your address</h5>
         <Link
           href="/settings/address"
           className={buttonVariants({ size: "sm" })}
