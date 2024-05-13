@@ -27,16 +27,6 @@ import {
 import { Fieldset } from "@/components/ui/fieldset"
 import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/drawer"
 import { ImageUploader } from "@/components/image-uploader"
 import { MultiSelectDropdown } from "@/components/multi-select-dropdown"
 
