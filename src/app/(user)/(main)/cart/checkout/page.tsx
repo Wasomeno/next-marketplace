@@ -1,13 +1,11 @@
-import Link from "next/link"
 import { redirect } from "next/navigation"
 import { getUserAddress } from "@/actions/user/user-details"
+import { AddressNotSetModal } from "@/modules/user/checkout-page/components/address-not-set-modal"
 import { CheckoutChangeAddressModal } from "@/modules/user/checkout-page/components/checkout-change-address-modal"
 import { CheckoutItems } from "@/modules/user/checkout-page/components/checkout-items"
 import { CheckoutPaymentModal } from "@/modules/user/checkout-page/components/checkout-payment-modal"
 import { CheckoutSummary } from "@/modules/user/checkout-page/components/checkout-summary"
 import { getServerSession } from "next-auth"
-
-import { buttonVariants } from "@/components/ui/button"
 
 export const metadata = {
   title: "Checkout",
@@ -23,14 +21,8 @@ export default async function CheckoutPage() {
 
   if (!address) {
     return (
-      <div className="flex flex-1 flex-col items-center justify-center gap-4">
-        <h5 className="font-medium">You have not set your address</h5>
-        <Link
-          href="/settings/address"
-          className={buttonVariants({ size: "sm" })}
-        >
-          Go to Setting
-        </Link>
+      <div className="flex flex-1 flex-col">
+        <AddressNotSetModal />
       </div>
     )
   }
