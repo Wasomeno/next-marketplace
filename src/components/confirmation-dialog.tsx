@@ -8,8 +8,8 @@ import { Dialog, DialogContent, DialogOverlay, DialogPortal } from "./ui/dialog"
 type ConfirmationDialogProps = {
   title: string
   open: boolean
-  onOpenChange: (isOpen: boolean) => void
-  onConfirm: () => void
+  onOpenChange?: (isOpen: boolean) => void
+  onConfirm?: () => void
   onCancel?: () => void
   body: ReactNode
 }
@@ -45,6 +45,7 @@ export function ConfirmationDialog({
                     variant="defaultOutline"
                     size="sm"
                     className="w-32 py-2.5"
+                    onClick={onCancel}
                   >
                     Cancel
                   </Button>
