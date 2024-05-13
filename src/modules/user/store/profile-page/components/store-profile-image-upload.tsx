@@ -11,7 +11,7 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import clsx from "clsx"
 import { ImSpinner8 } from "react-icons/im"
 import FileResizer from "react-image-file-resizer"
-import { toast } from "react-toastify"
+import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/skeleton"

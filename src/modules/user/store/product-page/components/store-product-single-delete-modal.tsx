@@ -5,7 +5,7 @@ import { deleteSingleProduct } from "@/actions/store/products"
 import { storeQueryKeys } from "@/modules/user/common/queryKeys/storeQueryKeys"
 import { Product } from "@prisma/client"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { toast } from "react-toastify"
+import { toast } from "sonner"
 
 import { ConfirmationDialog } from "@/components/confirmation-dialog"
 import { TableActions } from "@/components/table-actions"

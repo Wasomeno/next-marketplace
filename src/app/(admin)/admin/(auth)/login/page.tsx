@@ -2,11 +2,10 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
-import { AnimatePresence, motion } from "framer-motion"
 import { signIn } from "next-auth/react"
 import { useForm } from "react-hook-form"
 import { ImSpinner8 } from "react-icons/im"
-import { toast } from "react-toastify"
+import { toast } from "sonner"
 import { z } from "zod"
 
 import { Button } from "@/components/ui/button"

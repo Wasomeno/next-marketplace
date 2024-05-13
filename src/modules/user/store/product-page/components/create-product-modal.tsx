@@ -6,18 +6,16 @@ import { getCategories } from "@/actions/categories"
 import { addProduct } from "@/actions/store/products"
 import { categoryQueryKeys } from "@/modules/user/common/queryKeys/categoryQueryKeys"
 import { storeQueryKeys } from "@/modules/user/common/queryKeys/storeQueryKeys"
-import { storeProductsQuery } from "@/modules/user/common/queryOptions/storeQueryOptions"
 import { useSearchParamsValues } from "@/utils"
 import { useUploadThing } from "@/utils/uploadthing"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { AnimatePresence } from "framer-motion"
 import { useForm } from "react-hook-form"
 import { ImSpinner8 } from "react-icons/im"
-import { toast } from "react-toastify"
+import { toast } from "sonner"
 import * as z from "zod"
 
-import { queryClient } from "@/lib/react-query-client"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -29,6 +27,16 @@ import {
 import { Fieldset } from "@/components/ui/fieldset"
 import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/drawer"
 import { ImageUploader } from "@/components/image-uploader"
 import { MultiSelectDropdown } from "@/components/multi-select-dropdown"
 
@@ -77,9 +85,12 @@ export const CreateProductModal: React.FC<{ storeId: number }> = ({
   >()
   const isOpen = searchParamsValues.create !== undefined
 
+  const queryClient = useQueryClient()
+
   const categories = useQuery({
     queryKey: categoryQueryKeys.all().baseKey,
     queryFn: () => getCategories(),
+    enabled: isOpen,
   })
 
   const form = useForm<ProductFormData>({
@@ -105,7 +116,7 @@ export const CreateProductModal: React.FC<{ storeId: number }> = ({
         images: uploadedFiles.map((file) => ({
           name: file.name,
           url: file.url,
-        })) as { name: string; url: string }[],
+        })),
         categoryIds: formData.categoryIds,
         featured_image_url: uploadedFiles[0].url as string,
         status: "published",
@@ -121,6 +132,7 @@ export const CreateProductModal: React.FC<{ storeId: number }> = ({
     onError: (error) =>
       toast.error(error.message ?? "Error when creating new product"),
   })
+
   function onOpenChange(isOpen: boolean) {
     const urlSearchParams = new URLSearchParams(searchParamsValues)
     if (isOpen) {

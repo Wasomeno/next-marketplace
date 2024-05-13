@@ -8,7 +8,7 @@ import {
 } from "@/actions/user/wishlist"
 import { motion } from "framer-motion"
 import { useSession } from "next-auth/react"
-import { toast } from "react-toastify"
+import { toast } from "sonner"
 
 export const WishListButton = ({ isWishlisted }: { isWishlisted: boolean }) => {
   const [isPending, startTransition] = useTransition()

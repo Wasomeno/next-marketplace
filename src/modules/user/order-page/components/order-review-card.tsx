@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form"
 import { FaStar } from "react-icons/fa"
 import { ImCheckmark, ImSpinner8 } from "react-icons/im"
 import { IoCheckmarkCircle } from "react-icons/io5"
-import { toast } from "react-toastify"
+import { toast } from "sonner"
 import { twMerge } from "tailwind-merge"
 import * as z from "zod"
 

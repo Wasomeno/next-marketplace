@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { getUserAddresses, setMainAddress } from "@/actions/user/settings"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { ImSpinner8 } from "react-icons/im"
-import { toast } from "react-toastify"
+import { toast } from "sonner"
 
 import { queryClient } from "@/lib/react-query-client"
 import { Button } from "@/components/ui/button"

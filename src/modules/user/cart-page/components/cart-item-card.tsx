@@ -8,7 +8,7 @@ import { useMutation } from "@tanstack/react-query"
 import clsx from "clsx"
 import { BiTrash } from "react-icons/bi"
 import { ImSpinner8 } from "react-icons/im"
-import { toast } from "react-toastify"
+import { toast } from "sonner"
 import { twMerge } from "tailwind-merge"
 
 import { Button } from "@/components/ui/button"

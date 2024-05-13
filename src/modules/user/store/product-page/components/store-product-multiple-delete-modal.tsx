@@ -5,7 +5,7 @@ import { deleteMultipleProduct } from "@/actions/store/products"
 import { storeQueryKeys } from "@/modules/user/common/queryKeys/storeQueryKeys"
 import { useMutation } from "@tanstack/react-query"
 import { BsTrash3 } from "react-icons/bs"
-import { toast } from "react-toastify"
+import { toast } from "sonner"
 
 import { queryClient } from "@/lib/react-query-client"
 import { Button } from "@/components/ui/button"

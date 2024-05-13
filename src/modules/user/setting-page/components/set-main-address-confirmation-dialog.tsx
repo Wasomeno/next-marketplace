@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { setMainAddress } from "@/actions/user/settings"
 import { UserAddress } from "@prisma/client"
 import { useMutation } from "@tanstack/react-query"
-import { toast } from "react-toastify"
+import { toast } from "sonner"
 
 import { ConfirmationDialog } from "@/components/confirmation-dialog"
 

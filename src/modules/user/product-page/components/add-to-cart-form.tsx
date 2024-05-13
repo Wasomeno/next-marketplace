@@ -7,7 +7,7 @@ import { Product } from "@prisma/client"
 import { useMutation } from "@tanstack/react-query"
 import { useSession } from "next-auth/react"
 import { ImSpinner8 } from "react-icons/im"
-import { toast } from "react-toastify"
+import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
 

@@ -8,7 +8,7 @@ import { BiChevronRight } from "react-icons/bi"
 import { ImSpinner8 } from "react-icons/im"
 import { IoCheckmark } from "react-icons/io5"
 import { LuPackage, LuPackageCheck, LuTruck } from "react-icons/lu"
-import { toast } from "react-toastify"
+import { toast } from "sonner"
 
 import { queryClient } from "@/lib/react-query-client"
 import { Button } from "@/components/ui/button"

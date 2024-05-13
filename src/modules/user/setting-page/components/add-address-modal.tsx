@@ -8,7 +8,7 @@ import axios from "axios"
 import { useForm } from "react-hook-form"
 import { BiPlus } from "react-icons/bi"
 import { ImSpinner8 } from "react-icons/im"
-import { toast } from "react-toastify"
+import { toast } from "sonner"
 import { z } from "zod"
 
 import { Button } from "@/components/ui/button"

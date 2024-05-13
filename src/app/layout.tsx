@@ -1,13 +1,14 @@
 import "./globals.css"
-import "react-toastify/dist/ReactToastify.css"
 
 import { Metadata } from "next"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
+import { IoIosCloseCircle } from "react-icons/io"
+import { IoCheckmarkCircle } from "react-icons/io5"
 
 import { ReactQueryProvider } from "@/lib/react-query-provider"
 import ClientSessionProvider from "@/components/session-provider"
 import { ThemeClientProvider } from "@/components/theme-client-provider"
-import ToastifyContainer from "@/components/toastify-client-container"
+import { Toaster } from "@/components/toaster"
 
 export const metadata: Metadata = {
   title: {
@@ -30,13 +31,13 @@ export default async function RootLayout({
               {children}
               <div className="fixed" />
             </ThemeClientProvider>
-            <ToastifyContainer
-              closeButton={false}
-              position="bottom-right"
-              autoClose={2000}
-              hideProgressBar={true}
-              toastClassName="bg-white border border-slate-300 dark:border-gray-700 dark:bg-slate-950"
-              bodyClassName="text-sm font-medium flex gap-4 font-sans text-slate-600 dark:text-slate-50 rounded-xl"
+            <Toaster
+              icons={{
+                success: (
+                  <IoCheckmarkCircle className="text-green-600" size={18} />
+                ),
+                error: <IoIosCloseCircle className="text-red-600" size={18} />,
+              }}
             />
           </body>
           <ReactQueryDevtools />

@@ -4,7 +4,7 @@ import { deleteMultipleBanners } from "@/actions/admin/banner"
 import { bannersQuery } from "@/modules/user/common/queryOptions/bannerQueryOptions"
 import { useMutation } from "@tanstack/react-query"
 import { BsTrash3 } from "react-icons/bs"
-import { toast } from "react-toastify"
+import { toast } from "sonner"
 
 import { queryClient } from "@/lib/react-query-client"
 import { Button } from "@/components/ui/button"

@@ -12,7 +12,7 @@ import { data } from "autoprefixer"
 import { AnimatePresence } from "framer-motion"
 import { useForm } from "react-hook-form"
 import { ImSpinner8 } from "react-icons/im"
-import { toast } from "react-toastify"
+import { toast } from "sonner"
 import { ClientUploadedFileData } from "uploadthing/types"
 
 import { queryClient } from "@/lib/react-query-client"
