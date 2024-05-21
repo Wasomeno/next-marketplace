@@ -110,6 +110,7 @@ export const StoreSalesChart = () => {
               )}
               onOptionClick={(option) => onYearSelect(option.value as string)}
               deselectOption={onYearDeselect}
+              className="w-32 lg:w-48"
             />
           )}
           {chartMode === "month" && (
@@ -121,6 +122,7 @@ export const StoreSalesChart = () => {
               )}
               onOptionClick={(option) => onMonthSelect(option.value as string)}
               deselectOption={onMonthDeselect}
+              className="w-32 lg:w-48"
             />
           )}
           <Button
