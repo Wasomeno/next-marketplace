@@ -57,12 +57,23 @@ const DialogOverlay = React.forwardRef<
 
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 
-const DialogHeader = ({ title }: { title: string }) => {
+const DialogHeader = ({
+  title,
+  description,
+}: {
+  title: string
+  description?: string
+}) => {
   return (
-    <div className="sticky top-0 z-20 flex h-12 w-full shrink-0 items-center justify-between border-b bg-white px-4 dark:border-b-neutral-700 dark:bg-neutral-900 lg:h-16 lg:px-6">
-      <DialogPrimitive.Title className="text-base font-medium lg:text-lg">
-        {title}
-      </DialogPrimitive.Title>
+    <div className="sticky top-0 z-20 flex h-16 w-full shrink-0 items-center justify-between border-b bg-white px-4 dark:border-b-neutral-700 dark:bg-neutral-900 lg:h-[4.5rem] lg:px-6">
+      <div className="grid flex-wrap">
+        <DialogPrimitive.Title className="text-base font-medium lg:text-lg">
+          {title}
+        </DialogPrimitive.Title>
+        {description && (
+          <p className="text-xs text-gray-400 lg:text-sm">{description}</p>
+        )}
+      </div>
       <DialogPrimitive.Close>
         <RxCross2 className="h-5 w-5" />
       </DialogPrimitive.Close>
