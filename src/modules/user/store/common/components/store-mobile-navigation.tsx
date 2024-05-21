@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+import { BiStore } from "react-icons/bi"
 import {
   HiListBullet,
   HiOutlineArchiveBox,
@@ -29,9 +30,9 @@ export const StoreMobileNavigation = () => {
         icon={<HiListBullet size={20} />}
       />
       <StoreSideNavigationLink
-        text="Details"
+        text="Profile"
         href="/store/profile"
-        icon={<HiOutlineChatBubbleLeftEllipsis size={20} />}
+        icon={<BiStore size={20} />}
       />
       <StoreSideNavigationLink
         text="Reviews"
