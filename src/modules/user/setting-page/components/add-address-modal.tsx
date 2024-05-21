@@ -135,7 +135,10 @@ export function AddAddressModal() {
       <DialogPortal>
         <DialogOverlay />
         <DialogContent open={isOpen} className="h-[36rem] w-full lg:w-[30rem]">
-          <DialogHeader title="Add Address" />
+          <DialogHeader
+            title="Add Address"
+            description="Make a new address for your order delivery"
+          />
           <form
             className="flex flex-col gap-4 p-4"
             onSubmit={form.handleSubmit((formData) =>
@@ -233,9 +236,9 @@ export function AddAddressModal() {
             <div className="flex flex-wrap items-center justify-end gap-2">
               <Button
                 type="button"
-                variant="danger"
+                variant="defaultOutline"
                 size="sm"
-                className="w-full text-white lg:w-32 lg:text-xs"
+                className="w-full lg:w-32 lg:text-xs"
                 onClick={() => onOpenChange(false)}
               >
                 Cancel

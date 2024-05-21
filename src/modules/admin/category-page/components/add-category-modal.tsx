@@ -103,7 +103,10 @@ export function AddCategoryModal() {
           <DialogPortal forceMount>
             <DialogOverlay />
             <DialogContent open={isOpen} className="lg:h-5/6 lg:w-2/6">
-              <DialogHeader title="Add Category" />
+              <DialogHeader
+                title="Add Category"
+                description="Make a new category for user products"
+              />
               <form
                 onSubmit={form.handleSubmit((formData) =>
                   createCategoryMutation.mutate(formData)

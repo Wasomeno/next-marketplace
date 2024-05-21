@@ -148,7 +148,10 @@ export const CreateProductModal: React.FC<{ storeId: number }> = ({
           <DialogPortal forceMount>
             <DialogOverlay />
             <DialogContent open={isOpen} className="h-[36rem] lg:w-[30rem]">
-              <DialogHeader title="Create Store Product" />
+              <DialogHeader
+                title="Create Store Product"
+                description="Make a new product for your store"
+              />
               <form
                 onSubmit={form.handleSubmit((formData) =>
                   createProductMutation.mutate(formData)

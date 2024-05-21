@@ -86,7 +86,10 @@ export function CreateBannerModal() {
           <DialogPortal forceMount>
             <DialogOverlay />
             <DialogContent open={isOpen} className="lg:h-4/6 lg:w-3/6">
-              <DialogHeader title="Create Banner" />
+              <DialogHeader
+                title="Create Banner"
+                description="Make a new banner to be displayed on user home page"
+              />
               <form
                 onSubmit={handleSubmit((formData) =>
                   createBannerMutation.mutate(formData)

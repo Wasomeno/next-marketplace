@@ -142,7 +142,10 @@ export const EditProductModal: React.FC<{ storeId: number }> = ({
           <DialogPortal forceMount>
             <DialogOverlay />
             <DialogContent open={isOpen} className="h-[36rem] lg:w-[30rem]">
-              <DialogHeader title="Edit Store Product" />
+              <DialogHeader
+                title="Edit Store Product"
+                description="Make changes to existing store product"
+              />
               <form
                 onSubmit={form.handleSubmit((formData) =>
                   updateProductMutation.mutate(formData)

@@ -58,7 +58,10 @@ export const CreateReviewModal: React.FC<{
           open={isOpen}
           className="flex h-5/6 w-full flex-1 flex-col lg:h-4/6 lg:w-2/6"
         >
-          <DialogHeader title="Product Review" />
+          <DialogHeader
+            title="Product Review"
+            description="Give your review to ordered products"
+          />
           <div className="flex flex-1 flex-col gap-2 p-4">
             {orderProducts.map((orderProduct) => (
               <OrderReviewCard
