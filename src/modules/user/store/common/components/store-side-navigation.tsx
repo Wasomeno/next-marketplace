@@ -60,7 +60,7 @@ export const StoreSideNavigation = () => {
           isOpen={isOpen}
         />
         <StoreSideNavigationLink
-          text="Details"
+          text="Profile"
           href="/store/profile"
           icon={<BiStore size={20} />}
           isOpen={isOpen}
