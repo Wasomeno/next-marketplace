@@ -26,8 +26,8 @@ export const AddressCard = ({ address }: { address: UserAddress }) => {
         !address.isMainAddress && openSetMainAddresConfirmationModal()
       }
       className={clsx(
-        "relative w-full rounded-md border  border-gray-200 shadow-sm lg:w-72",
-        !address.isMainAddress && "cursor-pointer"
+        "relative w-full rounded-md border border-gray-200 shadow-sm transition  duration-200 lg:w-72",
+        !address.isMainAddress && "cursor-pointer  hover:shadow-md"
       )}
     >
       <div className="border-b border-gray-200 px-4 py-2">
