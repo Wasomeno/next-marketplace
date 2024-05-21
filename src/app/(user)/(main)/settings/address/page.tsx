@@ -1,8 +1,8 @@
+import { redirect } from "next/navigation"
 import { AddAddressModal } from "@/modules/user/setting-page/components/add-address-modal"
 import { AddressCard } from "@/modules/user/setting-page/components/address-card"
 import { SetMainAddressConfirmationDialog } from "@/modules/user/setting-page/components/set-main-address-confirmation-dialog"
 import { getServerSession } from "next-auth"
-import invariant from "tiny-invariant"
 
 import { authOptions } from "@/config/next-auth"
 import { prisma } from "@/lib/prisma"
@@ -15,7 +15,9 @@ type Props = {
 export default async function UserAddressSetting(props: Props) {
   const session = await getServerSession(authOptions)
 
-  invariant(session)
+  if (!session) {
+    redirect("/login")
+  }
 
   const addresses = await prisma.userAddress.findMany({
     where: { userEmail: session.user.email as string },
