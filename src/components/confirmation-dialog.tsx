@@ -1,9 +1,11 @@
-import React, { ReactNode } from "react"
-import { DialogClose } from "@radix-ui/react-dialog"
-import { AnimatePresence } from "framer-motion"
+import React, { ReactNode } from "react";
 
-import { Button } from "./ui/button"
-import { Dialog, DialogContent, DialogOverlay, DialogPortal } from "./ui/dialog"
+import {
+  ResponsiveDialog,
+  ResponsiveDialogClose,
+  ResponsiveDialogContent
+} from "./responsive-dialog";
+import { Button } from "./ui/button";
 
 type ConfirmationDialogProps = {
   title: string
@@ -23,38 +25,31 @@ export function ConfirmationDialog({
   title,
 }: ConfirmationDialogProps) {
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <AnimatePresence>
-        {open && (
-          <DialogPortal forceMount>
-            <DialogOverlay />
-            <DialogContent
-              open={open}
-              className="flex h-48 flex-col justify-between gap-2 p-6 lg:h-48 lg:w-[30rem]"
+    <ResponsiveDialog open={open} onOpenChange={onOpenChange}>
+      <ResponsiveDialogContent
+        open={open}
+        className="flex h-auto flex-col justify-between gap-3 px-6 pb-6 lg:h-48 lg:w-[30rem] lg:p-6"
+      >
+        <div className="space-y-2">
+          <h5 className="text-lg font-semibold">{title}</h5>
+          <p className="text-sm">{body}</p>
+        </div>
+        <div className="flex w-full items-center justify-end gap-2">
+          <Button size="sm" onClick={onConfirm} className="w-32 py-2.5">
+            Confirm
+          </Button>
+          <ResponsiveDialogClose asChild>
+            <Button
+              variant="defaultOutline"
+              size="sm"
+              className="w-32 py-2.5"
+              onClick={onCancel}
             >
-              <div className="space-y-2">
-                <h5 className="text-lg font-semibold">{title}</h5>
-                <p className="text-sm">{body}</p>
-              </div>
-              <div className="flex w-full items-center justify-end gap-2">
-                <Button size="sm" onClick={onConfirm} className="w-32 py-2.5">
-                  Confirm
-                </Button>
-                <DialogClose asChild>
-                  <Button
-                    variant="defaultOutline"
-                    size="sm"
-                    className="w-32 py-2.5"
-                    onClick={onCancel}
-                  >
-                    Cancel
-                  </Button>
-                </DialogClose>
-              </div>
-            </DialogContent>
-          </DialogPortal>
-        )}
-      </AnimatePresence>
-    </Dialog>
+              Cancel
+            </Button>
+          </ResponsiveDialogClose>
+        </div>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   )
 }

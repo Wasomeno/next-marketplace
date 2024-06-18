@@ -12,26 +12,22 @@ import { useUploadThing } from "@/utils/uploadthing"
 import { useFetchMultipleImages } from "@/utils/useImageFiles"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { AnimatePresence } from "framer-motion"
 import { useForm } from "react-hook-form"
 import { ImSpinner8 } from "react-icons/im"
 import { toast } from "sonner"
 
 import { queryClient } from "@/lib/react-query-client"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogOverlay,
-  DialogPortal,
-} from "@/components/ui/dialog"
 import { Fieldset } from "@/components/ui/fieldset"
 import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
-import { Dropdown } from "@/components/dropdown"
 import { ImageUploader } from "@/components/image-uploader"
 import { MultiSelectDropdown } from "@/components/multi-select-dropdown"
+import {
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogHeader,
+} from "@/components/responsive-dialog"
 import { Skeleton } from "@/components/skeleton"
 
 import { ProductFormData, ProductSchema } from "./create-product-modal"
@@ -136,118 +132,113 @@ export const EditProductModal: React.FC<{ storeId: number }> = ({
   }, [product.isLoading])
 
   return (
-    <Dialog open={isOpen} onOpenChange={closeModal}>
-      <AnimatePresence>
-        {isOpen && (
-          <DialogPortal forceMount>
-            <DialogOverlay />
-            <DialogContent open={isOpen} className="h-[36rem] lg:w-[30rem]">
-              <DialogHeader
-                title="Edit Store Product"
-                description="Make changes to existing store product"
+    <ResponsiveDialog
+      open={isOpen}
+      onOpenChange={(open) => !open && closeModal()}
+    >
+      <ResponsiveDialogContent
+        open={isOpen}
+        className="h-auto max-h-[36rem] lg:w-[30rem]"
+      >
+        <ResponsiveDialogHeader
+          title="Edit Store Product"
+          description="Make changes to existing store product"
+        />
+        <form
+          onSubmit={form.handleSubmit((formData) =>
+            updateProductMutation.mutate(formData)
+          )}
+          className="flex w-full flex-col gap-4 overflow-y-scroll px-4 py-4 lg:px-6"
+        >
+          <Fieldset label="Images" className="flex flex-col gap-2 ">
+            {images.isLoading ? (
+              Array(3).fill(<Skeleton className="h-20 w-20 lg:h-28 lg:w-28" />)
+            ) : (
+              <ImageUploader
+                mode="multiple"
+                images={images.data}
+                onImagesChange={(images) => form.setValue("images", images)}
               />
-              <form
-                onSubmit={form.handleSubmit((formData) =>
-                  updateProductMutation.mutate(formData)
-                )}
-                className="flex w-full flex-col gap-4 px-4 py-4 lg:px-6"
-              >
-                <Fieldset label="Images" className="flex flex-col gap-2 ">
-                  {images.isLoading ? (
-                    Array(3).fill(
-                      <Skeleton className="h-20 w-20 lg:h-28 lg:w-28" />
-                    )
-                  ) : (
-                    <ImageUploader
-                      mode="multiple"
-                      images={images.data}
-                      onImagesChange={(images) =>
-                        form.setValue("images", images)
-                      }
-                    />
-                  )}
-                </Fieldset>
-                <Fieldset
-                  label="Name"
-                  className="flex flex-col gap-2 "
-                  error={form.formState.errors.name}
-                >
-                  <Input className="w-full" {...form.register("name")} />
-                </Fieldset>
-                <Fieldset
-                  label="Categories"
-                  className="flex flex-col gap-2 "
-                  error={form.formState.errors.categoryIds}
-                >
-                  <MultiSelectDropdown
-                    options={categoryOptions}
-                    onOptionsChange={(options) => {
-                      form.setValue(
-                        "categoryIds",
-                        options.map((option) => Number(option.value))
-                      )
-                    }}
-                  />
-                </Fieldset>
-                <Fieldset
-                  label="Price"
-                  className="flex flex-col gap-2 "
-                  error={form.formState.errors.price}
-                >
-                  <Input
-                    type="number"
-                    className="w-full"
-                    {...form.register("price", { valueAsNumber: true })}
-                  />
-                </Fieldset>
-                <Fieldset
-                  label="Stock"
-                  className="flex flex-col gap-2 "
-                  error={form.formState.errors.stock}
-                >
-                  <Input
-                    type="number"
-                    className="w-full"
-                    {...form.register("stock", { valueAsNumber: true })}
-                  />
-                </Fieldset>
-                <Fieldset
-                  label="Description"
-                  className="col-span-2 flex flex-col gap-2 "
-                  error={form.formState.errors.description}
-                >
-                  <TextArea
-                    className="h-36 w-full"
-                    {...form.register("description")}
-                  />
-                </Fieldset>
-                <div className="flex flex-wrap-reverse items-center justify-end gap-2">
-                  <Button
-                    type="button"
-                    variant="defaultOutline"
-                    size="sm"
-                    className="w-full lg:w-32"
-                    onClick={closeModal}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    disabled={updateProductMutation.isPending}
-                    variant="default"
-                    size="sm"
-                    className="w-full lg:w-32"
-                  >
-                    {updateProductMutation.isPending && (
-                      <ImSpinner8 className="animate-spin" />
-                    )}
-                    Submit
-                  </Button>
-                </div>
-              </form>
-            </DialogContent>
-          </DialogPortal>
-        )}
-      </AnimatePresence>
-    </Dialog>
+            )}
+          </Fieldset>
+          <Fieldset
+            label="Name"
+            className="flex flex-col gap-2 "
+            error={form.formState.errors.name}
+          >
+            <Input className="w-full" {...form.register("name")} />
+          </Fieldset>
+          <Fieldset
+            label="Categories"
+            className="flex flex-col gap-2 "
+            error={form.formState.errors.categoryIds}
+          >
+            <MultiSelectDropdown
+              options={categoryOptions}
+              onOptionsChange={(options) => {
+                form.setValue(
+                  "categoryIds",
+                  options.map((option) => Number(option.value))
+                )
+              }}
+            />
+          </Fieldset>
+          <Fieldset
+            label="Price"
+            className="flex flex-col gap-2 "
+            error={form.formState.errors.price}
+          >
+            <Input
+              type="number"
+              className="w-full"
+              {...form.register("price", { valueAsNumber: true })}
+            />
+          </Fieldset>
+          <Fieldset
+            label="Stock"
+            className="flex flex-col gap-2 "
+            error={form.formState.errors.stock}
+          >
+            <Input
+              type="number"
+              className="w-full"
+              {...form.register("stock", { valueAsNumber: true })}
+            />
+          </Fieldset>
+          <Fieldset
+            label="Description"
+            className="col-span-2 flex flex-col gap-2 "
+            error={form.formState.errors.description}
+          >
+            <TextArea
+              className="h-36 w-full"
+              {...form.register("description")}
+            />
+          </Fieldset>
+          <div className="flex flex-wrap-reverse items-center justify-end gap-2">
+            <Button
+              type="button"
+              variant="defaultOutline"
+              size="sm"
+              className="w-full lg:w-32"
+              onClick={closeModal}
+            >
+              Cancel
+            </Button>
+            <Button
+              disabled={updateProductMutation.isPending}
+              variant="default"
+              size="sm"
+              className="w-full lg:w-32"
+            >
+              {updateProductMutation.isPending && (
+                <ImSpinner8 className="animate-spin" />
+              )}
+              Submit
+            </Button>
+          </div>
+        </form>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   )
 }

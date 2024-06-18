@@ -17,6 +17,12 @@ import {
   DialogPortal,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTrigger,
+} from "@/components/responsive-dialog"
 
 export const CheckoutChangeAddressModal: React.FC<{ userEmail: string }> = ({
   userEmail,
@@ -59,62 +65,57 @@ export const CheckoutChangeAddressModal: React.FC<{ userEmail: string }> = ({
   })
 
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>
+    <ResponsiveDialog open={isOpen} onOpenChange={onOpenChange}>
+      <ResponsiveDialogTrigger asChild>
         <Button size="sm" className="h-8 w-24 lg:text-xs">
           Change
         </Button>
-      </DialogTrigger>
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent open={isOpen} className="h-5/6 w-full lg:w-2/6">
-          <DialogHeader title="Your Addresses" />
-          <div className="space-y-4 p-4">
-            {!addresses.isLoading &&
-              addresses.data?.map((address) => (
-                <div
-                  key={address.id}
-                  className="relative w-full rounded-md border  border-gray-200 shadow-sm"
-                >
-                  <div className="flex items-center justify-between border-b border-gray-200 px-4 py-2">
-                    <span className="text-sm font-medium">
-                      {address.title}{" "}
-                      {address.isMainAddress && (
-                        <span className="ml-1 rounded-md bg-gray-200 p-1 text-xs">
-                          Main
-                        </span>
-                      )}
-                    </span>
-                    {!address.isMainAddress && (
-                      <Button
-                        className="h-8 lg:text-xs"
-                        disabled={setMainAddressMutation.isPending}
-                        onClick={() =>
-                          setMainAddressMutation.mutate(address.id)
-                        }
-                      >
-                        {setMainAddressMutation.isPending && (
-                          <ImSpinner8 className="animate-spin" />
-                        )}
-                        Select
-                      </Button>
+      </ResponsiveDialogTrigger>
+      <ResponsiveDialogContent open={isOpen} className="h-5/6 w-full lg:w-2/6">
+        <ResponsiveDialogHeader title="Your Addresses" />
+        <div className="space-y-4 p-4">
+          {!addresses.isLoading &&
+            addresses.data?.map((address) => (
+              <div
+                key={address.id}
+                className="relative w-full rounded-md border  border-gray-200 shadow-sm"
+              >
+                <div className="flex items-center justify-between border-b border-gray-200 px-4 py-2">
+                  <span className="text-sm font-medium">
+                    {address.title}{" "}
+                    {address.isMainAddress && (
+                      <span className="ml-1 rounded-md bg-gray-200 p-1 text-xs">
+                        Main
+                      </span>
                     )}
-                  </div>
-                  <div className="flex flex-col gap-2 px-4 py-2">
-                    <span className="text-sm">{address.recipient}</span>
-                    <span className="text-sm">
-                      {address.province}, {address.city}, {address.subdistrict}
-                    </span>
-                    <span className="text-sm">
-                      {address.street}, {address.postNumber}
-                    </span>
-                    <span className="text-sm">{address.phoneNumber}</span>
-                  </div>
+                  </span>
+                  {!address.isMainAddress && (
+                    <Button
+                      className="h-8 lg:text-xs"
+                      disabled={setMainAddressMutation.isPending}
+                      onClick={() => setMainAddressMutation.mutate(address.id)}
+                    >
+                      {setMainAddressMutation.isPending && (
+                        <ImSpinner8 className="animate-spin" />
+                      )}
+                      Select
+                    </Button>
+                  )}
                 </div>
-              ))}
-          </div>
-        </DialogContent>
-      </DialogPortal>
-    </Dialog>
+                <div className="flex flex-col gap-2 px-4 py-2">
+                  <span className="text-sm">{address.recipient}</span>
+                  <span className="text-sm">
+                    {address.province}, {address.city}, {address.subdistrict}
+                  </span>
+                  <span className="text-sm">
+                    {address.street}, {address.postNumber}
+                  </span>
+                  <span className="text-sm">{address.phoneNumber}</span>
+                </div>
+              </div>
+            ))}
+        </div>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   )
 }

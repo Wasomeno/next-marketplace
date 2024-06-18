@@ -12,18 +12,16 @@ import { toast } from "sonner"
 import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogOverlay,
-  DialogPortal,
-  DialogTrigger,
-} from "@/components/ui/dialog"
 import { Fieldset } from "@/components/ui/fieldset"
 import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
 import { Dropdown, Option } from "@/components/dropdown"
+import {
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTrigger,
+} from "@/components/responsive-dialog"
 
 const createAddressFormSchema = z.object({
   title: z.string().min(5, "Title must have at least 5 characters"),
@@ -126,138 +124,138 @@ export function AddAddressModal() {
   })
 
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>
+    <ResponsiveDialog open={isOpen} onOpenChange={onOpenChange}>
+      <ResponsiveDialogTrigger asChild>
         <Button size="sm">
           <BiPlus /> Create
         </Button>
-      </DialogTrigger>
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent open={isOpen} className="h-[36rem] w-full lg:w-[30rem]">
-          <DialogHeader
-            title="Add Address"
-            description="Make a new address for your order delivery"
-          />
-          <form
-            className="flex flex-col gap-4 p-4"
-            onSubmit={form.handleSubmit((formData) =>
-              addAddressMutation.mutate(formData)
-            )}
+      </ResponsiveDialogTrigger>
+      <ResponsiveDialogContent
+        open={isOpen}
+        className="h-[36rem] w-full lg:w-[30rem]"
+      >
+        <ResponsiveDialogHeader
+          title="Add Address"
+          description="Make a new address for your order delivery"
+        />
+        <form
+          className="flex flex-col gap-4 p-4"
+          onSubmit={form.handleSubmit((formData) =>
+            addAddressMutation.mutate(formData)
+          )}
+        >
+          <Fieldset label="Title" error={form.formState.errors.title}>
+            <Input
+              type="text"
+              placeholder="Title"
+              {...form.register("title")}
+            />
+          </Fieldset>
+          <Fieldset label="Recipient" error={form.formState.errors.recipient}>
+            <Input
+              type="text"
+              placeholder="Recipient Name"
+              {...form.register("recipient")}
+            />
+          </Fieldset>
+          <Fieldset
+            label="Phone Number"
+            error={form.formState.errors.phoneNumber}
           >
-            <Fieldset label="Title" error={form.formState.errors.title}>
-              <Input
-                type="text"
-                placeholder="Title"
-                {...form.register("title")}
-              />
-            </Fieldset>
-            <Fieldset label="Recipient" error={form.formState.errors.recipient}>
-              <Input
-                type="text"
-                placeholder="Recipient Name"
-                {...form.register("recipient")}
-              />
-            </Fieldset>
-            <Fieldset
-              label="Phone Number"
-              error={form.formState.errors.phoneNumber}
+            <Input
+              type="text"
+              placeholder="Recipient phone number "
+              {...form.register("phoneNumber")}
+            />
+          </Fieldset>
+          <Fieldset label="Province" error={form.formState.errors.province}>
+            <Dropdown
+              options={provinceOptions}
+              selectedOption={provinceOptions.find(
+                (option) => option.label === selectedProvince
+              )}
+              onOptionClick={(option) =>
+                form.setValue("province", option.label, {
+                  shouldValidate: true,
+                })
+              }
+              deselectOption={() => form.setValue("province", "")}
+              placeholder="Select Province"
+            />
+          </Fieldset>
+          <Fieldset label="City" error={form.formState.errors.city}>
+            <Dropdown
+              options={cities.data}
+              selectedOption={cities.data?.find(
+                (option) => option.label === selectedCity
+              )}
+              onOptionClick={(option) =>
+                form.setValue("city", option.label, { shouldValidate: true })
+              }
+              deselectOption={() => form.setValue("city", "")}
+              placeholder="Select City"
+            />
+          </Fieldset>
+          <Fieldset label="District" error={form.formState.errors.district}>
+            <Dropdown
+              options={districtOptions}
+              selectedOption={districtOptions.find(
+                (option) => option.label === selectedDistrict
+              )}
+              onOptionClick={(option) =>
+                form.setValue("district", option.label, {
+                  shouldValidate: true,
+                })
+              }
+              deselectOption={() => form.setValue("district", "")}
+              placeholder="Select District"
+            />
+          </Fieldset>
+          <Fieldset label="Street" error={form.formState.errors.street}>
+            <Input
+              type="text"
+              placeholder="Street"
+              {...form.register("street")}
+            />
+          </Fieldset>
+          <Fieldset label="Post Code" error={form.formState.errors.postCode}>
+            <Input
+              type="text"
+              placeholder="Your post code"
+              {...form.register("postCode")}
+            />
+          </Fieldset>
+          <Fieldset label="Notes" error={form.formState.errors.notes}>
+            <TextArea
+              placeholder="Additional notes"
+              className="h-36"
+              {...form.register("notes")}
+            />
+          </Fieldset>
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            <Button
+              type="button"
+              variant="defaultOutline"
+              size="sm"
+              className="w-full lg:w-32 lg:text-xs"
+              onClick={() => onOpenChange(false)}
             >
-              <Input
-                type="text"
-                placeholder="Recipient phone number "
-                {...form.register("phoneNumber")}
-              />
-            </Fieldset>
-            <Fieldset label="Province" error={form.formState.errors.province}>
-              <Dropdown
-                options={provinceOptions}
-                selectedOption={provinceOptions.find(
-                  (option) => option.label === selectedProvince
-                )}
-                onOptionClick={(option) =>
-                  form.setValue("province", option.label, {
-                    shouldValidate: true,
-                  })
-                }
-                deselectOption={() => form.setValue("province", "")}
-                placeholder="Select Province"
-              />
-            </Fieldset>
-            <Fieldset label="City" error={form.formState.errors.city}>
-              <Dropdown
-                options={cities.data}
-                selectedOption={cities.data?.find(
-                  (option) => option.label === selectedCity
-                )}
-                onOptionClick={(option) =>
-                  form.setValue("city", option.label, { shouldValidate: true })
-                }
-                deselectOption={() => form.setValue("city", "")}
-                placeholder="Select City"
-              />
-            </Fieldset>
-            <Fieldset label="District" error={form.formState.errors.district}>
-              <Dropdown
-                options={districtOptions}
-                selectedOption={districtOptions.find(
-                  (option) => option.label === selectedDistrict
-                )}
-                onOptionClick={(option) =>
-                  form.setValue("district", option.label, {
-                    shouldValidate: true,
-                  })
-                }
-                deselectOption={() => form.setValue("district", "")}
-                placeholder="Select District"
-              />
-            </Fieldset>
-            <Fieldset label="Street" error={form.formState.errors.street}>
-              <Input
-                type="text"
-                placeholder="Street"
-                {...form.register("street")}
-              />
-            </Fieldset>
-            <Fieldset label="Post Code" error={form.formState.errors.postCode}>
-              <Input
-                type="text"
-                placeholder="Your post code"
-                {...form.register("postCode")}
-              />
-            </Fieldset>
-            <Fieldset label="Notes" error={form.formState.errors.notes}>
-              <TextArea
-                placeholder="Additional notes"
-                className="h-36"
-                {...form.register("notes")}
-              />
-            </Fieldset>
-            <div className="flex flex-wrap items-center justify-end gap-2">
-              <Button
-                type="button"
-                variant="defaultOutline"
-                size="sm"
-                className="w-full lg:w-32 lg:text-xs"
-                onClick={() => onOpenChange(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="default"
-                size="sm"
-                className="w-full lg:w-32 lg:text-xs"
-                disabled={addAddressMutation.isPending}
-              >
-                {addAddressMutation.isPending && (
-                  <ImSpinner8 size={14} className="animate-spin" />
-                )}
-                Submit
-              </Button>
-            </div>
-          </form>
-        </DialogContent>
-      </DialogPortal>
-    </Dialog>
+              Cancel
+            </Button>
+            <Button
+              variant="default"
+              size="sm"
+              className="w-full lg:w-32 lg:text-xs"
+              disabled={addAddressMutation.isPending}
+            >
+              {addAddressMutation.isPending && (
+                <ImSpinner8 size={14} className="animate-spin" />
+              )}
+              Submit
+            </Button>
+          </div>
+        </form>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   )
 }

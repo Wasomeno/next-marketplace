@@ -6,7 +6,6 @@ import { categoryQueryKeys } from "@/modules/user/common/queryKeys/categoryQuery
 import { useUploadThing } from "@/utils/uploadthing"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
-import { AnimatePresence } from "framer-motion"
 import { useForm } from "react-hook-form"
 import { ImSpinner8 } from "react-icons/im"
 import { toast } from "sonner"
@@ -14,17 +13,15 @@ import * as z from "zod"
 
 import { queryClient } from "@/lib/react-query-client"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogOverlay,
-  DialogPortal,
-} from "@/components/ui/dialog"
 import { Fieldset } from "@/components/ui/fieldset"
 import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
 import { ImageUploader } from "@/components/image-uploader"
+import {
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogHeader,
+} from "@/components/responsive-dialog"
 
 export const createCategoryFormDataSchema = z.object({
   image: z.instanceof(File, { message: "Category must have at least 1 image" }),
@@ -97,86 +94,79 @@ export function AddCategoryModal() {
   })
 
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <AnimatePresence>
-        {isOpen && (
-          <DialogPortal forceMount>
-            <DialogOverlay />
-            <DialogContent open={isOpen} className="lg:h-5/6 lg:w-2/6">
-              <DialogHeader
-                title="Add Category"
-                description="Make a new category for user products"
+    <ResponsiveDialog open={isOpen} onOpenChange={onOpenChange}>
+      <ResponsiveDialogContent open={isOpen} className="lg:h-5/6 lg:w-2/6">
+        <ResponsiveDialogHeader
+          title="Add Category"
+          description="Make a new category for user products"
+        />
+        <form
+          onSubmit={form.handleSubmit((formData) =>
+            createCategoryMutation.mutate(formData)
+          )}
+          className="flex flex-1 flex-col gap-4 px-6 py-4"
+        >
+          <div className="flex flex-1 flex-col gap-4">
+            <Fieldset label="Image">
+              <ImageUploader
+                mode="single"
+                onImageChange={(image) => {
+                  if (image !== undefined) {
+                    form.setValue("image", image, {
+                      shouldValidate: true,
+                    })
+                  } else {
+                    form.resetField("image")
+                  }
+                }}
               />
-              <form
-                onSubmit={form.handleSubmit((formData) =>
-                  createCategoryMutation.mutate(formData)
-                )}
-                className="flex flex-1 flex-col gap-4 px-6 py-4"
-              >
-                <div className="flex flex-1 flex-col gap-4">
-                  <Fieldset label="Image">
-                    <ImageUploader
-                      mode="single"
-                      onImageChange={(image) => {
-                        if (image !== undefined) {
-                          form.setValue("image", image, {
-                            shouldValidate: true,
-                          })
-                        } else {
-                          form.resetField("image")
-                        }
-                      }}
-                    />
-                  </Fieldset>
-                  <Fieldset label="Name" error={form.formState.errors.name}>
-                    <Input
-                      id="categoryName"
-                      type="text"
-                      placeholder="Input category name"
-                      className="dark:border-neutral-600 dark:bg-neutral-800"
-                      {...form.register("name")}
-                    />
-                  </Fieldset>
+            </Fieldset>
+            <Fieldset label="Name" error={form.formState.errors.name}>
+              <Input
+                id="categoryName"
+                type="text"
+                placeholder="Input category name"
+                className="dark:border-neutral-600 dark:bg-neutral-800"
+                {...form.register("name")}
+              />
+            </Fieldset>
 
-                  <Fieldset
-                    label="Description"
-                    error={form.formState.errors.description}
-                  >
-                    <TextArea
-                      id="categoryDescription"
-                      placeholder="Input category description"
-                      className="h-40 dark:border-neutral-600 dark:bg-neutral-800"
-                      {...form.register("description")}
-                    />
-                  </Fieldset>
-                </div>
+            <Fieldset
+              label="Description"
+              error={form.formState.errors.description}
+            >
+              <TextArea
+                id="categoryDescription"
+                placeholder="Input category description"
+                className="h-40 dark:border-neutral-600 dark:bg-neutral-800"
+                {...form.register("description")}
+              />
+            </Fieldset>
+          </div>
 
-                <div className="flex flex-wrap items-center justify-end gap-4">
-                  <Button
-                    type="button"
-                    variant="defaultOutline"
-                    size="sm"
-                    className="w-32 lg:text-xs"
-                    onClick={() => onOpenChange(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    size="sm"
-                    className="w-32 lg:text-xs"
-                    disabled={createCategoryMutation.isPending}
-                  >
-                    {createCategoryMutation.isPending && (
-                      <ImSpinner8 className="animate-spin" />
-                    )}
-                    Submit
-                  </Button>
-                </div>
-              </form>
-            </DialogContent>
-          </DialogPortal>
-        )}
-      </AnimatePresence>
-    </Dialog>
+          <div className="flex flex-wrap items-center justify-end gap-4">
+            <Button
+              type="button"
+              variant="defaultOutline"
+              size="sm"
+              className="w-32 lg:text-xs"
+              onClick={() => onOpenChange(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              size="sm"
+              className="w-32 lg:text-xs"
+              disabled={createCategoryMutation.isPending}
+            >
+              {createCategoryMutation.isPending && (
+                <ImSpinner8 className="animate-spin" />
+              )}
+              Submit
+            </Button>
+          </div>
+        </form>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   )
 }

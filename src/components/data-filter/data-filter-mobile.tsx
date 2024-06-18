@@ -1,20 +1,17 @@
-import { useState } from "react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import clsx from "clsx"
-import { AnimatePresence } from "framer-motion"
-import { CiFilter } from "react-icons/ci"
+import clsx from "clsx";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { CiFilter } from "react-icons/ci";
 
-import { Option } from "../dropdown"
-import { Button } from "../ui/button"
+import { Option } from "../dropdown";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogOverlay,
-  DialogPortal,
-  DialogTrigger,
-} from "../ui/dialog"
-import { DataFilterOption, DataFilterProps } from "./"
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTrigger
+} from "../responsive-dialog";
+import { Button } from "../ui/button";
+import { DataFilterOption, DataFilterProps } from "./";
 
 export const DataFilterMobile = ({
   filterOptions,
@@ -158,8 +155,8 @@ export const DataFilterMobile = ({
   }
 
   return (
-    <Dialog onOpenChange={(open) => setIsOpen(open)}>
-      <DialogTrigger asChild>
+    <ResponsiveDialog onOpenChange={(open) => setIsOpen(open)}>
+      <ResponsiveDialogTrigger asChild>
         <button
           disabled={disabled}
           className="relative flex h-8 w-8 items-center justify-center rounded-md border bg-white lg:hidden"
@@ -172,44 +169,36 @@ export const DataFilterMobile = ({
 
           <CiFilter />
         </button>
-      </DialogTrigger>
-      <AnimatePresence>
-        {isOpen && (
-          <DialogPortal forceMount>
-            <DialogOverlay />
-            <DialogContent open={isOpen} className="h-64">
-              <DialogHeader title="Filter" />
-              <div className="space-y-4 px-4 py-2">
-                {filterOptions.map((option) => (
-                  <div key={option.value} className="space-y-2">
-                    <span className="text-sm font-medium">{option.label}</span>
-                    <div className="flex flex-wrap items-center gap-2">
-                      {option.children.map((childOption) => (
-                        <Button
-                          onClick={() =>
-                            getIsFilterActive(option, childOption)
-                              ? deselectFilter(option, childOption)
-                              : selectFilter(option, childOption)
-                          }
-                          key={childOption.value}
-                          variant="defaultOutline"
-                          size="sm"
-                          className={clsx(
-                            getIsFilterActive(option, childOption) &&
-                              "bg-gray-100"
-                          )}
-                        >
-                          {childOption.label}
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
+      </ResponsiveDialogTrigger>
+      <ResponsiveDialogContent open={isOpen} className="h-auto">
+        <ResponsiveDialogHeader title="Filter" />
+        <div className="space-y-4 px-4 py-2">
+          {filterOptions.map((option) => (
+            <div key={option.value} className="space-y-2">
+              <span className="text-sm font-medium">{option.label}</span>
+              <div className="flex flex-wrap items-center gap-2">
+                {option.children.map((childOption) => (
+                  <Button
+                    onClick={() =>
+                      getIsFilterActive(option, childOption)
+                        ? deselectFilter(option, childOption)
+                        : selectFilter(option, childOption)
+                    }
+                    key={childOption.value}
+                    variant="defaultOutline"
+                    size="sm"
+                    className={clsx(
+                      getIsFilterActive(option, childOption) && "bg-gray-100"
+                    )}
+                  >
+                    {childOption.label}
+                  </Button>
                 ))}
               </div>
-            </DialogContent>
-          </DialogPortal>
-        )}
-      </AnimatePresence>
-    </Dialog>
+            </div>
+          ))}
+        </div>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   )
 }

@@ -1,20 +1,17 @@
-import React, { useState } from "react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import clsx from "clsx"
-import { AnimatePresence } from "framer-motion"
-import { HiArrowsUpDown } from "react-icons/hi2"
+import clsx from "clsx";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import React, { useState } from "react";
+import { HiArrowsUpDown } from "react-icons/hi2";
 
-import { Option } from "../dropdown"
-import { Button } from "../ui/button"
+import { Option } from "../dropdown";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogOverlay,
-  DialogPortal,
-  DialogTrigger,
-} from "../ui/dialog"
-import { TableDataSorterProps } from "./"
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTrigger
+} from "../responsive-dialog";
+import { Button } from "../ui/button";
+import { TableDataSorterProps } from "./";
 
 export const DataSorterMobile = (props: TableDataSorterProps) => {
   const searchParams = useSearchParams()
@@ -45,8 +42,8 @@ export const DataSorterMobile = (props: TableDataSorterProps) => {
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
-      <DialogTrigger asChild>
+    <ResponsiveDialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
+      <ResponsiveDialogTrigger asChild>
         <button
           disabled={props?.disabled}
           className="flex h-8 w-8 items-center justify-center rounded-md border bg-white px-3 text-sm outline-0 disabled:opacity-50 dark:border-neutral-600 dark:bg-neutral-900 lg:hidden"
@@ -58,39 +55,32 @@ export const DataSorterMobile = (props: TableDataSorterProps) => {
             />
           </div>
         </button>
-      </DialogTrigger>
-      <AnimatePresence>
-        {isOpen && (
-          <DialogPortal forceMount>
-            <DialogOverlay className="lg:hidden" />
-            <DialogContent open={isOpen} className="h-72 lg:hidden">
-              <DialogHeader title="Sort Products" />
-              <div className="flex flex-wrap items-center gap-2 p-4">
-                {props.sortOptions.map((option) => (
-                  <Button
-                    key={option.value}
-                    variant="defaultOutline"
-                    onClick={() => {
-                      if (option.value === activeSort?.value) {
-                        deselectOption()
-                        return
-                      }
-                      selectOption(option)
-                    }}
-                    className={clsx(
-                      "shadow-sm",
-                      option.value === activeSort?.value &&
-                        "bg-gray-100 lg:hover:bg-gray-100"
-                    )}
-                  >
-                    {option.label}
-                  </Button>
-                ))}
-              </div>
-            </DialogContent>
-          </DialogPortal>
-        )}
-      </AnimatePresence>
-    </Dialog>
+      </ResponsiveDialogTrigger>
+      <ResponsiveDialogContent open={isOpen} className="h-auto lg:hidden">
+        <ResponsiveDialogHeader title="Sort Products" />
+        <div className="flex flex-wrap items-center gap-2 p-4">
+          {props.sortOptions.map((option) => (
+            <Button
+              key={option.value}
+              variant="defaultOutline"
+              onClick={() => {
+                if (option.value === activeSort?.value) {
+                  deselectOption()
+                  return
+                }
+                selectOption(option)
+              }}
+              className={clsx(
+                "shadow-sm",
+                option.value === activeSort?.value &&
+                  "bg-gray-100 lg:hover:bg-gray-100"
+              )}
+            >
+              {option.label}
+            </Button>
+          ))}
+        </div>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   )
 }

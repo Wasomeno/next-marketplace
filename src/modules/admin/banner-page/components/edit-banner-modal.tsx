@@ -1,37 +1,33 @@
 "use client"
 
-import { useEffect } from "react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { getBanner, updateBanner } from "@/actions/admin/banner"
-import { bannersQuery } from "@/modules/user/common/queryOptions/bannerQueryOptions"
-import { useUploadThing } from "@/utils/uploadthing"
-import { useFetchSingleImage } from "@/utils/useImageFiles"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation, useQuery } from "@tanstack/react-query"
-import { data } from "autoprefixer"
-import { AnimatePresence } from "framer-motion"
-import { useForm } from "react-hook-form"
-import { ImSpinner8 } from "react-icons/im"
-import { toast } from "sonner"
-import { ClientUploadedFileData } from "uploadthing/types"
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { ImSpinner8 } from "react-icons/im";
+import { toast } from "sonner";
+import { ClientUploadedFileData } from "uploadthing/types";
 
-import { queryClient } from "@/lib/react-query-client"
-import { Button } from "@/components/ui/button"
+import { getBanner, updateBanner } from "@/actions/admin/banner";
+import { ImageUploader } from "@/components/image-uploader";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogOverlay,
-  DialogPortal,
-} from "@/components/ui/dialog"
-import { Fieldset } from "@/components/ui/fieldset"
-import { Input } from "@/components/ui/input"
-import { ImageUploader } from "@/components/image-uploader"
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogHeader
+} from "@/components/responsive-dialog";
+import { Button } from "@/components/ui/button";
+import { Fieldset } from "@/components/ui/fieldset";
+import { Input } from "@/components/ui/input";
+import { queryClient } from "@/lib/react-query-client";
+import { bannersQuery } from "@/modules/user/common/queryOptions/bannerQueryOptions";
+import { useUploadThing } from "@/utils/uploadthing";
+import { useFetchSingleImage } from "@/utils/useImageFiles";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import {
   CreateBannerFormData,
-  createBannerFormDataSchema,
-} from "./create-banner-modal"
+  createBannerFormDataSchema
+} from "./create-banner-modal";
 
 export function EditBannerModal() {
   const pathname = usePathname()
@@ -105,71 +101,64 @@ export function EditBannerModal() {
   }, [banner.isLoading])
 
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <AnimatePresence>
-        {isOpen && (
-          <DialogPortal forceMount>
-            <DialogOverlay />
-            <DialogContent open={isOpen} className="lg:h-4/6 lg:w-3/6">
-              <DialogHeader title="Edit Banner" />
-              <form
-                onSubmit={form.handleSubmit((formData) =>
-                  updateBannerMutation.mutate(formData)
-                )}
-                className="flex flex-1 flex-col gap-4 px-6 py-4"
-              >
-                <div className="flex flex-1 flex-col gap-4">
-                  <Fieldset label="Image">
-                    <ImageUploader
-                      mode="single"
-                      image={images.data}
-                      onImageChange={(image) => {
-                        if (image) {
-                          form.setValue("image", image, {
-                            shouldValidate: true,
-                          })
-                        } else {
-                          form.resetField("image")
-                        }
-                      }}
-                    />
-                  </Fieldset>
-                  <Fieldset label="Name" error={form.formState.errors.name}>
-                    <Input
-                      id="bannerName"
-                      type="text"
-                      placeholder="Input banner name"
-                      className="dark:border-neutral-600 dark:bg-neutral-800"
-                      {...form.register("name")}
-                    />
-                  </Fieldset>
-                </div>
-                <div className="flex flex-wrap items-center justify-end gap-2">
-                  <Button
-                    type="button"
-                    variant="defaultOutline"
-                    size="sm"
-                    className="w-32 lg:text-xs"
-                    onClick={() => onOpenChange(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    size="sm"
-                    className="w-32 lg:text-xs"
-                    disabled={updateBannerMutation.isPending}
-                  >
-                    {updateBannerMutation.isPending && (
-                      <ImSpinner8 className="animate-spin" />
-                    )}
-                    Submit
-                  </Button>
-                </div>
-              </form>
-            </DialogContent>
-          </DialogPortal>
-        )}
-      </AnimatePresence>
-    </Dialog>
+    <ResponsiveDialog open={isOpen} onOpenChange={onOpenChange}>
+      <ResponsiveDialogContent open={isOpen} className="lg:h-4/6 lg:w-3/6">
+        <ResponsiveDialogHeader title="Edit Banner" />
+        <form
+          onSubmit={form.handleSubmit((formData) =>
+            updateBannerMutation.mutate(formData)
+          )}
+          className="flex flex-1 flex-col gap-4 px-6 py-4"
+        >
+          <div className="flex flex-1 flex-col gap-4">
+            <Fieldset label="Image">
+              <ImageUploader
+                mode="single"
+                image={images.data}
+                onImageChange={(image) => {
+                  if (image) {
+                    form.setValue("image", image, {
+                      shouldValidate: true,
+                    })
+                  } else {
+                    form.resetField("image")
+                  }
+                }}
+              />
+            </Fieldset>
+            <Fieldset label="Name" error={form.formState.errors.name}>
+              <Input
+                id="bannerName"
+                type="text"
+                placeholder="Input banner name"
+                className="dark:border-neutral-600 dark:bg-neutral-800"
+                {...form.register("name")}
+              />
+            </Fieldset>
+          </div>
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            <Button
+              type="button"
+              variant="defaultOutline"
+              size="sm"
+              className="w-32 lg:text-xs"
+              onClick={() => onOpenChange(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              size="sm"
+              className="w-32 lg:text-xs"
+              disabled={updateBannerMutation.isPending}
+            >
+              {updateBannerMutation.isPending && (
+                <ImSpinner8 className="animate-spin" />
+              )}
+              Submit
+            </Button>
+          </div>
+        </form>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   )
 }
