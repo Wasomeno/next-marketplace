@@ -38,7 +38,7 @@ export const StoreProductMultipleDeleteModal: React.FC<{
         size="sm"
         disabled={!selectedIds.length}
         onClick={() => setIsOpen(true)}
-        className="h-8 w-8 px-0 shadow-sm disabled:hover:bg-white lg:h-9 lg:w-auto lg:px-2.5"
+        className="h-8 w-8 px-0 shadow-sm lg:h-9 lg:w-auto lg:px-2.5"
       >
         <span className="hidden text-xs lg:inline">Remove</span> <BsTrash3 />
       </Button>
