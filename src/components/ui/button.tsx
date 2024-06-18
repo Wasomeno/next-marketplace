@@ -8,8 +8,10 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-gray-100 lg:hover:bg-gray-200",
-        defaultOutline: "border border-gray-200 lg:hover:bg-gray-50",
+        default:
+          "bg-gray-100 lg:hover:bg-gray-200 disabled:bg-gray-200 disabled:hover:bg-gray-200",
+        defaultOutline:
+          "border border-gray-200 lg:hover:bg-gray-50 lg:disabled:bg-gray-200 lg:disabled:hover:bg-gray-200",
         danger: "bg-red-700 dark:bg-red-800 lg:hover:bg-red-600",
         warning: "bg-yellow-600 lg:hover:bg-yellow-500",
         success: "bg-green-700 dark:bg-green-800 lg:hover:bg-green-600",
