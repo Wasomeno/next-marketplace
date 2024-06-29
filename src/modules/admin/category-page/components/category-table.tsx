@@ -55,7 +55,7 @@ export const CategoryTable = () => {
 
   const columns: ColumnDef<
     Prisma.CategoryGetPayload<{
-      include: { _count: { select: { products: true } }; images: true }
+      include: { _count: { select: { products: true } }; image: true }
     }>
   >[] = [
     {
@@ -135,7 +135,7 @@ export const CategoryTable = () => {
 
   const placeHolderColumns: ColumnDef<
     Prisma.CategoryGetPayload<{
-      include: { _count: { select: { products: true } }; images: true }
+      include: { _count: { select: { products: true } }; image: true }
     }>
   >[] = [
     {
@@ -166,8 +166,6 @@ export const CategoryTable = () => {
     },
   ]
 
-  const placeholderData = Array(5).fill("")
-
   function openAddCategoryModal() {
     const urlSearchParams = new URLSearchParams(searchParamsValues)
     urlSearchParams.set("add", "true")
@@ -187,7 +185,7 @@ export const CategoryTable = () => {
 
   return (
     <DataTable
-      data={categories.data ?? placeholderData}
+      data={categories.data}
       columns={categories.isLoading ? placeHolderColumns : columns}
       searchInput={
         <DataTable.SearchInput placeholder="Search by category name" />
