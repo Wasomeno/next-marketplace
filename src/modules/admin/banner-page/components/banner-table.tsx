@@ -116,7 +116,7 @@ export const BannerTable = () => {
     },
   ]
 
-  const placeholderColumns: ColumnDef<{}>[] = [
+  const placeholderColumns: ColumnDef<Banner>[] = [
     {
       id: "select",
       header: () => <CheckBox disabled />,
@@ -170,7 +170,7 @@ export const BannerTable = () => {
 
   return (
     <DataTable
-      data={banners.data ?? Array(5).fill({})}
+      data={banners?.data}
       columns={banners.isLoading ? placeholderColumns : columns}
       searchInput={
         <DataTable.SearchInput placeholder="Search by banner name" />
