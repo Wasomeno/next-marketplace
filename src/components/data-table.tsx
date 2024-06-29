@@ -25,7 +25,7 @@ import {
 
 type DataTableProps<T> = {
   columns: ColumnDef<T>[]
-  data: T[]
+  data?: T[]
   dataSorter?: ReactElement
   dataFilter?: ReactElement
   deleteTrigger?: ReactElement
@@ -47,7 +47,7 @@ export function DataTable<T extends Record<string, unknown>>({
   noDataFallback,
 }: DataTableProps<T>) {
   const table = useReactTable<T>({
-    data,
+    data: data ?? Array(5).fill({}),
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
