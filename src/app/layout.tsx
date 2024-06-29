@@ -39,8 +39,8 @@ export default async function RootLayout({
                 error: <IoIosCloseCircle className="text-red-600" size={18} />,
               }}
             />
+            <ReactQueryDevtools />
           </body>
-          <ReactQueryDevtools />
         </ReactQueryProvider>
       </ClientSessionProvider>
     </html>
