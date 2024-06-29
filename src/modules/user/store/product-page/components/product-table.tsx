@@ -172,11 +172,7 @@ export const ProductTable: React.FC<{ storeId: number }> = ({ storeId }) => {
 
   return (
     <DataTable
-      data={
-        (products.isLoading
-          ? Array(5).fill({})
-          : products.data?.products) as StoreProduct[]
-      }
+      data={products.data?.products}
       columns={products.isLoading ? placeholderColumns : columns}
       pagination={
         products.data?.products.length ? (
