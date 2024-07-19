@@ -1,12 +1,12 @@
 "use client"
 
+import moment from "moment"
 import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
-import { Prisma } from "@prisma/client"
-import moment from "moment"
 
-import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/skeleton"
+import { Button } from "@/components/ui/button"
+import { Prisma } from "@prisma/client"
 
 import { CreateReviewModal } from "./create-review-modal"
 
@@ -73,7 +73,7 @@ export const OrderCard = ({ order, userEmail }: OrderCardProps) => {
         <Button onClick={viewOrderDetails} size="sm" className="lg:text-xs">
           View Order Details
         </Button>
-        {order.status_id === 5 && (
+        {order.status_id === 6 && (
           <CreateReviewModal
             userEmail={userEmail}
             orderProducts={order.products}
