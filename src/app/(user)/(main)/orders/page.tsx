@@ -1,12 +1,14 @@
 import { Metadata } from "next"
 import { redirect } from "next/navigation"
+import { RxCrossCircled } from "react-icons/rx"
+
 import { getCachedSession } from "@/actions/store/user"
 import { getUserOrders } from "@/actions/user/order"
-import { OrderCard } from "@/modules/user/order-page/components/order-card"
-import { OrderSearchInput } from "@/modules/user/order-page/components/order-search-input"
-import { OrderStatusDropdown } from "@/modules/user/order-page/components/order-status-dropdown"
-import { UserViewOrderModal } from "@/modules/user/order-page/components/user-view-order-modal"
-import { RxCrossCircled } from "react-icons/rx"
+
+import { OrderCard } from "./_components/order-card"
+import { OrderSearchInput } from "./_components/order-search-input"
+import { OrderStatusDropdown } from "./_components/order-status-dropdown"
+import { UserViewOrderModal } from "./_components/user-view-order-modal"
 
 type Props = {
   searchParams: {

@@ -1,7 +1,6 @@
-import { CartItemCardSkeleton } from "@/modules/user/cart-page/components/cart-item-card"
-
-import { Button } from "@/components/ui/button"
+import { CartItemCardSkeleton } from "@/app/(user)/(main)/cart/_components/cart-item-card"
 import { Skeleton } from "@/components/skeleton"
+import { Button } from "@/components/ui/button"
 
 export default function CartLoading() {
   return (

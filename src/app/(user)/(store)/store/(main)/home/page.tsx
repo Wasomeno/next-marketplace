@@ -1,15 +1,17 @@
-import React from "react"
 import { Metadata } from "next"
 import { redirect } from "next/navigation"
+import React from "react"
+import { FaFileInvoiceDollar } from "react-icons/fa6"
+import { LiaMoneyBillSolid } from "react-icons/lia"
+
 import { getStoreSales } from "@/actions/store/store"
 import { getCachedSession } from "@/actions/store/user"
 import { getStoreOrderCount } from "@/actions/user/order"
 import { getUserStore } from "@/actions/user/user-details"
-import { AnalyticCard } from "@/modules/user/store/dashboard-page/components/analytic-card"
-import { StoreRecentOrderList } from "@/modules/user/store/dashboard-page/components/store-recent-order-list"
-import { StoreSalesChart } from "@/modules/user/store/dashboard-page/components/store-sales-chart"
-import { FaFileInvoiceDollar } from "react-icons/fa6"
-import { LiaMoneyBillSolid } from "react-icons/lia"
+
+import { AnalyticCard } from "./_components/analytic-card"
+import { StoreRecentOrderList } from "./_components/store-recent-order-list"
+import { StoreSalesChart } from "./_components/store-sales-chart"
 
 export const metadata: Metadata = {
   title: "Store Dashboard",

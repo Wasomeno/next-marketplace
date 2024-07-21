@@ -1,6 +1,7 @@
 import { ReactNode } from "react"
-import { Footer } from "@/modules/user/common/components/footer"
-import { UserMainNavigation } from "@/modules/user/common/components/navigation/user-main-navigation/user-main-navigation"
+
+import { Footer } from "@/components/footer"
+import { UserMainNavigation } from "@/components/navigation/user-main-navigation"
 
 export default async function StoreLayout({
   children,

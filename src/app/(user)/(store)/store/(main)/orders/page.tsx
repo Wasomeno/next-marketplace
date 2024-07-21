@@ -1,8 +1,10 @@
 import { redirect } from "next/navigation"
+
 import { getStore } from "@/actions/store/store"
 import { getCachedSession } from "@/actions/store/user"
-import { StoreOrderCount } from "@/modules/user/store/order-page/components/store-order-count"
-import { StoreOrderList } from "@/modules/user/store/order-page/components/store-order-list"
+
+import { StoreOrderCount } from "./_components/store-order-count"
+import { StoreOrderList } from "./_components/store-order-list"
 
 export default async function UserStoreOrdersPage() {
   const session = await getCachedSession()

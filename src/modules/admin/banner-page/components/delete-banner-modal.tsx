@@ -1,14 +1,14 @@
-import React from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { deleteMultipleBanners } from "@/actions/admin/banner"
-import { bannersQuery } from "@/modules/user/common/queryOptions/bannerQueryOptions"
-import { useMutation } from "@tanstack/react-query"
+import React from "react"
 import { BsTrash3 } from "react-icons/bs"
 import { toast } from "sonner"
 
-import { queryClient } from "@/lib/react-query-client"
-import { Button } from "@/components/ui/button"
+import { deleteMultipleBanners } from "@/actions/admin/banner"
 import { ConfirmationDialog } from "@/components/confirmation-dialog"
+import { Button } from "@/components/ui/button"
+import { queryClient } from "@/lib/react-query-client"
+import { bannersQuery } from "@/query/queryOptions/bannerQueryOptions"
+import { useMutation } from "@tanstack/react-query"
 
 interface DeleteBannersModalProps {
   selectedBanners: Array<number>

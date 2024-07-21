@@ -1,11 +1,13 @@
 import { Metadata } from "next"
 import { redirect } from "next/navigation"
+
 import { getCachedSession } from "@/actions/store/user"
 import { getUserStore } from "@/actions/user/user-details"
-import { CreateProductModal } from "@/modules/user/store/product-page/components/create-product-modal"
-import { EditProductModal } from "@/modules/user/store/product-page/components/edit-product-modal"
-import { ProductCount } from "@/modules/user/store/product-page/components/product-count"
-import { ProductTable } from "@/modules/user/store/product-page/components/product-table"
+
+import { CreateProductModal } from "./_components/create-product-modal"
+import { EditProductModal } from "./_components/edit-product-modal"
+import { ProductCount } from "./_components/product-count"
+import { ProductTable } from "./_components/product-table"
 
 export const metadata: Metadata = {
   title: "My Store Products",

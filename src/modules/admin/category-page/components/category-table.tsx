@@ -1,18 +1,18 @@
 "use client"
 
 import { usePathname, useRouter } from "next/navigation"
+import { BsPlus } from "react-icons/bs"
+
 import { getCategories } from "@/actions/categories"
-import { categoryQueryKeys } from "@/modules/user/common/queryKeys/categoryQueryKeys"
+import { Skeleton } from "@/components/skeleton"
+import { TableActions } from "@/components/table-actions"
+import { Button } from "@/components/ui/button"
+import { CheckBox } from "@/components/ui/checkbox"
+import { categoryQueryKeys } from "@/query/queryKeys/categoryQueryKeys"
 import { getParsedSortParams, useSearchParamsValues } from "@/utils"
 import { Prisma } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
 import { ColumnDef } from "@tanstack/react-table"
-import { BsPlus } from "react-icons/bs"
-
-import { Button } from "@/components/ui/button"
-import { CheckBox } from "@/components/ui/checkbox"
-import { Skeleton } from "@/components/skeleton"
-import { TableActions } from "@/components/table-actions"
 
 import { TBaseDataFilterParams } from "../../../../../types"
 import { DataTable, useSelectedData } from "../../../../components/data-table"

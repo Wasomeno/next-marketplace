@@ -1,11 +1,13 @@
-import { redirect } from "next/navigation"
-import { getUserAddress } from "@/actions/user/user-details"
-import { AddressNotSetModal } from "@/modules/user/checkout-page/components/address-not-set-modal"
-import { CheckoutChangeAddressModal } from "@/modules/user/checkout-page/components/checkout-change-address-modal"
-import { CheckoutItems } from "@/modules/user/checkout-page/components/checkout-items"
-import { CheckoutPaymentModal } from "@/modules/user/checkout-page/components/checkout-payment-modal"
-import { CheckoutSummary } from "@/modules/user/checkout-page/components/checkout-summary"
 import { getServerSession } from "next-auth"
+import { redirect } from "next/navigation"
+
+import { getUserAddress } from "@/actions/user/user-details"
+
+import { AddressNotSetModal } from "./_components/address-not-set-modal"
+import { CheckoutChangeAddressModal } from "./_components/checkout-change-address-modal"
+import { CheckoutItems } from "./_components/checkout-items"
+import { CheckoutPaymentModal } from "./_components/checkout-payment-modal"
+import { CheckoutSummary } from "./_components/checkout-summary"
 
 export const metadata = {
   title: "Checkout",

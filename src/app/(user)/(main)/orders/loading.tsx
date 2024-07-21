@@ -1,7 +1,7 @@
-import { OrderCardSkeleton } from "@/modules/user/order-page/components/order-card"
-import { OrderStatusFilter } from "@/modules/user/order-page/components/order-status-filter"
 import { RxMagnifyingGlass } from "react-icons/rx"
 
+import { OrderCardSkeleton } from "@/app/(user)/(main)/orders/_components/order-card"
+import { OrderStatusFilter } from "@/app/(user)/(main)/orders/_components/order-status-filter"
 import { Input } from "@/components/ui/input"
 
 export default function OrdersLoadingPage() {

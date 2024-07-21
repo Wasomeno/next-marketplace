@@ -1,14 +1,14 @@
-import React from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { deleteCategories } from "@/actions/categories"
-import { categoryQueryKeys } from "@/modules/user/common/queryKeys/categoryQueryKeys"
-import { useMutation } from "@tanstack/react-query"
+import React from "react"
 import { BsTrash3 } from "react-icons/bs"
 import { toast } from "sonner"
 
-import { queryClient } from "@/lib/react-query-client"
-import { Button } from "@/components/ui/button"
+import { deleteCategories } from "@/actions/categories"
 import { ConfirmationDialog } from "@/components/confirmation-dialog"
+import { Button } from "@/components/ui/button"
+import { queryClient } from "@/lib/react-query-client"
+import { categoryQueryKeys } from "@/query/queryKeys/categoryQueryKeys"
+import { useMutation } from "@tanstack/react-query"
 
 interface DeleteCategoriesModalProps {
   selectedCategories: Array<number>

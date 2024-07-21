@@ -1,19 +1,19 @@
 "use client"
 
-import React from "react"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
-import { bannersQuery } from "@/modules/user/common/queryOptions/bannerQueryOptions"
+import React from "react"
+import { BsPlus } from "react-icons/bs"
+
+import { Skeleton } from "@/components/skeleton"
+import { TableActions } from "@/components/table-actions"
+import { Button } from "@/components/ui/button"
+import { CheckBox } from "@/components/ui/checkbox"
+import { bannersQuery } from "@/query/queryOptions/bannerQueryOptions"
 import { useSearchParamsValues } from "@/utils"
 import { Banner } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
 import { ColumnDef } from "@tanstack/react-table"
-import { BsPlus } from "react-icons/bs"
-
-import { Button } from "@/components/ui/button"
-import { CheckBox } from "@/components/ui/checkbox"
-import { Skeleton } from "@/components/skeleton"
-import { TableActions } from "@/components/table-actions"
 
 import { TBaseDataFilterParams } from "../../../../../types"
 import { DataTable, useSelectedData } from "../../../../components/data-table"

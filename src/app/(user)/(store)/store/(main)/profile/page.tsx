@@ -1,9 +1,10 @@
-import { redirect } from "next/navigation"
-import { StoreProfileForm } from "@/modules/user/store/profile-page/components/store-profile-form"
-import { StoreProfileImageUpload } from "@/modules/user/store/profile-page/components/store-profile-image-upload"
 import { getServerSession } from "next-auth"
+import { redirect } from "next/navigation"
 
 import { prisma } from "@/lib/prisma"
+
+import { StoreProfileForm } from "./_components/store-profile-form"
+import { StoreProfileImageUpload } from "./_components/store-profile-image-upload"
 
 export default async function StoreProfilePage() {
   const session = await getServerSession()

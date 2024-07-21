@@ -1,9 +1,11 @@
-import React from "react"
 import { Metadata } from "next"
 import { redirect } from "next/navigation"
+import React from "react"
+
 import { getCachedSession } from "@/actions/store/user"
 import { getUserStore } from "@/actions/user/user-details"
-import { CreateStoreForm } from "@/modules/user/store/create-store-page/components/create-store-form"
+
+import { CreateStoreForm } from "./_components/create-store-form"
 
 export const metadata: Metadata = {
   title: "Create Your Own Store",

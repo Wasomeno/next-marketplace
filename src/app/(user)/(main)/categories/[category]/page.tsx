@@ -1,12 +1,10 @@
-import { Suspense } from "react"
 import { Metadata } from "next"
-import {
-  CategoryHero,
-  CategoryHeroSkeleton,
-} from "@/modules/user/category-page/components/category-hero"
-import { CategoryProducts } from "@/modules/user/category-page/components/category-products"
+import { Suspense } from "react"
 
 import { prisma } from "@/lib/prisma"
+
+import { CategoryHero, CategoryHeroSkeleton } from "./_components/category-hero"
+import { CategoryProducts } from "./_components/category-products"
 
 type Props = {
   params: { category: string }

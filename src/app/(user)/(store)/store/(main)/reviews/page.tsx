@@ -1,8 +1,10 @@
 import { redirect } from "next/navigation"
+
 import { getStore } from "@/actions/store/store"
 import { getCachedSession } from "@/actions/store/user"
-import { StoreProductReviewsTable } from "@/modules/user/store/review-page/components/store-product-reviews-table"
-import { StoreReviewCount } from "@/modules/user/store/review-page/components/store-review-count"
+
+import { StoreProductReviewsTable } from "./_components/store-product-reviews-table"
+import { StoreReviewCount } from "./_components/store-review-count"
 
 export default async function UserStoreReviews() {
   const session = await getCachedSession()

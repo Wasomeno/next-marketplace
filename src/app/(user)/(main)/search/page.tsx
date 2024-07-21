@@ -1,5 +1,6 @@
 import { Metadata } from "next"
-import { SearchResultProducts } from "@/modules/user/search-page/components/search-result-products"
+
+import { SearchProductResults } from "./_components/search-result-products"
 
 type Props = {
   searchParams: {
@@ -25,7 +26,7 @@ export default async function SearchPage({ searchParams }: Props) {
           You Search for {`"${searchParams.q}"`}
         </h2>
       </div>
-      <SearchResultProducts />
+      <SearchProductResults />
     </div>
   )
 }

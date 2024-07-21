@@ -1,5 +1,4 @@
-import ProductCard from "@/modules/user/common/components/product-card"
-
+import ProductCard from "@/components/product-card"
 import { Button } from "@/components/ui/button"
 
 export default async function SearchLoading() {

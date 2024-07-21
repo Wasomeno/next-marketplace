@@ -1,6 +1,7 @@
 import { ReactNode } from "react"
-import { UserMainNavigation } from "@/modules/user/common/components/navigation/user-main-navigation/user-main-navigation"
-import { UserSettingSideNavigation } from "@/modules/user/common/components/navigation/user-setting-side-navigation"
+
+import { UserMainNavigation } from "@/components/navigation/user-main-navigation"
+import { UserSettingSideNavigation } from "@/components/navigation/user-setting-side-navigation"
 
 interface UserSettingsLayout {
   children: ReactNode

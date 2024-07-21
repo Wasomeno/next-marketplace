@@ -1,10 +1,11 @@
 import { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
-import ProductCard from "@/modules/user/common/components/product-card"
-import { HomeBannerSlider } from "@/modules/user/home-page/components/home-banner-slider"
 
+import ProductCard from "@/components/product-card"
 import { prisma } from "@/lib/prisma"
+
+import { HomeBannerSlider } from "./_components/home-banner-slider"
 
 export const metadata: Metadata = {
   title: "Shopping Made Easy with Next Marketplace",

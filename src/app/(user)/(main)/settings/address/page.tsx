@@ -1,11 +1,12 @@
-import { redirect } from "next/navigation"
-import { AddAddressModal } from "@/modules/user/setting-page/components/add-address-modal"
-import { AddressCard } from "@/modules/user/setting-page/components/address-card"
-import { SetMainAddressConfirmationDialog } from "@/modules/user/setting-page/components/set-main-address-confirmation-dialog"
 import { getServerSession } from "next-auth"
+import { redirect } from "next/navigation"
 
 import { authOptions } from "@/config/next-auth"
 import { prisma } from "@/lib/prisma"
+
+import { AddAddressModal } from "./_components/add-address-modal"
+import { AddressCard } from "./_components/address-card"
+import { SetMainAddressConfirmationDialog } from "./_components/set-main-address-confirmation-dialog"
 
 type Props = {
   params: Record<string, string>

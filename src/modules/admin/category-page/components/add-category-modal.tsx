@@ -1,27 +1,27 @@
 "use client"
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { addCategory } from "@/actions/categories"
-import { categoryQueryKeys } from "@/modules/user/common/queryKeys/categoryQueryKeys"
-import { useUploadThing } from "@/utils/uploadthing"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { ImSpinner8 } from "react-icons/im"
 import { toast } from "sonner"
 import * as z from "zod"
 
-import { queryClient } from "@/lib/react-query-client"
-import { Button } from "@/components/ui/button"
-import { Fieldset } from "@/components/ui/fieldset"
-import { Input } from "@/components/ui/input"
-import { TextArea } from "@/components/ui/text-area"
+import { addCategory } from "@/actions/categories"
 import { ImageUploader } from "@/components/image-uploader"
 import {
   ResponsiveDialog,
   ResponsiveDialogContent,
   ResponsiveDialogHeader,
 } from "@/components/responsive-dialog"
+import { Button } from "@/components/ui/button"
+import { Fieldset } from "@/components/ui/fieldset"
+import { Input } from "@/components/ui/input"
+import { TextArea } from "@/components/ui/text-area"
+import { queryClient } from "@/lib/react-query-client"
+import { categoryQueryKeys } from "@/query/queryKeys/categoryQueryKeys"
+import { useUploadThing } from "@/utils/uploadthing"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation } from "@tanstack/react-query"
 
 export const createCategoryFormDataSchema = z.object({
   image: z.instanceof(File, { message: "Category must have at least 1 image" }),

@@ -1,33 +1,33 @@
 "use client"
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { ImSpinner8 } from "react-icons/im";
-import { toast } from "sonner";
-import { ClientUploadedFileData } from "uploadthing/types";
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useEffect } from "react"
+import { useForm } from "react-hook-form"
+import { ImSpinner8 } from "react-icons/im"
+import { toast } from "sonner"
+import { ClientUploadedFileData } from "uploadthing/types"
 
-import { getBanner, updateBanner } from "@/actions/admin/banner";
-import { ImageUploader } from "@/components/image-uploader";
+import { getBanner, updateBanner } from "@/actions/admin/banner"
+import { ImageUploader } from "@/components/image-uploader"
 import {
   ResponsiveDialog,
   ResponsiveDialogContent,
-  ResponsiveDialogHeader
-} from "@/components/responsive-dialog";
-import { Button } from "@/components/ui/button";
-import { Fieldset } from "@/components/ui/fieldset";
-import { Input } from "@/components/ui/input";
-import { queryClient } from "@/lib/react-query-client";
-import { bannersQuery } from "@/modules/user/common/queryOptions/bannerQueryOptions";
-import { useUploadThing } from "@/utils/uploadthing";
-import { useFetchSingleImage } from "@/utils/useImageFiles";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery } from "@tanstack/react-query";
+  ResponsiveDialogHeader,
+} from "@/components/responsive-dialog"
+import { Button } from "@/components/ui/button"
+import { Fieldset } from "@/components/ui/fieldset"
+import { Input } from "@/components/ui/input"
+import { queryClient } from "@/lib/react-query-client"
+import { bannersQuery } from "@/query/queryOptions/bannerQueryOptions"
+import { useUploadThing } from "@/utils/uploadthing"
+import { useFetchSingleImage } from "@/utils/useImageFiles"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation, useQuery } from "@tanstack/react-query"
 
 import {
   CreateBannerFormData,
-  createBannerFormDataSchema
-} from "./create-banner-modal";
+  createBannerFormDataSchema,
+} from "./create-banner-modal"
 
 export function EditBannerModal() {
   const pathname = usePathname()

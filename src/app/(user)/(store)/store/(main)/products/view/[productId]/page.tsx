@@ -1,10 +1,11 @@
 import { Metadata } from "next"
 import Image from "next/image"
-import { getProduct } from "@/actions/product"
-import { ProductMonthlySalesChart } from "@/modules/user/store/product-page/components/product-monthly-sales-chart"
-import { ProductYearlySalesChart } from "@/modules/user/store/product-page/components/product-yearly-sales-chart"
 import { BiCheck } from "react-icons/bi"
 import invariant from "tiny-invariant"
+
+import { getProduct } from "@/actions/product"
+import { ProductMonthlySalesChart } from "@/app/(user)/(store)/store/(main)/products/_components/product-monthly-sales-chart"
+import { ProductYearlySalesChart } from "@/app/(user)/(store)/store/(main)/products/_components/product-yearly-sales-chart"
 
 type ProductPageProps = {
   params: { productId: string }

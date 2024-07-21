@@ -1,15 +1,6 @@
 import { getCartItems } from "@/actions/user/cart"
-import { CartItems } from "@/modules/user/cart-page/components/cart-items"
-import { Prisma } from "@prisma/client"
 
-export type CartItem = Prisma.CartItemGetPayload<{
-  select: {
-    amount: true
-    id: true
-    product: { include: { price: true; images: true } }
-    product_id: true
-  }
-}>
+import { CartItems } from "./_components/cart-items"
 
 export const metadata = {
   title: "Cart",

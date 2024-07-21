@@ -1,18 +1,19 @@
 import { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
+import { FiMapPin } from "react-icons/fi"
+import invariant from "tiny-invariant"
+
 import { isProductInWishlist } from "@/actions/user/wishlist"
+import { Separator } from "@/components/ui/separator"
+import { prisma } from "@/lib/prisma"
+
 import {
   AddToCartForm,
   ProductImages,
   ProductReviews,
   WishListButton,
-} from "@/modules/user/product-page/components"
-import { FiMapPin } from "react-icons/fi"
-import invariant from "tiny-invariant"
-
-import { prisma } from "@/lib/prisma"
-import { Separator } from "@/components/ui/separator"
+} from "./_components"
 
 type Props = {
   params: { productSlug: string }

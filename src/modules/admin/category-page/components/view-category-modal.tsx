@@ -1,11 +1,11 @@
 "use client"
 
 import { useRouter, useSearchParams } from "next/navigation"
-import { getCategory } from "@/actions/categories"
-import { categoryQueryKeys } from "@/modules/user/common/queryKeys/categoryQueryKeys"
-import { useQuery } from "@tanstack/react-query"
 
+import { getCategory } from "@/actions/categories"
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
+import { categoryQueryKeys } from "@/query/queryKeys/categoryQueryKeys"
+import { useQuery } from "@tanstack/react-query"
 
 export function ViewCategoryModal() {
   const router = useRouter()

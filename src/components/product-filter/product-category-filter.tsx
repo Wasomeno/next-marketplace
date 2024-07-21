@@ -1,9 +1,10 @@
 "use client"
 
-import { useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useState } from "react"
+
 import { getCategories } from "@/actions/categories"
-import { categoryQueryKeys } from "@/modules/user/common/queryKeys/categoryQueryKeys"
+import { categoryQueryKeys } from "@/query/queryKeys/categoryQueryKeys"
 import { useQuery } from "@tanstack/react-query"
 
 import { Skeleton } from "../skeleton"

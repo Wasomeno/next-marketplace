@@ -1,23 +1,13 @@
 "use client"
 
-import { useEffect } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { getCategory, updateCategory } from "@/actions/categories"
-import { categoryQueryKeys } from "@/modules/user/common/queryKeys/categoryQueryKeys"
-import { useUploadThing } from "@/utils/uploadthing"
-import { useFetchSingleImage } from "@/utils/useImageFiles"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { ImSpinner8 } from "react-icons/im"
 import { toast } from "sonner"
 import { ClientUploadedFileData } from "uploadthing/types"
 
-import { queryClient } from "@/lib/react-query-client"
-import { Button } from "@/components/ui/button"
-import { Fieldset } from "@/components/ui/fieldset"
-import { Input } from "@/components/ui/input"
-import { TextArea } from "@/components/ui/text-area"
+import { getCategory, updateCategory } from "@/actions/categories"
 import { ImageUploader } from "@/components/image-uploader"
 import {
   ResponsiveDialog,
@@ -25,6 +15,16 @@ import {
   ResponsiveDialogHeader,
 } from "@/components/responsive-dialog"
 import { Skeleton } from "@/components/skeleton"
+import { Button } from "@/components/ui/button"
+import { Fieldset } from "@/components/ui/fieldset"
+import { Input } from "@/components/ui/input"
+import { TextArea } from "@/components/ui/text-area"
+import { queryClient } from "@/lib/react-query-client"
+import { categoryQueryKeys } from "@/query/queryKeys/categoryQueryKeys"
+import { useUploadThing } from "@/utils/uploadthing"
+import { useFetchSingleImage } from "@/utils/useImageFiles"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation, useQuery } from "@tanstack/react-query"
 
 import {
   CreateCategoryFormData,
