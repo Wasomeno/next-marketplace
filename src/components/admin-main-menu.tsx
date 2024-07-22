@@ -1,15 +1,11 @@
 "use client"
 
-import { useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { signOut, useSession } from "next-auth/react"
+import { useState } from "react"
 import { VscSignOut } from "react-icons/vsc"
 
-import {
-  Dropdown,
-  DropdownContent,
-  DropdownTrigger,
-} from "../../../../components/ui/dropdown"
+import { Dropdown, DropdownContent, DropdownTrigger } from "./ui/dropdown"
 
 export function AdminMainMenu() {
   const [isOpen, setIsOpen] = useState(false)

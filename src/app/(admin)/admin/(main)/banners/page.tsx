@@ -1,8 +1,9 @@
-import React from "react"
 import { Metadata } from "next"
-import { BannerTable } from "@/modules/admin/banner-page/components/banner-table"
-import { CreateBannerModal } from "@/modules/admin/banner-page/components/create-banner-modal"
-import { EditBannerModal } from "@/modules/admin/banner-page/components/edit-banner-modal"
+import React from "react"
+
+import { BannerTable } from "./_components/banner-table"
+import { CreateBannerModal } from "./_components/create-banner-modal"
+import { EditBannerModal } from "./_components/edit-banner-modal"
 
 export const metadata: Metadata = {
   title: "Promo Banners",

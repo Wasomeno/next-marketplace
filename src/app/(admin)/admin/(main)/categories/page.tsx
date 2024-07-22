@@ -1,7 +1,8 @@
 import { Metadata } from "next"
-import { AddCategoryModal } from "@/modules/admin/category-page/components/add-category-modal"
-import { CategoryTable } from "@/modules/admin/category-page/components/category-table"
-import { EditCategoryModal } from "@/modules/admin/category-page/components/edit-category-modal"
+
+import { AddCategoryModal } from "./_components/add-category-modal"
+import { CategoryTable } from "./_components/category-table"
+import { EditCategoryModal } from "./_components/edit-category-modal"
 
 export const metadata: Metadata = {
   title: "Categories",

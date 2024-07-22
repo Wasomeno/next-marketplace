@@ -14,8 +14,11 @@ import { Prisma } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
 import { ColumnDef } from "@tanstack/react-table"
 
-import { TBaseDataFilterParams } from "../../../../../types"
-import { DataTable, useSelectedData } from "../../../../components/data-table"
+import { TBaseDataFilterParams } from "../../../../../../../types"
+import {
+  DataTable,
+  useSelectedData,
+} from "../../../../../../components/data-table"
 import { DeleteCategoriesModal } from "./delete-categories-modal"
 
 export const categorySortOptions = [

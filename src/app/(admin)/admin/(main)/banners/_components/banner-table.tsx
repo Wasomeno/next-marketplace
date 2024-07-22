@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation"
 import React from "react"
 import { BsPlus } from "react-icons/bs"
 
+import { DataTable, useSelectedData } from "@/components/data-table"
 import { Skeleton } from "@/components/skeleton"
 import { TableActions } from "@/components/table-actions"
 import { Button } from "@/components/ui/button"
@@ -15,8 +16,7 @@ import { Banner } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
 import { ColumnDef } from "@tanstack/react-table"
 
-import { TBaseDataFilterParams } from "../../../../../types"
-import { DataTable, useSelectedData } from "../../../../components/data-table"
+import { TBaseDataFilterParams } from "../../../../../../../types"
 import { DeleteBannerModal } from "./delete-banner-modal"
 
 export const bannerSortOptions = [
