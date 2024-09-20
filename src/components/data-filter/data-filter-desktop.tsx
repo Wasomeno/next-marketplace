@@ -1,8 +1,8 @@
-import { use, useState } from "react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
 import clsx from "clsx"
 import { AnimatePresence, motion } from "framer-motion"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { use, useState } from "react"
 import { BiChevronRight } from "react-icons/bi"
 import { HiChevronRight } from "react-icons/hi2"
 
@@ -139,38 +139,49 @@ export const DataFilterDesktop = ({
       </DropdownTrigger>
       <AnimatePresence>
         {isOpen && (
-          <DropdownContent asChild>
+          <DropdownContent sideOffset={6} asChild>
             <motion.div
-              initial={{ height: "0px" }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: "0px" }}
-              className="hidden w-72 flex-col overflow-hidden rounded-md rounded-t-none border-x border-b bg-white text-sm shadow-sm dark:border-neutral-600 dark:bg-neutral-900 lg:flex"
+              initial={{ opacity: 0, translateY: "-5px", scale: 0.95 }}
+              animate={{ opacity: 1, translateY: "0px", scale: 1 }}
+              exit={{ opacity: 0, translateY: "-5px", scale: 0.95 }}
+              transition={{ duration: 0.3, type: "spring" }}
+              className="hidden w-72 p-1.5 flex-col overflow-hidden rounded-md border bg-white text-sm shadow-sm dark:border-neutral-600 dark:bg-neutral-900 lg:flex"
             >
               {filterOptions.map((option) => (
                 <DropdownMenu.Sub key={option.value}>
-                  <DropdownMenu.SubTrigger onClick={() => {}} asChild>
-                    <div
+                  <DropdownMenu.SubTrigger asChild>
+                    <button
                       className={clsx(
-                        "flex cursor-pointer items-center gap-4 p-3 outline-0 ring-0 transition duration-200 dark:hover:bg-neutral-800"
+                        "w-full px-3 rounded-md py-1.5 text-start outline-0 ring-0 transition  duration-200 hover:bg-gray-100 disabled:opacity-50 dark:hover:bg-neutral-800"
                       )}
                     >
                       <span className="text-sm">{option.label}</span>
-                    </div>
+                    </button>
                   </DropdownMenu.SubTrigger>
 
                   <DropdownPortal>
-                    <DropdownMenu.SubContent className="hidden w-72 flex-col overflow-hidden rounded-md border bg-white text-sm shadow-sm dark:border-neutral-600 dark:bg-neutral-900 lg:flex">
-                      {option.children.map((childOption) => (
-                        <DropdownItem key={childOption.value} asChild>
-                          <div className="flex cursor-pointer items-center gap-4 p-3 outline-0 ring-0 transition duration-200 dark:hover:bg-neutral-800">
-                            {/* <> */}
-                            <>
+                    <DropdownMenu.SubContent asChild sideOffset={6}>
+                      <motion.div
+                        initial={{ opacity: 0, translateX: "4px" }}
+                        animate={{ opacity: 1, translateX: "6px" }}
+                        exit={{ opacity: 0, translateX: "4px" }}
+                        transition={{
+                          duration: 0.2,
+                          ease: "easeInOut",
+                          type: "spring",
+                        }}
+                        className="hidden w-72 flex-col overflow-hidden rounded-md border bg-white text-sm shadow-sm dark:border-neutral-600 dark:bg-neutral-900 lg:flex"
+                      >
+                        {option.children.map((childOption) => (
+                          <DropdownItem key={childOption.value} asChild>
+                            <div className="flex cursor-pointer items-center gap-4 p-3 outline-0 ring-0 transition duration-200 dark:hover:bg-neutral-800">
                               <CheckBox
                                 id={childOption.label}
                                 checked={getIsChildOptionActive(
                                   option.value as string,
                                   childOption.value as string
                                 )}
+                                className="w-[20px] h-[18px]"
                                 onCheckedChange={() => {
                                   if (
                                     getIsChildOptionActive(
@@ -196,12 +207,10 @@ export const DataFilterDesktop = ({
                               >
                                 {childOption.label}
                               </label>
-                            </>
-
-                            {/* </> */}
-                          </div>
-                        </DropdownItem>
-                      ))}
+                            </div>
+                          </DropdownItem>
+                        ))}
+                      </motion.div>
                     </DropdownMenu.SubContent>
                   </DropdownPortal>
                 </DropdownMenu.Sub>

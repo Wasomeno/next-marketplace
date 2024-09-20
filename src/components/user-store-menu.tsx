@@ -1,11 +1,11 @@
 "use client"
 
-import React, { useState } from "react"
-import Image from "next/image"
-import Link from "next/link"
 import * as HoverCard from "@radix-ui/react-hover-card"
 import { AnimatePresence, motion } from "framer-motion"
 import { Session } from "next-auth"
+import Image from "next/image"
+import Link from "next/link"
+import React, { useState } from "react"
 import { IoSettingsOutline } from "react-icons/io5"
 import { VscSignOut } from "react-icons/vsc"
 
@@ -40,14 +40,18 @@ export const UserStoreMenu = ({ session }: { session: Session }) => {
               asChild
               side="bottom"
               align="end"
-              sideOffset={2.5}
+              alignOffset={15}
             >
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2, ease: "easeIn" }}
-                className="z-30 h-fit w-64 overflow-hidden rounded-md border border-slate-300 bg-white transition-all duration-200 dark:border-gray-800 dark:bg-neutral-950"
+                initial={{ opacity: 0, translateY: "-16px", scale: 0.95 }}
+                animate={{ opacity: 1, translateY: "-8px", scale: 1 }}
+                exit={{ opacity: 0, translateY: "-16px", scale: 0.95 }}
+                transition={{
+                  duration: 0.3,
+                  ease: "easeInOut",
+                  type: "spring",
+                }}
+                className="z-30 h-fit w-64 overflow-hidden rounded-md border border-slate-300 bg-white dark:border-gray-800 dark:bg-neutral-950"
                 style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
               >
                 <div className="border-b p-2.5 dark:border-b-gray-800">
