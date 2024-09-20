@@ -1,7 +1,7 @@
 "use client"
 
-import React, { MouseEvent, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
+import React, { MouseEvent, useState } from "react"
 import { HiXMark } from "react-icons/hi2"
 
 import {
@@ -85,9 +85,10 @@ export const MultiSelectDropdown = ({
         {isOptionsOpen && (
           <DropdownContent align="start" asChild sideOffset={6}>
             <motion.div
-              initial={{ height: "0px" }}
-              animate={{ height: "120px", opacity: 1 }}
-              exit={{ height: "0px" }}
+              initial={{ opacity: 0, translateY: "-5px" }}
+              animate={{ opacity: 1, translateY: "0px" }}
+              exit={{ opacity: 0, translateY: "-5px" }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
               className="z-[80] flex w-96 flex-col overflow-hidden rounded-lg border bg-white shadow-sm dark:border-neutral-600 dark:bg-neutral-900"
             >
               {!options?.length && (

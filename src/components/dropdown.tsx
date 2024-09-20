@@ -1,9 +1,9 @@
 "use client"
 
-import React, { useState } from "react"
 import { DropdownMenuTriggerProps } from "@radix-ui/react-dropdown-menu"
 import clsx from "clsx"
 import { AnimatePresence, motion } from "framer-motion"
+import React, { useState } from "react"
 import { FaCircleXmark } from "react-icons/fa6"
 import { HiChevronRight } from "react-icons/hi2"
 import { IoList } from "react-icons/io5"
@@ -90,12 +90,13 @@ export const Dropdown = (props: TDropdownProps) => {
         </button>
         <AnimatePresence>
           {isOpen && (
-            <DropdownContent align="start" sideOffset={5} asChild>
+            <DropdownContent align="start" sideOffset={6} asChild>
               <motion.div
-                initial={{ height: "0px" }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: "0px" }}
-                className="z-[80] flex max-h-48 w-48 flex-col items-start overflow-y-scroll rounded-md border bg-white text-sm shadow-sm dark:border-neutral-600 dark:bg-neutral-900"
+                initial={{ opacity: 0, translateY: "-5px", scale: 0.95 }}
+                animate={{ opacity: 1, translateY: "0px", scale: 1 }}
+                exit={{ opacity: 0, translateY: "-5px", scale: 0.95 }}
+                transition={{ duration: 0.3, type: "spring" }}
+                className="z-[80] p-1.5 gap-1 flex max-h-48 w-48 flex-col items-start overflow-y-scroll rounded-md border bg-white text-sm shadow-sm dark:border-neutral-600 dark:bg-neutral-900"
               >
                 {props.isLoading &&
                   Array(5)
@@ -114,7 +115,7 @@ export const Dropdown = (props: TDropdownProps) => {
                         onClick={() =>
                           props.onOptionClick && props.onOptionClick(option)
                         }
-                        className="w-full px-3 py-2 text-start outline-0 ring-0 transition  duration-200 hover:bg-gray-100 disabled:opacity-50 dark:hover:bg-neutral-800"
+                        className="w-full px-3 rounded-md py-1.5 text-start outline-0 ring-0 transition  duration-200 hover:bg-gray-100 disabled:opacity-50 dark:hover:bg-neutral-800"
                       >
                         {option.label}
                       </button>

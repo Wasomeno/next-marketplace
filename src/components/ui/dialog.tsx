@@ -1,12 +1,12 @@
 "use client"
 
-import clsx from "clsx";
-import { AnimatePresence, motion } from "framer-motion";
-import React from "react";
-import { RxCross2 } from "react-icons/rx";
-import { twMerge } from "tailwind-merge";
+import clsx from "clsx"
+import { AnimatePresence, motion } from "framer-motion"
+import React from "react"
+import { RxCross2 } from "react-icons/rx"
+import { twMerge } from "tailwind-merge"
 
-import * as DialogPrimitive from "@radix-ui/react-dialog";
+import * as DialogPrimitive from "@radix-ui/react-dialog"
 
 const Dialog = DialogPrimitive.Root
 
@@ -92,27 +92,29 @@ const DialogContent = React.forwardRef<
     <AnimatePresence>
       {open && (
         <DialogPortal forceMount>
-          <DialogOverlay />
-          <DialogPrimitive.Content asChild ref={ref} {...props}>
-            <motion.div
-              initial={{ bottom: "-40vh", opacity: 0 }}
-              animate={{ bottom: 0, opacity: 1 }}
-              exit={{ bottom: "-40vh", opacity: 0 }}
-              transition={{
-                type: "tween",
-                ease: "easeInOut",
-                duration: 0.25,
-              }}
-              className={clsx(
-                twMerge(
-                  "fixed bottom-0 z-[70] flex h-[95%] w-full flex-1 flex-col overflow-y-scroll rounded-lg bg-white shadow-md transition duration-300 dark:bg-neutral-900 lg:right-1/2 lg:top-1/2 lg:-translate-y-1/2 lg:translate-x-1/2 ",
-                  className
-                )
-              )}
-            >
-              {children}
-            </motion.div>
-          </DialogPrimitive.Content>
+          <div className="fixed inset-0 z-[60] grid place-items-center  content-center">
+            <DialogOverlay />
+            <DialogPrimitive.Content asChild ref={ref} {...props}>
+              <motion.div
+                initial={{ opacity: 0, bottom: -120, scale: 0.95 }}
+                animate={{ opacity: 1, bottom: 0, scale: 1 }}
+                exit={{ opacity: 0, bottom: -120, scale: 0.95 }}
+                transition={{
+                  type: "spring",
+                  ease: "easeInOut",
+                  duration: 0.3,
+                }}
+                className={clsx(
+                  twMerge(
+                    "z-[70] relative flex h-[95%] w-full max-w-[90%] flex-col overflow-y-scroll rounded-lg bg-white shadow-md dark:bg-neutral-900 lg:max-w-[600px]",
+                    className
+                  )
+                )}
+              >
+                {children}
+              </motion.div>
+            </DialogPrimitive.Content>
+          </div>
         </DialogPortal>
       )}
     </AnimatePresence>

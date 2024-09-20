@@ -1,12 +1,12 @@
 "use client"
 
-import { useState } from "react"
-import Image from "next/image"
-import Link from "next/link"
 import * as HoverCard from "@radix-ui/react-hover-card"
 import { AnimatePresence, motion } from "framer-motion"
 import { Session } from "next-auth"
 import { signOut } from "next-auth/react"
+import Image from "next/image"
+import Link from "next/link"
+import { useState } from "react"
 import { BsBox2Heart } from "react-icons/bs"
 import { HiOutlineClipboard } from "react-icons/hi"
 import { IoSettingsOutline } from "react-icons/io5"
@@ -28,7 +28,7 @@ export const UserMainMenu = ({ session }: { session: Session }) => {
           <div className="relative h-8 w-8">
             <Image
               src={session?.user?.picture as string}
-              alt="userProfile"
+              alt="user-profile-image"
               className="rounded-full object-cover"
               fill
             />
@@ -45,11 +45,15 @@ export const UserMainMenu = ({ session }: { session: Session }) => {
               sideOffset={2.5}
             >
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2, ease: "easeInOut" }}
-                className="z-[60] h-fit w-64 overflow-hidden rounded-md border border-slate-300 bg-white transition-all duration-200 dark:border-gray-800 dark:bg-neutral-950"
+                initial={{ opacity: 0, translateY: "-5px", scale: 0.95 }}
+                animate={{ opacity: 1, translateY: "5px", scale: 1 }}
+                exit={{ opacity: 0, translateY: "-5px", scale: 0.95 }}
+                transition={{
+                  duration: 0.3,
+                  ease: "easeInOut",
+                  type: "spring",
+                }}
+                className="z-[60] h-fit w-64 overflow-hidden rounded-md border border-slate-300 bg-white dark:border-gray-800 dark:bg-neutral-950"
                 style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
               >
                 <div className="border-b p-2.5 dark:border-b-gray-800">
