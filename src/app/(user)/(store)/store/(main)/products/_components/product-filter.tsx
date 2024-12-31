@@ -8,7 +8,7 @@ import {
   DataFilterOption,
   DataFilterProps,
 } from "@/components/data-filter"
-import { categoryQueryKeys } from "@/query/queryKeys/categoryQueryKeys"
+import { categoryQueryKeys } from "@/query/keys/category"
 import { useQuery } from "@tanstack/react-query"
 
 export const ProductFilter = (props: Pick<DataFilterProps, "disabled">) => {

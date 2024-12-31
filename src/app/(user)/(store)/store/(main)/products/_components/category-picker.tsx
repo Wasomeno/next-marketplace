@@ -2,7 +2,7 @@ import clsx from "clsx"
 import { twMerge } from "tailwind-merge"
 
 import { getCategories } from "@/actions/categories"
-import { categoryQueryKeys } from "@/query/queryKeys/categoryQueryKeys"
+import { categoryQueryKeys } from "@/query/keys/category"
 import * as ScrollArea from "@radix-ui/react-scroll-area"
 import { useQuery } from "@tanstack/react-query"
 

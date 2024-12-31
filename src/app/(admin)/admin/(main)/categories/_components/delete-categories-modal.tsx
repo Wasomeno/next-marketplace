@@ -7,7 +7,7 @@ import { deleteCategories } from "@/actions/categories"
 import { ConfirmationDialog } from "@/components/confirmation-dialog"
 import { Button } from "@/components/ui/button"
 import { queryClient } from "@/lib/react-query-client"
-import { categoryQueryKeys } from "@/query/queryKeys/categoryQueryKeys"
+import { categoryQueryKeys } from "@/query/keys/category"
 import { useMutation } from "@tanstack/react-query"
 
 interface DeleteCategoriesModalProps {
