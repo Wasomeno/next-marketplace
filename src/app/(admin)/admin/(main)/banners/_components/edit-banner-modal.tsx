@@ -18,12 +18,12 @@ import { Button } from "@/components/ui/button"
 import { Fieldset } from "@/components/ui/fieldset"
 import { Input } from "@/components/ui/input"
 import { queryClient } from "@/lib/react-query-client"
-import { bannersQuery } from "@/query/queryOptions/bannerQueryOptions"
 import { useUploadThing } from "@/utils/uploadthing"
 import { useFetchSingleImage } from "@/utils/useImageFiles"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery } from "@tanstack/react-query"
 
+import { bannersQuery } from "@/query/options/banner"
 import {
   CreateBannerFormData,
   createBannerFormDataSchema,

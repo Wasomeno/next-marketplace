@@ -7,7 +7,7 @@ import { deleteMultipleBanners } from "@/actions/admin/banner"
 import { ConfirmationDialog } from "@/components/confirmation-dialog"
 import { Button } from "@/components/ui/button"
 import { queryClient } from "@/lib/react-query-client"
-import { bannersQuery } from "@/query/queryOptions/bannerQueryOptions"
+import { bannersQuery } from "@/query/options/banner"
 import { useMutation } from "@tanstack/react-query"
 
 interface DeleteBannersModalProps {
