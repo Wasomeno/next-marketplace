@@ -1,8 +1,8 @@
-import { getStoreProducts } from "@/actions/store/store"
 import { queryOptions } from "@tanstack/react-query"
 
-import { TBaseDataFilter } from "../../../types"
-import { storeQueryKeys } from "../queryKeys/storeQueryKeys"
+import { getStoreProducts } from "@/app/(user)/(store)/store/_actions"
+import { TBaseDataFilter } from "../../../../../../types"
+import { storeQueryKeys } from "./keys"
 
 type StoreProductsQueryParams = TBaseDataFilter & {
   storeId: number

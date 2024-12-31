@@ -1,4 +1,4 @@
-import { TBaseDataFilter, TBaseDataFilterParams } from "../../../types"
+import { TBaseDataFilter, TBaseDataFilterParams } from "../../../../../../types"
 
 export const storeQueryKeys = {
   products: (
