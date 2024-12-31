@@ -6,9 +6,9 @@ import { toast } from "sonner"
 import { deleteSingleProduct } from "@/actions/store/products"
 import { ConfirmationDialog } from "@/components/confirmation-dialog"
 import { TableActions } from "@/components/table-actions"
-import { storeQueryKeys } from "@/query/queryKeys/storeQueryKeys"
 import { Product } from "@prisma/client"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { storeQueryKeys } from "../../../_query/keys"
 
 export const StoreProductSingleDeleteModal: React.FC<{
   product: Product

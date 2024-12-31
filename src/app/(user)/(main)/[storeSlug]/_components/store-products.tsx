@@ -2,13 +2,13 @@
 
 import { useParams } from "next/navigation"
 
-import { getStoreProducts } from "@/actions/store/store"
 import { DataSorter } from "@/components/data-sorter"
 import { Option } from "@/components/dropdown"
-import { storeQueryKeys } from "@/query/queryKeys/storeQueryKeys"
 import { getParsedSortParams, useSearchParamsValues } from "@/utils"
 import { useQuery } from "@tanstack/react-query"
 
+import { getStoreProducts } from "@/app/(user)/(store)/store/_actions"
+import { storeQueryKeys } from "@/app/(user)/(store)/store/_query/keys"
 import { TBaseDataFilterParams } from "../../../../../../types"
 import ProductCard from "../../../../../components/product-card"
 

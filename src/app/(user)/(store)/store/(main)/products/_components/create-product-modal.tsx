@@ -18,24 +18,17 @@ import {
   ResponsiveDialogHeader,
 } from "@/components/responsive-dialog"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogOverlay,
-  DialogPortal,
-} from "@/components/ui/dialog"
 import { Fieldset } from "@/components/ui/fieldset"
 import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
 import { categoryQueryKeys } from "@/query/queryKeys/categoryQueryKeys"
-import { storeQueryKeys } from "@/query/queryKeys/storeQueryKeys"
 import { useSearchParamsValues } from "@/utils"
 import { useUploadThing } from "@/utils/uploadthing"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 import { TBaseDataFilterParams } from "../../../../../../../../types"
+import { storeQueryKeys } from "../../../_query/keys"
 
 export const ProductSchema = z.object({
   images: z

@@ -1,20 +1,20 @@
 "use client"
 
-import React, { ChangeEvent, useState } from "react"
-import Image from "next/image"
-import {
-  getStoreProfileImage,
-  updateStoreProfileImage,
-} from "@/actions/store/store"
 import { useUploadThing } from "@/utils/uploadthing"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import clsx from "clsx"
+import Image from "next/image"
+import React, { ChangeEvent, useState } from "react"
 import { ImSpinner8 } from "react-icons/im"
 import FileResizer from "react-image-file-resizer"
 import { toast } from "sonner"
 
-import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/skeleton"
+import { Button } from "@/components/ui/button"
+import {
+  getStoreProfileImage,
+  updateStoreProfileImage,
+} from "../../../_actions"
 
 export const StoreProfileImageUpload: React.FC<{ storeId: number }> = ({
   storeId,
@@ -91,7 +91,7 @@ export const StoreProfileImageUpload: React.FC<{ storeId: number }> = ({
       >
         {!isFetching && (
           <Image
-            src={image ? image.preview : data ?? ""}
+            src={image ? image.preview : (data ?? "")}
             alt="store-profile-image"
             fill
           />

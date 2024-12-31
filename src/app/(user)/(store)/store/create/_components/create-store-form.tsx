@@ -1,24 +1,24 @@
 "use client"
 
-import React, { useState } from "react"
-import Link from "next/link"
-import { createStore } from "@/actions/store/store"
 import { useUploadThing } from "@/utils/uploadthing"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import Lottie from "lottie-react"
 import { useSession } from "next-auth/react"
+import Link from "next/link"
+import React, { useState } from "react"
 import { useForm } from "react-hook-form"
 import { HiArrowRight } from "react-icons/hi2"
 import { ImSpinner8 } from "react-icons/im"
 import { z } from "zod"
 
+import { ImageUploader } from "@/components/image-uploader"
+import checkMarkSuccess from "@/components/lottie/files/checkmark_success.json"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Fieldset } from "@/components/ui/fieldset"
 import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
-import { ImageUploader } from "@/components/image-uploader"
-import checkMarkSuccess from "@/components/lottie/files/checkmark_success.json"
+import { createStore } from "../../_actions"
 
 const createStoreSchema = z.object({
   image: z.instanceof(File, { message: "Store must have an image" }),
