@@ -1,13 +1,13 @@
-import React from "react"
+import { getServerSession } from "next-auth"
 import Image from "next/image"
 import Link from "next/link"
-import { getServerSession } from "next-auth"
+import React from "react"
 import invariant from "tiny-invariant"
 
 import { authOptions } from "@/config/next-auth"
 
-import { UserStoreMenu } from "./user-store-menu"
-import { UserStoreMobileMenu } from "./user-store-mobile-menu"
+import { UserStoreMenu } from "../../../../../components/user-store-menu"
+import { UserStoreMobileMenu } from "../../../../../components/user-store-mobile-menu"
 
 export async function StoreTopNavigation() {
   const session = await getServerSession(authOptions)
