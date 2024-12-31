@@ -1,7 +1,7 @@
 import Image from "next/image"
-import { getStore } from "@/actions/store/store"
 import { FiMapPin } from "react-icons/fi"
 
+import { getStore } from "@/app/(user)/(store)/store/_actions"
 import { Skeleton } from "@/components/skeleton"
 
 export async function StoreDetails({ slug }: { slug?: string }) {

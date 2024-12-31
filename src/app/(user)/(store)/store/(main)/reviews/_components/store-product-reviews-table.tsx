@@ -8,13 +8,13 @@ import { DataTable } from "@/components/data-table"
 import { Option } from "@/components/dropdown"
 import { Skeleton } from "@/components/skeleton"
 import { TableActions } from "@/components/table-actions"
-import { storeQueryKeys } from "@/query/queryKeys/storeQueryKeys"
 import { getParsedSortParams, useSearchParamsValues } from "@/utils"
 import { Prisma } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
 import { ColumnDef } from "@tanstack/react-table"
 
 import { TBaseDataFilterParams } from "../../../../../../../../types"
+import { storeQueryKeys } from "../../../_query/keys"
 
 type ProductReview = Prisma.ProductReviewGetPayload<{
   include: { user: true; product: true }

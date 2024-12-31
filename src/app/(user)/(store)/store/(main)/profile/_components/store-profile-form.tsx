@@ -1,10 +1,9 @@
 "use client"
 
-import React, { useEffect } from "react"
-import { updateStore } from "@/actions/store/store"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Store } from "@prisma/client"
 import { useMutation } from "@tanstack/react-query"
+import React, { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { ImSpinner8 } from "react-icons/im"
 import { toast } from "sonner"
@@ -13,6 +12,7 @@ import * as z from "zod"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
+import { updateStore } from "../../../_actions"
 
 type Props = {
   store: Store | null

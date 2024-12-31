@@ -8,8 +8,8 @@ import { deleteMultipleProduct } from "@/actions/store/products"
 import { ConfirmationDialog } from "@/components/confirmation-dialog"
 import { Button } from "@/components/ui/button"
 import { queryClient } from "@/lib/react-query-client"
-import { storeQueryKeys } from "@/query/queryKeys/storeQueryKeys"
 import { useMutation } from "@tanstack/react-query"
+import { storeQueryKeys } from "../../../_query/keys"
 
 export const StoreProductMultipleDeleteModal: React.FC<{
   storeId: number

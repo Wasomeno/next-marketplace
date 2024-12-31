@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation"
 
-import { getStore } from "@/actions/store/store"
 import { getCachedSession } from "@/actions/store/user"
 
+import { getStore } from "../../_actions"
 import { StoreProductReviewsTable } from "./_components/store-product-reviews-table"
 import { StoreReviewCount } from "./_components/store-review-count"
 

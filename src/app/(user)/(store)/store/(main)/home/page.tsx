@@ -4,11 +4,11 @@ import React from "react"
 import { FaFileInvoiceDollar } from "react-icons/fa6"
 import { LiaMoneyBillSolid } from "react-icons/lia"
 
-import { getStoreSales } from "@/actions/store/store"
 import { getCachedSession } from "@/actions/store/user"
 import { getStoreOrderCount } from "@/actions/user/order"
 import { getUserStore } from "@/actions/user/user-details"
 
+import { getStoreSales } from "../../_actions"
 import { AnalyticCard } from "./_components/analytic-card"
 import { StoreRecentOrderList } from "./_components/store-recent-order-list"
 import { StoreSalesChart } from "./_components/store-sales-chart"

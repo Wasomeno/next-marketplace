@@ -4,11 +4,9 @@ import { usePathname, useRouter } from "next/navigation"
 import React from "react"
 import { BsPlus, BsTrash3 } from "react-icons/bs"
 
-import { StoreProduct } from "@/actions/store/store"
 import { TableActions } from "@/components/table-actions"
 import { Button } from "@/components/ui/button"
 import { CheckBox } from "@/components/ui/checkbox"
-import { storeProductsQuery } from "@/query/queryOptions/storeQueryOptions"
 import { getParsedSortParams, useSearchParamsValues } from "@/utils"
 import { Prisma } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
@@ -19,6 +17,8 @@ import {
   DataTable,
   useSelectedData,
 } from "../../../../../../../components/data-table"
+import { StoreProduct } from "../../../_actions"
+import { storeProductsQuery } from "../../../_query/options"
 import { ProductFilter } from "./product-filter"
 import {
   productTableColumns,

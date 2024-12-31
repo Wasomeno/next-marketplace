@@ -1,12 +1,12 @@
 "use client"
 
-import { getStoreProductsCount } from "@/actions/store/store"
 import { Skeleton } from "@/components/skeleton"
-import { storeQueryKeys } from "@/query/queryKeys/storeQueryKeys"
 import { useSearchParamsValues } from "@/utils"
 import { useQuery } from "@tanstack/react-query"
 
 import { TBaseDataFilterParams } from "../../../../../../../../types"
+import { getStoreProductsCount } from "../../../_actions"
+import { storeQueryKeys } from "../../../_query/keys"
 
 export const ProductCount: React.FC<{ storeId: number }> = ({ storeId }) => {
   const searchParamsValues = useSearchParamsValues<

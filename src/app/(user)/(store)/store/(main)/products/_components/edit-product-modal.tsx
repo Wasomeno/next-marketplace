@@ -23,13 +23,13 @@ import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/text-area"
 import { queryClient } from "@/lib/react-query-client"
 import { categoryQueryKeys } from "@/query/queryKeys/categoryQueryKeys"
-import { storeQueryKeys } from "@/query/queryKeys/storeQueryKeys"
 import { useSearchParamsValues } from "@/utils"
 import { useUploadThing } from "@/utils/uploadthing"
 import { useFetchMultipleImages } from "@/utils/useImageFiles"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery } from "@tanstack/react-query"
 
+import { storeQueryKeys } from "../../../_query/keys"
 import { ProductFormData, ProductSchema } from "./create-product-modal"
 
 export const EditProductModal: React.FC<{ storeId: number }> = ({
