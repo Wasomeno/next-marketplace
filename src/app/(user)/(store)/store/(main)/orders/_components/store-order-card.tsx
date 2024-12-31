@@ -8,7 +8,6 @@ import { Skeleton } from "@/components/skeleton"
 import { Separator } from "@/components/ui/separator"
 import { Prisma } from "@prisma/client"
 
-import { OrderStatus } from "../../../../../../../../types"
 import { OrderChangeStatusButton } from "./order-change-status-button"
 
 export const StoreOrderCard = ({
