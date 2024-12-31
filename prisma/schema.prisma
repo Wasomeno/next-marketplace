@@ -271,3 +271,32 @@ model OrderToProduct {
   @@index([B], map: "_OrderToProduct_B_index")
   @@map("_OrderToProduct")
 }
+
+model city {
+  id          String  @id @db.VarChar(4)
+  province_id String? @db.VarChar(2)
+  name        String  @db.VarChar(50)
+
+  @@index([province_id], map: "idx_cities_province_id")
+}
+
+model district {
+  id      String  @id @db.VarChar(6)
+  city_id String? @db.VarChar(4)
+  name    String  @db.VarChar(50)
+
+  @@index([city_id], map: "idx_districts_city_id")
+}
+
+model province {
+  id   String @id @db.VarChar(2)
+  name String @db.VarChar(50)
+}
+
+model village {
+  id          String  @id @db.VarChar(10)
+  district_id String? @db.VarChar(6)
+  name        String  @db.VarChar(50)
+
+  @@index([district_id], map: "idx_villages_district_id")
+}
