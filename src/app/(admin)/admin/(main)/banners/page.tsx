@@ -1,5 +1,5 @@
 import { Metadata } from "next"
-import React from "react"
+import React, { Suspense } from "react"
 
 import { BannerTable } from "./_components/banner-table"
 import { CreateBannerModal } from "./_components/create-banner-modal"

@@ -4,16 +4,13 @@ import { redirect } from "next/navigation"
 import { authOptions } from "@/config/next-auth"
 import { prisma } from "@/lib/prisma"
 
+import { TPageProps } from "../../../../../../types"
 import { AddAddressModal } from "./_components/add-address-modal"
 import { AddressCard } from "./_components/address-card"
 import { SetMainAddressConfirmationDialog } from "./_components/set-main-address-confirmation-dialog"
 
-type Props = {
-  params: Record<string, string>
-  searchParams: { add?: string; mainAddressConfirm?: string; id?: string }
-}
-
-export default async function UserAddressSetting(props: Props) {
+export default async function UserAddressSetting(props: TPageProps) {
+  const { id } = await props.searchParams
   const session = await getServerSession(authOptions)
 
   if (!session) {
@@ -43,7 +40,7 @@ export default async function UserAddressSetting(props: Props) {
       </div>
       <SetMainAddressConfirmationDialog
         selectedAddress={addresses.find(
-          (address) => address.id.toString() === props.searchParams.id
+          (address) => address.id.toString() === id
         )}
       />
     </div>

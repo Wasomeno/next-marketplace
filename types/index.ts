@@ -18,3 +18,8 @@ export type OrderStatus =
   | "On Shipping"
   | "Arrived"
   | "Done"
+
+export type TPageProps = {
+  params: Promise<Record<string, string>>
+  searchParams: Promise<Record<string, string>>
+}

@@ -6,26 +6,22 @@ import invariant from "tiny-invariant"
 import { getProduct } from "@/actions/product"
 import { ProductMonthlySalesChart } from "@/app/(user)/(store)/store/(main)/products/_components/product-monthly-sales-chart"
 import { ProductYearlySalesChart } from "@/app/(user)/(store)/store/(main)/products/_components/product-yearly-sales-chart"
-
-type ProductPageProps = {
-  params: { productId: string }
-  searchParams: { [key: string]: string | string[] | undefined }
-}
+import { TPageProps } from "../../../../../../../../../types"
 
 export async function generateMetadata({
   params,
-}: ProductPageProps): Promise<Metadata> {
-  const product = await getProduct(parseInt(params.productId))
+}: TPageProps): Promise<Metadata> {
+  const { productId } = await params
+  const product = await getProduct(parseInt(productId))
   return {
     title: `${product?.name} | Store Product Page`,
     description: `Details about product ${product?.name}`,
   }
 }
 
-export default async function UserStoreProductViewPage({
-  params,
-}: ProductPageProps) {
-  const product = await getProduct(parseInt(params.productId))
+export default async function UserStoreProductViewPage({ params }: TPageProps) {
+  const { productId } = await params
+  const product = await getProduct(parseInt(productId))
   const imageUrls = product?.images.map((image) => image.url)
 
   invariant(imageUrls)

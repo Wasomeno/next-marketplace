@@ -8,6 +8,7 @@ import { isProductInWishlist } from "@/actions/user/wishlist"
 import { Separator } from "@/components/ui/separator"
 import { prisma } from "@/lib/prisma"
 
+import { TPageProps } from "../../../../../../types"
 import {
   AddToCartForm,
   ProductImages,
@@ -15,14 +16,12 @@ import {
   WishListButton,
 } from "./_components"
 
-type Props = {
-  params: { productSlug: string }
-  searchParams: { [key: string]: string | string[] | undefined }
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: TPageProps): Promise<Metadata> {
+  const { productSlug } = await params
   const product = await prisma.product.findUnique({
-    where: { slug: params?.productSlug },
+    where: { slug: productSlug },
   })
   return {
     title: `${product?.name} | Next Marketplace `,
@@ -30,10 +29,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function ProductPage(props: {
-  params: { productSlug: string }
-}) {
-  const { productSlug } = props.params
+export default async function ProductPage({ params }: TPageProps) {
+  const { productSlug } = await params
   const product = await prisma.product.findUnique({
     where: { slug: productSlug },
     include: {

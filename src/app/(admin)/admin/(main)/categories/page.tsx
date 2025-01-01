@@ -1,5 +1,6 @@
 import { Metadata } from "next"
 
+import { Suspense } from "react"
 import { AddCategoryModal } from "./_components/add-category-modal"
 import { CategoryTable } from "./_components/category-table"
 import { EditCategoryModal } from "./_components/edit-category-modal"
