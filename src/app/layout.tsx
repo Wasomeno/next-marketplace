@@ -1,14 +1,16 @@
 import "./globals.css"
 
-import { Metadata } from "next"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
+import { Metadata } from "next"
 import { IoIosCloseCircle } from "react-icons/io"
 import { IoCheckmarkCircle } from "react-icons/io5"
 
-import { ReactQueryProvider } from "@/lib/react-query-provider"
+import { DataTable } from "@/components/data-table"
 import ClientSessionProvider from "@/components/session-provider"
 import { ThemeClientProvider } from "@/components/theme-client-provider"
 import { Toaster } from "@/components/toaster"
+import { ReactQueryProvider } from "@/lib/react-query-provider"
+import { Suspense } from "react"
 
 export const metadata: Metadata = {
   title: {
@@ -28,7 +30,9 @@ export default async function RootLayout({
         <ReactQueryProvider>
           <body className="flex min-h-screen flex-1 flex-col overflow-y-scroll antialiased dark:bg-slate-950">
             <ThemeClientProvider>
-              {children}
+              <Suspense fallback={<div className="flex h-full w-full" />}>
+                {children}
+              </Suspense>
               <div className="fixed" />
             </ThemeClientProvider>
             <Toaster
