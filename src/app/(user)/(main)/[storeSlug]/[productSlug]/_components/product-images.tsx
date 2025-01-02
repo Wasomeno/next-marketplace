@@ -1,7 +1,7 @@
 "use client"
 
-import { useState } from "react"
 import Image from "next/image"
+import { useState } from "react"
 import { twMerge } from "tailwind-merge"
 
 export const ProductImages = ({ imageUrls }: { imageUrls: string[] }) => {
@@ -9,7 +9,7 @@ export const ProductImages = ({ imageUrls }: { imageUrls: string[] }) => {
   const [activeImage, setActiveImage] = useState(imageUrls[0])
   return (
     <div className="flex w-full flex-col lg:items-start">
-      <div className="relative h-80 w-full self-center overflow-hidden rounded-md">
+      <div className="relative h-[45rem] w-full self-center overflow-hidden rounded-md">
         <Image src={activeImage} alt="product-image-main" fill />
       </div>
       <div className="mt-4 flex items-center gap-2.5">
@@ -20,7 +20,7 @@ export const ProductImages = ({ imageUrls }: { imageUrls: string[] }) => {
             onMouseLeave={() => setActiveImage(selectedImage)}
             onClick={() => setSelectedImage(url)}
             className={twMerge(
-              "relative h-16 w-16 cursor-pointer rounded-md transition duration-200"
+              "relative h-32 w-32 cursor-pointer rounded-md transition duration-200"
             )}
           >
             <Image
