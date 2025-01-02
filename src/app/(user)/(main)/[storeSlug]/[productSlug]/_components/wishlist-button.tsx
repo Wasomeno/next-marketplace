@@ -1,13 +1,13 @@
 "use client"
 
-import { useTransition } from "react"
-import { useParams, useRouter } from "next/navigation"
 import {
   addProductToWishlist,
   removeProductFromWishlist,
 } from "@/actions/user/wishlist"
 import { motion } from "framer-motion"
 import { useSession } from "next-auth/react"
+import { useParams, useRouter } from "next/navigation"
+import { useTransition } from "react"
 import { toast } from "sonner"
 
 export const WishListButton = ({ isWishlisted }: { isWishlisted: boolean }) => {
@@ -51,7 +51,7 @@ export const WishListButton = ({ isWishlisted }: { isWishlisted: boolean }) => {
       <motion.svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 512 512"
-        className="w-5 lg:w-5"
+        className="w-5 lg:w-7"
         animate={{ scale: isWishlisted ? 1.2 : 1.0 }}
         transition={{
           type: "spring",
