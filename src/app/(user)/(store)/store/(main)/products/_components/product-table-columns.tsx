@@ -1,11 +1,6 @@
-import Image from "next/image"
 import { Prisma } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
-
-import { Skeleton } from "@/components/skeleton"
-import { TableActions } from "@/components/table-actions"
-
-import { StoreProductSingleDeleteModal } from "./store-product-single-delete-modal"
+import Image from "next/image"
 
 export const productTableColumns: ColumnDef<
   Prisma.ProductGetPayload<{
@@ -69,60 +64,5 @@ export const productTableColumns: ColumnDef<
     accessorKey: "stock",
     header: "Stock",
     cell: (stock) => stock.getValue(),
-  },
-]
-
-export const productTablePlaceholderColumns: ColumnDef<
-  Prisma.ProductGetPayload<{
-    include: { images: true; categories: true; reviews: true; store: true }
-  }>
->[] = [
-  {
-    header: "Id",
-    enableColumnFilter: false,
-    cell: () => <Skeleton className="h-6 w-20 " />,
-  },
-  {
-    header: "Image",
-    cell: () => {
-      return <Skeleton className="h-[140px] w-[120px] " />
-    },
-    enableColumnFilter: false,
-  },
-  {
-    id: "name",
-    header: "Name",
-    cell: () => <Skeleton className="h-6 w-20 " />,
-  },
-  {
-    header: "Category",
-    cell: () => {
-      return (
-        <div className="flex items-center justify-center gap-1.5">
-          <Skeleton className="h-6 w-20 " />
-        </div>
-      )
-    },
-  },
-  {
-    header: "Status",
-    cell: () => <Skeleton className="h-6 w-20 " />,
-  },
-  {
-    header: "Stock",
-    cell: (stock) => <Skeleton className="h-6 w-20 " />,
-  },
-  {
-    id: "action",
-    header: "Actions",
-    cell: () => {
-      return (
-        <TableActions
-          viewAction={<TableActions.View asLink={false} />}
-          editAction={<TableActions.Edit asLink={false} />}
-          deleteAction={<TableActions.Delete asLink={false} />}
-        />
-      )
-    },
   },
 ]

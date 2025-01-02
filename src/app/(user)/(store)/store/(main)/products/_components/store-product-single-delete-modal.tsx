@@ -31,7 +31,7 @@ export const StoreProductSingleDeleteModal: React.FC<{
   })
   return (
     <>
-      <TableActions.Delete onClick={() => setIsOpen(true)} asLink={false} />
+      <TableActions.Delete onClick={() => setIsOpen(true)} type="button" />
       <ConfirmationDialog
         open={isOpen}
         title={"Delete Product"}

@@ -4,7 +4,6 @@ import { usePathname, useRouter } from "next/navigation"
 import { BsPlus } from "react-icons/bs"
 
 import { getCategories } from "@/actions/categories"
-import { Skeleton } from "@/components/skeleton"
 import { TableActions } from "@/components/table-actions"
 import { Button } from "@/components/ui/button"
 import { CheckBox } from "@/components/ui/checkbox"
@@ -119,51 +118,18 @@ export const CategoryTable = () => {
       header: "Actions",
       cell: ({ row }) => (
         <TableActions
-          viewAction={
+          view={
             <TableActions.View
-              asLink
+              type="link"
               href={`/admin/categories/${row.original.id}`}
             />
           }
-          editAction={
+          edit={
             <TableActions.Edit
               onClick={() => openEditCategoryModal(row.original.id.toString())}
-              asLink={false}
+              type="button"
             />
           }
-        />
-      ),
-    },
-  ]
-
-  const placeHolderColumns: ColumnDef<
-    Prisma.CategoryGetPayload<{
-      include: { _count: { select: { products: true } }; image: true }
-    }>
-  >[] = [
-    {
-      id: "select",
-      header: () => <CheckBox disabled />,
-      cell: () => <CheckBox disabled />,
-    },
-    {
-      header: "Id",
-      cell: () => <Skeleton className="h-6 w-24" />,
-    },
-    {
-      header: "Name",
-      cell: () => <Skeleton className="h-6 w-44" />,
-    },
-    {
-      header: "Product Amount",
-      cell: () => <Skeleton className="h-6 w-28" />,
-    },
-    {
-      header: "Actions",
-      cell: () => (
-        <TableActions
-          viewAction={<TableActions.View asLink={false} disabled />}
-          editAction={<TableActions.Edit asLink={false} disabled />}
         />
       ),
     },
@@ -189,7 +155,8 @@ export const CategoryTable = () => {
   return (
     <DataTable
       data={categories.data}
-      columns={categories.isLoading ? placeHolderColumns : columns}
+      isLoading={categories.isLoading}
+      columns={columns}
       searchInput={
         <DataTable.SearchInput placeholder="Search by category name" />
       }

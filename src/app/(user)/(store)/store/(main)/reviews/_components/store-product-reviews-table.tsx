@@ -6,7 +6,6 @@ import React from "react"
 import { getStoreProductReviews } from "@/actions/store/review"
 import { DataTable } from "@/components/data-table"
 import { Option } from "@/components/dropdown"
-import { Skeleton } from "@/components/skeleton"
 import { TableActions } from "@/components/table-actions"
 import { getParsedSortParams, useSearchParamsValues } from "@/utils"
 import { Prisma } from "@prisma/client"
@@ -56,40 +55,14 @@ export const StoreProductReviewsTable: React.FC<{ storeId: number }> = ({
     },
     {
       header: "Actions",
-      cell: () => (
-        <TableActions viewAction={<TableActions.View asLink={false} />} />
-      ),
-    },
-  ]
-
-  const placeholderColumns: ColumnDef<ProductReview>[] = [
-    {
-      header: "Product Name",
-      cell: () => <Skeleton className="h-6 w-20 " />,
-    },
-    {
-      header: "Rating",
-      cell: () => <Skeleton className="h-6 w-20 " />,
-    },
-    {
-      header: "User",
-      cell: () => <Skeleton className="h-6 w-20 " />,
-    },
-    {
-      header: "Created at",
-      cell: () => <Skeleton className="h-6 w-20 " />,
-    },
-    {
-      header: "Actions",
-      cell: () => (
-        <TableActions viewAction={<TableActions.View asLink={false} />} />
-      ),
+      cell: () => <TableActions view={<TableActions.View type="button" />} />,
     },
   ]
 
   return (
     <DataTable
-      columns={reviews.isLoading ? placeholderColumns : columns}
+      columns={columns}
+      isLoading={reviews.isLoading}
       data={reviews.data ?? Array(5).fill("")}
       searchInput={
         <DataTable.SearchInput

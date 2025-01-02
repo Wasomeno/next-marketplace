@@ -20,10 +20,7 @@ import {
 import { StoreProduct } from "../../../_actions"
 import { storeProductsQuery } from "../../../_query/options"
 import { ProductFilter } from "./product-filter"
-import {
-  productTableColumns,
-  productTablePlaceholderColumns,
-} from "./product-table-columns"
+import { productTableColumns } from "./product-table-columns"
 import { StoreProductMultipleDeleteModal } from "./store-product-multiple-delete-modal"
 import { StoreProductSingleDeleteModal } from "./store-product-single-delete-modal"
 
@@ -46,19 +43,6 @@ export const productSortOptions = [
     label: "Stock from low to high",
     value: "stock.asc",
   },
-]
-
-const placeholderColumns: ColumnDef<
-  Prisma.ProductGetPayload<{
-    include: { images: true; categories: true; reviews: true; store: true }
-  }>
->[] = [
-  {
-    id: "select",
-    header: () => <CheckBox disabled />,
-    cell: () => <CheckBox disabled />,
-  },
-  ...productTablePlaceholderColumns,
 ]
 
 export const ProductTable: React.FC<{ storeId: number }> = ({ storeId }) => {
@@ -138,21 +122,16 @@ export const ProductTable: React.FC<{ storeId: number }> = ({ storeId }) => {
 
         return (
           <TableActions
-            viewAction={
+            view={
               <TableActions.View
                 href={`/store/products/view/${row.original.id}`}
-                asLink
+                type="link"
               />
             }
-            editAction={
-              <TableActions.Edit
-                onClick={openEditProductModal}
-                asLink={false}
-              />
+            edit={
+              <TableActions.Edit onClick={openEditProductModal} type="button" />
             }
-            deleteAction={
-              <StoreProductSingleDeleteModal product={row.original} />
-            }
+            delete={<StoreProductSingleDeleteModal product={row.original} />}
           />
         )
       },
@@ -173,7 +152,8 @@ export const ProductTable: React.FC<{ storeId: number }> = ({ storeId }) => {
   return (
     <DataTable
       data={products.data?.products}
-      columns={products.isLoading ? placeholderColumns : columns}
+      isLoading={products.isLoading}
+      columns={columns}
       pagination={
         products.data?.products.length ? (
           <DataTable.Pagination
@@ -212,43 +192,6 @@ export const ProductTable: React.FC<{ storeId: number }> = ({ storeId }) => {
           storeId={storeId}
           selectedIds={selectedData}
         />
-      }
-    />
-  )
-}
-
-export function ProductTableSkeleton() {
-  return (
-    <DataTable
-      data={Array(5).fill({})}
-      columns={placeholderColumns}
-      pagination={<></>}
-      dataSorter={
-        <DataTable.Sorter sortOptions={productSortOptions} disabled />
-      }
-      dataFilter={<ProductFilter disabled />}
-      searchInput={
-        <DataTable.SearchInput disabled placeholder="Search by product name" />
-      }
-      addTrigger={
-        <Button
-          variant="defaultOutline"
-          size="sm"
-          className="h-8 w-8 gap-1 px-0 shadow-sm lg:h-9 lg:w-auto lg:px-2.5"
-          disabled
-        >
-          <span className="hidden text-xs lg:inline">Create</span> <BsPlus />
-        </Button>
-      }
-      deleteTrigger={
-        <Button
-          variant="defaultOutline"
-          size="sm"
-          className="h-8 w-8 px-0 shadow-sm lg:h-9 lg:w-auto lg:px-2.5"
-          disabled
-        >
-          <span className="hidden text-xs lg:inline">Remove</span> <BsTrash3 />
-        </Button>
       }
     />
   )

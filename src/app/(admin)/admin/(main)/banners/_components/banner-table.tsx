@@ -6,7 +6,6 @@ import React from "react"
 import { BsPlus } from "react-icons/bs"
 
 import { DataTable, useSelectedData } from "@/components/data-table"
-import { Skeleton } from "@/components/skeleton"
 import { TableActions } from "@/components/table-actions"
 import { Button } from "@/components/ui/button"
 import { CheckBox } from "@/components/ui/checkbox"
@@ -105,47 +104,12 @@ export const BannerTable = () => {
       header: "Actions",
       cell: ({ row }) => (
         <TableActions
-          editAction={
+          edit={
             <TableActions.Edit
-              asLink={false}
+              type="button"
               onClick={() => openEditBannerModal(row.original.id)}
             />
           }
-        />
-      ),
-    },
-  ]
-
-  const placeholderColumns: ColumnDef<Banner>[] = [
-    {
-      id: "select",
-      header: () => <CheckBox disabled />,
-      cell: () => <CheckBox disabled />,
-    },
-    {
-      header: "Id",
-      cell: () => <Skeleton className="h-6 w-20" />,
-      enableColumnFilter: false,
-    },
-    {
-      header: "Image",
-      cell: () => <Skeleton className="h-28 w-48" />,
-      footer: (props) => props.column.id,
-      enableColumnFilter: false,
-    },
-    {
-      header: "Name",
-      cell: () => <Skeleton className="h-6 w-32" />,
-      footer: (props) => props.column.id,
-    },
-
-    {
-      id: "actions",
-      header: "Actions",
-      cell: () => (
-        <TableActions
-          viewAction={<TableActions.View asLink={false} disabled />}
-          editAction={<TableActions.Edit asLink={false} disabled />}
         />
       ),
     },
@@ -171,7 +135,8 @@ export const BannerTable = () => {
   return (
     <DataTable
       data={banners?.data}
-      columns={banners.isLoading ? placeholderColumns : columns}
+      isLoading={banners.isLoading}
+      columns={columns}
       searchInput={
         <DataTable.SearchInput placeholder="Search by banner name" />
       }
