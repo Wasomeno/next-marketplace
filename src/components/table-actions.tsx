@@ -1,5 +1,5 @@
-import React, { ReactElement } from "react"
 import Link, { LinkProps } from "next/link"
+import React, { ReactElement } from "react"
 import { BiPencil, BiTrash } from "react-icons/bi"
 import { BsEye } from "react-icons/bs"
 import { twMerge } from "tailwind-merge"
@@ -7,15 +7,15 @@ import { twMerge } from "tailwind-merge"
 import { Button, ButtonProps, buttonVariants } from "./ui/button"
 
 type TableActionsProps = {
-  viewAction?: ReactElement
-  editAction?: ReactElement
-  deleteAction?: ReactElement
+  view?: ReactElement
+  edit?: ReactElement
+  delete?: ReactElement
 }
 
-type ButtonActionProps = { asLink: false } & ButtonProps
+type ButtonActionProps = { type: "button" } & ButtonProps
 
 type LinkActionProps = {
-  asLink: true
+  type: "link"
 } & LinkProps
 
 type ActionProps = ButtonActionProps | LinkActionProps
@@ -31,21 +31,21 @@ const linkStyle = twMerge(
 const buttonStyle = "h-7 w-7 shadow-sm p-0 px-0 py-0"
 
 export function TableActions({
-  viewAction,
-  editAction,
-  deleteAction,
+  view,
+  edit,
+  delete: deleteAction,
 }: TableActionsProps) {
   return (
     <div className="flex items-center justify-center gap-2">
-      {viewAction}
-      {editAction}
+      {view}
+      {edit}
       {deleteAction}
     </div>
   )
 }
 
 const ViewAction: React.FC<ActionProps> = (props) => {
-  if (!props.asLink) {
+  if (props.type === "button") {
     return (
       <Button {...props} variant="defaultOutline" className={buttonStyle}>
         <BsEye />
@@ -60,7 +60,7 @@ const ViewAction: React.FC<ActionProps> = (props) => {
   }
 }
 const EditAction: React.FC<ActionProps> = ({ ...props }) => {
-  if (!props.asLink) {
+  if (props.type === "button") {
     return (
       <Button {...props} variant="defaultOutline" className={buttonStyle}>
         <BiPencil />
@@ -75,7 +75,7 @@ const EditAction: React.FC<ActionProps> = ({ ...props }) => {
   }
 }
 const DeleteAction: React.FC<ActionProps> = ({ ...props }) => {
-  if (!props.asLink) {
+  if (props.type === "button") {
     return (
       <Button {...props} variant="defaultOutline" className={buttonStyle}>
         <BiTrash />
