@@ -1,6 +1,5 @@
 "use client"
 
-import React, { ReactElement, useState } from "react"
 import {
   ColumnDef,
   flexRender,
@@ -8,11 +7,13 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table"
+import React, { ReactElement, useState } from "react"
 import { CiViewList } from "react-icons/ci"
 
 import { DataSorter } from "./data-sorter"
 import { NoData } from "./no-data"
 import { Pagination } from "./pagination"
+import { Skeleton } from "./skeleton"
 import { TableSearchInput } from "./table-search-input"
 import {
   Table as ReactTable,
@@ -26,6 +27,7 @@ import {
 type DataTableProps<T> = {
   columns: ColumnDef<T>[]
   data?: T[]
+  isLoading?: boolean
   dataSorter?: ReactElement
   dataFilter?: ReactElement
   deleteTrigger?: ReactElement
@@ -40,6 +42,7 @@ export function DataTable<T extends Record<string, unknown>>({
   data,
   deleteTrigger,
   addTrigger,
+  isLoading,
   dataSorter,
   searchInput,
   pagination,
@@ -97,7 +100,7 @@ export function DataTable<T extends Record<string, unknown>>({
             ))}
           </TableHeader>
           <TableBody className="relative divide-y divide-gray-100 border-t border-gray-100 dark:divide-neutral-600 dark:border-neutral-600">
-            {table.getRowModel().rows?.length > 0 &&
+            {isLoading &&
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
@@ -105,10 +108,30 @@ export function DataTable<T extends Record<string, unknown>>({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
-                      className="text-center text-xs   dark:text-white lg:text-sm"
+                      className="text-center text-xs dark:text-white lg:text-sm"
                       key={cell.id}
                     >
-                      <div className="flex  items-center justify-center px-3 py-2 lg:px-6 lg:py-4">
+                      <div className="flex items-center justify-center px-3 py-2 lg:px-6 lg:py-4">
+                        <Skeleton className="w-24 h-8" />
+                      </div>
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+
+            {!isLoading &&
+              table.getRowModel().rows?.length > 0 &&
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  className="bg-white dark:border-neutral-600 dark:bg-neutral-800"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell
+                      className="text-center text-xs dark:text-white lg:text-sm"
+                      key={cell.id}
+                    >
+                      <div className="flex items-center justify-center px-3 py-2 lg:px-6 lg:py-4">
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
@@ -119,7 +142,7 @@ export function DataTable<T extends Record<string, unknown>>({
                 </TableRow>
               ))}
 
-            {!table.getRowModel().rows?.length && (
+            {!isLoading && !table.getRowModel().rows?.length && (
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
