@@ -46,12 +46,6 @@ export default async function ProductPage({ params }: TPageProps) {
 
   const isWishlisted = await isProductInWishlist(product?.id as number)
 
-  const testValue = 100
-
-  const test = await new Promise((resolve) =>
-    setTimeout(() => resolve(testValue), 5000)
-  )
-
   invariant(product, "Type error")
 
   return (
