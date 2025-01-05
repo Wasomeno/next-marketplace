@@ -26,7 +26,7 @@ export default async function OrdersPage({ searchParams }: TPageProps) {
 
   const orders = await getUserOrders({
     userEmail: session.user.email,
-    statusId: Number(statusId),
+    statusId: statusId ? Number(statusId) : undefined,
     search: search,
   })
 
