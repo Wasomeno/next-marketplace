@@ -13,22 +13,22 @@ import React from "react"
 type DatePickerMode = "single" | "range" | "multiple"
 
 export type DateRange = {
-  from: Date | null
-  to: Date | null
+  from: Date | undefined
+  to?: Date | undefined
 }
 
 type DatePickerProps = {
   mode?: DatePickerMode
   className?: string
-  onChange?: (value: Date | null | DateRange | Date[]) => void
-  initialValue?: Date | null | DateRange | Date[]
+  onChange?: (value: Date | undefined | DateRange | Date[]) => void
+  initialValue?: Date | undefined | DateRange | Date[]
 }
 
 export const DatePicker = ({
   mode = "single",
   className,
   onChange,
-  initialValue = null,
+  initialValue = undefined,
 }: DatePickerProps) => {
   // Type guard to check if value is a DateRange
   const isDateRange = (value: any): value is DateRange => {
@@ -43,18 +43,18 @@ export const DatePicker = ({
   }
 
   // Initialize state based on mode and initialValue
-  const [date, setDate] = React.useState<Date | null>(() => {
+  const [date, setDate] = React.useState<Date | undefined>(() => {
     if (mode === "single" && initialValue instanceof Date) {
       return initialValue
     }
-    return null
+    return undefined
   })
 
   const [dateRange, setDateRange] = React.useState<DateRange>(() => {
     if (mode === "range" && isDateRange(initialValue)) {
       return initialValue
     }
-    return { from: null, to: null }
+    return { from: undefined, to: undefined }
   })
 
   const [selectedDays, setSelectedDays] = React.useState<Date[]>(() => {
@@ -64,10 +64,12 @@ export const DatePicker = ({
     return []
   })
 
-  const handleSelect = (selectedDate: Date | null | DateRange | Date[]) => {
+  const handleSelect = (
+    selectedDate: Date | undefined | DateRange | Date[]
+  ) => {
     switch (mode) {
       case "single":
-        setDate(selectedDate as Date | null)
+        setDate(selectedDate as Date | undefined)
         onChange?.(selectedDate)
         break
       case "range":
@@ -133,7 +135,7 @@ export const DatePicker = ({
             <Calendar
               mode="single"
               selected={date}
-              onSelect={handleSelect as (date: Date | null) => void}
+              onSelect={handleSelect as (date: Date | undefined) => void}
               initialFocus
             />
           )}
@@ -141,7 +143,7 @@ export const DatePicker = ({
             <Calendar
               mode="range"
               selected={dateRange}
-              onSelect={handleSelect as (range: DateRange) => void}
+              onSelect={handleSelect as (range: DateRange | undefined) => void}
               numberOfMonths={2}
               initialFocus
             />
@@ -150,7 +152,7 @@ export const DatePicker = ({
             <Calendar
               mode="multiple"
               selected={selectedDays}
-              onSelect={handleSelect as (dates: Date[]) => void}
+              onSelect={handleSelect as (dates: Date[] | undefined) => void}
               initialFocus
             />
           )}
