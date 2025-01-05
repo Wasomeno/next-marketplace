@@ -1,12 +1,13 @@
 import { getProductReviews } from "@/actions/product"
 import React from "react"
-import { BiSolidStar } from "react-icons/bi"
 import { RiChatDeleteFill } from "react-icons/ri"
 
+import { Prisma } from "@prisma/client"
 import { ReviewCard } from "./review-card"
 
-export async function ProductReviews({ productId }: { productId: number }) {
-  const reviews = await getProductReviews(productId)
+export const ProductReviews: React.FC<{
+  reviews: Prisma.ProductReviewGetPayload<{ include: { user: true } }>[]
+}> = ({ reviews }) => {
   return (
     <div className="flex flex-1 flex-col gap-5 lg:flex-row lg:items-start lg:justify-normal lg:gap-10">
       <div className="flex flex-1 flex-col space-y-2 lg:space-y-4">
