@@ -39,9 +39,9 @@ export const AddToCartForm = ({ product }: AddToCartFormProps) => {
   })
 
   return (
-    <div className="bottom-0 m-0 h-fit w-full space-y-4 mb-6 border-t border-slate-200 bg-white p-2 shadow-[0_3px_10px_rgb(0,0,0,0.1)] dark:border-t-gray-800 lg:rounded-lg lg:border lg:border-slate-200 lg:p-4 lg:shadow-sm lg:dark:border-gray-800">
+    <div className="sticky bottom-0 m-0 h-fit w-full lg:space-y-4 lg:mb-6 border-t border-slate-200 bg-white p-2 shadow-[0_3px_10px_rgb(0,0,0,0.1)] dark:border-t-gray-800 lg:rounded-lg lg:border lg:border-slate-200 lg:p-4 lg:shadow-sm lg:dark:border-gray-800">
       <span className="hidden lg:inline-block">Add to Cart</span>
-      <div className="space-y-3">
+      <div className="lg:space-y-3">
         <div className="hidden lg:block">
           <div className="flex items-center justify-between gap-4">
             <span className="text-xs text-slate-500 lg:text-sm">Quantity</span>
