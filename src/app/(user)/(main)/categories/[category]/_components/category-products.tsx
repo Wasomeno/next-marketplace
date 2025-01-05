@@ -49,9 +49,7 @@ export function CategoryProducts() {
       }),
   })
 
-  const ProductsExist = products?.data?.length !== 0 && !products.isLoading
-  const ProductNotExist =
-    (products?.data?.length as number) < 1 && !products.isLoading
+  const isProductsExist = products?.data?.length !== 0 && !products.isLoading
 
   return (
     <div className="relative flex w-full flex-1 justify-center gap-10 px-4 lg:px-10">
@@ -69,7 +67,7 @@ export function CategoryProducts() {
               <ProductCard.Skeleton key={index} />
             ))}
 
-          {ProductsExist &&
+          {isProductsExist &&
             products?.data?.map((product) => (
               <ProductCard
                 key={product.id}
@@ -87,7 +85,7 @@ export function CategoryProducts() {
               />
             ))}
 
-          {ProductNotExist && (
+          {!isProductsExist && (
             <div className="col-span-12 flex h-96 flex-col items-center justify-center gap-2">
               <span className="text-sm text-slate-800  text-opacity-50 dark:text-gray-500 lg:text-base">
                 No products found
