@@ -1,11 +1,11 @@
 "use client"
 
-import Image from "next/image"
-import { useRouter, useSearchParams } from "next/navigation"
 import { getOrder } from "@/actions/user/order"
 import { Separator } from "@radix-ui/react-separator"
 import { useQuery } from "@tanstack/react-query"
 import moment from "moment"
+import Image from "next/image"
+import { useRouter, useSearchParams } from "next/navigation"
 import { ImSpinner8 } from "react-icons/im"
 
 import {
@@ -43,7 +43,7 @@ export function UserViewOrderModal() {
     <ResponsiveDialog open={isOpen} onOpenChange={onOpenChange}>
       <ResponsiveDialogContent
         open={isOpen}
-        className="flex w-full flex-1 flex-col gap-2 lg:h-4/6 lg:w-3/6 lg:gap-4"
+        className="flex w-full flex-1 flex-col gap-2 lg:w-[50rem] lg:h-[45rem] lg:gap-4"
       >
         <ResponsiveDialogHeader title="Order Details" />
         {order.isLoading ? (
