@@ -4,17 +4,15 @@ import { usePathname, useRouter } from "next/navigation"
 import React from "react"
 
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogOverlay,
-  DialogPortal,
-  DialogTrigger,
-} from "@/components/ui/dialog"
 import { useSearchParamsValues } from "@/utils"
 import { Prisma } from "@prisma/client"
 
+import {
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTrigger,
+} from "@/components/responsive-dialog"
 import { OrderReviewCard } from "./order-review-card"
 
 export const CreateReviewModal: React.FC<{
@@ -46,33 +44,30 @@ export const CreateReviewModal: React.FC<{
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>
+    <ResponsiveDialog open={isOpen} onOpenChange={onOpenChange}>
+      <ResponsiveDialogTrigger asChild>
         <Button size="sm" className="lg:text-xs">
           Rate Product
         </Button>
-      </DialogTrigger>
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent
-          open={isOpen}
-          className="flex h-5/6 w-full flex-1 flex-col lg:h-4/6 lg:w-2/6"
-        >
-          <DialogHeader
-            title="Product Review"
-            description="Give your review to ordered products"
-          />
-          <div className="flex flex-1 flex-col gap-2 p-4">
-            {orderProducts.map((orderProduct) => (
-              <OrderReviewCard
-                key={orderProduct.id}
-                userEmail={userEmail}
-                orderProduct={orderProduct}
-              />
-            ))}
-          </div>
-        </DialogContent>
-      </DialogPortal>
-    </Dialog>
+      </ResponsiveDialogTrigger>
+      <ResponsiveDialogContent
+        open={isOpen}
+        className="flex w-full flex-1 flex-col lg:h-[45rem] lg:w-[50rem]"
+      >
+        <ResponsiveDialogHeader
+          title="Product Review"
+          description="Give your review to ordered products"
+        />
+        <div className="flex flex-1 flex-col gap-2 p-4">
+          {orderProducts.map((orderProduct) => (
+            <OrderReviewCard
+              key={orderProduct.id}
+              userEmail={userEmail}
+              orderProduct={orderProduct}
+            />
+          ))}
+        </div>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   )
 }
