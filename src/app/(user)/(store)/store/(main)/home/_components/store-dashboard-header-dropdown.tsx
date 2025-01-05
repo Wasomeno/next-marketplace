@@ -14,7 +14,7 @@ export const StoreDashboardHeaderDropdown = () => {
   const pathname = usePathname()
   const router = useRouter()
 
-  function onSelectDate(date: Date | Date[] | DateRange | null) {
+  function onSelectDate(date: Date | Date[] | DateRange | undefined) {
     // const searchParams = new URLSearchParams(searchParamValues)
     // if (date) {
     //   searchParams.set("date", format(date, "m"))
