@@ -3,9 +3,13 @@ export type TBaseDataFilter = {
   sort?: Record<string, "asc" | "desc">
   pageSize?: string
   page?: string
+  startDate?: string
+  endDate?: string
 }
 
 export type TBaseDataFilterParams = {
+  startDate?: string
+  endDate?: string
   search?: string
   sort?: string
   pageSize?: string
