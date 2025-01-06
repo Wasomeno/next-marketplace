@@ -142,6 +142,7 @@ export const DatePicker = ({
           {mode === "range" && (
             <Calendar
               mode="range"
+              defaultMonth={dateRange?.from}
               selected={dateRange}
               onSelect={handleSelect as (range: DateRange | undefined) => void}
               numberOfMonths={2}
