@@ -52,7 +52,7 @@ export function CategoryProducts() {
   const isProductsExist = products?.data?.length !== 0 && !products.isLoading
 
   return (
-    <div className="relative flex w-full flex-1 justify-center gap-10 px-4 lg:px-10">
+    <div className="relative flex w-full flex-1 justify-center gap-10 px-4 lg:px-28">
       <div className="w-full">
         <div className="mb-4 flex items-center justify-between">
           <h6 className="text-sm font-medium lg:text-lg">Products</h6>
