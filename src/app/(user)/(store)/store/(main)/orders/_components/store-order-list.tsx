@@ -3,7 +3,7 @@
 import React from "react"
 import { BsBoxSeam } from "react-icons/bs"
 
-import { getOrderStatuses, getStoreOrders } from "@/actions/user/order"
+import { getOrderStatuses } from "@/actions/user/order"
 import { DataFilter } from "@/components/data-filter"
 import { DataSorter } from "@/components/data-sorter"
 import { Option } from "@/components/dropdown"
@@ -14,6 +14,7 @@ import { getParsedSortParams, useSearchParamsValues } from "@/utils"
 import { useQuery } from "@tanstack/react-query"
 
 import { TBaseDataFilterParams } from "../../../../../../../../types"
+import { getStoreOrders } from "../../../_actions"
 import { StoreOrderCard, StoreOrderCardSkeleton } from "./store-order-card"
 
 const sortOptions: Option[] = [

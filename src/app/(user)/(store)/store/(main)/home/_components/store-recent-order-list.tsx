@@ -1,13 +1,13 @@
 "use client"
 
-import React from "react"
-import { getStoreOrders } from "@/actions/user/order"
-import { Order, Prisma } from "@prisma/client"
+import { Prisma } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
 import { ColumnDef } from "@tanstack/react-table"
 import moment from "moment"
+import React from "react"
 
 import { DataTable } from "@/components/data-table"
+import { getStoreOrders } from "../../../_actions"
 
 const columns: ColumnDef<
   Prisma.OrderGetPayload<{ include: { products: true } }>

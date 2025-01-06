@@ -2,12 +2,12 @@
 
 import React from "react"
 
-import { getStoreOrderCount } from "@/actions/user/order"
 import { Skeleton } from "@/components/skeleton"
 import { useSearchParamsValues } from "@/utils"
 import { useQuery } from "@tanstack/react-query"
 
 import { TBaseDataFilterParams } from "../../../../../../../../types"
+import { getStoreOrderCount } from "../../../_actions"
 
 export const StoreOrderCount: React.FC<{ storeId: number }> = ({ storeId }) => {
   const searchParamsValues = useSearchParamsValues<TBaseDataFilterParams>()
