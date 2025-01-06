@@ -6,6 +6,14 @@ import { getServerSession } from "next-auth"
 import { revalidatePath } from "next/cache"
 
 import { prisma } from "@/lib/prisma"
+import {
+  addDays,
+  differenceInDays,
+  endOfDay,
+  format,
+  isValid,
+  startOfDay,
+} from "date-fns"
 import { TBaseDataFilter } from "../../../../../../types"
 
 type GetStoreProductsParams = TBaseDataFilter & {
@@ -24,6 +32,13 @@ type UpdateStoreParams = Omit<
   Store,
   "owner_email" | "profile_image" | "created_at"
 >
+
+type GetStoreSalesParams = TBaseDataFilter
+
+type GetStoreOrdersParams = TBaseDataFilter & {
+  storeId: number
+  statusIds?: Array<number>
+}
 
 export async function getStore({
   userEmail,
@@ -44,6 +59,28 @@ export async function getStore({
   })
 
   return store
+}
+
+export async function getStoreOrders(params: GetStoreOrdersParams) {
+  const orders = await prisma.order.findMany({
+    orderBy: params.sort,
+    where: {
+      store_id: params.storeId,
+      id: { contains: params.search, mode: "insensitive" },
+      status_id: { in: params.statusIds },
+      created_at: {
+        gte: params.startDate ? new Date(params.startDate) : undefined,
+        lte: params.endDate ? new Date(params.endDate) : undefined,
+      },
+    },
+    include: {
+      products: { include: { product: { include: { images: true } } } },
+      _count: { select: { products: true } },
+      address: true,
+    },
+  })
+
+  return orders
 }
 
 export async function getStoreProducts(props: GetStoreProductsParams) {
@@ -142,24 +179,147 @@ export async function updateStoreProfileImage({
   })
 }
 
-export async function getStoreOrderCount() {
-  const session = await getServerSession()
+export async function getStoreSalesByTimeRange(
+  storeId: number,
+  startDate?: string,
+  endDate?: string
+) {
+  const sales = []
 
-  if (!session?.user.email) {
-    throw new Error("User Session Invalid")
+  if (startDate && endDate) {
+    const timeRange = differenceInDays(new Date(endDate), new Date(startDate))
+
+    for (let i = 0; i < timeRange; i++) {
+      const time = new Date(startDate)
+
+      const timeWithAddedDays = addDays(time, i)
+
+      if (!isValid(time)) {
+        throw new Error("Invalid Date")
+      }
+
+      const store = await prisma.store.findUnique({
+        where: {
+          id: storeId,
+        },
+        select: {
+          orders: {
+            where: {
+              created_at: {
+                gte: startOfDay(timeWithAddedDays),
+                lte: endOfDay(timeWithAddedDays),
+              },
+            },
+          },
+        },
+      })
+
+      if (!store?.orders) {
+        throw new Error("Error Getting Store Sales")
+      }
+
+      const salesAmount = store.orders.reduce(
+        (acc, order) => acc + order.total,
+        0
+      )
+
+      sales.push({
+        time: format(timeWithAddedDays, "dd-MM-yyyy"),
+        sales: salesAmount,
+      })
+    }
+
+    return sales
   }
 
-  const store = await prisma.store.findUnique({
-    where: {
-      owner_email: session.user.email,
-    },
-    select: { _count: { select: { orders: true } } },
-  })
+  const defaultEarlierTime = new Date()
 
-  return store?._count.orders ?? 0
+  defaultEarlierTime.setFullYear(defaultEarlierTime.getFullYear() - 1)
+
+  const defaultTimeRange = differenceInDays(new Date(), defaultEarlierTime)
+
+  for (let i = 0; i < defaultTimeRange; i++) {
+    const time = defaultEarlierTime
+
+    const timeWithAddedDays = addDays(time, i)
+
+    if (!isValid(time)) {
+      throw new Error("Invalid Date")
+    }
+
+    const store = await prisma.store.findUnique({
+      where: {
+        id: storeId,
+      },
+      select: {
+        orders: {
+          where: {
+            created_at: {
+              gte: startOfDay(timeWithAddedDays),
+              lte: endOfDay(timeWithAddedDays),
+            },
+          },
+        },
+      },
+    })
+
+    if (!store?.orders) {
+      throw new Error("Error Getting Store Sales")
+    }
+
+    const salesAmount = store.orders.reduce(
+      (acc, order) => acc + order.total,
+      0
+    )
+
+    sales.push({
+      time: format(timeWithAddedDays, "dd-MM-yyyy"),
+      sales: salesAmount,
+    })
+  }
+
+  return sales
 }
 
-export async function getStoreSales() {
+export async function getStoreOrderCount(params: GetStoreOrdersParams) {
+  const orders = await prisma.order.findMany({
+    where: {
+      store_id: params.storeId,
+      created_at: {
+        gte: params.startDate ? new Date(params.startDate) : undefined,
+        lte: params.endDate ? new Date(params.endDate) : undefined,
+      },
+    },
+  })
+
+  return orders.length
+}
+
+export async function getStoreProductSoldCount(params: GetStoreOrdersParams) {
+  const orders = await prisma.order.findMany({
+    where: {
+      store_id: params.storeId,
+      created_at: {
+        gte: params.startDate ? new Date(params.startDate) : undefined,
+        lte: params.endDate ? new Date(params.endDate) : undefined,
+      },
+    },
+    select: {
+      products: true,
+    },
+  })
+
+  return orders.reduce((acc, order) => {
+    return (
+      acc +
+      order.products.reduce((acc, product) => {
+        return acc + product.amount
+      }, 0)
+    )
+  }, 0)
+}
+
+export async function getStoreSales(params: GetStoreSalesParams) {
   const session = await getServerSession()
 
   if (!session?.user.email) {
@@ -170,7 +330,16 @@ export async function getStoreSales() {
     where: {
       owner_email: session.user.email,
     },
-    select: { orders: true },
+    select: {
+      orders: {
+        where: {
+          created_at: {
+            gte: params.startDate ? new Date(params.startDate) : undefined,
+            lte: params.endDate ? new Date(params.endDate) : undefined,
+          },
+        },
+      },
+    },
   })
 
   if (!store?.orders) {
