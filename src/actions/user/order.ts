@@ -1,7 +1,7 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
 import { Prisma } from "@prisma/client"
+import { revalidatePath } from "next/cache"
 
 import { prisma } from "@/lib/prisma"
 
@@ -16,10 +16,6 @@ type TCheckout = {
   addressId: string
 }
 
-type GetStoreOrdersParams = TBaseDataFilter & {
-  storeId: number
-  statusIds?: Array<number>
-}
 type GetUserOrdersParams = TBaseDataFilter & {
   statusId?: number
   userEmail: string
@@ -28,24 +24,6 @@ type GetUserOrdersParams = TBaseDataFilter & {
 type GetOrderParams = TBaseDataFilter & {
   status?: string
   orderId: string
-}
-
-export async function getStoreOrders(params: GetStoreOrdersParams) {
-  const orders = await prisma.order.findMany({
-    orderBy: params.sort,
-    where: {
-      store_id: params.storeId,
-      id: { contains: params.search, mode: "insensitive" },
-      status_id: { in: params.statusIds },
-    },
-    include: {
-      products: { include: { product: { include: { images: true } } } },
-      _count: { select: { products: true } },
-      address: true,
-    },
-  })
-
-  return orders
 }
 
 export async function getUserOrders(params: GetUserOrdersParams) {
@@ -72,14 +50,6 @@ export async function getOrder(params: GetOrderParams) {
   })
 
   return orders
-}
-
-export async function getStoreOrderCount(params: GetStoreOrdersParams) {
-  const orders = await prisma.order.findMany({
-    where: { store_id: params.storeId },
-  })
-
-  return orders.length
 }
 
 export async function checkout({ userEmail, cartItems, addressId }: TCheckout) {
