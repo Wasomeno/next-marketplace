@@ -5,11 +5,14 @@ import { FaBoxArchive, FaFileInvoiceDollar } from "react-icons/fa6"
 import { LiaMoneyBillSolid } from "react-icons/lia"
 
 import { getCachedSession } from "@/actions/store/user"
-import { getStoreOrderCount } from "@/actions/user/order"
 import { getUserStore } from "@/actions/user/user-details"
 
-import { FaBox } from "react-icons/fa"
-import { getStoreSales } from "../../_actions"
+import { TPageProps } from "../../../../../../../types"
+import {
+  getStoreOrderCount,
+  getStoreProductSoldCount,
+  getStoreSales,
+} from "../../_actions"
 import { AnalyticCard } from "./_components/analytic-card"
 import { StoreDashboardHeaderDropdown } from "./_components/store-dashboard-header-dropdown"
 import { StoreRecentOrderList } from "./_components/store-recent-order-list"
@@ -19,8 +22,9 @@ export const metadata: Metadata = {
   title: "Store Dashboard",
 }
 
-export default async function UserStorePage() {
+export default async function UserStorePage(props: TPageProps) {
   const session = await getCachedSession()
+  const searchParams = await props.searchParams
 
   if (!session?.user.email) {
     redirect("/login")
@@ -32,9 +36,22 @@ export default async function UserStorePage() {
     redirect("/")
   }
 
-  const sales = await getStoreSales()
+  const sales = await getStoreSales({
+    endDate: searchParams.endDate,
+    startDate: searchParams.startDate,
+  })
 
-  const orderAmount = await getStoreOrderCount({ storeId: store.id })
+  const orderAmount = await getStoreOrderCount({
+    storeId: store.id,
+    endDate: searchParams.endDate,
+    startDate: searchParams.startDate,
+  })
+
+  const productsSoldAmount = await getStoreProductSoldCount({
+    storeId: store.id,
+    endDate: searchParams.endDate,
+    startDate: searchParams.startDate,
+  })
 
   return (
     <div className="flex flex-col gap-4 lg:gap-6">
@@ -80,10 +97,10 @@ export default async function UserStorePage() {
           icon={
             <FaBoxArchive className="h-8 w-8 text-orange-600 lg:h-10 lg:w-10" />
           }
-          data={orderAmount}
+          data={productsSoldAmount}
         />
       </div>
-      <StoreSalesChart />
+      <StoreSalesChart storeId={store.id} />
 
       <StoreRecentOrderList storeId={store.id} />
     </div>
