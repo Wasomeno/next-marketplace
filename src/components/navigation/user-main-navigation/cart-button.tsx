@@ -1,5 +1,5 @@
-import Link from "next/link"
 import { getCartItemsCount } from "@/actions/user/cart"
+import Link from "next/link"
 import { IoCartOutline } from "react-icons/io5"
 
 export async function CartButton() {

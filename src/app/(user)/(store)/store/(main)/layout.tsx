@@ -14,7 +14,9 @@ export default async function StoreLayout({
       <StoreTopNavigation />
       <div className="flex flex-1 flex-col lg:flex-row">
         <StoreSideNavigation />
-        <div className="flex flex-1 flex-col p-4 lg:p-6">{children}</div>
+        <div className="flex flex-1 flex-col p-4 lg:py-6 lg:px-16">
+          {children}
+        </div>
       </div>
       <StoreMobileNavigation />
     </div>

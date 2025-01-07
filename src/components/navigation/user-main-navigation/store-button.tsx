@@ -1,13 +1,13 @@
-import React, { Fragment } from "react"
-import Link from "next/link"
 import clsx from "clsx"
 import { getServerSession } from "next-auth"
+import Link from "next/link"
+import React, { Fragment } from "react"
 import { BiStore } from "react-icons/bi"
 import { HiPlus } from "react-icons/hi2"
 import invariant from "tiny-invariant"
 
-import { prisma } from "@/lib/prisma"
 import { buttonVariants } from "@/components/ui/button"
+import { prisma } from "@/lib/prisma"
 
 export async function StoreButton() {
   const session = await getServerSession()
@@ -61,15 +61,11 @@ export async function StoreButton() {
 
   return (
     <Fragment>
-      <Link
-        href="/store/home"
-        className={clsx(linkStyle, "hidden items-center gap-2 lg:flex")}
-      >
-        <BiStore size={20} />
-        Your Store
+      <Link href="/store/home">
+        <BiStore className=" w-6 h-6" />
       </Link>
       <Link href="/store/home" className="inline-block lg:hidden">
-        <BiStore size={20} />
+        <BiStore className=" w-6 h-6" />
       </Link>
     </Fragment>
   )

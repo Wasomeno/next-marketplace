@@ -23,7 +23,7 @@ export default async function StoreProfilePage() {
 
   return (
     <div className="flex flex-1 flex-col gap-2 lg:gap-4">
-      <h1 className="text-base font-medium lg:text-2xl">Store Profile</h1>
+      <h1 className="text-base font-bold lg:text-2xl">Store Profile</h1>
       <div className="flex flex-col items-center gap-4 lg:flex-row lg:items-start lg:gap-10 ">
         <StoreProfileImageUpload storeId={store.id} />
         <StoreProfileForm store={store} />

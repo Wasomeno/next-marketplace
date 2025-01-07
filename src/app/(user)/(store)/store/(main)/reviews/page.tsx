@@ -22,7 +22,7 @@ export default async function UserStoreReviews() {
   return (
     <div className="flex flex-1 flex-col gap-4">
       <div className="space-y-2">
-        <h1 className="text-lg font-medium lg:text-2xl">Reviews</h1>
+        <h1 className="text-lg font-bold lg:text-2xl">Reviews</h1>
         <StoreReviewCount storeId={store?.id} />
       </div>
       <StoreProductReviewsTable storeId={store?.id} />

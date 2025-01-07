@@ -54,11 +54,11 @@ export default async function UserStorePage(props: TPageProps) {
   })
 
   return (
-    <div className="flex flex-col gap-4 lg:gap-6">
+    <div className="flex flex-col flex-1 w-full gap-4 lg:gap-6">
       <div className="flex justify-between items-center ">
         <div className="lg:space-y-2">
-          <h1 className="text-lg font-medium lg:text-2xl">Store Dashboard</h1>
-          <p className="text-xs text-gray-500 lg:text-base">
+          <h1 className="text-lg font-bold lg:text-2xl">Store Dashboard</h1>
+          <p className="text-xs text-muted-foreground lg:text-base">
             Monitor your store performance
           </p>
         </div>

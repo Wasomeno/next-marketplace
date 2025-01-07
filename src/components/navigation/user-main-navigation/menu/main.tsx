@@ -29,7 +29,7 @@ export const UserMainMenu = ({ session }: { session: Session }) => {
             <Image
               src={session?.user?.picture as string}
               alt="user-profile-image"
-              className="rounded-full object-cover"
+              className="rounded-full border-2 border-gray-300 object-cover"
               fill
             />
           </div>

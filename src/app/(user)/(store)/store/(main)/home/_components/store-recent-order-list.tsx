@@ -32,6 +32,11 @@ const columns: ColumnDef<
     header: "Ordered at",
     enableColumnFilter: false,
   },
+  {
+    accessorKey: "status_id",
+    header: "Status",
+    enableColumnFilter: false,
+  },
 ]
 
 export const StoreRecentOrderList: React.FC<{ storeId: number }> = ({
@@ -43,7 +48,7 @@ export const StoreRecentOrderList: React.FC<{ storeId: number }> = ({
   })
 
   return (
-    <div className="space-y-2 rounded-lg border p-4 lg:px-6 lg:py-4">
+    <div className="flex flex-col flex-1 w-full gap-2">
       <h2 className="text-base font-medium lg:text-lg">Recent Transactions</h2>
       <DataTable
         data={transactions.data ?? Array(5).fill("")}
