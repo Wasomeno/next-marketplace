@@ -4,7 +4,6 @@ import clsx from "clsx"
 import NextImage from "next/image"
 import Link from "next/link"
 import React from "react"
-import { BiStore } from "react-icons/bi"
 import { FaStar } from "react-icons/fa"
 import { twMerge } from "tailwind-merge"
 
@@ -35,29 +34,28 @@ const ProductCard = ({
     <div
       className={twMerge(
         clsx(
-          "col-span-5 h-64 cursor-pointer rounded-md shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] dark:bg-neutral-900 dark:bg-opacity-50 dark:shadow-gray-700 lg:col-span-2 lg:h-auto",
+          "col-span-5 h-64 border-r-[1.5px] border-b-[1.5px] border-slate-200 p-4 dark:bg-neutral-900 dark:bg-opacity-50 dark:shadow-gray-700 lg:col-span-3 lg:h-auto first:border-l-0 last:border-r-0 [&:nth-child(4n)]:border-r-0",
           className
         )
       )}
       {...props}
     >
-      <Link href={href}>
-        {image}
-        <div className="flex w-full flex-col gap-1.5 p-3">
+      <Link href={href}>{image}</Link>
+      <div className="flex w-full flex-col gap-2">
+        <div className="space-y-1">
           {name}
           {price}
-          {category}
           {store}
-          {rating}
         </div>
-      </Link>
+        {rating}
+      </div>
     </div>
   )
 }
 
 const Image = ({ image }: { image: string }) => {
   return (
-    <div className="relative h-32 w-full overflow-clip rounded-t-md border-b bg-slate-50 lg:h-40">
+    <div className="relative h-32 mb-4 w-full overflow-clip bg-slate-50 lg:h-80">
       <NextImage
         src={image}
         alt="product-image"
@@ -89,26 +87,27 @@ const Rating = ({
 
 const Name = ({ name }: { name: string }) => {
   return (
-    <span className="overflow-ellipsis font-sans text-xs lg:text-sm">
+    <div className="overflow-ellipsis font-sans text-xs lg:text-base">
       {name}
-    </span>
+    </div>
   )
 }
 
 const Price = ({ price }: { price: number }) => {
   return (
-    <span className="font-sans text-sm font-medium lg:text-base">
+    <div className="font-sans text-sm font-bold lg:text-xl">
       Rp {price.toLocaleString("id")}
-    </span>
+    </div>
   )
 }
 
-const StoreName = ({ name }: { name: string }) => {
+const Store = ({ name, slug }: { name: string; slug: string }) => {
   return (
-    <div className="flex items-center gap-1.5 text-gray-500">
-      <BiStore />
-      <span className="text-sm">{name}</span>
-    </div>
+    <Link href={`/${slug}`} className="w-fit">
+      <span className="text-sm hover:text-gray-700 duration-200 text-gray-500">
+        {name}
+      </span>
+    </Link>
   )
 }
 
@@ -126,14 +125,8 @@ const Category = ({
 
 const CardSkeleton = () => {
   return (
-    <div className="col-span-5 h-64 rounded-md shadow-md dark:shadow-neutral-700 lg:col-span-2 lg:h-auto">
-      <Skeleton className="h-32 w-full rounded-b-none" />
-      <div className="flex w-full flex-col gap-1.5 p-3">
-        <Skeleton className="h-[14px] w-36" />
-        <Skeleton className="h-[16px] w-28 " />
-        <Skeleton className="h-[14px] w-24 " />
-        <Skeleton className="h-[14px] w-20 " />
-      </div>
+    <div className="col-span-5 h-64 border-r-[1.5px] border-b-[1.5px] border-slate-200 p-4 dark:bg-neutral-900 dark:bg-opacity-50 dark:shadow-gray-700 lg:col-span-3 lg:h-auto first:border-l-0 last:border-r-0 [&:nth-child(4n)]:border-r-0">
+      <Skeleton className="h-96 rounded-md w-full" />
     </div>
   )
 }
@@ -144,6 +137,6 @@ ProductCard.Rating = Rating
 ProductCard.Name = Name
 ProductCard.Price = Price
 ProductCard.Category = Category
-ProductCard.Store = StoreName
+ProductCard.Store = Store
 
 export default ProductCard

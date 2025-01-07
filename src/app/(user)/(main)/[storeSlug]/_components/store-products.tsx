@@ -36,15 +36,15 @@ export function StoreProducts() {
       }),
   })
 
-  const productSkeletons = Array(6).fill(<ProductCard.Skeleton />)
+  const productSkeletons = Array(16).fill(<ProductCard.Skeleton />)
 
   return (
     <>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between px-4">
         <h2 className="font-medium lg:text-lg">Products</h2>
         <DataSorter sortOptions={sortOptions} />
       </div>
-      <div className="grid grid-cols-10 gap-2.5 lg:grid-cols-12 lg:gap-4">
+      <div className="grid grid-cols-10 lg:grid-cols-12">
         {products.isLoading && productSkeletons}
         {!products.isLoading &&
           products?.data?.products.map((product) => (
@@ -54,7 +54,12 @@ export function StoreProducts() {
               image={<ProductCard.Image image={product.featured_image_url} />}
               name={<ProductCard.Name name={product.name} />}
               price={<ProductCard.Price price={product.price} />}
-              store={<ProductCard.Store name={product.store.name} />}
+              store={
+                <ProductCard.Store
+                  name={product.store.name}
+                  slug={product.store.slug}
+                />
+              }
               rating={
                 <ProductCard.Rating
                   rating={
