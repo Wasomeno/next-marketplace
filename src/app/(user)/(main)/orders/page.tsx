@@ -33,7 +33,7 @@ export default async function OrdersPage({ searchParams }: TPageProps) {
   return (
     <div className="flex flex-1 flex-col px-5 lg:px-28">
       <div className="mb-4 mt-2">
-        <h1 className="text-base font-medium lg:text-xl">Orders</h1>
+        <h1 className="text-base font-bold lg:text-2xl">Orders</h1>
       </div>
       <div className="flex flex-1 flex-col lg:w-7/12">
         <div className="mb-2.5 flex items-center gap-2.5 overflow-x-scroll">
