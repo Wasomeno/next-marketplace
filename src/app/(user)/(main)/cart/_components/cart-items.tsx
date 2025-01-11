@@ -1,12 +1,12 @@
 "use client"
 
 import { useState } from "react"
-import { IoCartOutline } from "react-icons/io5"
 import invariant from "tiny-invariant"
 
-import { NoData } from "@/components/no-data"
 import { Prisma } from "@prisma/client"
 
+import { Button } from "@/components/ui/button"
+import { ArrowRight } from "lucide-react"
 import { CartItem } from "../_types"
 import { CartItemCard } from "./cart-item-card"
 import { CartSummary } from "./cart-summary"
@@ -32,41 +32,39 @@ export const CartItems = ({
     )
   }
 
+  function getIsSelected(cartItemId: number) {
+    return selectedItems.some((item) => item.id === cartItemId)
+  }
+
+  function onItemClick(cartItem: CartItem) {
+    if (getIsSelected(cartItem.id)) {
+      deselectItem(cartItem.id)
+    } else {
+      selectItem(cartItem)
+    }
+  }
+
   invariant(items)
 
   return (
-    <div className="flex flex-1 flex-col items-start justify-between lg:flex-row lg:justify-center">
-      <div className="w-full px-4 lg:w-4/6 lg:px-8">
-        {items.length > 0 && (
-          <div className="flex w-full flex-col gap-4">
+    <div className="flex flex-1 flex-col w-full px-28">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div className="lg:col-span-2 space-y-6">
+          <h1 className="text-2xl font-bold">Shopping Cart</h1>
+          <div className="space-y-6">
             {items.map((item) => (
               <CartItemCard
                 key={item.id}
+                isSelected={getIsSelected(item.id)}
+                onClick={() => onItemClick(item)}
                 item={item}
-                isSelected={selectedItems?.some(
-                  (selectedItem) => selectedItem.id === item.id
-                )}
-                onClick={() =>
-                  selectedItems?.some(
-                    (selectedItem) => selectedItem.id === item.id
-                  )
-                    ? deselectItem(item.id)
-                    : selectItem(item)
-                }
               />
             ))}
           </div>
-        )}
-        {items.length === 0 && (
-          <div className="flex h-96 flex-col items-center justify-center">
-            <NoData
-              text="No Items in Cart"
-              icon={<IoCartOutline size={26} />}
-            />
-          </div>
-        )}
+        </div>
+
+        <CartSummary selectedItems={selectedItems} />
       </div>
-      <CartSummary selectedItems={selectedItems} />
     </div>
   )
 }
