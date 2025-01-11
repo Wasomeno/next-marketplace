@@ -54,7 +54,7 @@ export const CartItemCard = ({
       onClick={onClick}
       className={twMerge(
         clsx(
-          "flex cursor-pointer items-center gap-4 rounded-lg rounded-t-none border border-x-transparent border-b-transparent p-4 transition-all duration-200 dark:border-t-gray-800",
+          "flex cursor-pointer border-b border-gray-300 items-center gap-4 pb-4 transition-all duration-200 dark:border-t-gray-800",
           isSelected &&
             "rounded-t-lg border-blue-400 border-x-blue-400 border-b-blue-400 shadow-md"
         )
@@ -62,7 +62,7 @@ export const CartItemCard = ({
     >
       <div className="flex w-full items-end justify-between gap-2">
         <div className="flex w-full gap-4">
-          <div className="relative h-20 w-20 overflow-hidden rounded-lg border bg-slate-200 shadow-sm lg:h-28 lg:w-28">
+          <div className="relative h-20 w-20 overflow-hidden bg-slate-200 shadow-sm lg:h-48 lg:w-40">
             <Image
               src={item.product.featured_image_url}
               alt="product-image"
