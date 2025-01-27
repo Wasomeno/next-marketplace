@@ -1,34 +1,23 @@
 import { Metadata } from "next"
 import { redirect } from "next/navigation"
-import { RxCrossCircled } from "react-icons/rx"
 
 import { getCachedSession } from "@/actions/store/user"
-import { getUserOrders } from "@/actions/user/order"
 
-import { TPageProps } from "../../../../../types"
-import { OrderCard } from "./_components/order-card"
 import { OrderSearchInput } from "./_components/order-search-input"
 import { OrderStatusDropdown } from "./_components/order-status-dropdown"
+import { UserOrders } from "./_components/orders"
 import { UserViewOrderModal } from "./_components/user-view-order-modal"
 
 export const metadata: Metadata = {
   title: "Orders",
 }
 
-export default async function OrdersPage({ searchParams }: TPageProps) {
+export default async function OrdersPage() {
   const session = await getCachedSession()
 
   if (!session?.user.email) {
     redirect("/login")
   }
-
-  const { statusId, search } = await searchParams
-
-  const orders = await getUserOrders({
-    userEmail: session.user.email,
-    statusId: statusId ? Number(statusId) : undefined,
-    search: search,
-  })
 
   return (
     <div className="flex flex-1 flex-col px-5 lg:px-28">
@@ -40,22 +29,7 @@ export default async function OrdersPage({ searchParams }: TPageProps) {
           <OrderSearchInput />
           <OrderStatusDropdown />
         </div>
-        <div className="flex flex-1 flex-col gap-2">
-          {orders.length > 0 &&
-            orders.map((order) => (
-              <OrderCard
-                key={order.id}
-                userEmail={session.user.email as string}
-                order={order}
-              />
-            ))}
-          {orders.length === 0 && (
-            <div className="flex flex-1 flex-col items-center justify-center gap-2.5 opacity-50">
-              <span className="text-sm">No Transactions</span>
-              <RxCrossCircled size="25" />
-            </div>
-          )}
-        </div>
+        <UserOrders userEmail={session.user.email} />
       </div>
       <UserViewOrderModal />
     </div>
