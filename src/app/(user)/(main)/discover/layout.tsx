@@ -4,7 +4,7 @@ import { Footer } from "@/components/footer"
 import { UserMainNavigation } from "@/components/navigation/user-main-navigation"
 import { UserMobileNavigation } from "@/components/navigation/user-mobile-navigation"
 
-export default async function SearchLayout({
+export default async function DiscoverLayout({
   children,
 }: {
   children: ReactNode
