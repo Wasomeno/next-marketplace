@@ -88,24 +88,28 @@ export const OrderCard = ({ order, userEmail }: OrderCardProps) => {
 
 export const OrderCardSkeleton = () => {
   return (
-    <div className="flex h-40 flex-col gap-2 rounded-md border bg-slate-50 bg-opacity-50 p-2.5 shadow-md dark:border-gray-800 dark:bg-slate-950 dark:bg-opacity-50">
-      <div className="flex h-10 items-center gap-3">
-        <Skeleton className="h-6 w-24 " />
-        <div>
-          <Skeleton className="h-6 w-28 " />
-        </div>
-        <Skeleton className="h-6 w-32 " />
+    <div className="flex flex-col gap-2 rounded-md border bg-opacity-50 py-4 px-6 shadow-sm dark:border-gray-800 dark:bg-slate-950 dark:bg-opacity-50 dark:shadow-gray-800 ">
+      <div className="flex items-center justify-between lg:h-10">
+        <Skeleton className="w-32 h-6" />
+        <Skeleton className="w-24 h-6" />
       </div>
-      <div className="flex items-center gap-10">
-        <div className="flex w-4/6 items-center gap-2.5 border-r border-r-slate-300 dark:border-r-gray-800">
-          <Skeleton className="h-16 w-16 " />
-          <Skeleton className="h-16 w-16 " />
-          <Skeleton className="h-16 w-16 " />
+      <div className="flex flex-wrap items-center gap-2 lg:gap-10">
+        <div className="flex w-full items-center gap-6 border-r-slate-200 dark:border-r-gray-800  lg:w-4/6 lg:border-r">
+          <Skeleton className="h-16 w-16 lg:h-48 lg:w-40" />
+
+          <div className="space-y-2">
+            <Skeleton className="w-48 h-6" />
+            <Skeleton className="w-36 h-6" />
+          </div>
         </div>
-        <div className="space-y-2">
-          <Skeleton className="h-6 w-10 " />
-          <Skeleton className="h-6 w-7 " />
+        <div className="space-y-1">
+          <Skeleton className="w-32 h-6" />
+          <Skeleton className="w-72 h-6" />
         </div>
+      </div>
+      <div className="flex items-center justify-end gap-2">
+        <Skeleton className="w-24 h-8" />
+        <Skeleton className="w-24 h-8" />
       </div>
     </div>
   )
