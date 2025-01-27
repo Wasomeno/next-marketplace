@@ -26,9 +26,13 @@ export default async function Home() {
               covered
             </p>
           </div>
-          <Button variant="default" size="default" className="bg-white">
-            Shop now
-          </Button>
+          <div>
+            <Link href={"/discover"}>
+              <Button variant="default" size="default" className="bg-white">
+                Shop now
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
       <div className="grid w-full grid-cols-2 gap-6">
