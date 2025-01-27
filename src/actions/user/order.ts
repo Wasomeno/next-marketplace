@@ -36,7 +36,9 @@ export async function getUserOrders(params: GetUserOrdersParams) {
 }
 
 export async function getOrderStatuses() {
-  const statuses = await prisma.orderStatus.findMany()
+  const statuses = (await prisma.orderStatus.findMany()).toSorted((a, b) =>
+    a.id > b.id ? 1 : -1
+  )
   return statuses
 }
 
