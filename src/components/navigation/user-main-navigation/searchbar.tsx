@@ -1,18 +1,18 @@
 "use client"
 
-import { ChangeEvent, useRef, useState } from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { searchProductsAndStores } from "@/actions/user/search"
 import { useQuery } from "@tanstack/react-query"
 import { AnimatePresence, motion } from "framer-motion"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { ChangeEvent, FormEvent, useRef, useState } from "react"
 import { BiSearch } from "react-icons/bi"
 import { HiXMark } from "react-icons/hi2"
 import { ImSpinner8 } from "react-icons/im"
 import { LiaStackExchange } from "react-icons/lia"
 
-import { Input } from "@/components/ui/input"
 import { NoData } from "@/components/no-data"
+import { Input } from "@/components/ui/input"
 
 export function SearchBar() {
   const [isModalActive, setIsModalActive] = useState(false)
@@ -37,6 +37,17 @@ export function SearchBar() {
     )
   }
 
+  function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const pageTarget = "/discover"
+    const searchParams = new URLSearchParams()
+    searchParams.set("q", searchQuery)
+
+    if (searchQuery.length > 0) {
+      router.push(`${pageTarget}?${searchParams.toString()}`)
+    }
+  }
+
   return (
     <div className="flex items-center gap-2 lg:relative lg:block">
       {isModalActive && (
@@ -50,15 +61,7 @@ export function SearchBar() {
           <HiXMark size={18} />
         </motion.button>
       )}
-      <form
-        onSubmit={(event) => {
-          event.preventDefault()
-          if (searchQuery.length > 0) {
-            router.push("/search?q=" + searchQuery)
-          }
-        }}
-        className="w-full lg:w-96"
-      >
+      <form onSubmit={submit} className="w-full lg:w-96">
         <Input
           ref={searchInputRef as any}
           placeholder="Search..."
