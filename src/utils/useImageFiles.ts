@@ -26,7 +26,7 @@ const mutlipleImageQuery = (
   images: { name: string; url: string }[] | undefined
 ) =>
   queryOptions<FileImage[] | undefined>({
-    queryKey: ["fetchedImages", images?.length],
+    queryKey: ["images", images?.map((image) => image.url).join("-")],
     queryFn: async () => {
       return await Promise.all(
         (images as { name: string; url: string }[]).map((image) =>
