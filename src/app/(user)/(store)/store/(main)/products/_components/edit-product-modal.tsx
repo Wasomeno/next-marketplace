@@ -129,7 +129,7 @@ export const EditProductModal: React.FC<{ storeId: number }> = ({
         categoryIds: product.data.categories.map((category) => category.id),
       })
     }
-  }, [product.isLoading])
+  }, [product.isLoading, product.data, searchParamsValues.id])
 
   return (
     <ResponsiveDialog
