@@ -122,7 +122,7 @@ export const EditProductModal: React.FC<{ storeId: number }> = ({
   })
 
   useEffect(() => {
-    if (product.data) {
+    if (!product.isLoading && product.data) {
       form.reset({
         ...product.data,
         images: images?.data,
@@ -152,7 +152,11 @@ export const EditProductModal: React.FC<{ storeId: number }> = ({
         >
           <Fieldset label="Images" className="flex flex-col gap-2 ">
             {images.isLoading ? (
-              Array(3).fill(<Skeleton className="h-20 w-20 lg:h-28 lg:w-28" />)
+              <div className="flex flex-wrap items-center gap-2">
+                {Array(3).fill(
+                  <Skeleton className="h-20 w-20 lg:h-28 lg:w-28" />
+                )}
+              </div>
             ) : (
               <ImageUploader
                 mode="multiple"
@@ -175,6 +179,7 @@ export const EditProductModal: React.FC<{ storeId: number }> = ({
           >
             <MultiSelectDropdown
               options={categoryOptions}
+              defaultValue={form.watch("categoryIds")}
               onOptionsChange={(options) => {
                 form.setValue(
                   "categoryIds",

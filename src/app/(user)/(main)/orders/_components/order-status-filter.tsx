@@ -1,9 +1,8 @@
 "use client"
 
-import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation"
 
-import { Dropdown, Option } from "@/components/dropdown";
+import { Dropdown, Option } from "@/components/dropdown"
 
 const statusOptions: Option[] = [
   { label: "All", value: "" },

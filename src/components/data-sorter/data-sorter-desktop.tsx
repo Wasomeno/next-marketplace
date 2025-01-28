@@ -1,5 +1,5 @@
-import { useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useState } from "react"
 
 import { Dropdown, Option } from "../dropdown"
 import { TableDataSorterProps } from "./"
@@ -42,7 +42,7 @@ export const DataSorterDesktop = ({
       selectedOption={selectedSorting}
       onOptionClick={selectOption}
       placeholder="Select Sorting"
-      className="hidden w-48 lg:flex"
+      className="hidden lg:flex"
     />
   )
 }

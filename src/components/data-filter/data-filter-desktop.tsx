@@ -145,7 +145,8 @@ export const DataFilterDesktop = ({
               animate={{ opacity: 1, translateY: "0px", scale: 1 }}
               exit={{ opacity: 0, translateY: "-5px", scale: 0.95 }}
               transition={{ duration: 0.3, type: "spring" }}
-              className="hidden w-72 p-1.5 flex-col overflow-hidden rounded-md border bg-white text-sm shadow-sm dark:border-neutral-600 dark:bg-neutral-900 lg:flex"
+              style={{ width: "var(--radix-dropdown-menu-trigger-width)" }}
+              className="hidden p-1.5 flex-col overflow-hidden rounded-md border bg-white text-sm shadow-sm dark:border-neutral-600 dark:bg-neutral-900 lg:flex"
             >
               {filterOptions.map((option) => (
                 <DropdownMenu.Sub key={option.value}>
