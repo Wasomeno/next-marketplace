@@ -41,7 +41,11 @@ export const Dropdown = (props: TDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <DropdownRoot open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
+    <DropdownRoot
+      open={isOpen}
+      onOpenChange={(open) => setIsOpen(open)}
+      modal={false}
+    >
       <div
         className={twMerge(
           clsx(
@@ -54,49 +58,55 @@ export const Dropdown = (props: TDropdownProps) => {
         )}
       >
         <DropdownTrigger asChild>
-          <div className="flex w-full items-center py-2 pl-3 text-xs lg:text-sm">
+          <div className="flex items-center w-full py-2 pl-3 text-xs lg:text-sm">
             {props?.selectedOption !== undefined && props.selectedOption.label}
             {!props?.selectedOption && (
-              <span className="text-gray-400">
+              <span className="text-gray-400 w-full">
                 {props.placeholder ?? "Select Option"}
               </span>
             )}
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation()
+                event.nativeEvent.stopImmediatePropagation()
+                props?.deselectOption?.()
+              }}
+              className={clsx(
+                "absolute right-2 top-1/2 -translate-y-1/2 text-gray-300 transition-all duration-200 hover:text-gray-800",
+                props.selectedOption !== undefined && props.deselectOption
+                  ? "inline"
+                  : "hidden"
+              )}
+            >
+              <FaCircleXmark size={16} />
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsOpen(!isOpen)}
+              className={clsx(
+                "px-3 transition duration-300",
+                props.selectedOption !== undefined && props.deselectOption
+                  ? "hidden"
+                  : "inline",
+                isOpen && "rotate-90"
+              )}
+            >
+              <HiChevronRight size={14} />
+            </button>
           </div>
         </DropdownTrigger>
-        <button
-          type="button"
-          onClick={props?.deselectOption}
-          className={clsx(
-            "absolute right-2 top-1/2 -translate-y-1/2 text-gray-300 transition-all duration-200 hover:text-gray-800",
-            props.selectedOption !== undefined && props.deselectOption
-              ? "inline"
-              : "hidden"
-          )}
-        >
-          <FaCircleXmark size={16} />
-        </button>
-        <button
-          type="button"
-          onClick={() => setIsOpen(!isOpen)}
-          className={clsx(
-            "px-3 transition duration-300",
-            props.selectedOption !== undefined && props.deselectOption
-              ? "hidden"
-              : "inline",
-            isOpen && "rotate-90"
-          )}
-        >
-          <HiChevronRight size={14} />
-        </button>
+
         <AnimatePresence>
           {isOpen && (
             <DropdownContent align="start" sideOffset={6} asChild>
               <motion.div
+                style={{ width: "var(--radix-dropdown-menu-trigger-width)" }}
                 initial={{ opacity: 0, translateY: "-5px", scale: 0.95 }}
                 animate={{ opacity: 1, translateY: "0px", scale: 1 }}
                 exit={{ opacity: 0, translateY: "-5px", scale: 0.95 }}
                 transition={{ duration: 0.3, type: "spring" }}
-                className="z-[80] w-72 p-1.5 gap-1 flex max-h-48 flex-col items-start overflow-y-scroll rounded-md border bg-white text-sm shadow-sm dark:border-neutral-600 dark:bg-neutral-900"
+                className="z-[80] p-1.5 gap-1 flex max-h-48 flex-col items-start overflow-y-scroll rounded-md border bg-white text-sm shadow-sm dark:border-neutral-600 dark:bg-neutral-900"
               >
                 {props.isLoading &&
                   Array(5)

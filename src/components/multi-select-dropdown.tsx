@@ -2,8 +2,9 @@
 
 import { AnimatePresence, motion } from "framer-motion"
 import React, { MouseEvent, useState } from "react"
-import { HiXMark } from "react-icons/hi2"
+import { HiChevronRight, HiXMark } from "react-icons/hi2"
 
+import clsx from "clsx"
 import {
   Dropdown,
   DropdownContent,
@@ -20,14 +21,22 @@ type Props = {
   onOptionsChange: (options: Option[]) => void
   options: Option[]
   placeholder?: string
+  isLoading?: boolean
+  defaultValue?: Option["value"][]
 }
 
 export const MultiSelectDropdown = ({
   onOptionsChange,
   options,
   placeholder,
+  isLoading,
+  defaultValue,
 }: Props) => {
-  const [selectedOptions, setSelectedOptions] = useState<Array<Option>>([])
+  const [selectedOptions, setSelectedOptions] = useState<Array<Option>>(
+    !isLoading && !!defaultValue
+      ? options.filter((option) => defaultValue?.includes(option.value))
+      : []
+  )
   const [isOptionsOpen, setIsOptionsOpen] = useState(false)
 
   function selectOption(option: Option) {
@@ -37,8 +46,8 @@ export const MultiSelectDropdown = ({
   }
 
   function deselectOption(option: Option, event: MouseEvent) {
-    // TODO: FIND A WAY TO TRIGGER EVENT PROPAGATION
     event.stopPropagation()
+    event.nativeEvent.stopImmediatePropagation()
     const newSelectedOptions = selectedOptions.filter(
       (currentOption) => currentOption.value !== option.value
     )
@@ -49,10 +58,11 @@ export const MultiSelectDropdown = ({
   return (
     <Dropdown
       open={isOptionsOpen}
+      modal={false}
       onOpenChange={(open) => setIsOptionsOpen(open)}
     >
       <DropdownTrigger asChild>
-        <div className="flex w-full rounded-md border bg-white px-3 py-2 outline-0 disabled:opacity-50 dark:border-neutral-600 dark:bg-neutral-900">
+        <div className="flex w-full cursor-pointer rounded-md border bg-white px-3 py-2 outline-0 disabled:opacity-50 dark:border-neutral-600 dark:bg-neutral-900">
           {selectedOptions.length > 0 && (
             <div className="flex flex-1 flex-wrap gap-2">
               {selectedOptions.map((selectedOption) => (
@@ -75,21 +85,31 @@ export const MultiSelectDropdown = ({
             </div>
           )}
           {selectedOptions.length < 1 && (
-            <span className="text-sm text-gray-400">
+            <span className="text-sm text-gray-400 w-full">
               {placeholder ?? "Select item"}
             </span>
           )}
+          <button
+            type="button"
+            className={clsx(
+              "transition duration-300",
+              isOptionsOpen && "rotate-90"
+            )}
+          >
+            <HiChevronRight size={14} />
+          </button>
         </div>
       </DropdownTrigger>
       <AnimatePresence>
         {isOptionsOpen && (
           <DropdownContent align="start" asChild sideOffset={6}>
             <motion.div
-              initial={{ opacity: 0, translateY: "-5px" }}
-              animate={{ opacity: 1, translateY: "0px" }}
-              exit={{ opacity: 0, translateY: "-5px" }}
-              transition={{ duration: 0.2, ease: "easeInOut" }}
-              className="z-[80] flex w-96 flex-col overflow-hidden rounded-lg border bg-white shadow-sm dark:border-neutral-600 dark:bg-neutral-900"
+              initial={{ opacity: 0, translateY: "-5px", scale: 0.95 }}
+              animate={{ opacity: 1, translateY: "0px", scale: 1 }}
+              exit={{ opacity: 0, translateY: "-5px", scale: 0.95 }}
+              transition={{ duration: 0.3, type: "spring" }}
+              style={{ width: "var(--radix-dropdown-menu-trigger-width)" }}
+              className="z-[80] flex flex-col overflow-hidden rounded-lg border bg-white shadow-sm dark:border-neutral-600 dark:bg-neutral-900"
             >
               {!options?.length && (
                 <div className="flex h-full w-full items-center justify-center text-sm text-gray-400">
