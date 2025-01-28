@@ -116,8 +116,9 @@ export const ProductTable: React.FC<{ storeId: number }> = ({ storeId }) => {
         function openEditProductModal() {
           urlSearchParams.set("edit", "true")
           urlSearchParams.set("id", row.original.id.toString())
-
-          return router.replace(`${pathname}?${urlSearchParams.toString()}`)
+          router.replace(`${pathname}?${urlSearchParams.toString()}`, {
+            scroll: false,
+          })
         }
 
         return (

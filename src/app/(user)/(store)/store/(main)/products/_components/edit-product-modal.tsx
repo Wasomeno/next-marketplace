@@ -76,7 +76,9 @@ export const EditProductModal: React.FC<{ storeId: number }> = ({
     const urlSearchParams = new URLSearchParams(searchParamsValues)
     urlSearchParams.delete("edit")
     urlSearchParams.delete("id")
-    router.replace(`${pathname}?${urlSearchParams.toString()}`)
+    router.replace(`${pathname}?${urlSearchParams.toString()}`, {
+      scroll: false,
+    })
   }
 
   const updateProductMutation = useMutation({
@@ -113,7 +115,9 @@ export const EditProductModal: React.FC<{ storeId: number }> = ({
         queryKey: ["product", searchParamsValues.id],
       })
 
-      router.replace(`${pathname}?${urlSearchParams.toString()}`)
+      router.replace(`${pathname}?${urlSearchParams.toString()}`, {
+        scroll: false,
+      })
       toast.success("Successfully Updated Product")
     },
     onError: (error) => {
