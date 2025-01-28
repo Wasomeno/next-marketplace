@@ -4,11 +4,13 @@ import { DropdownMenuTriggerProps } from "@radix-ui/react-dropdown-menu"
 import clsx from "clsx"
 import { AnimatePresence, motion } from "framer-motion"
 import React, { useState } from "react"
-import { FaCircleXmark } from "react-icons/fa6"
+import { FaCircleXmark, FaSpinner } from "react-icons/fa6"
 import { HiChevronRight } from "react-icons/hi2"
 import { IoList } from "react-icons/io5"
 import { twMerge } from "tailwind-merge"
 
+import { CgSpinner } from "react-icons/cg"
+import { ImSpinner8 } from "react-icons/im"
 import { NoData } from "./no-data"
 import { Skeleton } from "./skeleton"
 import {
@@ -81,19 +83,24 @@ export const Dropdown = (props: TDropdownProps) => {
             >
               <FaCircleXmark size={16} />
             </button>
-            <button
-              type="button"
-              onClick={() => setIsOpen(!isOpen)}
-              className={clsx(
-                "px-3 transition duration-300",
-                props.selectedOption !== undefined && props.deselectOption
-                  ? "hidden"
-                  : "inline",
-                isOpen && "rotate-90"
-              )}
-            >
-              <HiChevronRight size={14} />
-            </button>
+            {!props.isLoading && (
+              <HiChevronRight
+                size={14}
+                className={clsx(
+                  "mx-3 transition duration-300",
+                  props.selectedOption !== undefined && props.deselectOption
+                    ? "hidden"
+                    : "inline",
+                  isOpen && "rotate-90"
+                )}
+              />
+            )}
+            {props.isLoading && (
+              <ImSpinner8
+                className="animate-spin mx-3 text-gray-500"
+                size={14}
+              />
+            )}
           </div>
         </DropdownTrigger>
 
@@ -112,8 +119,8 @@ export const Dropdown = (props: TDropdownProps) => {
                   Array(5)
                     .fill("")
                     .map((_, index) => (
-                      <div key={index} className=" px-3 py-2">
-                        <Skeleton className="h-6 w-36" />
+                      <div key={index} className="px-3 w-full py-1.5">
+                        <Skeleton className="h-6" />
                       </div>
                     ))}
                 {!props.isLoading &&

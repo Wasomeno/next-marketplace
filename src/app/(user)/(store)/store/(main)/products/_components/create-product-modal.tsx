@@ -185,6 +185,7 @@ export const CreateProductModal: React.FC<{ storeId: number }> = ({
               error={form.formState.errors.categoryIds}
             >
               <MultiSelectDropdown
+                isLoading={categories.isLoading}
                 options={categoryOptions ?? []}
                 onOptionsChange={(options) => {
                   form.setValue(

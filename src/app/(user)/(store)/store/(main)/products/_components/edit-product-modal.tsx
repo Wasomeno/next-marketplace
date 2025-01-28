@@ -178,6 +178,7 @@ export const EditProductModal: React.FC<{ storeId: number }> = ({
             error={form.formState.errors.categoryIds}
           >
             <MultiSelectDropdown
+              isLoading={categories.isLoading}
               options={categoryOptions}
               defaultValue={form.watch("categoryIds")}
               onOptionsChange={(options) => {
