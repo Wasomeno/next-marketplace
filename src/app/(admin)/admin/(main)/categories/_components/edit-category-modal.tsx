@@ -78,7 +78,7 @@ export function EditCategoryModal() {
       let imageResults: ClientUploadedFileData<null>[] | undefined = []
 
       try {
-        imageResults = await uploadthing.startUpload([formData.image])
+        imageResults = (await uploadthing.startUpload([formData.image])) ?? []
       } catch (error) {
         console.log(error, "ME RROR")
         imageResults = []
