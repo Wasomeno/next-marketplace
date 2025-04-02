@@ -25,7 +25,7 @@ export const StoreOrderCard = ({
 }) => {
   const [isShowOtherProducts, setIsShowOtherProducts] = useState(false)
   return (
-    <div className="space-y-2 rounded-lg shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]">
+    <div className="space-y-2 rounded-lg border overflow-hidden">
       <div className="flex flex-wrap items-center justify-between border-b  border-b-gray-200 bg-gray-50 px-4 py-2">
         <span className="text-sm font-medium text-gray-400">
           Order Id: {order.id}
@@ -122,7 +122,7 @@ export const StoreOrderCard = ({
 
 export const StoreOrderCardSkeleton = () => {
   return (
-    <div className="space-y-2 rounded-lg shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]">
+    <div className="space-y-2 rounded-lg border">
       <div className="flex flex-wrap items-center justify-between border-b  border-b-gray-200 bg-gray-50 px-4 py-2">
         <Skeleton className="h-[18px] w-32" />
         <Skeleton className="h-[18px] w-36" />

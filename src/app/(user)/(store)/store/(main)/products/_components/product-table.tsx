@@ -8,10 +8,9 @@ import { TableActions } from "@/components/table-actions"
 import { Button } from "@/components/ui/button"
 import { CheckBox } from "@/components/ui/checkbox"
 import { getParsedSortParams, useSearchParamsValues } from "@/utils"
-import { Prisma } from "@prisma/client"
-import { useQuery } from "@tanstack/react-query"
 import { ColumnDef } from "@tanstack/react-table"
 
+import { useQuery } from "@tanstack/react-query"
 import { TBaseDataFilterParams } from "../../../../../../../../types"
 import {
   DataTable,

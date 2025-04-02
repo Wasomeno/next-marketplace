@@ -14,10 +14,7 @@ export default async function Home() {
   const categories = await getCategories()
   return (
     <div className="relative flex flex-1 flex-col gap-6 bg-white px-4 dark:bg-neutral-950 lg:px-28">
-      <div className="w-full h-[30rem] bg-gray-100 rounded-lg py-10 gap-20 px-14 flex justify-center items-center">
-        <div className="relative w-96 h-96">
-          <Image src="/" fill alt="banner-image" />
-        </div>
+      <div className="w-full h-[30rem] bg-gray-100 rounded-lg py-10 gap-20 px-14 flex justify-end items-center">
         <div className="space-y-6">
           <div className="space-y-2 w-96">
             <h1 className="text-3xl font-bold">Shop the Latest Trends</h1>
@@ -42,7 +39,7 @@ export default async function Home() {
             className="h-[30rem] bg-gray-100 flex gap-10 items-center rounded-lg py-10 px-14"
           >
             <div className="relative w-72 h-72">
-              <Image src={"/"} fill alt="clothing-image" />
+              <Image src={category.image?.url} fill alt="clothing-image" />
             </div>
             <div className="space-y-6">
               <div className="space-y-2">

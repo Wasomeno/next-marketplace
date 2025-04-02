@@ -30,7 +30,7 @@ export const OrderCard = ({ order, userEmail }: OrderCardProps) => {
   }
 
   return (
-    <div className="flex flex-col gap-2 rounded-md border bg-opacity-50 py-4 px-6 shadow-sm dark:border-gray-800 dark:bg-slate-950 dark:bg-opacity-50 dark:shadow-gray-800 ">
+    <div className="flex flex-col gap-2 rounded-md border bg-opacity-50 py-4 px-6 dark:border-gray-800 dark:bg-slate-950 dark:bg-opacity-50 ">
       <div className="flex items-center justify-between lg:h-10">
         <div className="text-sm">{time}</div>
         <span className="rounded-md bg-blue-200 p-1.5 text-xs font-medium tracking-wide dark:bg-blue-900">

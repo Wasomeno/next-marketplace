@@ -31,6 +31,12 @@ const nextConfig = {
       },
       {
         protocol: "https",
+        hostname: "m1ih6djku4.ufs.sh",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "utfs.io",
         port: "",
         pathname: "/**",

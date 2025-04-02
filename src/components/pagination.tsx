@@ -1,6 +1,6 @@
-import React, { useEffect } from "react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import clsx from "clsx"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import React, { useEffect } from "react"
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi2"
 
 import { Button } from "./ui/button"
@@ -74,7 +74,8 @@ export const Pagination = (props: TablePaginationProps) => {
           size="sm"
           className={clsx(
             "h-8 w-8 lg:h-10 lg:w-10",
-            currentPage === page.toString() && "bg-blue-400 text-white"
+            currentPage === page.toString() &&
+              "bg-blue-400 text-white hover:bg-blue-400 hover:text-white"
           )}
           onClick={() => setPage(page)}
         >

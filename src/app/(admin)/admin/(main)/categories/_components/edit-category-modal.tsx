@@ -77,9 +77,11 @@ export function EditCategoryModal() {
     mutationFn: async (formData: CreateCategoryFormData) => {
       let imageResults: ClientUploadedFileData<null>[] | undefined = []
 
-      if (image.data?.name !== category.data?.image?.name)
+      try {
         imageResults = await uploadthing.startUpload([formData.image])
-      if (!imageResults?.length) {
+      } catch (error) {
+        console.log(error, "ME RROR")
+        imageResults = []
         throw new Error("Error when uploading image")
       }
 
@@ -100,7 +102,8 @@ export function EditCategoryModal() {
       onOpenChange(false)
       toast.success("Succesfully updated category")
     },
-    onError() {
+    onError(error) {
+      console.log(error)
       toast.error("Error when updating category")
     },
   })

@@ -1,7 +1,7 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
 import { Prisma } from "@prisma/client"
+import { revalidatePath } from "next/cache"
 
 import { prisma } from "@/lib/prisma"
 
@@ -57,7 +57,19 @@ export async function updateCategory({
   try {
     await prisma.category.update({
       where: { id },
-      data: { name, description, slug, image: { update: { data: image } } },
+      data: {
+        name,
+        description,
+        slug,
+        image: {
+          update: {
+            data: {
+              name: image.name,
+              url: image.url,
+            },
+          },
+        },
+      },
     })
   } catch (error) {
     throw error
