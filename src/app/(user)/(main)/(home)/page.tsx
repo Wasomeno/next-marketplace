@@ -39,7 +39,11 @@ export default async function Home() {
             className="h-[30rem] bg-gray-100 flex gap-10 items-center rounded-lg py-10 px-14"
           >
             <div className="relative w-72 h-72">
-              <Image src={category.image?.url} fill alt="clothing-image" />
+              <Image
+                src={category.image?.url ?? "-"}
+                fill
+                alt="clothing-image"
+              />
             </div>
             <div className="space-y-6">
               <div className="space-y-2">
