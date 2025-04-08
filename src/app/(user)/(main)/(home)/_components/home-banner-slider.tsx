@@ -3,9 +3,9 @@
 import "swiper/css"
 import "swiper/css/navigation"
 
-import { useRef, useState } from "react"
-import Image from "next/image"
 import { AnimatePresence, motion } from "framer-motion"
+import Image from "next/image"
+import { useRef, useState } from "react"
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs"
 import Swiper from "swiper"
 import { Autoplay, Navigation } from "swiper/modules"
@@ -13,7 +13,7 @@ import { Swiper as SwiperReact, SwiperSlide } from "swiper/react"
 
 export function HomeBannerSlider() {
   const [showNavigation, setShowNavigation] = useState(false)
-  const swiperRef = useRef<Swiper>()
+  const swiperRef = useRef<Swiper | null>(null)
   return (
     <div
       className="swiper-container relative w-full lg:w-11/12"
