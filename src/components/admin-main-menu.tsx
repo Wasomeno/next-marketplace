@@ -19,12 +19,22 @@ export function AdminMainMenu() {
       </DropdownTrigger>
       <AnimatePresence>
         {isOpen && (
-          <DropdownContent asChild side="bottom" align="end" sideOffset={2.5}>
+          <DropdownContent
+            asChild
+            side="bottom"
+            align="end"
+            alignOffset={12}
+            sideOffset={3}
+          >
             <motion.div
-              initial={{ height: "50px", opacity: 0 }}
-              animate={{ height: "120px", opacity: 1 }}
-              exit={{ height: "50px", opacity: 0 }}
-              transition={{ duration: 0.1 }}
+              initial={{ opacity: 0, translateY: "-10px", scale: 0.95 }}
+              animate={{ opacity: 1, translateY: "-2px", scale: 1 }}
+              exit={{ opacity: 0, translateY: "-10px", scale: 0.95 }}
+              transition={{
+                duration: 0.3,
+                ease: "easeInOut",
+                type: "spring",
+              }}
               className="z-30 w-64 rounded-md border border-slate-300 bg-white duration-200 dark:border-neutral-600 dark:bg-neutral-900"
               style={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
             >

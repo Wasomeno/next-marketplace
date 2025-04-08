@@ -67,7 +67,7 @@ export function EditCategoryModal() {
       urlSearchParams.delete("edit")
       urlSearchParams.delete("id")
     }
-
+    form.reset()
     router.replace(`${pathname}?${urlSearchParams.toString()}`, {
       scroll: false,
     })
@@ -80,7 +80,6 @@ export function EditCategoryModal() {
       try {
         imageResults = (await uploadthing.startUpload([formData.image])) ?? []
       } catch (error) {
-        console.log(error, "ME RROR")
         imageResults = []
         throw new Error("Error when uploading image")
       }
@@ -112,7 +111,7 @@ export function EditCategoryModal() {
     if (category.data !== undefined && image.data !== undefined) {
       form.reset({ ...category.data, image: image.data })
     }
-  }, [category.isLoading, image.isLoading])
+  }, [category.isLoading, image.isLoading, categoryId])
 
   return (
     <ResponsiveDialog open={isOpen} onOpenChange={onOpenChange}>

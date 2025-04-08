@@ -108,7 +108,7 @@ export const CategoryTable = () => {
       header: "Product Amount",
       cell: (productCount) => {
         const count = productCount.getValue() as { products: number }
-        return count.products
+        return count?.products
       },
       footer: (props) => props.column.id,
       enableColumnFilter: false,

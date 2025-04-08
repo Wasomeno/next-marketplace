@@ -1,8 +1,5 @@
 "use server"
 
-import { Prisma } from "@prisma/client"
-import { revalidatePath } from "next/cache"
-
 import { prisma } from "@/lib/prisma"
 
 import { TBaseDataFilter } from "../../types"
@@ -71,19 +68,6 @@ export async function updateCategory({
         },
       },
     })
-  } catch (error) {
-    throw error
-  }
-}
-
-export async function deleteCategories({
-  categoryIds,
-}: {
-  categoryIds: number[]
-}) {
-  try {
-    await prisma.category.deleteMany({ where: { id: { in: categoryIds } } })
-    revalidatePath("/admin/categories")
   } catch (error) {
     throw error
   }

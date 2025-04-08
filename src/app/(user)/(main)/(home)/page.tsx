@@ -38,13 +38,12 @@ export default async function Home() {
             key={category.id}
             className="h-[30rem] bg-gray-100 flex gap-10 items-center rounded-lg py-10 px-14"
           >
-            <div className="relative w-72 h-72">
-              <Image
-                src={category.image?.url ?? "-"}
-                fill
-                alt="clothing-image"
-              />
-            </div>
+            <Image
+              src={category.image?.url ?? "-"}
+              alt="clothing-image"
+              height={300}
+              width={320}
+            />
             <div className="space-y-6">
               <div className="space-y-2">
                 <h5 className="text-2xl font-bold">{category.name}</h5>
