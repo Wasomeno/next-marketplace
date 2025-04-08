@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma"
 
+import { revalidatePath } from "next/cache"
 import { TBaseDataFilter } from "../../types"
 
 type GetCategoriesProps = TBaseDataFilter
@@ -81,6 +82,19 @@ export async function getCategories(props?: GetCategoriesProps) {
   })
 
   return categories
+}
+
+export async function deleteCategories({
+  categoryIds,
+}: {
+  categoryIds: number[]
+}) {
+  try {
+    await prisma.category.deleteMany({ where: { id: { in: categoryIds } } })
+    revalidatePath("/admin/categories")
+  } catch (error) {
+    throw error
+  }
 }
 
 export async function getCategory(categoryId: number) {
