@@ -33,8 +33,7 @@ import { storeQueryKeys } from "../../../_query/keys"
 export const ProductSchema = z.object({
   images: z
     .array(z.instanceof(File))
-    .min(1, "Product must have at least 1 image")
-    .default([]),
+    .min(1, "Product must have at least 1 image"),
   name: z
     .string()
     .min(5, "Name must have at least 5 characters")
@@ -51,10 +50,7 @@ export const ProductSchema = z.object({
     .number()
     .min(10, "Stock must have at least 10")
     .max(10000, "Stock must have at least 10.000"),
-  categoryIds: z
-    .array(z.number())
-    .min(1, "Product must have a category")
-    .default([]),
+  categoryIds: z.array(z.number()).min(1, "Product must have a category"),
 })
 
 export type ProductFormData = z.infer<typeof ProductSchema>

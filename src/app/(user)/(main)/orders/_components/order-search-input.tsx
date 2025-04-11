@@ -1,10 +1,11 @@
 "use client"
 
-import React, { ChangeEvent, useRef } from "react"
-import { usePathname, useRouter } from "next/navigation"
 import { useSearchParamsValues } from "@/utils"
+import { usePathname, useRouter } from "next/navigation"
+import React, { ChangeEvent, useRef } from "react"
 import { RxMagnifyingGlass } from "react-icons/rx"
 
+import { time } from "console"
 import { Input } from "@/components/ui/input"
 
 export const OrderSearchInput = () => {
@@ -15,10 +16,12 @@ export const OrderSearchInput = () => {
     search: string
   }>()
 
-  const timeoutRef = useRef<NodeJS.Timeout>()
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   function onChange(event: ChangeEvent<HTMLInputElement>) {
-    clearTimeout(timeoutRef.current)
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
 
     const value = event.target.value
     const searchParams = new URLSearchParams(searchParamsValues)

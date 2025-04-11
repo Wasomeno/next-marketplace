@@ -1,20 +1,16 @@
 "use client"
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { addAddress } from "@/actions/user/settings"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import axios from "axios"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { BiPlus } from "react-icons/bi"
 import { ImSpinner8 } from "react-icons/im"
 import { toast } from "sonner"
 import { z } from "zod"
 
-import { Button } from "@/components/ui/button"
-import { Fieldset } from "@/components/ui/fieldset"
-import { Input } from "@/components/ui/input"
-import { TextArea } from "@/components/ui/text-area"
 import { Dropdown, Option } from "@/components/dropdown"
 import {
   ResponsiveDialog,
@@ -22,6 +18,10 @@ import {
   ResponsiveDialogHeader,
   ResponsiveDialogTrigger,
 } from "@/components/responsive-dialog"
+import { Button } from "@/components/ui/button"
+import { Fieldset } from "@/components/ui/fieldset"
+import { Input } from "@/components/ui/input"
+import { TextArea } from "@/components/ui/text-area"
 
 const createAddressFormSchema = z.object({
   title: z.string().min(5, "Title must have at least 5 characters"),
@@ -31,11 +31,7 @@ const createAddressFormSchema = z.object({
       RegExp("^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$"),
       "Phone number not valid"
     ),
-  notes: z
-    .string()
-    .min(15, "Notes must have at least 15 characters")
-    .optional()
-    .default(""),
+  notes: z.string().min(15, "Notes must have at least 15 characters"),
   street: z.string().min(5, "Street must have at least 5 characters"),
   postCode: z.string().min(5, "Post Code must have at least 5 characters"),
   recipient: z

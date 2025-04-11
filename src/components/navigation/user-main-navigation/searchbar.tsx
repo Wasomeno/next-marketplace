@@ -19,8 +19,8 @@ export function SearchBar() {
   const [searchQuery, setSearchQuery] = useState("")
   const router = useRouter()
 
-  const searchInputRef = useRef<HTMLInputElement>()
-  const timeoutRef = useRef<NodeJS.Timeout>()
+  const searchInputRef = useRef<HTMLInputElement | null>(null)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const { data, isLoading } = useQuery({
     queryKey: ["search", searchQuery],
@@ -29,7 +29,9 @@ export function SearchBar() {
   })
 
   function search(event: ChangeEvent<HTMLInputElement>) {
-    clearTimeout(timeoutRef.current)
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
 
     timeoutRef.current = setTimeout(
       () => setSearchQuery(event.target.value),

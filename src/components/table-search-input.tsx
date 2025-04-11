@@ -1,8 +1,8 @@
 "use client"
 
-import { ChangeEvent, useEffect, useRef } from "react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import clsx from "clsx"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { ChangeEvent, useEffect, useRef } from "react"
 import { RxMagnifyingGlass } from "react-icons/rx"
 import { twMerge } from "tailwind-merge"
 
@@ -19,10 +19,13 @@ export const TableSearchInput = ({
   const searchParams = useSearchParams()
   const pathname = usePathname()
 
-  const timeoutRef = useRef<NodeJS.Timeout>()
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   function search(event: ChangeEvent<HTMLInputElement>) {
-    clearTimeout(timeoutRef.current)
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+
     const searchParamsInstance = new URLSearchParams(searchParams.toString())
     if (event.target.value !== "") {
       searchParamsInstance.set("search", event.target.value)
