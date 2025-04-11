@@ -1,10 +1,10 @@
-import React from "react"
-import { cva, VariantProps } from "class-variance-authority"
+import { VariantProps, cva } from "class-variance-authority"
 import clsx from "clsx"
+import React from "react"
 import { twMerge } from "tailwind-merge"
 
 const buttonVariants = cva(
-  "flex text-xs lg:text-sm gap-2 font-medium transition duration-300 disabled:opacity-50 items-center rounded-md justify-center",
+  "flex text-xs cursor-pointer lg:text-sm gap-2 font-medium transition duration-300 disabled:opacity-50 items-center rounded-md justify-center",
   {
     variants: {
       variant: {

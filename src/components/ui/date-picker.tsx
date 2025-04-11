@@ -130,13 +130,12 @@ export const DatePicker = ({
             {getButtonText()}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0">
+        <PopoverContent className="w-full p-0" align="end">
           {mode === "single" && (
             <Calendar
               mode="single"
               selected={date}
               onSelect={handleSelect as (date: Date | undefined) => void}
-              initialFocus
             />
           )}
           {mode === "range" && (
@@ -146,7 +145,6 @@ export const DatePicker = ({
               selected={dateRange}
               onSelect={handleSelect as (range: DateRange | undefined) => void}
               numberOfMonths={2}
-              initialFocus
             />
           )}
           {mode === "multiple" && (
@@ -154,7 +152,6 @@ export const DatePicker = ({
               mode="multiple"
               selected={selectedDays}
               onSelect={handleSelect as (dates: Date[] | undefined) => void}
-              initialFocus
             />
           )}
         </PopoverContent>
